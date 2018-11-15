@@ -7,7 +7,7 @@ module.exports = {
   srcDir: 'public',
   buildDir: 'nuxt-dist',
   generate: {
-    dir: 'docs' + routerBase
+    dir: 'docs'
   },
   /*
   ** Headers of the page
@@ -25,7 +25,7 @@ module.exports = {
     ]
   },
   router: {
-    base: '/',
+    base: routerBase,
     middleware: 'auth'
   },
   /*
