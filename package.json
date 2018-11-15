@@ -27,7 +27,7 @@
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue",
     "build": "nuxt build",
-    "generate:nuxt": "nuxt generate",
+    "generate:nuxt": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate",
     "start": "node src/",
     "start:seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f config/db/mongod.config.yml",

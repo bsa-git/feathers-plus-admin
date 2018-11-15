@@ -1,5 +1,6 @@
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/': '';
 
 module.exports = {
   mode: 'spa',
@@ -23,6 +24,7 @@ module.exports = {
     ]
   },
   router: {
+    base: routerBase,
     middleware: 'auth'
   },
   /*
