@@ -1,0 +1,98 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ],
+    "local": {
+      "password": "password"
+    },
+    "client": {
+      "port": 3030,
+      "ioOptions": {
+        "transports": [
+          "websocket"
+        ],
+        "forceNew": true,
+        "reconnection": false,
+        "extraHeaders": {}
+      },
+      "primusOptions": {
+        "transformer": "ws"
+      },
+      "restOptions": {
+        "url": "http://localhost:3030"
+      },
+      "overriddenAuth": {
+        "users": {
+          "create": "noauth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
+        },
+        "roles": {
+          "create": "auth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
+        },
+        "teams": {
+          "create": "auth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
+        }
+      }
+    }
+  },
+  "authentication": {
+    "secret": "0ca5ac9c53dd100a277f023113aafbe91b3d6bda17310b21dd3f7143b805bcb3884a1c74501867315ab1e2a3066d7e7e95ae030007f64ca5780f3061d7bbe2c49bcd4e8226b8fd606e4d5d899fbfba11f39051879ad41eda66578f02a227a75881310b4840c8143fa0d4fd07d206fb8e02050ac6a1d8033d7ae454ed3d91b10043547af2685d3d156a056640471845a3dc7b61306ca7ba2a46c6a617172671ed9470eedb1801cde809a8e393a70fce598c87f3a08e9e9a905ac7bd8dd4f4c4751fd3926f4115973ba56cd0018426f8c6f0deb6cee5cba97ca3a9cb78e571b979604dd0689adb810635d680152c35169ea2a37afa7ea9e3e4abd45e1ba323b4a3",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "google": {
+      "clientID": "your google client id",
+      "clientSecret": "your google client secret",
+      "successRedirect": "/",
+      "scope": [
+        "profile openid email"
+      ]
+    },
+    "github": {
+      "clientID": "your github client id",
+      "clientSecret": "your github client secret",
+      "successRedirect": "/"
+    },
+    "cookie": {
+      "enabled": true,
+      "name": "feathers-jwt",
+      "httpOnly": false,
+      "secure": false
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/feathers_plus_app"
+}

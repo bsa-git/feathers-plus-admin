@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "email": "Sandrine.Torphy@yahoo.com",
+      "firstName": "Jermain",
+      "lastName": "Johns",
+      "roleId": "5bc5af338e15851484dc7486",
+      "password": "Sandrine.Torphy",
+      "_id": "5bc5af338e15851484dc7483"
+    },
+    {
+      "email": "Sam_Bernier83@hotmail.com",
+      "firstName": "Rico",
+      "lastName": "Predovic",
+      "roleId": "5bc5af338e15851484dc7487",
+      "password": "Sam_Bernier83",
+      "_id": "5bc5af338e15851484dc7484"
+    },
+    {
+      "email": "Boyd.Lueilwitz@hotmail.com",
+      "firstName": "Mylene",
+      "lastName": "Runolfsson",
+      "roleId": "5bc5af338e15851484dc7487",
+      "password": "Boyd.Lueilwitz",
+      "_id": "5bc5af338e15851484dc7485"
+    }
+  ],
+  "roles": [
+    {
+      "name": "Lead Applications Planner",
+      "_id": "5bc5af338e15851484dc7486"
+    },
+    {
+      "name": "Forward Response Strategist",
+      "_id": "5bc5af338e15851484dc7487"
+    }
+  ],
+  "teams": [
+    {
+      "name": "nisi quae et",
+      "memberIds": [
+        "5bc5af338e15851484dc7483"
+      ],
+      "_id": "5bc5af338e15851484dc7488"
+    },
+    {
+      "name": "quidem ut eaque",
+      "memberIds": [
+        "5bc5af338e15851484dc7484"
+      ],
+      "_id": "5bc5af338e15851484dc7489"
+    },
+    {
+      "name": "totam sit delectus",
+      "memberIds": [
+        "5bc5af338e15851484dc7485"
+      ],
+      "_id": "5bc5af338e15851484dc748a"
+    }
+  ]
+}
