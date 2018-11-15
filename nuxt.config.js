@@ -1,12 +1,13 @@
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/': '';
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/': '/';
 
 module.exports = {
   mode: 'spa',
   srcDir: 'public',
+  buildDir: 'nuxt-dist',
   generate: {
-    dir: 'docs'
+    dir: 'docs' + routerBase
   },
   /*
   ** Headers of the page
@@ -24,7 +25,7 @@ module.exports = {
     ]
   },
   router: {
-    base: routerBase,
+    base: '/',
     middleware: 'auth'
   },
   /*
