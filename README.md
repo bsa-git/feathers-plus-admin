@@ -1,6 +1,6 @@
-# feathers-plus-app
+# feathers-plus-admin
 
-> Project feathers-plus-app
+> Project feathers-plus-admin
 
 ## About
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/feathers-plus-app; npm install
+    cd path/to/feathers-plus-admin; npm install
     ```
 
 3. Start your app
@@ -47,12 +47,6 @@ $ feathers-plus help                         # Show all commands
 ## Help
 
 For more information on all the things you can do, visit [the generator](https://generator.feathers-plus.com/), [FeathersJS](http://docs.feathersjs.com) and [extensions](https://feathers-plus.github.io/).
-
-## Changelog
-
-__0.1.0__
-
-- Initial release
 
 ## License
 
