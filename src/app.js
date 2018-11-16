@@ -59,6 +59,9 @@ app.use('/', express.static(app.get('public')));
 const configAuthentication = app.get('authentication');
 configAuthentication.local.usernameField = 'email';
 app.set('authentication', configAuthentication);
+
+// Set mongodb
+app.set('mongodb', process.env.MONGODB);
 //--------------------
 // !end
 app.configure(express.rest(

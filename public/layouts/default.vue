@@ -93,8 +93,8 @@
         drawer: true,
         fixed: false,
         items: [
-          {icon: 'apps', title: 'Welcome', to: '/'},
-          {icon: 'bubble_chart', title: 'Inspire', to: '/inspire'}
+          {icon: 'apps', title: 'Welcome', to: '/admin'},
+          {icon: 'bubble_chart', title: 'Inspire', to: '/admin/inspire'}
         ],
         miniVariant: false,
         right: true,

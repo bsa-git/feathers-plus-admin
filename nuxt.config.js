@@ -16,6 +16,7 @@ module.exports = {
     title: pkg.name,
     meta: [
       { charset: 'utf-8' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
@@ -44,7 +45,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/vuetify'
+    '@/plugins/ui-framework/vuetify',
+    '@/plugins/validators/vee-validate'
   ],
 
   /*

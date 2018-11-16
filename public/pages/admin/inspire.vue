@@ -2,8 +2,9 @@
   <v-container fluid>
     <v-layout>
       <v-flex text-xs-center>
+        <!-- -->
         <img
-          src="/static/img/logo/v.png"
+          src="/img/logo/v.png"
           alt="Vuetify.js"
           class="mb-5">
         <blockquote class="blockquote">
@@ -20,9 +21,11 @@
     <v-layout>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
-          <!--src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"-->
+          <!-- src="/static/img/nature/desert.jpg" -->
+          <!-- :src="myLogo" -->
+          <!-- src="/img/logo/m1.jpg" -->
           <v-img
-            src="/static/img/nature/desert.jpg"
+            :src="myLogo"
             aspect-ratio="2.75"
           ></v-img>
 
@@ -42,3 +45,15 @@
     </v-layout>
   </v-container>
 </template>
+
+<script>
+  export default {
+    components: {
+    },
+    data() {
+      return {
+        myLogo: process.env.PERSONAL_LOGO_IMAGE
+      }
+    }
+  }
+</script>
