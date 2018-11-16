@@ -7,7 +7,6 @@
       xs12
       sm8
       md6>
-      <p>userAgent: {{ userAgent }}</p>
       <div class="text-xs-center">
         <logo/>
         <vuetify-logo/>
@@ -80,7 +79,7 @@
 //      });
 //      console.log('accessToken: ', data.accessToken);
 
-      return {userAgent: context.userAgent}
+//      return {userAgent: context.userAgent}
     },
   }
 </script>

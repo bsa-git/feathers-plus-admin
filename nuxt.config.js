@@ -27,7 +27,7 @@ module.exports = {
   },
   router: {
     base: routerBase,
-    middleware: 'auth'
+    middleware: 'init-app'
   },
   /*
   ** Customize the progress-bar color
