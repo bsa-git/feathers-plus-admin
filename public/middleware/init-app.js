@@ -7,6 +7,8 @@ export default async function (context) {
     // context.config = config;
     // context.store.commit(types.SET_CONFIG, config);
 
+    console.log('context.route.path:', context.route.path);
+
     // Check maintenance mode
     if (context.route.path === '/') {
       context.redirect('/admin');
