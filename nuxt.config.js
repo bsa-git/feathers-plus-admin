@@ -1,3 +1,4 @@
+require('@babel/polyfill');
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/': '/';
@@ -23,7 +24,10 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
-    ]
+    ],
+    script: [
+      { src: '/static/js/polyfills/polyfill.min.js' }
+    ],
   },
   router: {
     base: routerBase,
@@ -45,6 +49,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    // { src: '@/plugins/polyfills/babel-polyfill', ssr: false },
     '@/plugins/ui-framework/vuetify',
     '@/plugins/validators/vee-validate'
   ],
