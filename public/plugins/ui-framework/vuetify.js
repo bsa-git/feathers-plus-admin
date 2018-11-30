@@ -31,6 +31,7 @@ Vue.use(Vuetify, {
       sideNav: 'primary',
       mainNav: 'primary lighten-1',
       bodyBg: '',
+      pageBg: colors.grey['lighten-5']
     }
   }
 });

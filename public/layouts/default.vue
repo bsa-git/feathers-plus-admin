@@ -1,106 +1,113 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile
-          v-for="(item, i) in items"
-          :to="item.to"
-          :key="i"
-          router
-          exact
-        >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"/>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"/>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-toolbar-side-icon @click="drawer = !drawer"/>
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"/>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"/>
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>menu</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-content>
-      <v-container>
-        <nuxt/>
-      </v-container>
-    </v-content>
-    <v-navigation-drawer
-      :right="right"
-      v-model="rightDrawer"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
-            <v-icon light>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-      <span>&copy; 2017</span>
-    </v-footer>
+  <v-app id="inspire">
+    <!-- Top toolbar -->
+    <app-toolbar
+      :mailto="mailto"
+      :github-project="githubProject"
+      :user-avatar="userAvatar"
+      :user-menu="userMenu"
+      v-on:onNavLeft="navLeft = !navLeft"
+    ></app-toolbar>
+    <!-- Left toolbar -->
+    <app-drawer
+      isIcon
+      :logo-title="logoTitle"
+      :logo-img="logoImg"
+      :home-path="homePath"
+      :app-menu="appMenu"
+      :drawer="navLeft"
+      v-on:onNavLeft="modelNavLeft"
+     ></app-drawer>
+    <!-- Page content -->
+    <app-page-content>
+      <app-footer
+        slot="footer"
+        class="app--footer"
+        :copyright="copyright"
+        :developer="developer"
+        :site="site"
+      ></app-footer>
+    </app-page-content>
+    <!-- Go to top -->
+    <app-fab></app-fab>
+    <!-- Config theme colors -->
+    <app-theme-settings>
+      <theme-settings
+        :color-options="colorOptions"
+      ></theme-settings>
+    </app-theme-settings>
+    <!-- Snackbar -->
+    <app-snackbar
+      :show="snackbar.show"
+      :text="snackbar.text"
+      :color="snackbar.color"
+    ></app-snackbar>
   </v-app>
 </template>
 
 <script>
+  import util from '~/plugins/lib/util';
+  import appMenu from '~/store/data/app-menu';
+  import userMenu from '~/store/data/user-menu';
+  import themeColorOptions from '~/store/data/theme-color-options';
+  import AppToolbar from '~/components/layout/AppToolbar';
+  import AppDrawer from '~/components/layout/AppDrawer';
+  import AppPageContent from '~/components/layout/AppPageContent';
+  import AppPageHeader from '~/components/layout/AppPageHeader';
+  import AppFooter from '~/components/layout/AppFooter';
+  import AppFab from '~/components/layout/AppFab';
+  import AppThemeSettings from '~/components/layout/AppThemeSettings';
+  import ThemeSettings from '~/components/layout/ThemeSettings';
+  import AppSnackbar from '~/components/layout/AppSnackbar';
+
   export default {
-    data() {
-      return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [
-          {icon: 'apps', title: 'Welcome', to: '/admin'},
-          {icon: 'bubble_chart', title: 'Inspire', to: '/admin/inspire'}
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
-      }
-    }
+    components: {
+      AppDrawer,
+      AppToolbar,
+      AppPageContent,
+      AppPageHeader,
+      AppFooter,
+      AppFab,
+      AppThemeSettings,
+      ThemeSettings,
+      AppSnackbar
+    },
+    data: () => ({
+      navLeft: true,
+      snackbar: {
+        show: false,
+        text: 'Test success!',
+        color: 'purple',
+      },
+      appMenu: appMenu,
+      userMenu: userMenu,
+      colorOptions: themeColorOptions,
+      logoTitle: process.env.PERSONAL_LOGO_TITLE,
+      logoImg: process.env.PERSONAL_LOGO_IMAGE,
+      homePath: process.env.HOME_PATH,
+      mailto: process.env.PERSONAL_EMAIL,
+      githubProject: process.env.GITHUB_PROJECT,
+      userAvatar: '',
+      copyright: process.env.PERSONAL_COPYRIGHT,
+      developer: process.env.PERSONAL_LOGO_TITLE,
+      site: process.env.PERSONAL_WEBSITE,
+    }),
+    created() {
+      this.computeUserAvatar(this.mailto);
+//      AppEvents.forEach(item => {
+//        this.$on(item.name, item.callback);
+//      });
+      window.getApp = this;
+//      console.log('this.$route:', this.$route)
+    },
+    methods: {
+      computeUserAvatar(email) {
+        this.userAvatar = util.gravatar(email);
+      },
+      modelNavLeft: function (newValue) {
+        this.navLeft = newValue
+      },
+    },
   }
 </script>
+

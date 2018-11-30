@@ -1,2 +1,28 @@
-// Import Vuetify styling
-@require '../../../node_modules/vuetify/src/stylus/main.styl'
+// Import Playball font
+//@require "../fonts/Playball/style.css"
+@import url("https://fonts.googleapis.com/css?family=Playball");
+
+// ============================================================
+// Vuetify colors
+// ============================================================
+@require "../../../node_modules/vuetify/src/stylus/settings/_colors"
+
+// ============================================================
+// Vuetify variables
+// ============================================================
+@require "../../../node_modules/vuetify/src/stylus/settings/_variables"
+
+// --- EXOTIC --- //
+.exotic--dark
+  color: white //$grey.lighten-4
+  text-shadow: 0 3px 3px #a1a1a1;
+
+.exotic--light
+  color: $grey.darken-4
+  text-shadow: 0 3px 3px #bdbdbd;
+
+.exotic--font
+  font-family: playball, sans-serif !important;
+
+
+

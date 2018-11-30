@@ -8,7 +8,15 @@ let moduleExports = function (app) {
   // !code: func_init // !end
   // Add your custom middleware here. Remember that
   // in Express, the order matters.
-  // !code: middleware  // !end
+  // !code: middleware
+  //-------------------
+  // const useragentMiddleware = function (req, res, next ) {
+  //   console.log('req.useragent:', req.useragent);
+  //   next()
+  // };
+  // app.use(useragentMiddleware);
+  //-------------------
+  // !end
   // !code: func_return // !end
 };
 

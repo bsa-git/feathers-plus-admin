@@ -1,5 +1,5 @@
 {
-  "host": "feathers-plus-app-app.feathersjs.com",
+  "host": "HOST",
   "port": "PORT",
-  "mongodb": "DB_MONGODB_URI"
+  "mongodb": "MONGODB"
 }

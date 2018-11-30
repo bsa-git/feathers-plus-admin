@@ -71,20 +71,20 @@
     },
     "local": {
       "entity": "user",
-      "usernameField": "email",
+      "usernameField": "\\email",
       "passwordField": "password"
     },
     "google": {
-      "clientID": "your google client id",
-      "clientSecret": "your google client secret",
+      "clientID": "GOOGLE_ID",
+      "clientSecret": "GOOGLE_SECRET",
       "successRedirect": "/",
       "scope": [
         "profile openid email"
       ]
     },
     "github": {
-      "clientID": "your github client id",
-      "clientSecret": "your github client secret",
+      "clientID": "GITHUB_ID",
+      "clientSecret": "GITHUB_SECRET",
       "successRedirect": "/"
     },
     "cookie": {

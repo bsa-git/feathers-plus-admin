@@ -24,6 +24,7 @@ const mongoose = require('./mongoose');
 //-----------------
 const dotenv = require('dotenv');// Loads environment variables from .env file.
 const nuxt = require('./middleware/nuxt');// Loads nuxt middleware
+const useragent = require('express-useragent');// Loads useragent middleware
 //-----------------
 // !end
 // !code: init
@@ -50,20 +51,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
-// !code: use_end // !end
+// !code: use_end
+//----------------
+app.use(useragent.express());
+//----------------
+// !end
 
 // Set up Plugins and providers
-// !code: config_start
-//--------------------
-// Set authentication.local.usernameField = "email" for Win OS
-const configAuthentication = app.get('authentication');
-configAuthentication.local.usernameField = 'email';
-app.set('authentication', configAuthentication);
-
-// Set mongodb
-app.set('mongodb', process.env.MONGODB);
-//--------------------
-// !end
+// !code: config_start // !end
 app.configure(express.rest(
   // !code: express_rest // !end
 ));

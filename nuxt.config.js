@@ -1,7 +1,7 @@
 require('@babel/polyfill');
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/': '/';
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
 
 module.exports = {
   mode: 'spa',
@@ -16,17 +16,18 @@ module.exports = {
   head: {
     title: pkg.name,
     meta: [
-      { charset: 'utf-8' },
-      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      {charset: 'utf-8'},
+      {'http-equiv': 'X-UA-Compatible', content: 'IE=edge'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: pkg.description}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      {rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico'},
+      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'},
+      {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'}
     ],
     script: [
-      { src: '/static/js/polyfills/polyfill.min.js' }
+      {src: '/static/js/polyfills/polyfill.min.js'}
     ],
   },
   router: {
@@ -36,12 +37,13 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: {color: '#fff'},
 
   /*
   ** Global CSS
   */
   css: [
+    '~/assets/style/vuetify.styl',
     '~/assets/style/app.styl'
   ],
 

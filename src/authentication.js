@@ -17,16 +17,7 @@ let moduleExports = function (app) {
   app.configure(authentication(config));
   app.configure(jwt());
   app.configure(local());
-  // !code: loc_1
-  //---------------
-  // Set secret data
-  config.google.clientID = process.env.GOOGLE_ID;
-  config.google.clientSecret = process.env.GOOGLE_SECRET;
-  config.github.clientID = process.env.GITHUB_ID;
-  config.github.clientSecret = process.env.GITHUB_SECRET;
-  app.set('authentication', config);
-  //---------------
-  // !end
+  // !code: loc_1 // !end
 
   app.configure(oauth2(Object.assign({
     name: 'google',
