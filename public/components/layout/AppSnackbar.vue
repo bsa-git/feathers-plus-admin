@@ -1,10 +1,10 @@
 <template>
   <v-snackbar
-    :timeout="3000"
+    :timeout="6000"
     bottom
     right
     :color="color"
-    v-model="show"
+    v-model="compShow"
   >
     {{ text }}
     <v-btn dark flat @click.native="show = false" icon>
@@ -19,6 +19,18 @@ export default {
     show: Boolean,
     text: String,
     color: String
+  },
+  computed: {
+    compShow: {
+      // Getter:
+      get: function () {
+        return this.show
+      },
+      // Setter:
+      set: function (newValue) {
+        this.$emit('onShow', newValue)
+      }
+    }
   },
 };
 </script>

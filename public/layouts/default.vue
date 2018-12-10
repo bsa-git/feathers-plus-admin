@@ -1,19 +1,24 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="app-admin">
     <!-- Top toolbar -->
     <app-toolbar
-      :mailto="mailto"
-      :github-project="githubProject"
+      :mailto="config.email"
+      :github-project="config.githubProject"
       :user-avatar="userAvatar"
       :user-menu="userMenu"
       v-on:onNavLeft="navLeft = !navLeft"
-    ></app-toolbar>
+    >
+      <notification-list
+        slot="notification"
+        :notes="toolbarNotes"
+      ></notification-list>
+    </app-toolbar>
     <!-- Left toolbar -->
     <app-drawer
       isIcon
-      :logo-title="logoTitle"
-      :logo-img="logoImg"
-      :home-path="homePath"
+      :logo-title="config.logoTitle"
+      :logo-img="config.logoImg"
+      :home-path="config.homePath"
       :app-menu="appMenu"
       :drawer="navLeft"
       v-on:onNavLeft="modelNavLeft"
@@ -23,9 +28,9 @@
       <app-footer
         slot="footer"
         class="app--footer"
-        :copyright="copyright"
-        :developer="developer"
-        :site="site"
+        :copyright="config.copyright"
+        :developer="config.logoTitle"
+        :site="config.website"
       ></app-footer>
     </app-page-content>
     <!-- Go to top -->
@@ -37,20 +42,25 @@
       ></theme-settings>
     </app-theme-settings>
     <!-- Snackbar -->
-    <app-snackbar
-      :show="snackbar.show"
-      :text="snackbar.text"
-      :color="snackbar.color"
-    ></app-snackbar>
+    <app-snack-bar
+      :show="snackBar.show"
+      :text="snackBar.text"
+      :color="snackBar.color"
+      v-on:onShow="modelSnackBar"
+    ></app-snack-bar>
   </v-app>
 </template>
 
 <script>
+  import { mapGetters, mapMutations, mapActions } from 'vuex';
   import util from '~/plugins/lib/util';
-  import appMenu from '~/store/data/app-menu';
-  import userMenu from '~/store/data/user-menu';
-  import themeColorOptions from '~/store/data/theme-color-options';
+  import HttpBox from '~/plugins/lib/http.client.class';
+  import appMenu from '~/api/data/app-menu';
+  import userMenu from '~/api/data/user-menu';
+  import notes from '~/api/data/app-notification';
+  import themeColorOptions from '~/api/data/theme-color-options';
   import AppToolbar from '~/components/layout/AppToolbar';
+  import NotificationList from '~/components/layout/NotificationList';
   import AppDrawer from '~/components/layout/AppDrawer';
   import AppPageContent from '~/components/layout/AppPageContent';
   import AppPageHeader from '~/components/layout/AppPageHeader';
@@ -58,42 +68,41 @@
   import AppFab from '~/components/layout/AppFab';
   import AppThemeSettings from '~/components/layout/AppThemeSettings';
   import ThemeSettings from '~/components/layout/ThemeSettings';
-  import AppSnackbar from '~/components/layout/AppSnackbar';
+  import AppSnackBar from '~/components/layout/AppSnackbar';
 
   export default {
     components: {
       AppDrawer,
       AppToolbar,
+      NotificationList,
       AppPageContent,
       AppPageHeader,
       AppFooter,
       AppFab,
       AppThemeSettings,
       ThemeSettings,
-      AppSnackbar
+      AppSnackBar
     },
     data: () => ({
       navLeft: true,
-      snackbar: {
-        show: false,
-        text: 'Test success!',
-        color: 'purple',
-      },
       appMenu: appMenu,
       userMenu: userMenu,
       colorOptions: themeColorOptions,
-      logoTitle: process.env.PERSONAL_LOGO_TITLE,
-      logoImg: process.env.PERSONAL_LOGO_IMAGE,
-      homePath: process.env.HOME_PATH,
-      mailto: process.env.PERSONAL_EMAIL,
-      githubProject: process.env.GITHUB_PROJECT,
+      toolbarNotes: notes,
       userAvatar: '',
-      copyright: process.env.PERSONAL_COPYRIGHT,
-      developer: process.env.PERSONAL_LOGO_TITLE,
-      site: process.env.PERSONAL_WEBSITE,
     }),
     created() {
-      this.computeUserAvatar(this.mailto);
+      if(HttpBox.isAccessToken()){
+        this.authenticate().catch(error => {
+          if (error.message.includes('Could not find stored JWT')) {
+            HttpBox.removeAccessToken();
+          }else {
+            console.error(error);
+            this.showError(error.message);
+          }
+        })
+      }
+      this.computeUserAvatar(this.config.email);
 //      AppEvents.forEach(item => {
 //        this.$on(item.name, item.callback);
 //      });
@@ -107,7 +116,20 @@
       modelNavLeft: function (newValue) {
         this.navLeft = newValue
       },
+      modelSnackBar: function (newValue) {
+        this.$store.commit('SET_SNACKBAR', { show: newValue });
+      },
+      ...mapMutations({
+        showError: 'SHOW_ERROR',
+      }),
+      ...mapActions('auth', ['authenticate'])
     },
+    computed: {
+      ...mapGetters({
+        config: 'getConfig',
+        snackBar: 'getSnackBar'
+      })
+    }
   }
 </script>
 

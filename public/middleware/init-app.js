@@ -1,7 +1,7 @@
 
 import useragent from 'express-useragent'
 
-export default async function (context) {
+export default function (context) {
   try {
     // GoTo '/admin'
     if (context.route.path === '/') {

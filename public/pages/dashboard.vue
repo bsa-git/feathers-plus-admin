@@ -84,7 +84,7 @@
 </template>
 
 <script>
-  import appMenu from '~/store/data/app-menu';
+  import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
 
   export default {

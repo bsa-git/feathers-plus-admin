@@ -33,7 +33,8 @@
           <v-icon medium>notifications</v-icon>
         </v-badge>
       </v-btn>
-      <notification-list></notification-list>
+      <!-- Slot - notification -->
+      <slot name="notification"></slot>
     </v-menu>
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
       <v-btn v-if="userAvatar" icon large flat slot="activator">
@@ -60,29 +61,21 @@
   </v-toolbar>
 </template>
 <script>
-  import NotificationList from '~/components/widgets/list/NotificationList';
   import util from '~/plugins/lib/util';
 
   export default {
-    components: {
-      NotificationList
-    },
     props: {
       mailto: String,
       githubProject: String,
       userAvatar: String,
       userMenu: Array
     },
-    data: () => ({}),
     computed: {
       toolbarColor() {
         return this.$vuetify.options.extra.mainNav;
       }
     },
     methods: {
-//      handleDrawerToggle() {
-//        window.getApp.$emit('APP_DRAWER_TOGGLED');
-//      },
       onNavLeft: function () {
         this.$emit('onNavLeft')
       },

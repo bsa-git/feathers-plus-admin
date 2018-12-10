@@ -6,7 +6,7 @@
     <v-divider></v-divider>
     <v-card-text class="pa-0">
       <v-list two-line class="pa-0">
-        <template v-for="(item, index) in items">
+        <template v-for="(item, index) in notes">
           <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
           <v-divider v-else-if="item.divider" :key="index"></v-divider>
           <v-list-tile avatar v-else :key="item.title" @click="handleClick">
@@ -30,11 +30,10 @@
 </template>
 
 <script>
-import notes from '~/store/api/notification';
 export default {
-  data: () => ({
-    items: notes
-  }),
+  props: {
+    notes: Array
+  },
   methods: {
     handleClick: (e) => {
       console.log(e);
