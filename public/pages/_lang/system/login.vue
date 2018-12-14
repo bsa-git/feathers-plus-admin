@@ -5,14 +5,29 @@
         <v-card-text>
           <div class="layout column align-center">
             <img src="/static/img/m.png" alt="Vue Material Admin" width="120" height="120">
-            <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
+            <router-link :to="config.homePath">
+              <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
+            </router-link>
           </div>
           <v-form>
             <!--<v-form @submit.prevent="onSubmit(model.email, model.password)">-->
-            <v-text-field append-icon="person" name="login" label="Email" type="text"
-                          v-model="model.email"></v-text-field>
-            <v-text-field append-icon="lock" name="password" label="Password" id="password" type="password"
-                          v-model="model.password"></v-text-field>
+            <v-text-field
+              append-icon="email"
+              v-validate="'required|email'"
+              :error-messages="errors.collect('email')"
+              data-vv-name="email"
+              v-model="model.email"
+              label="Email"
+            ></v-text-field>
+            <v-text-field
+              append-icon="lock"
+              v-validate="'required|min:3'"
+              :error-messages="errors.collect('password')"
+              data-vv-name="password"
+              v-model="model.password"
+              label="Password"
+              type="password"
+            ></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -26,7 +41,7 @@
             <v-icon color="light-blue">fab fa-twitter fa-lg</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn block color="primary" @click="login" :loading="loading" :disabled="user? true : false">Login</v-btn>
+          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -39,8 +54,8 @@
 
   export default {
     layout: 'auth',
-    components: {
-//      AppSnackbar
+    $_veeValidate: {
+      validator: 'new'
     },
     data: () => ({
       title: 'Login',
@@ -60,21 +75,32 @@
         ],
       }
     },
+    mounted () {
+//      this.$validator.localize('en', this.dictionary)
+      console.log('$i18n:', this.$i18n);
+    },
     computed: {
       ...mapGetters('users', {
         user: 'current'
+      }),
+      ...mapGetters({
+        config: 'getConfig',
       })
     },
     methods: {
-      async login() {
+      async submit() {
         const self = this;
-        const response = await self.onSubmit(self.model.email, self.model.password);
-//        console.log('response:', response);
-        if(response && response.accessToken){
-          this.loading = true;
-          setTimeout(() => {
-            this.$router.push('/dashboard');
-          }, 1000);
+        await this.$validator.validateAll();
+        if(this.$validator.errors.any()){
+          this.showError('Validation Error!');
+        }else {
+          const response = await self.login(self.model.email, self.model.password);
+          if (response && response.accessToken) {
+            this.loading = true;
+            setTimeout(() => {
+              self.$router.push('/dashboard');
+            }, 1000);
+          }
         }
       },
       dismissError() {
@@ -82,7 +108,7 @@
         this.clearAuthenticateError()
       },
 
-      async onSubmit(email, password) {
+      async login(email, password) {
         try {
           const response = await this.authenticate({strategy: 'local', email, password});
           this.showSuccess('Success Login!');

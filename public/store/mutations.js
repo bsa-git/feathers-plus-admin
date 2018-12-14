@@ -1,9 +1,17 @@
 
 const mutations = {
 
+  //--- LOCALE ---//
+
+  SET_LANG(state, locale) {
+    if (state.locales.indexOf(locale) !== -1) {
+      state.locale = locale;
+    }
+  },
+
   //--- SNACKBAR ---//
 
-  SET_SNACKBAR (state, snackbar) {
+  SET_SNACK_BAR (state, snackbar) {
     state.snackbar =  Object.assign(state.snackbar, snackbar);
   },
 

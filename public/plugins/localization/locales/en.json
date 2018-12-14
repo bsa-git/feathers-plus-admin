@@ -1,0 +1,22 @@
+{
+  "links": {
+    "home": "Home",
+    "about": "About",
+    "english": "English version",
+    "french": "French version"
+  },
+  "home": {
+    "title": "Welcome",
+    "description": "This is an introduction in English"
+  },
+  "about": {
+    "title": "About",
+    "description": "This page is made to give you more informations"
+  },
+  "login": {
+    "title": "Login",
+    "description": "Enter credentials",
+    "email": "Email",
+    "password": "Password"
+  }
+}

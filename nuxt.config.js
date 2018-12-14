@@ -32,7 +32,7 @@ module.exports = {
   },
   router: {
     base: routerBase,
-    middleware: 'init-app'
+    middleware: ['init-app', 'i18n']
   },
   /*
   ** Customize the progress-bar color
@@ -51,9 +51,10 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    // { src: '@/plugins/polyfills/babel-polyfill', ssr: false },
     '@/plugins/ui-framework/vuetify',
-    '@/plugins/validators/vee-validate'
+    '@/plugins/localization/vue-i18n',
+    '@/plugins/validators/vee-validate',
+
   ],
 
   /*

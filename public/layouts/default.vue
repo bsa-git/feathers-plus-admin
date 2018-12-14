@@ -117,7 +117,7 @@
         this.navLeft = newValue
       },
       modelSnackBar: function (newValue) {
-        this.$store.commit('SET_SNACKBAR', { show: newValue });
+        this.$store.commit('SET_SNACK_BAR', { show: newValue });
       },
       ...mapMutations({
         showError: 'SHOW_ERROR',
