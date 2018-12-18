@@ -83,15 +83,17 @@
       ThemeSettings,
       AppSnackBar
     },
-    data: () => ({
-      navLeft: true,
-      appMenu: appMenu,
-      userMenu: userMenu,
-      colorOptions: themeColorOptions,
-      toolbarNotes: notes,
-      userAvatar: '',
-    }),
-    created() {
+    data: function () {
+      return {
+        navLeft: true,
+        appMenu: appMenu,
+        userMenu: userMenu,
+        colorOptions: themeColorOptions,
+        toolbarNotes: notes,
+        userAvatar: '',
+      }
+    },
+    mounted() {
       if(HttpBox.isAccessToken()){
         this.authenticate().catch(error => {
           if (error.message.includes('Could not find stored JWT')) {
@@ -100,7 +102,7 @@
             console.error(error);
             this.showError(error.message);
           }
-        })
+        });
       }
       this.computeUserAvatar(this.config.email);
 //      AppEvents.forEach(item => {
@@ -121,6 +123,7 @@
       },
       ...mapMutations({
         showError: 'SHOW_ERROR',
+        setLang: 'SET_LANG'
       }),
       ...mapActions('auth', ['authenticate'])
     },

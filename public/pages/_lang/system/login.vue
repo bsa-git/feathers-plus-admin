@@ -5,19 +5,18 @@
         <v-card-text>
           <div class="layout column align-center">
             <img src="/static/img/m.png" alt="Vue Material Admin" width="120" height="120">
-            <router-link :to="config.homePath">
+            <router-link :to="$i18n.path(config.homePath)">
               <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
             </router-link>
           </div>
           <v-form>
-            <!--<v-form @submit.prevent="onSubmit(model.email, model.password)">-->
             <v-text-field
               append-icon="email"
               v-validate="'required|email'"
               :error-messages="errors.collect('email')"
               data-vv-name="email"
               v-model="model.email"
-              label="Email"
+              :label="$t('login.email')"
             ></v-text-field>
             <v-text-field
               append-icon="lock"
@@ -25,7 +24,7 @@
               :error-messages="errors.collect('password')"
               data-vv-name="password"
               v-model="model.password"
-              label="Password"
+              :label="$t('login.password')"
               type="password"
             ></v-text-field>
           </v-form>
@@ -41,7 +40,9 @@
             <v-icon color="light-blue">fab fa-twitter fa-lg</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">Login</v-btn>
+          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">
+            {{ $t('login.title') }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -57,16 +58,18 @@
     $_veeValidate: {
       validator: 'new'
     },
-    data: () => ({
-      title: 'Login',
-      description: 'Enter credentials',
-      loading: false,
-      error: undefined,
-      model: {
-        email: 'Sandrine.Torphy@yahoo.com',
-        password: 'Sandrine.Torphy'
-      },
-    }),
+    data: function () {
+      return {
+        title: this.$t('login.title'),
+        description: this.$t('login.description'),
+        loading: false,
+        error: undefined,
+        model: {
+          email: 'Sandrine.Torphy@yahoo.com',
+          password: 'Sandrine.Torphy'
+        },
+      }
+    },
     head() {
       return {
         title: this.title,
@@ -75,9 +78,9 @@
         ],
       }
     },
-    mounted () {
+    mounted() {
 //      this.$validator.localize('en', this.dictionary)
-      console.log('$i18n:', this.$i18n);
+//      console.log('$i18n:', this.$t('login.title'));// this.$t('login.title')
     },
     computed: {
       ...mapGetters('users', {
@@ -91,9 +94,9 @@
       async submit() {
         const self = this;
         await this.$validator.validateAll();
-        if(this.$validator.errors.any()){
+        if (this.$validator.errors.any()) {
           this.showError('Validation Error!');
-        }else {
+        } else {
           const response = await self.login(self.model.email, self.model.password);
           if (response && response.accessToken) {
             this.loading = true;

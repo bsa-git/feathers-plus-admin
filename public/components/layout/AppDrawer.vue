@@ -18,11 +18,11 @@
         <span class="font-weight-black font-italic">{{ logoTitle }}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :to="homePath" title="Home">
+      <v-btn icon :to="$i18n.path(homePath)" title="Home">
         <v-icon>home</v-icon>
       </v-btn>
     </v-toolbar>
-    <vue-perfect-scrollbar class="drawer-menu--scroll" :settings="scrollSettings">
+    <!--<vue-perfect-scrollbar class="drawer-menu&#45;&#45;scroll" :settings="scrollSettings">-->
       <v-list dense expand>
         <template v-for="(item, i) in appMenu">
           <!--group with subitems-->
@@ -41,7 +41,7 @@
                     <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-for="(child, i) in subItem.children" :key="i" :to="child.to" ripple="ripple">
+                <v-list-tile v-for="(child, i) in subItem.children" :key="i" :to="$i18n.path(child.to)" ripple="ripple">
                   <v-list-tile-content>
                     <v-list-tile-title>{{ child.title }}</v-list-tile-title>
                   </v-list-tile-content>
@@ -51,7 +51,7 @@
                 </v-list-tile>
               </v-list-group>
               <!--child item-->
-              <v-list-tile v-else :key="i" :to="subItem.to" :disabled="subItem.disabled" :target="subItem.target"
+              <v-list-tile v-else :key="i" :to="$i18n.path(subItem.to)" :disabled="subItem.disabled" :target="subItem.target"
                            ripple="ripple">
                 <v-list-tile-content>
                   <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
@@ -65,7 +65,7 @@
           <v-subheader v-else-if="item.header" :key="i">{{ item.header }}</v-subheader>
           <v-divider v-else-if="item.divider" :key="i"></v-divider>
           <!--top-level link-->
-          <v-list-tile v-else :to="item.to" ripple="ripple" :disabled="item.disabled" :target="item.target"
+          <v-list-tile v-else :to="$i18n.path(item.to)" ripple="ripple" :disabled="item.disabled" :target="item.target"
                        rel="noopener" :key="item.name">
             <v-list-tile-action v-if="item.icon">
               <v-icon>{{ item.icon }}</v-icon>
@@ -79,15 +79,15 @@
           </v-list-tile>
         </template>
       </v-list>
-    </vue-perfect-scrollbar>
+    <!--</vue-perfect-scrollbar>-->
   </v-navigation-drawer>
 </template>
 <script>
-  import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+//  import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 
   export default {
     components: {
-      VuePerfectScrollbar,
+//      VuePerfectScrollbar,
     },
     props: {
       isIcon: Boolean,

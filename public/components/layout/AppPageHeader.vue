@@ -1,7 +1,7 @@
 <template>
   <v-layout row class="align-center px-4 pt-4">
     <div class="exotic--light headline pr-3">{{title}}</div>
-    <v-btn flat icon :to="homePath">
+    <v-btn flat icon :to="$i18n.path(homePath)">
       <v-icon>home</v-icon>
     </v-btn>
     <v-breadcrumbs :items="breadcrumbs" class="hidden-sm-and-down">
@@ -9,7 +9,7 @@
       <template slot="item" slot-scope="props">
         <li>
           <router-link
-            :to="props.item.href"
+            :to="$i18n.path(props.item.href)"
             :class="['v-breadcrumbs__item', props.item.disabled ? 'v-breadcrumbs__item--disabled' : '']">
             {{ props.item.text }}
           </router-link>
@@ -48,6 +48,7 @@
     },
     computed: {
       breadcrumbs: function () {
+        const self = this;
         let _breadcrumbs = [];
         let child = null;
         this.appMenu.forEach(menu => {
@@ -55,20 +56,48 @@
             menu.items.forEach(item => {
               if (item.children) {
                 child = item.children.find(i => {
-                  return i.to === this.routePath;
+                  return (i.to ? self.$i18n.path(i.to) : '') === self.routePath;
                 });
                 if (child) {
-                  this.title = child.title;
+                  self.title = child.title;
+                  if (menu.to) {
+                    _breadcrumbs.push({
+                      href: menu.to,
+                      text: menu.title,
+                      disabled: menu.disabled ? menu.disabled : false
+                    });
+                  }
+                  if (item.to) {
+                    _breadcrumbs.push({
+                      href: item.to,
+                      text: item.title,
+                      disabled: item.disabled ? item.disabled : false
+                    });
+                  }
+                  if (child.to) {
+                    _breadcrumbs.push({
+                      href: child.to,
+                      text: child.title,
+                      disabled: true
+                    });
+                  }
+                }
+              }
+            });
+            if (!child) {
+              child = menu.items.find(i => {
+                return (i.to ? self.$i18n.path(i.to) : '') === self.routePath;
+              });
+              if (child) {
+                self.title = child.title;
+                if (menu.to) {
                   _breadcrumbs.push({
                     href: menu.to,
                     text: menu.title,
                     disabled: menu.disabled ? menu.disabled : false
                   });
-                  _breadcrumbs.push({
-                    href: item.to,
-                    text: item.title,
-                    disabled: item.disabled ? item.disabled : false
-                  });
+                }
+                if (child.to) {
                   _breadcrumbs.push({
                     href: child.to,
                     text: child.title,
@@ -76,28 +105,10 @@
                   });
                 }
               }
-            });
-            if (!child) {
-              child = menu.items.find(i => {
-                return i.to === this.routePath;
-              });
-              if (child) {
-                this.title = child.title;
-                _breadcrumbs.push({
-                  href: menu.to,
-                  text: menu.title,
-                  disabled: menu.disabled ? menu.disabled : false
-                });
-                _breadcrumbs.push({
-                  href: child.to,
-                  text: child.title,
-                  disabled: true
-                });
-              }
             }
             if (!child) {
-              if (menu.to === this.routePath) {
-                this.title = menu.title;
+              if (menu.to && self.$i18n.path(menu.to) === self.routePath) {
+                self.title = menu.title;
                 _breadcrumbs.push({
                   href: menu.to,
                   text: menu.title,
@@ -106,8 +117,8 @@
               }
             }
           } else {
-            if (menu.to === this.routePath) {
-              this.title = menu.title;
+            if (menu.to && self.$i18n.path(menu.to) === self.routePath) {
+              self.title = menu.title;
               _breadcrumbs.push({
                 href: menu.to,
                 text: menu.title,

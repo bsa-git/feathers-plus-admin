@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import state from '~/store/state';
 import getters from '~/store/getters';
 import mutations from '~/store/mutations';
+import actions from '~/store/actions';
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 
@@ -17,6 +18,7 @@ const createStore = () => {
     state: state,
     getters: getters,
     mutations: mutations,
+    actions: actions,
     plugins: [
       service('users'),
       auth({

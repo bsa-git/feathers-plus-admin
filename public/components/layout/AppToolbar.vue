@@ -46,16 +46,55 @@
         <v-icon>fas fa-user-circle</v-icon>
       </v-btn>
       <v-list class="pa-0">
-        <v-list-tile v-for="(item,index) in userMenu" :to="!item.href ? { name: item.name } : null" :href="item.href"
-                     @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener"
-                     :key="index">
-          <v-list-tile-action v-if="item.icon">
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <!--<v-list-tile v-for="(item,index) in userMenu" :to="!item.href ? { name: item.name } : null" :href="item.href"-->
+        <!--@click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener"-->
+        <!--:key="index">-->
+        <!--<v-list-tile-action v-if="item.icon">-->
+        <!--<v-icon>{{ item.icon }}</v-icon>-->
+        <!--</v-list-tile-action>-->
+        <!--<v-list-tile-content>-->
+        <!--<v-list-tile-title>{{ item.title }}</v-list-tile-title>-->
+        <!--</v-list-tile-content>-->
+        <!--</v-list-tile>-->
+
+        <template v-for="(item, i) in userMenu">
+          <!--group with subitems-->
+          <v-list-group v-if="item.items" :key="item.name" :group="item.group" :prepend-icon="item.icon"
+                        no-action="no-action" :value="true">
+            <v-list-tile slot="activator" ripple="ripple" >
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <template v-for="(subItem, i) in item.items">
+              <!--sub item-->
+              <v-list-tile :key="subItem.name" :to="subItem.to ? $i18n.path(subItem.to) : null"
+                           :href="subItem.href" :disabled="subItem.disabled" :target="subItem.target"
+                           @click="subItem.click ? subItem.click : null" ripple="ripple">
+                <v-list-tile-content>
+                  <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
+                </v-list-tile-content>
+                <v-list-tile-action v-if="subItem.icon">
+                  <v-icon v-text="subItem.icon"></v-icon>
+                </v-list-tile-action>
+              </v-list-tile>
+            </template>
+          </v-list-group>
+          <!--divider-->
+          <v-divider v-else-if="item.divider" :key="i"></v-divider>
+          <!--top-level link-->
+          <v-list-tile v-else :to="item.to ? $i18n.path(item.to) : null" :href="item.href" ripple="ripple"
+                       :disabled="item.disabled" :target="item.target"
+                       @click="item.click ? item.click : null" rel="noopener" :key="item.name">
+            <v-list-tile-action v-if="item.icon">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+
       </v-list>
     </v-menu>
   </v-toolbar>

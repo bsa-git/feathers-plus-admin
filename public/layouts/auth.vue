@@ -25,10 +25,9 @@
       AppSnackBar
     },
     data: function () {
-      return {
-      }
+      return {}
     },
-    created() {
+    mounted() {
       if(HttpBox.isAccessToken()){
         this.authenticate().catch(error => {
           if (error.message.includes('Could not find stored JWT')) {

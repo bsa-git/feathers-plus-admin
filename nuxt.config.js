@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
 
 module.exports = {
-  mode: 'spa',
+  mode: 'spa',// universal|spa
   srcDir: 'public',
   buildDir: 'nuxt-dist',
   generate: {
