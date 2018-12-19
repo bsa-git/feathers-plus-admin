@@ -99,12 +99,14 @@
       appMenu: Array,
       drawer: Boolean
     },
-    data: () => ({
-      mini: false,
-      scrollSettings: {
-        maxScrollbarLength: 160
+    data: function () {
+      return {
+        mini: false,
+        scrollSettings: {
+          maxScrollbarLength: 160
+        }
       }
-    }),
+    },
     created() {
 //      window.getApp.$on('APP_DRAWER_TOGGLED', () => {
 //        this.drawer = (!this.drawer);

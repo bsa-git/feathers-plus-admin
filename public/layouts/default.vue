@@ -1,11 +1,10 @@
 <template>
   <v-app id="app-admin">
-    <!-- Top toolbar -->
+    <!-- Top toolbar :user-menu="userMenu" -->
     <app-toolbar
       :mailto="config.email"
       :github-project="config.githubProject"
       :user-avatar="userAvatar"
-      :user-menu="userMenu"
       v-on:onNavLeft="navLeft = !navLeft"
     >
       <notification-list
@@ -56,7 +55,7 @@
   import util from '~/plugins/lib/util';
   import HttpBox from '~/plugins/lib/http.client.class';
   import appMenu from '~/api/data/app-menu';
-  import userMenu from '~/api/data/user-menu';
+//  import userMenu from '~/api/data/user-menu';
   import notes from '~/api/data/app-notification';
   import themeColorOptions from '~/api/data/theme-color-options';
   import AppToolbar from '~/components/layout/AppToolbar';
@@ -87,7 +86,7 @@
       return {
         navLeft: true,
         appMenu: appMenu,
-        userMenu: userMenu,
+//        userMenu: userMenu,
         colorOptions: themeColorOptions,
         toolbarNotes: notes,
         userAvatar: '',

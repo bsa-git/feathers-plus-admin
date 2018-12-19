@@ -70,7 +70,7 @@
               <!--sub item-->
               <v-list-tile :key="subItem.name" :to="subItem.to ? $i18n.path(subItem.to) : null"
                            :href="subItem.href" :disabled="subItem.disabled" :target="subItem.target"
-                           @click="subItem.click ? subItem.click : null" ripple="ripple">
+                           @click="subItem.click ? selectLang(subItem.click) : null" ripple="ripple">
                 <v-list-tile-content>
                   <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
                 </v-list-tile-content>
@@ -83,9 +83,9 @@
           <!--divider-->
           <v-divider v-else-if="item.divider" :key="i"></v-divider>
           <!--top-level link-->
-          <v-list-tile v-else :to="item.to ? $i18n.path(item.to) : null" :href="item.href" ripple="ripple"
+          <v-list-tile v-else :to="item.to ? $i18n.path(item.to) : null" :href="item.href" ripple="ripple" :id="item.name"
                        :disabled="item.disabled" :target="item.target"
-                       @click="item.click ? item.click : null" rel="noopener" :key="item.name">
+                       @click="warn('Hellow!', $event)" rel="noopener" :key="item.name">
             <v-list-tile-action v-if="item.icon">
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -100,14 +100,24 @@
   </v-toolbar>
 </template>
 <script>
+  import { mapMutations } from 'vuex';
   import util from '~/plugins/lib/util';
+  import userMenu from '~/api/data/user-menu';
 
   export default {
     props: {
       mailto: String,
       githubProject: String,
       userAvatar: String,
-      userMenu: Array
+//      userMenu: Array
+    },
+    data: function () {
+      return {
+        userMenu
+      }
+    },
+    created() {
+      console.log('userMenu:', this.userMenu)
     },
     computed: {
       toolbarColor() {
@@ -115,12 +125,28 @@
       }
     },
     methods: {
-      onNavLeft: function () {
+      onClick(type) {
+        switch (type) {
+          case 'en':
+          case 'ru':
+            this.setLang(type);
+            break;
+          case 'logout':
+            text = "It is Weekend";
+            break;
+          default:
+            text = "Looking forward to the Weekend";
+        }
+      },
+      onNavLeft() {
         this.$emit('onNavLeft')
       },
       handleFullScreen() {
         util.toggleFullScreen();
-      }
+      },
+      ...mapMutations({
+        setLang: 'SET_LANG'
+      }),
     }
   };
 </script>
