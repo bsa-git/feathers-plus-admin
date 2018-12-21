@@ -1,17 +1,125 @@
 {
-  "links": {
-    "home": "Home",
-    "about": "About",
-    "english": "English version",
-    "french": "French version"
+  "$vuetify": {
+    "dataIterator": {
+      "rowsPerPageText": "Записей на странице:",
+      "rowsPerPageAll": "Все",
+      "pageText": "{0}-{1} из {2}",
+      "noResultsText": "Не найдено подходящих записей",
+      "nextPage": "Следующая страница",
+      "prevPage": "Предыдущая страница"
+    },
+    "dataTable": {
+      "rowsPerPageText": "Строк на странице:"
+    },
+    "noDataText": "Отсутствуют данные"
   },
-  "home": {
-    "title": "Welcome",
-    "description": "This is an introduction in English"
+  "app_menu": {
+    "apps": "Приложения",
+    "home": "Главная",
+    "about": "О Программе",
+    "dashboard": "Рабочий стол",
+    "chat": "Чат",
+    "inbox": "Входящие",
+    "media": "Медиа",
+    "service": "Сервис",
+    "admins": "Администрирование",
+    "management": "Аккаунты",
+    "settings": "Конфигурирование",
+    "actions": "Действия",
+    "create": "Создать",
+    "read": "Читать",
+    "update": "Обновить",
+    "delete": "Удалить",
+    "widgets": "Виджеты",
+    "social": "Социальные",
+    "statistic": "Статистика",
+    "chart": "График",
+    "list": "Список",
+    "ui_elements": "Интерфейс",
+    "general": "Основной",
+    "alerts": "Предупреждения",
+    "avatars": "Аватары",
+    "badges": "Значки",
+    "buttons": "Кнопки",
+    "cards": "Карты",
+    "carousels": "Карусели",
+    "chips": "Чипсы",
+    "dialogs": "Диалоги",
+    "icons": "Иконки",
+    "tables": "Таблицы данных",
+    "parallax": "Паралакс",
+    "slider": "Слайдер",
+    "pagination": "Пагинация",
+    "typography": "Типография",
+    "color": "Цвет",
+    "tooltip": "Подсказка",
+    "pickers": "Выбор данных",
+    "timepicker": "Выбор времени",
+    "datepicker": "Выбор даты",
+    "layout": "Макет",
+    "bottom_sheets": "Нижние панели",
+    "expansion_panels": "Панели расширения",
+    "footer": "Нижний колонтитул",
+    "lists": "Списки",
+    "menus": "Меню",
+    "tabs": "Вкладки",
+    "toolbar": "Панель инструментов",
+    "timeline": "График",
+    "forms_controls": "Формы",
+    "basic": "Основной",
+    "text_fields": "Текстовые поля",
+    "steppers": "Степперы",
+    "editors": "Редакторы",
+    "pages": "Страницы",
+    "login": "Логин",
+    "extras": "Дополнительно",
+    "progress": "Прогресс",
+    "snackbar": "Snackbar",
+    "jumbotrons": "Jumbotrons",
+    "selection_controls": "Selection Controls",
+    "selects": "Selects",
+    "403": "403",
+    "404": "404",
+    "500": "500"
   },
-  "about": {
-    "title": "About",
-    "description": "This page is made to give you more informations"
+  "user_menu": {
+    "language": "Язык",
+    "language_en": "English",
+    "language_ru": "Русский",
+    "user": "Пользователь",
+    "profile": "Профайл",
+    "settings": "Конфигурация",
+    "logout": "Выход"
+  },
+  "app_notification": {
+    "notification": "Уведомление",
+    "show_all": "Показать все",
+    "new_user": "Новый Пользователь",
+    "new_order": "Новый заказ получен",
+    "new_payment": "Сделан новый платеж",
+    "new_message": "Новое сообщение"
+  },
+  "theme_settings": {
+    "settings": "Настройки темы",
+    "color_option": "Выбор цвета",
+    "sidebar_option": "Выбор цвета темы",
+    "dark": "Темный",
+    "light": "Светлый"
+  },
+  "app_toolbar": {
+    "hire_me": "Напиши Мне",
+    "github": "GitHub",
+    "full_size": "Полный Размер",
+    "notifications": "Уведомления",
+    "user": "Пользователь",
+    "search": "Поиск"
+  },
+  "app_footer": {
+    "designed_with_by": "РАЗРАБОТАН С "
+  },
+  "dashboard": {
+    "title": "Рабочий стол",
+    "description": "Суммарная Информация"
   },
   "login": {
     "title": "Логин",

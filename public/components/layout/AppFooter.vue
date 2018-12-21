@@ -4,7 +4,7 @@
     <v-spacer></v-spacer>
     <div class="footer__developer">
       <v-btn :href="site" flat color="primary" target="_blank">{{ developer }}</v-btn>
-      <span class="caption exotic--light mr-1">DESIGNED WITH BY</span>
+      <span class="caption exotic--light mr-1">{{ $t('app_footer.designed_with_by') }}</span>
       <v-icon color="red" small>favorite</v-icon>
     </div>
   </v-footer>

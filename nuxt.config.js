@@ -51,8 +51,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/ui-framework/vuetify',
     '@/plugins/localization/vue-i18n',
+    '@/plugins/ui-framework/vuetify',
     '@/plugins/validators/vee-validate',
 
   ],

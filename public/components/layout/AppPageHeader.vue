@@ -1,7 +1,7 @@
 <template>
   <v-layout row class="align-center px-4 pt-4">
     <div class="exotic--light headline pr-3">{{title}}</div>
-    <v-btn flat icon :to="$i18n.path(homePath)">
+    <v-btn flat icon :to="$i18n.path(homePath)" :title="$t('app_menu.home')">
       <v-icon>home</v-icon>
     </v-btn>
     <v-breadcrumbs :items="breadcrumbs" class="hidden-sm-and-down">
@@ -59,25 +59,25 @@
                   return (i.to ? self.$i18n.path(i.to) : '') === self.routePath;
                 });
                 if (child) {
-                  self.title = child.title;
+                  self.title = this.$t(`app_menu.${child.alias}`);
                   if (menu.to) {
                     _breadcrumbs.push({
                       href: menu.to,
-                      text: menu.title,
+                      text: this.$t(`app_menu.${menu.alias}`),
                       disabled: menu.disabled ? menu.disabled : false
                     });
                   }
                   if (item.to) {
                     _breadcrumbs.push({
                       href: item.to,
-                      text: item.title,
+                      text: this.$t(`app_menu.${item.alias}`),
                       disabled: item.disabled ? item.disabled : false
                     });
                   }
                   if (child.to) {
                     _breadcrumbs.push({
                       href: child.to,
-                      text: child.title,
+                      text: this.$t(`app_menu.${child.alias}`),
                       disabled: true
                     });
                   }
@@ -89,18 +89,18 @@
                 return (i.to ? self.$i18n.path(i.to) : '') === self.routePath;
               });
               if (child) {
-                self.title = child.title;
+                self.title = this.$t(`app_menu.${child.alias}`);
                 if (menu.to) {
                   _breadcrumbs.push({
                     href: menu.to,
-                    text: menu.title,
+                    text: this.$t(`app_menu.${menu.alias}`),
                     disabled: menu.disabled ? menu.disabled : false
                   });
                 }
                 if (child.to) {
                   _breadcrumbs.push({
                     href: child.to,
-                    text: child.title,
+                    text: this.$t(`app_menu.${child.alias}`),
                     disabled: true
                   });
                 }
@@ -108,20 +108,20 @@
             }
             if (!child) {
               if (menu.to && self.$i18n.path(menu.to) === self.routePath) {
-                self.title = menu.title;
+                self.title = this.$t(`app_menu.${menu.alias}`);
                 _breadcrumbs.push({
                   href: menu.to,
-                  text: menu.title,
+                  text: this.$t(`app_menu.${menu.alias}`),
                   disabled: true
                 });
               }
             }
           } else {
             if (menu.to && self.$i18n.path(menu.to) === self.routePath) {
-              self.title = menu.title;
+              self.title = this.$t(`app_menu.${menu.alias}`);
               _breadcrumbs.push({
                 href: menu.to,
-                text: menu.title,
+                text: this.$t(`app_menu.${menu.alias}`),
                 disabled: true
               });
             }

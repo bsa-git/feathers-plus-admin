@@ -1,17 +1,125 @@
 {
-  "links": {
+  "$vuetify": {
+    "dataIterator": {
+      "rowsPerPageText": "Items per page:",
+      "rowsPerPageAll": "All",
+      "pageText": "{0}-{1} of {2}",
+      "noResultsText": "No matching records found",
+      "nextPage": "Next page",
+      "prevPage": "Previous page"
+    },
+    "dataTable": {
+      "rowsPerPageText": "Rows per page:"
+    },
+    "noDataText": "No data available"
+  },
+  "app_menu": {
+    "apps": "Apps",
     "home": "Home",
     "about": "About",
-    "english": "English version",
-    "french": "French version"
+    "dashboard": "Dashboard",
+    "chat": "Chat",
+    "inbox": "Inbox",
+    "media": "Media",
+    "service": "Service",
+    "admins": "Admins",
+    "management": "Management",
+    "settings": "Settings",
+    "actions": "Actions",
+    "create": "Create",
+    "read": "Read",
+    "update": "Update",
+    "delete": "Delete",
+    "widgets": "Widgets",
+    "social": "Social",
+    "statistic": "Statistic",
+    "chart": "Chart",
+    "list": "List",
+    "ui_elements": "UI Elements",
+    "general": "General",
+    "alerts": "Alerts",
+    "avatars": "Avatars",
+    "badges": "Badges",
+    "buttons": "Buttons",
+    "cards": "Cards",
+    "carousels": "Carousels",
+    "chips": "Chips",
+    "dialogs": "Dialogs",
+    "icons": "Icons",
+    "tables": "Data Tables",
+    "parallax": "Parallax",
+    "snackbar": "Snackbar",
+    "progress": "Progress",
+    "slider": "Slider",
+    "pagination": "Pagination",
+    "typography": "Typography",
+    "color": "Color",
+    "tooltip": "Tooltip",
+    "pickers": "Pickers",
+    "timepicker": "Timepicker",
+    "datepicker": "Datepicker",
+    "layout": "Layout",
+    "bottom_sheets": "Bottom panels",
+    "expansion_panels": "Expansion panels",
+    "footer": "Footer",
+    "lists": "Lists",
+    "jumbotrons": "Jumbotrons",
+    "menus": "Menus",
+    "tabs": "Tabs",
+    "toolbar": "Toolbar",
+    "timeline": "Timeline",
+    "forms_controls": "Forms & Controls",
+    "basic": "General",
+    "selects": "Selects",
+    "selection_controls": "Selection Controls",
+    "text_fields": "Text Fields",
+    "steppers": "Steppers",
+    "editors": "Editors",
+    "extras": "Extras",
+    "pages": "Pages",
+    "login": "Login",
+    "404": "404",
+    "403": "403",
+    "500": "500"
   },
-  "home": {
-    "title": "Welcome",
-    "description": "This is an introduction in English"
+  "user_menu": {
+    "language": "Language",
+    "language_en": "English",
+    "language_ru": "Русский",
+    "user": "User",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
   },
-  "about": {
-    "title": "About",
-    "description": "This page is made to give you more informations"
+  "app_notification": {
+    "notification": "Notification",
+    "show_all": "All",
+    "new_user": "New user registered",
+    "new_order": "New order received",
+    "new_payment": "New payment made",
+    "new_message": "New message"
+  },
+  "theme_settings": {
+    "settings": "Theme Settings",
+    "color_option": "Color Option",
+    "sidebar_option": "Sidebar Option",
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "app_toolbar": {
+    "hire_me": "Hire Me",
+    "github": "GitHub",
+    "full_size": "Full Size",
+    "notifications": "Notification",
+    "user": "User",
+    "search": "Search"
+  },
+  "app_footer": {
+    "designed_with_by": "DESIGNED WITH BY"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Summary Information"
   },
   "login": {
     "title": "Login",

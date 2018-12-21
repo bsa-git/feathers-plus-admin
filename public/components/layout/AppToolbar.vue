@@ -12,22 +12,22 @@
       flat
       solo-inverted
       prepend-icon="search"
-      label="Search"
+      :label="$t('app_toolbar.search')"
       class="hidden-sm-and-down"
     >
     </v-text-field>
     <v-spacer></v-spacer>
     <v-btn :href="`mailto:${mailto}`">
-      Hire Me
+      {{ $t('app_toolbar.hire_me') }}
     </v-btn>
-    <v-btn icon :href="githubProject" target="_blank">
+    <v-btn icon :href="githubProject" target="_blank" title="GitHub">
       <v-icon>fab fa-github</v-icon>
     </v-btn>
-    <v-btn icon @click="handleFullScreen()">
+    <v-btn icon @click="handleFullScreen()" :title="$t('app_toolbar.full_size')">
       <v-icon>fullscreen</v-icon>
     </v-btn>
     <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-      <v-btn icon flat slot="activator">
+      <v-btn icon flat slot="activator" :title="$t('app_toolbar.notifications')">
         <v-badge color="red" overlap>
           <span slot="badge">3</span>
           <v-icon medium>notifications</v-icon>
@@ -37,70 +37,43 @@
       <slot name="notification"></slot>
     </v-menu>
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
-      <v-btn v-if="userAvatar" icon large flat slot="activator">
+      <v-btn v-if="userAvatar" icon large flat slot="activator" :title="$t('app_toolbar.user')">
         <v-avatar size="30px">
           <img :src="userAvatar" alt="Michael Wang"/>
         </v-avatar>
       </v-btn>
-      <v-btn v-else icon flat slot="activator">
+      <v-btn v-else icon flat slot="activator" :title="$t('app_toolbar.user')">
         <v-icon>fas fa-user-circle</v-icon>
       </v-btn>
-      <v-list class="pa-0">
-        <!--<v-list-tile v-for="(item,index) in userMenu" :to="!item.href ? { name: item.name } : null" :href="item.href"-->
-        <!--@click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener"-->
-        <!--:key="index">-->
-        <!--<v-list-tile-action v-if="item.icon">-->
-        <!--<v-icon>{{ item.icon }}</v-icon>-->
-        <!--</v-list-tile-action>-->
-        <!--<v-list-tile-content>-->
-        <!--<v-list-tile-title>{{ item.title }}</v-list-tile-title>-->
-        <!--</v-list-tile-content>-->
-        <!--</v-list-tile>-->
-
+      <v-list class="pa-0" expand>
         <template v-for="(item, i) in userMenu">
-          <!--group with subitems-->
-          <v-list-group v-if="item.items" :key="item.name" :group="item.group" :prepend-icon="item.icon"
-                        no-action="no-action" :value="true">
-            <v-list-tile slot="activator" ripple="ripple" >
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <template v-for="(subItem, i) in item.items">
-              <!--sub item-->
-              <v-list-tile :key="subItem.name" :to="subItem.to ? $i18n.path(subItem.to) : null"
-                           :href="subItem.href" :disabled="subItem.disabled" :target="subItem.target"
-                           @click="subItem.click ? selectLang(subItem.click) : null" ripple="ripple">
-                <v-list-tile-content>
-                  <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action v-if="subItem.icon">
-                  <v-icon v-text="subItem.icon"></v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
-            </template>
-          </v-list-group>
+          <v-subheader v-if="item.header" :key="i">{{ $t(`user_menu.${item.name}`) }}</v-subheader>
           <!--divider-->
           <v-divider v-else-if="item.divider" :key="i"></v-divider>
-          <!--top-level link-->
-          <v-list-tile v-else :to="item.to ? $i18n.path(item.to) : null" :href="item.href" ripple="ripple" :id="item.name"
-                       :disabled="item.disabled" :target="item.target"
-                       @click="warn('Hellow!', $event)" rel="noopener" :key="item.name">
+          <!--top level link-->
+          <v-list-tile v-else
+                       :to="item.to ? $i18n.path(item.to) : null" :href="item.href"
+                       ripple="ripple"
+                       :disabled="item.disabled || locale === item.click"
+                       :target="item.target"
+                       @click="item.click ? onClick(item.click) : null"
+                       rel="noopener"
+                       :key="item.name"
+          >
             <v-list-tile-action v-if="item.icon">
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ $t(`user_menu.${item.name}`) }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </template>
-
       </v-list>
     </v-menu>
   </v-toolbar>
 </template>
 <script>
-  import { mapMutations } from 'vuex';
+  import {mapState, mapMutations} from 'vuex';
   import util from '~/plugins/lib/util';
   import userMenu from '~/api/data/user-menu';
 
@@ -109,7 +82,6 @@
       mailto: String,
       githubProject: String,
       userAvatar: String,
-//      userMenu: Array
     },
     data: function () {
       return {
@@ -117,25 +89,31 @@
       }
     },
     created() {
-      console.log('userMenu:', this.userMenu)
+//      console.log('userMenu:', this.userMenu)
     },
     computed: {
       toolbarColor() {
         return this.$vuetify.options.extra.mainNav;
-      }
+      },
+      ...mapState([
+          'locale'
+        ]
+      )
     },
     methods: {
       onClick(type) {
+        console.log('item.click:', type);
         switch (type) {
           case 'en':
           case 'ru':
-            this.setLang(type);
+            const path1 = '/' + type +  this.$route.fullPath;
+            const path2 = '/' + type + this.$route.fullPath.replace(/^\/[^\/]+/, '');
+            const path = this.$i18n.fallbackLocale === this.locale ? path1 : path2;
+            this.$router.push(path);
             break;
           case 'logout':
-            text = "It is Weekend";
             break;
           default:
-            text = "Looking forward to the Weekend";
         }
       },
       onNavLeft() {

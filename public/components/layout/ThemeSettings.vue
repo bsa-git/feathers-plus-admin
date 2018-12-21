@@ -2,14 +2,14 @@
   <div id="themeSetting">
     <v-toolbar color="blue" dark>
       <v-toolbar-title>
-        Theme Settings
+        {{ $t('theme_settings.settings') }}
       </v-toolbar-title>
     </v-toolbar>
     <v-container>
       <v-layout column>
         <v-flex>
           <v-subheader class="px-1 my-2">
-            Color Option
+            {{ $t('theme_settings.color_option') }}
           </v-subheader>
           <div class="color-option">
             <v-layout wrap>
@@ -28,16 +28,16 @@
           </div>
           <div class="theme-options">
             <v-subheader class="px-1 my-2">
-              Sidebar Option
+              {{ $t('theme_settings.sidebar_option') }}
             </v-subheader>
             <v-divider></v-divider>
             <div class="my-3">
               <v-btn-toggle v-model="sideBarOption">
                 <v-btn flat value="dark">
-                  Dark
+                  {{ $t('theme_settings.dark') }}
                 </v-btn>
                 <v-btn flat value="light">
-                  Light
+                  {{ $t('theme_settings.light') }}
                 </v-btn>
               </v-btn-toggle>
             </div>

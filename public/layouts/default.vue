@@ -1,6 +1,6 @@
 <template>
   <v-app id="app-admin">
-    <!-- Top toolbar :user-menu="userMenu" -->
+    <!-- Top toolbar -->
     <app-toolbar
       :mailto="config.email"
       :github-project="config.githubProject"
@@ -55,7 +55,6 @@
   import util from '~/plugins/lib/util';
   import HttpBox from '~/plugins/lib/http.client.class';
   import appMenu from '~/api/data/app-menu';
-//  import userMenu from '~/api/data/user-menu';
   import notes from '~/api/data/app-notification';
   import themeColorOptions from '~/api/data/theme-color-options';
   import AppToolbar from '~/components/layout/AppToolbar';
@@ -86,7 +85,6 @@
       return {
         navLeft: true,
         appMenu: appMenu,
-//        userMenu: userMenu,
         colorOptions: themeColorOptions,
         toolbarNotes: notes,
         userAvatar: '',
@@ -121,8 +119,7 @@
         this.$store.commit('SET_SNACK_BAR', { show: newValue });
       },
       ...mapMutations({
-        showError: 'SHOW_ERROR',
-        setLang: 'SET_LANG'
+        showError: 'SHOW_ERROR'
       }),
       ...mapActions('auth', ['authenticate'])
     },

@@ -1,7 +1,7 @@
 
 export default () => ({
   locales: ['en', 'ru'],
-  locale: 'en',
+  locale: process.env.LOCALE || 'en',
   config: {
     //--- SYSTEM ---//
     debug: process.env.DEBUG,
