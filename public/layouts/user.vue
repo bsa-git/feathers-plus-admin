@@ -18,7 +18,6 @@
 <script>
   import {mapGetters, mapMutations, mapActions} from 'vuex';
   import AppSnackBar from '~/components/layout/AppSnackbar';
-  import HttpBox from '~/plugins/lib/http.client.class';
 
   export default {
     components: {
@@ -27,17 +26,8 @@
     data: function () {
       return {}
     },
-    mounted() {
-      if(HttpBox.isAccessToken()){
-        this.authenticate().catch(error => {
-          if (error.message.includes('Could not find stored JWT')) {
-            HttpBox.removeAccessToken();
-          }else {
-            console.error(error);
-            this.showError(error.message);
-          }
-        })
-      }
+    async created() {
+      await this.checkAuth();
     },
     computed: {
       ...mapGetters({
@@ -48,10 +38,7 @@
       modelSnackBar: function (newValue) {
         this.$store.commit('SET_SNACK_BAR', { show: newValue });
       },
-      ...mapMutations({
-        showError: 'SHOW_ERROR',
-      }),
-      ...mapActions('auth', ['authenticate'])
+      ...mapActions(['checkAuth'])
     },
   }
 </script>

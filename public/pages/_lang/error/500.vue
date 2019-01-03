@@ -1,10 +1,13 @@
 <template>
-  <v-layout id="error" align-center justify-center row>
+  <v-layout align-center justify-center row>
+    <div class="mr-3 hidden-sm-and-down">
+      <img src="/static/img/error/500.svg" alt="">
+    </div>
     <div class="error-box text-md-center">
-      <h1>404</h1>
-      <h2 class="my-3 headline ">Sorry, page not found</h2>
+      <h1>500</h1>
+      <h2 class="my-3 headline ">{{ $t('error.sorry_server_is_down') }}</h2>
       <div>
-        <v-btn color="primary" @click="goHome">Go Home</v-btn>
+        <v-btn color="primary" @click="goHome">{{ $t('error.go_home') }}</v-btn>
       </div>
     </div>
   </v-layout>
@@ -13,10 +16,13 @@
 <script>
   export default {
     layout: 'stand-alone',
-    data: () => ({
-      title: 'Error: 404',
-      description: 'Page not found',
-    }),
+    data() {
+      return {
+        title: `${this.$t('error.title')}: 500`,
+        description: this.$t('error.server_is_down'),
+        homePath: this.$i18n.path(process.env.HOME_PATH)
+      }
+    },
     head() {
       return {
         title: this.title,
@@ -26,9 +32,8 @@
       }
     },
     methods: {
-      goHome () {
-        throw new Error('Test Error');
-        this.$router.push(process.env.HOME_PATH);
+      goHome() {
+        this.$router.push({path: this.homePath});
       }
     }
   };

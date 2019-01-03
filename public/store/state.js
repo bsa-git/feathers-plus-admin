@@ -1,4 +1,3 @@
-
 export default () => ({
   locales: ['en', 'ru'],
   locale: process.env.LOCALE || 'en',
@@ -19,5 +18,9 @@ export default () => ({
     show: false,
     text: 'Test success!',
     color: 'purple',
+  },
+  theme: {
+    primary: 'indigo',
+    dark: false
   }
 });

@@ -1,13 +1,13 @@
 <template>
   <v-layout align-center justify-center row>
     <div class="mr-3 hidden-sm-and-down">
-      <img src="/static/img/error/500.svg" alt="">
+      <img src="/static/img/error/403.svg" alt="">
     </div>
     <div class="error-box text-md-center">
-      <h1>500</h1>
-      <h2 class="my-3 headline ">Sorry, the server is down.</h2>
+      <h1>403</h1>
+      <h2 class="my-3 headline ">{{ $t('error.sorry_access_denied') }}.</h2>
       <div>
-        <v-btn color="primary" @click="goHome">Go Home</v-btn>
+        <v-btn color="primary" @click="goHome">{{ $t('error.go_home') }}</v-btn>
       </div>
     </div>
   </v-layout>
@@ -16,21 +16,25 @@
 <script>
   export default {
     layout: 'stand-alone',
-    data: () => ({
-      title: 'Error: 500',
-      description: 'The server is down',
-    }),
+    data() {
+      return {
+        title: `${this.$t('error.title')}: 403`,
+        description: this.$t('error.access_denied'),
+        homePath: this.$i18n.path(process.env.HOME_PATH)
+      }
+    },
     head() {
       return {
         title: this.title,
         meta: [
           {hid: 'description', name: 'description', content: this.description}
         ],
+        link: []
       }
     },
     methods: {
       goHome() {
-        this.$router.push({path: process.env.HOME_PATH});
+        this.$router.push({path: this.homePath});
       }
     }
   };

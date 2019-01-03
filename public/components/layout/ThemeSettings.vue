@@ -1,6 +1,6 @@
 <template>
   <div id="themeSetting">
-    <v-toolbar color="blue" dark>
+    <v-toolbar color="primary darken-1" dark>
       <v-toolbar-title>
         {{ $t('theme_settings.settings') }}
       </v-toolbar-title>
@@ -16,13 +16,13 @@
               <label class="color-option--label flex xs6 pa-1" v-for="(option,index) in colorOptions" :key="index">
                 <input type="radio" name="color" v-bind:value="option.key" v-model="themeColor">
                 <span class="color-option--item bg">
-                <span class="overlay">
-                  <span class="material-icons">check</span>
+                  <span class="overlay">
+                    <span class="material-icons">check</span>
+                  </span>
+                  <span class="color-option--item--header sideNav" :class="option.value.sideNav"></span>
+                  <span class="color-option--item--header mainNav" :class="option.value.mainNav"></span>
+                  <span class="sideMenu" :class="option.value.sideMenu"></span>
                 </span>
-                <span class="color-option--item--header sideNav" :class="option.value.sideNav"></span>
-                <span class="color-option--item--header mainNav" :class="option.value.mainNav"></span>
-                <span class="sideMenu" :class="option.value.sideManu"></span>
-              </span>
               </label>
             </v-layout>
           </div>
@@ -49,7 +49,10 @@
 </template>
 
 <script>
+
   import colors from 'vuetify/es5/util/colors';
+  import cookies from 'browser-cookies';
+  import {mapState, mapMutations} from 'vuex';
 
   export default {
     props: {
@@ -59,97 +62,47 @@
       return {
         themeColor: 'indigo',
         sideBarOption: 'light',
-        colors: colors
+        changedColor: false,
+        changedDark: false
       };
     },
+    methods: {
+      ...mapMutations({
+        setThemePrimary: 'SET_THEME_PRIMARY',
+        setThemeDark: 'SET_THEME_DARK'
+      })
+    },
     computed: {
-      themeColorOptions() {
-        return [
-          {
-            key: 'blue',
-            value: {
-              sideNav: 'blue',
-              mainNav: 'blue',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'teal',
-            value: {
-              sideNav: 'teal',
-              mainNav: 'teal',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'red',
-            value: {
-              sideNav: 'red',
-              mainNav: 'red',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'orange',
-            value: {
-              sideNav: 'orange',
-              mainNav: 'orange',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'purple',
-            value: {
-              sideNav: 'purple',
-              mainNav: 'purple',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'indigo',
-            value: {
-              sideNav: 'indigo',
-              mainNav: 'indigo',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'cyan',
-            value: {
-              sideNav: 'cyan',
-              mainNav: 'cyan',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'pink',
-            value: {
-              sideNav: 'pink',
-              mainNav: 'pink',
-              sideManu: 'white'
-            }
-          },
-          {
-            key: 'green',
-            value: {
-              sideNav: 'green',
-              mainNav: 'green',
-              sideManu: 'white'
-            }
-          }
-        ];
-      }
+      ...mapState(['theme']),
     },
     watch: {
       themeColor: {
         handler(val) {
-          this.$vuetify.theme.primary = this.colors[val].base;
+          const color = colors[val].base;
+          if (this.changedColor) {
+            this.$vuetify.theme.primary = color;
+            this.setThemePrimary(val);
+          } else {
+            this.changedColor = true;
+            if (this.theme.primary !== val) {
+              this.themeColor = this.theme.primary;
+            }
+          }
         },
         immediate: true
       },
       sideBarOption: {
         handler(val) {
-          this.$vuetify.dark = (val === 'dark');
+          const dark = (val === 'dark');
+          if (this.changedDark) {
+            this.$vuetify.dark = dark;
+            this.setThemeDark(dark);
+          } else {
+            this.changedDark = true;
+            if (this.theme.dark !== dark) {
+              this.sideBarOption = this.theme.dark ? 'dark' : 'light';
+            }
+          }
         },
         immediate: true
       }

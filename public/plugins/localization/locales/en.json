@@ -89,7 +89,9 @@
     "user": "User",
     "profile": "Profile",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "sign_up": "SignUp",
+    "login": "Login"
   },
   "app_notification": {
     "notification": "Notification",
@@ -121,10 +123,23 @@
     "title": "Dashboard",
     "description": "Summary Information"
   },
+  "error": {
+    "title": "Error",
+    "description": "Sorry for temporary inconvenience, please contact your system administrator",
+    "back_to_home": "Back To Home",
+    "go_home": "Go Home",
+    "access_denied": "Access denied",
+    "sorry_access_denied": "Sorry, access denied",
+    "page_not_found": "Page not found",
+    "sorry_page_not_found": "Sorry, page not found",
+    "server_is_down": "The server is down",
+    "sorry_server_is_down": "Sorry, the server is down"
+  },
   "login": {
     "title": "Login",
     "description": "Enter credentials",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "clear": "Clear"
   }
 }

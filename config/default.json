@@ -77,7 +77,8 @@
     "google": {
       "clientID": "GOOGLE_ID",
       "clientSecret": "GOOGLE_SECRET",
-      "successRedirect": "/",
+      "callbackURL": "/auth/google/callback",
+      "successRedirect": "HOME_PATH",
       "scope": [
         "profile openid email"
       ]
@@ -85,7 +86,8 @@
     "github": {
       "clientID": "GITHUB_ID",
       "clientSecret": "GITHUB_SECRET",
-      "successRedirect": "/"
+      "callbackURL": "/auth/github/callback",
+      "successRedirect": "HOME_PATH"
     },
     "cookie": {
       "enabled": true,

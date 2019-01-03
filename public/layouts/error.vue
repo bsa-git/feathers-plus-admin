@@ -23,7 +23,7 @@
               :to="homePath"
               class="white--text"
             >
-              Back To Home
+              {{ $t('error.go_home') }}
               <v-icon right dark>home</v-icon>
             </v-btn>
           </v-card-actions>
@@ -39,9 +39,11 @@
 
   export default {
     props: ['error'],
-    data: () => ({
-      homePath: process.env.HOME_PATH
-    }),
+    data() {
+      return {
+        homePath: this.$i18n.path(process.env.HOME_PATH)
+      }
+    },
     head() {
       return {
         title: this.statusCode ? `Error: ${HttpBox.getHttpCode(this.statusCode)}` : `${this.error.statusCode}: ${this.title}`,
@@ -60,7 +62,7 @@
         return this.error.message
       },
       description: function () {
-        return 'Sorry for temporary inconvenience, please contact your system administrator.';
+        return this.$t('error.description');
       },
       statusCode: function () {
         return isNumber(this.error.statusCode) ? this.error.statusCode : '';

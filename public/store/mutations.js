@@ -1,10 +1,31 @@
 
+import cookies from 'browser-cookies';
+
 const mutations = {
 
   //--- LOCALE ---//
   SET_LANG(state, locale) {
     if (state.locales.indexOf(locale) !== -1) {
       state.locale = locale;
+      if(cookies.get('locale') !== locale){
+        cookies.set('locale', locale);
+      }
+    }
+  },
+
+  //--- THEME ---//
+  SET_THEME_PRIMARY(state, color) {
+    state.theme.primary = color;
+    if(cookies.get('theme_primary') !== color){
+      cookies.set('theme_primary', color);
+    }
+  },
+
+  SET_THEME_DARK(state, isDark) {
+    state.theme.dark = isDark;
+    const _isDark = isDark? '1':'0';
+    if(cookies.get('theme_dark') !== _isDark){
+      cookies.set('theme_dark', _isDark);
     }
   },
 

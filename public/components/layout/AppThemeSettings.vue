@@ -11,6 +11,7 @@
       v-model="rightDrawer"
       hide-overlay
       fixed
+      :dark="$vuetify.dark"
     >
       <slot></slot>
     </v-navigation-drawer>

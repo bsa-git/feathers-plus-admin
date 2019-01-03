@@ -30,18 +30,18 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn icon :disabled="user? true : false">
-            <v-icon color="blue">fab fa-facebook-square fa-lg</v-icon>
-          </v-btn>
-          <v-btn icon :disabled="user? true : false">
+          <v-btn href="/auth/google" icon :disabled="!!user" >
             <v-icon color="red">fab fa-google fa-lg</v-icon>
           </v-btn>
-          <v-btn icon :disabled="user? true : false">
-            <v-icon color="light-blue">fab fa-twitter fa-lg</v-icon>
+          <v-btn href="/auth/github" icon :disabled="!!user">
+            <v-icon color="light-blue">fab fa-github fa-lg</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">
+          <v-btn block color="primary" @click="onSubmit" :loading="loading" :disabled="!!user">
             {{ $t('login.title') }}
+          </v-btn>
+          <v-btn block @click="onClear">
+            {{ $t('login.clear') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -54,11 +54,11 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 
   export default {
-    layout: 'auth',
+    layout: 'user',
     $_veeValidate: {
       validator: 'new'
     },
-    data: function () {
+    data() {
       return {
         title: this.$t('login.title'),
         description: this.$t('login.description'),
@@ -83,32 +83,41 @@
 //      console.log('$i18n:', this.$t('login.title'));// this.$t('login.title')
     },
     computed: {
-      ...mapGetters('users', {
-        user: 'current'
-      }),
+//      ...mapGetters('users', {
+//        user: 'current'
+//      }),
       ...mapGetters({
         config: 'getConfig',
-      })
+      }),
+      ...mapState('auth', [
+        'user'
+      ]),
     },
     methods: {
-      async submit() {
-        const self = this;
+      async onSubmit() {
+        this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
           this.showError('Validation Error!');
         } else {
-          const response = await self.login(self.model.email, self.model.password);
+          const response = await this.login(this.model.email, this.model.password);
           if (response && response.accessToken) {
             this.loading = true;
             setTimeout(() => {
-              self.$router.push('/dashboard');
+              this.$router.push(this.$i18n.path(this.config.homePath));
             }, 1000);
           }
         }
       },
+      onClear () {
+        this.model.password = '';
+        this.model.email = '';
+        this.$validator.reset();
+        this.dismissError();
+      },
       dismissError() {
         this.error = undefined;
-        this.clearAuthenticateError()
+        this.clearError()
       },
 
       async login(email, password) {

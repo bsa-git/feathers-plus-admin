@@ -4,7 +4,9 @@
     <app-toolbar
       :mailto="config.email"
       :github-project="config.githubProject"
-      :user-avatar="userAvatar"
+      :user="user"
+      :user-menu="userMenu"
+      :toggle-full-screen="toggleFullScreen"
       v-on:onNavLeft="navLeft = !navLeft"
     >
       <notification-list
@@ -14,9 +16,9 @@
     </app-toolbar>
     <!-- Left toolbar -->
     <app-drawer
-      isIcon
+      isAvatar
       :logo-title="config.logoTitle"
-      :logo-img="config.logoImg"
+      :logo-img="devAvatar"
       :home-path="config.homePath"
       :app-menu="appMenu"
       :drawer="navLeft"
@@ -51,10 +53,10 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
   import util from '~/plugins/lib/util';
-  import HttpBox from '~/plugins/lib/http.client.class';
   import appMenu from '~/api/data/app-menu';
+  import userMenu from '~/api/data/user-menu';
   import notes from '~/api/data/app-notification';
   import themeColorOptions from '~/api/data/theme-color-options';
   import AppToolbar from '~/components/layout/AppToolbar';
@@ -84,50 +86,36 @@
     data: function () {
       return {
         navLeft: true,
-        appMenu: appMenu,
+        appMenu,
+        userMenu,
         colorOptions: themeColorOptions,
         toolbarNotes: notes,
-        userAvatar: '',
+        toggleFullScreen: util.toggleFullScreen
       }
     },
-    mounted() {
-      if(HttpBox.isAccessToken()){
-        this.authenticate().catch(error => {
-          if (error.message.includes('Could not find stored JWT')) {
-            HttpBox.removeAccessToken();
-          }else {
-            console.error(error);
-            this.showError(error.message);
-          }
-        });
-      }
-      this.computeUserAvatar(this.config.email);
-//      AppEvents.forEach(item => {
-//        this.$on(item.name, item.callback);
-//      });
-      window.getApp = this;
-//      console.log('this.$route:', this.$route)
+    async created() {
+      await this.checkAuth();
     },
     methods: {
-      computeUserAvatar(email) {
-        this.userAvatar = util.gravatar(email);
-      },
       modelNavLeft: function (newValue) {
         this.navLeft = newValue
       },
       modelSnackBar: function (newValue) {
         this.$store.commit('SET_SNACK_BAR', { show: newValue });
       },
-      ...mapMutations({
-        showError: 'SHOW_ERROR'
-      }),
-      ...mapActions('auth', ['authenticate'])
+      ...mapActions(['checkAuth'])
     },
     computed: {
+      devAvatar(){
+        return util.gravatar(this.config.email)
+      },
       ...mapGetters({
         config: 'getConfig',
         snackBar: 'getSnackBar'
-      })
+      }),
+      ...mapState('auth', [
+        'user'
+      ]),
     }
   }
 </script>
