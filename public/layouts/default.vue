@@ -54,7 +54,6 @@
 
 <script>
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-  import util from '~/plugins/lib/util';
   import appMenu from '~/api/data/app-menu';
   import userMenu from '~/api/data/user-menu';
   import notes from '~/api/data/app-notification';
@@ -90,11 +89,12 @@
         userMenu,
         colorOptions: themeColorOptions,
         toolbarNotes: notes,
-        toggleFullScreen: util.toggleFullScreen
+        toggleFullScreen: this.$util.toggleFullScreen
       }
     },
-    async created() {
-      await this.checkAuth();
+    created() {
+      const color = this.$colors[this.theme.primary].base;
+      this.$vuetify.theme.primary = color;
     },
     methods: {
       modelNavLeft: function (newValue) {
@@ -107,7 +107,7 @@
     },
     computed: {
       devAvatar(){
-        return util.gravatar(this.config.email)
+        return this.$util.gravatar(this.config.email)
       },
       ...mapGetters({
         config: 'getConfig',
@@ -116,6 +116,7 @@
       ...mapState('auth', [
         'user'
       ]),
+      ...mapState(['theme'])
     }
   }
 </script>

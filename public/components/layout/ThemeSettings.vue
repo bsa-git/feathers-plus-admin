@@ -51,7 +51,6 @@
 <script>
 
   import colors from 'vuetify/es5/util/colors';
-  import cookies from 'browser-cookies';
   import {mapState, mapMutations} from 'vuex';
 
   export default {

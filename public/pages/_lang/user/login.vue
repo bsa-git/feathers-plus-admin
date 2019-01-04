@@ -4,7 +4,8 @@
       <v-card class="elevation-1 pa-3">
         <v-card-text>
           <div class="layout column align-center">
-            <img src="/static/img/m.png" alt="Vue Material Admin" width="120" height="120">
+            <v-icon v-if="user" size="120">fas fa-user-check</v-icon>
+            <v-icon v-else size="120">fas fa-user-alt-slash</v-icon>
             <router-link :to="$i18n.path(config.homePath)">
               <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
             </router-link>
@@ -78,14 +79,7 @@
         ],
       }
     },
-    mounted() {
-//      this.$validator.localize('en', this.dictionary)
-//      console.log('$i18n:', this.$t('login.title'));// this.$t('login.title')
-    },
     computed: {
-//      ...mapGetters('users', {
-//        user: 'current'
-//      }),
       ...mapGetters({
         config: 'getConfig',
       }),

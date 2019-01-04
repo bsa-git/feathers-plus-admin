@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
 
 module.exports = {
-  mode: 'spa',// universal|spa
+  mode: 'universal',// universal|spa
   srcDir: 'public',
   buildDir: 'nuxt-dist',
   generate: {
@@ -51,9 +51,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/localization/vue-i18n',
-    '@/plugins/ui-framework/vuetify',
-    '@/plugins/validators/vee-validate',
+    '@/plugins/index'
 
   ],
 

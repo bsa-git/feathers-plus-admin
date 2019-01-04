@@ -35,7 +35,6 @@
 
 <script>
   import isNumber from 'lodash/isNumber';
-  import HttpBox from '~/plugins/lib/http.client.class';
 
   export default {
     props: ['error'],
@@ -46,7 +45,7 @@
     },
     head() {
       return {
-        title: this.statusCode ? `Error: ${HttpBox.getHttpCode(this.statusCode)}` : `${this.error.statusCode}: ${this.title}`,
+        title: this.statusCode ? `Error: ${this.$HttpBox.getHttpCode(this.statusCode)}` : `${this.error.statusCode}: ${this.title}`,
         meta: [
           {hid: 'description', name: 'description', content: this.description}
         ]

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations, mapActions} from 'vuex';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import AppSnackBar from '~/components/layout/AppSnackbar';
 
   export default {
@@ -26,17 +26,19 @@
     data: function () {
       return {}
     },
-    async created() {
-      await this.checkAuth();
+    created() {
+      const color = this.$colors[this.theme.primary].base;
+      this.$vuetify.theme.primary = color;
     },
     computed: {
       ...mapGetters({
         snackBar: 'getSnackBar',
-      })
+      }),
+      ...mapState(['theme'])
     },
     methods: {
       modelSnackBar: function (newValue) {
-        this.$store.commit('SET_SNACK_BAR', { show: newValue });
+        this.$store.commit('SET_SNACK_BAR', {show: newValue});
       },
       ...mapActions(['checkAuth'])
     },

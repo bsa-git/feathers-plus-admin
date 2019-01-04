@@ -24,9 +24,6 @@
 </template>
 
 <script>
-
-  import util from '~/plugins/lib/util';
-
   export default {
     props: {
       homePath: {
@@ -38,7 +35,7 @@
     data() {
       return {
         title: '',
-        routePath: '/' + util.stripSlashes(this.$route.path)
+        routePath: '/' + this.$util.stripSlashes(this.$route.path)
       };
     },
     methods: {

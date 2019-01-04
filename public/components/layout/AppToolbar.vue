@@ -42,7 +42,7 @@
       <!-- Slot - notification -->
       <slot name="notification"></slot>
     </v-menu>
-    <!-- User menu fas fa-user-check fas fa-user-circle  -->
+    <!-- User menu -->
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
       <v-btn icon flat slot="activator" :title="$t('app_toolbar.user')">
         <v-icon v-if="user">fas fa-user-check</v-icon>
