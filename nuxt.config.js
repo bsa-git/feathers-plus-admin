@@ -10,7 +10,23 @@ module.exports = {
   generate: {
     dir: 'docs',
     routes: [
-      '/ru/dashboard',
+      '/ru/error/403',
+      '/ru/error/404',
+      '/ru/error/500',
+      '/ru/service/actions/create',
+      '/ru/service/actions/delete',
+      '/ru/service/actions/read',
+      '/ru/service/actions/update',
+      '/ru/service/admins/management',
+      '/ru/service/admins/settings',
+      '/ru/user/login',
+      '/ru/user/profile',
+      '/ru/user/sign-up',
+      '/ru/widgets/chart',
+      '/ru/widgets/social',
+      '/ru/widgets/statistic',
+      '/ru/widgets/widget-list',
+      '/ru/dashboard'
     ]
   },
   /*
