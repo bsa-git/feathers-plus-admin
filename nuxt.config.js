@@ -8,7 +8,10 @@ module.exports = {
   srcDir: 'public',
   buildDir: 'nuxt-dist',
   generate: {
-    dir: 'docs'
+    dir: 'docs',
+    routes: [
+      '/ru/dashboard',
+    ]
   },
   /*
   ** Headers of the page
