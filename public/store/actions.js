@@ -9,13 +9,16 @@ const actions = {
 
     debug(`nuxtServerInit start on ${process.server ? 'server' : 'client'}`);
 
-    const _initAuth =  await initAuth({
-      commit,
-      dispatch,
-      req,
-      moduleName: 'auth',
-      cookieName: 'feathers-jwt',
-    });
+    let _initAuth = null;
+    if(process.server && !process.static){
+      _initAuth =  await initAuth({
+        commit,
+        dispatch,
+        req,
+        moduleName: 'auth',
+        cookieName: 'feathers-jwt',
+      });
+    }
     return _initAuth;
   },
 

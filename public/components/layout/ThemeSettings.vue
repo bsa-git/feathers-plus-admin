@@ -50,7 +50,6 @@
 
 <script>
 
-  import colors from 'vuetify/es5/util/colors';
   import {mapState, mapMutations} from 'vuex';
 
   export default {
@@ -77,7 +76,7 @@
     watch: {
       themeColor: {
         handler(val) {
-          const color = colors[val].base;
+          const color = this.$colors[val].base;
           if (this.changedColor) {
             this.$vuetify.theme.primary = color;
             this.setThemePrimary(val);

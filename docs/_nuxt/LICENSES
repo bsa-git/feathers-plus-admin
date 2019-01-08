@@ -1,26 +1,32 @@
 /*!
- * Vue.js v2.5.17
+ * Vue.js v2.5.21
  * (c) 2014-2018 Evan You
  * Released under the MIT License.
  */
 
 /**
-  * vue-router v3.0.1
-  * (c) 2017 Evan You
+ * vuex v3.0.1
+ * (c) 2017 Evan You
+ * @license MIT
+ */
+
+/*!
+  * vue-router v3.0.2
+  * (c) 2018 Evan You
   * @license MIT
   */
 
 /**
- * vue-meta v1.5.5
+ * vue-meta v1.5.6
  * (c) 2018 Declan de Wet & Sébastien Chopin (@Atinux)
  * @license MIT
  */
 
 /*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
 
 /*!
  * Determine if an object is a Buffer
@@ -30,7 +36,34 @@ object-assign
  */
 
 /*!
- * vue-no-ssr v1.0.0
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+/**
+ *
+ * @revision    $Id: index.js 2012-03-24 16:21:10 Aleksey $
+ * @created     2012-03-24 16:21:10
+ * @category    Express Helpers
+ * @package     express-useragent
+ * @version     0.1.8
+ * @copyright   Copyright (c) 2009-2012 - All rights reserved.
+ * @license     MIT License
+ * @author      Alexey Gordeyev IK <aleksej@gordejev.lv>
+ * @link        http://www.gordejev.lv
+ *
+ */
+
+/*!
+ * vue-i18n v8.7.0 
+ * (c) 2019 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+
+/*!
+ * vue-no-ssr v1.1.0
  * (c) 2018-present egoist <0x142857@gmail.com>
  * Released under the MIT License.
  */
@@ -175,6 +208,8 @@ object-assign
 
 /*! ../../mixins/colorable */
 
+/*! ../../mixins/themeable */
+
 /*! ../../util/mixins */
 
 /*!********************************************!*\
@@ -301,15 +336,9 @@ object-assign
 
 /*! ../../stylus/components/_cards.styl */
 
-/*! ../../mixins/colorable */
-
-/*! ../../mixins/measurable */
+/*! ../VSheet */
 
 /*! ../../mixins/routable */
-
-/*! ../../mixins/themeable */
-
-/*! ../../util/helpers */
 
 /*! ../../util/mixins */
 
@@ -344,8 +373,6 @@ object-assign
 /*! ./VCardMedia */
 
 /*! ./VCardTitle */
-
-/*! vue */
 
 /*!***********************************************!*\
   !*** ./src/components/VCarousel/VCarousel.ts ***!
@@ -1014,7 +1041,7 @@ object-assign
 /*! ./VImg */
 
 /*!*****************************************!*\
-  !*** ./src/components/VInput/VInput.js ***!
+  !*** ./src/components/VInput/VInput.ts ***!
   \*****************************************/
 
 /*! exports provided: default */
@@ -1037,8 +1064,10 @@ object-assign
 
 /*! ../../util/console */
 
+/*! ../../util/mixins */
+
 /*!****************************************!*\
-  !*** ./src/components/VInput/index.js ***!
+  !*** ./src/components/VInput/index.ts ***!
   \****************************************/
 
 /*! exports provided: VInput, default */
@@ -1585,8 +1614,6 @@ object-assign
 
 /*! ../../util/mixins */
 
-/*! ../../util/helpers */
-
 /*!*********************************************!*\
   !*** ./src/components/VResponsive/index.ts ***!
   \*********************************************/
@@ -1665,6 +1692,32 @@ object-assign
 
 /*! ../../util/console */
 
+/*!*****************************************!*\
+  !*** ./src/components/VSheet/VSheet.ts ***!
+  \*****************************************/
+
+/*! exports provided: default */
+
+/*! ../../stylus/components/_sheet.styl */
+
+/*! ../../mixins/colorable */
+
+/*! ../../mixins/elevatable */
+
+/*! ../../mixins/measurable */
+
+/*! ../../mixins/themeable */
+
+/*! ../../util/mixins */
+
+/*!****************************************!*\
+  !*** ./src/components/VSheet/index.ts ***!
+  \****************************************/
+
+/*! exports provided: VSheet, default */
+
+/*! ./VSheet */
+
 /*!*******************************************!*\
   !*** ./src/components/VSlider/VSlider.js ***!
   \*******************************************/
@@ -1716,6 +1769,48 @@ object-assign
 /*! exports provided: VSnackbar, default */
 
 /*! ./VSnackbar */
+
+/*!*************************************************!*\
+  !*** ./src/components/VSparkline/VSparkline.ts ***!
+  \*************************************************/
+
+/*! exports provided: default */
+
+/*! ../../mixins/colorable */
+
+/*! ../../util/mixins */
+
+/*! ./helpers/core */
+
+/*! ./helpers/path */
+
+/*!***************************************************!*\
+  !*** ./src/components/VSparkline/helpers/core.ts ***!
+  \***************************************************/
+
+/*! exports provided: genPoints */
+
+/*!***************************************************!*\
+  !*** ./src/components/VSparkline/helpers/math.ts ***!
+  \***************************************************/
+
+/*! exports provided: checkCollinear, getDistance, moveTo */
+
+/*!***************************************************!*\
+  !*** ./src/components/VSparkline/helpers/path.ts ***!
+  \***************************************************/
+
+/*! exports provided: genPath */
+
+/*! ./math */
+
+/*!********************************************!*\
+  !*** ./src/components/VSparkline/index.ts ***!
+  \********************************************/
+
+/*! exports provided: VSparkline, default */
+
+/*! ./VSparkline */
 
 /*!*************************************************!*\
   !*** ./src/components/VSpeedDial/VSpeedDial.js ***!
@@ -2048,10 +2143,10 @@ object-assign
 /*! ./VTextarea */
 
 /*!***************************************************!*\
-  !*** ./src/components/VTimePicker/VTimePicker.js ***!
+  !*** ./src/components/VTimePicker/VTimePicker.ts ***!
   \***************************************************/
 
-/*! exports provided: default */
+/*! exports provided: selectingTimes, default */
 
 /*! ./VTimePickerTitle */
 
@@ -2063,8 +2158,10 @@ object-assign
 
 /*! ../VDatePicker/util/pad */
 
+/*! ../../util/mixins */
+
 /*!********************************************************!*\
-  !*** ./src/components/VTimePicker/VTimePickerClock.js ***!
+  !*** ./src/components/VTimePicker/VTimePickerClock.ts ***!
   \********************************************************/
 
 /*! exports provided: default */
@@ -2075,8 +2172,10 @@ object-assign
 
 /*! ../../mixins/themeable */
 
+/*! ../../util/mixins */
+
 /*!********************************************************!*\
-  !*** ./src/components/VTimePicker/VTimePickerTitle.js ***!
+  !*** ./src/components/VTimePicker/VTimePickerTitle.ts ***!
   \********************************************************/
 
 /*! exports provided: default */
@@ -2087,8 +2186,12 @@ object-assign
 
 /*! ../VDatePicker/util */
 
+/*! ../../util/mixins */
+
+/*! ./VTimePicker */
+
 /*!*********************************************!*\
-  !*** ./src/components/VTimePicker/index.js ***!
+  !*** ./src/components/VTimePicker/index.ts ***!
   \*********************************************/
 
 /*! exports provided: VTimePicker, VTimePickerClock, VTimePickerTitle, default */
@@ -2332,10 +2435,10 @@ object-assign
 /*! vue */
 
 /*!************************************************!*\
-  !*** ./src/components/Vuetify/mixins/icons.js ***!
+  !*** ./src/components/Vuetify/mixins/icons.ts ***!
   \************************************************/
 
-/*! exports provided: default */
+/*! exports provided: convertToComponentDeclarations, default */
 
 /*!***********************************************!*\
   !*** ./src/components/Vuetify/mixins/lang.ts ***!
@@ -2373,7 +2476,7 @@ object-assign
   !*** ./src/components/index.ts ***!
   \*********************************/
 
-/*! exports provided: VApp, VAlert, VAutocomplete, VAvatar, VBadge, VBottomNav, VBottomSheet, VBreadcrumbs, VBreadcrumbsItem, VBreadcrumbsDivider, VBtn, VBtnToggle, VCard, VCardMedia, VCardTitle, VCardActions, VCardText, VCarousel, VCarouselItem, VCheckbox, VChip, VCombobox, VCounter, VDataIterator, VDataTable, VEditDialog, VTableOverflow, VDatePicker, VDatePickerTitle, VDatePickerHeader, VDatePickerDateTable, VDatePickerMonthTable, VDatePickerYears, VDialog, VDivider, VExpansionPanel, VExpansionPanelContent, VFooter, VForm, VContainer, VContent, VFlex, VLayout, VSpacer, VHover, VIcon, VImg, VInput, VItem, VItemGroup, VJumbotron, VLabel, VList, VListGroup, VListTile, VListTileAction, VListTileAvatar, VListTileActionText, VListTileContent, VListTileTitle, VListTileSubTitle, VMenu, VMessages, VNavigationDrawer, VOverflowBtn, VPagination, VParallax, VPicker, VProgressCircular, VProgressLinear, VRadioGroup, VRadio, VRangeSlider, VRating, VResponsive, VSelect, VSlider, VSnackbar, VSpeedDial, VStepper, VStepperContent, VStepperStep, VStepperHeader, VStepperItems, VSubheader, VSwitch, VSystemBar, VTabs, VTab, VTabItem, VTabsItems, VTabsSlider, VTextarea, VTextField, VTimeline, VTimelineItem, VTimePicker, VTimePickerClock, VTimePickerTitle, VToolbar, VToolbarSideIcon, VToolbarTitle, VToolbarItems, VTooltip, VTreeview, VTreeviewNode, VWindow, VWindowItem, VBottomSheetTransition, VCarouselTransition, VCarouselReverseTransition, VTabTransition, VTabReverseTransition, VMenuTransition, VFabTransition, VDialogTransition, VDialogBottomTransition, VFadeTransition, VScaleTransition, VScrollXTransition, VScrollXReverseTransition, VScrollYTransition, VScrollYReverseTransition, VSlideXTransition, VSlideXReverseTransition, VSlideYTransition, VSlideYReverseTransition, VExpandTransition, VRowExpandTransition */
+/*! exports provided: VApp, VAlert, VAutocomplete, VAvatar, VBadge, VBottomNav, VBottomSheet, VBreadcrumbs, VBreadcrumbsItem, VBreadcrumbsDivider, VBtn, VBtnToggle, VCard, VCardMedia, VCardTitle, VCardActions, VCardText, VCarousel, VCarouselItem, VCheckbox, VChip, VCombobox, VCounter, VDataIterator, VDataTable, VEditDialog, VTableOverflow, VDatePicker, VDatePickerTitle, VDatePickerHeader, VDatePickerDateTable, VDatePickerMonthTable, VDatePickerYears, VDialog, VDivider, VExpansionPanel, VExpansionPanelContent, VFooter, VForm, VContainer, VContent, VFlex, VLayout, VSpacer, VHover, VIcon, VImg, VInput, VItem, VItemGroup, VJumbotron, VLabel, VList, VListGroup, VListTile, VListTileAction, VListTileAvatar, VListTileActionText, VListTileContent, VListTileTitle, VListTileSubTitle, VMenu, VMessages, VNavigationDrawer, VOverflowBtn, VPagination, VSheet, VParallax, VPicker, VProgressCircular, VProgressLinear, VRadioGroup, VRadio, VRangeSlider, VRating, VResponsive, VSelect, VSlider, VSnackbar, VSparkline, VSpeedDial, VStepper, VStepperContent, VStepperStep, VStepperHeader, VStepperItems, VSubheader, VSwitch, VSystemBar, VTabs, VTab, VTabItem, VTabsItems, VTabsSlider, VTextarea, VTextField, VTimeline, VTimelineItem, VTimePicker, VTimePickerClock, VTimePickerTitle, VToolbar, VToolbarSideIcon, VToolbarTitle, VToolbarItems, VTooltip, VTreeview, VTreeviewNode, VWindow, VWindowItem, VBottomSheetTransition, VCarouselTransition, VCarouselReverseTransition, VTabTransition, VTabReverseTransition, VMenuTransition, VFabTransition, VDialogTransition, VDialogBottomTransition, VFadeTransition, VScaleTransition, VScrollXTransition, VScrollXReverseTransition, VScrollYTransition, VScrollYReverseTransition, VSlideXTransition, VSlideXReverseTransition, VSlideYTransition, VSlideYReverseTransition, VExpandTransition, VRowExpandTransition */
 
 /*! ./VApp */
 
@@ -2451,6 +2554,8 @@ object-assign
 
 /*! ./VPagination */
 
+/*! ./VSheet */
+
 /*! ./VParallax */
 
 /*! ./VPicker */
@@ -2472,6 +2577,8 @@ object-assign
 /*! ./VSlider */
 
 /*! ./VSnackbar */
+
+/*! ./VSparkline */
 
 /*! ./VSpeedDial */
 
@@ -2680,6 +2787,14 @@ object-assign
 /*! ../util/console */
 
 /*!**********************************!*\
+  !*** ./src/mixins/elevatable.ts ***!
+  \**********************************/
+
+/*! exports provided: default */
+
+/*! vue */
+
+/*!**********************************!*\
   !*** ./src/mixins/filterable.ts ***!
   \**********************************/
 
@@ -2719,6 +2834,8 @@ object-assign
 
 /*! exports provided: default */
 
+/*! ../util/helpers */
+
 /*! vue */
 
 /*!********************************!*\
@@ -2733,6 +2850,8 @@ object-assign
 
 /*! ./stackable */
 
+/*! ../util/console */
+
 /*!***********************************!*\
   !*** ./src/mixins/overlayable.js ***!
   \***********************************/
@@ -2744,13 +2863,17 @@ object-assign
 /*! ../util/helpers */
 
 /*!*************************************!*\
-  !*** ./src/mixins/picker-button.js ***!
+  !*** ./src/mixins/picker-button.ts ***!
   \*************************************/
 
 /*! exports provided: default */
 
+/*! ./colorable */
+
+/*! ../util/mixins */
+
 /*!******************************!*\
-  !*** ./src/mixins/picker.js ***!
+  !*** ./src/mixins/picker.ts ***!
   \******************************/
 
 /*! exports provided: default */
@@ -2760,6 +2883,8 @@ object-assign
 /*! ./colorable */
 
 /*! ./themeable */
+
+/*! ../util/mixins */
 
 /*!************************************!*\
   !*** ./src/mixins/positionable.ts ***!
@@ -2886,18 +3011,20 @@ object-assign
 /*! vue */
 
 /*!***********************************!*\
-  !*** ./src/mixins/validatable.js ***!
+  !*** ./src/mixins/validatable.ts ***!
   \***********************************/
 
 /*! exports provided: default */
 
-/*! ../util/helpers */
+/*! ./colorable */
 
 /*! ./registrable */
 
+/*! ../util/helpers */
+
 /*! ../util/console */
 
-/*! ./colorable */
+/*! ../util/mixins */
 
 /*!*****************************!*\
   !*** ./src/stylus/app.styl ***!
@@ -3211,6 +3338,12 @@ object-assign
 
 /*! no static exports found */
 
+/*!*******************************************!*\
+  !*** ./src/stylus/components/_sheet.styl ***!
+  \*******************************************/
+
+/*! no static exports found */
+
 /*!*********************************************!*\
   !*** ./src/stylus/components/_sliders.styl ***!
   \*********************************************/
@@ -3379,6 +3512,8 @@ object-assign
 
 /*! exports provided: createSimpleFunctional, createSimpleTransition, createJavaScriptTransition, directiveConfig, addOnceEventListener, getNestedValue, deepEqual, getObjectValueByPath, getPropertyFromItem, createRange, getZIndex, escapeHTML, filterObjectOnKeys, filterChildren, convertToUnit, kebabCase, isObject, keyCodes, remapInternalIcon, keys, camelize */
 
+/*! vue */
+
 /*!**************************!*\
   !*** ./src/util/mask.js ***!
   \**************************/
@@ -3418,7 +3553,24 @@ object-assign
 /*! no static exports found */
 
 /**
-  * vee-validate v2.1.3
-  * (c) 2018 Abdelrahman Awad
+  * vee-validate v2.1.5
+  * (c) 2019 Abdelrahman Awad
   * @license MIT
   */
+
+/*!
+ * express-useragent.js v1.0.12 (https://github.com/biggora/express-useragent/)
+ * Copyright 2011-2018 Alexey Gordeyev
+ * Licensed under MIT (https://github.com/biggora/express-useragent/blob/master/README.md#license)
+ */
+
+/*!
+ * inflection
+ * Copyright(c) 2011 Ben Lin <ben@dreamerslab.com>
+ * MIT Licensed
+ *
+ * @fileoverview
+ * A port of inflection-js to node.js module.
+ */
+
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
