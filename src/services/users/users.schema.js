@@ -1,4 +1,3 @@
-
 // Define the Feathers schema for service `users`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
@@ -37,10 +36,24 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     email: {type: 'string', format: 'email', minLength: 8, maxLength: 40, faker: 'internet.email'},
+    password: {type: 'string', faker: {exp: 'rec.email.slice(0, rec.email.indexOf("@"))'}},
+    googleId: {type: 'string'},
+    githubId: {type: 'string'},
     firstName: {type: 'string', minLength: 2, maxLength: 20, faker: 'name.firstName'},
     lastName: {type: 'string', minLength: 2, maxLength: 40, faker: 'name.lastName'},
-    password: {type: 'string', faker: {exp: 'rec.email.slice(0, rec.email.indexOf("@"))'}},
-    roleId: {type: 'ID', faker: {fk: 'roles:random'}}
+    roleId: {type: 'ID', faker: {fk: 'roles:random'}},
+    googleTokens: {
+      type: 'object',
+      properties: {
+        accessToken: {type: 'string'}
+      }
+    },
+    githubTokens: {
+      type: 'object',
+      properties: {
+        accessToken: {type: 'string'}
+      }
+    }
     //-------------------------
     // !end
   },
@@ -76,9 +89,9 @@ let extensions = {
     add: {
       // !code: graphql_add
       //-------------------
-      fullName: { type: 'String!', args: false },
-      role: { type: 'Role', args: true, relation: { ourTable: 'roleId', otherTable: '_id' } },
-      teams: { type: '[Team!]', args: true, relation: { ourTable: '_id', otherTable: 'memberIds' }, sort: { name: 1 } },
+      fullName: {type: 'String!', args: false},
+      role: {type: 'Role', args: true, relation: {ourTable: 'roleId', otherTable: '_id'}},
+      teams: {type: '[Team!]', args: true, relation: {ourTable: '_id', otherTable: 'memberIds'}, sort: {name: 1}},
       //-------------------
       // !end
     },

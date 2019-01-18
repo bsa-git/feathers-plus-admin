@@ -11,6 +11,10 @@ let moduleExports = merge({},
   // !<DEFAULT> code: model
   {
     email: String,
+    googleId: String,
+    githubId: String,
+    googleTokens: Object,
+    githubTokens: Object,
     firstName: String,
     lastName: String,
     password: String,

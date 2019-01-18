@@ -21,6 +21,18 @@ let moduleExports = merge({},
         faker: "internet.email",
         bsonType: "string"
       },
+      googleId: {
+        bsonType: "string"
+      },
+      githubId: {
+        bsonType: "string"
+      },
+      googleTokens: {
+        bsonType: "object"
+      },
+      githubTokens: {
+        bsonType: "object"
+      },
       firstName: {
         minLength: 2,
         maxLength: 20,

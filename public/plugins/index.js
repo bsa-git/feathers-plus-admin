@@ -16,6 +16,7 @@ export default async (context, inject) => {
   inject('util', util);
   inject('HttpBox', HttpBox);
   inject('colors', colors);
+
   // Set Vue plugins
   vueI18n(context);
   vuetify(context);

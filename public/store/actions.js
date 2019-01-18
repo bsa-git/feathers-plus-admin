@@ -6,9 +6,7 @@ const actions = {
 
   //--- ServerInit ---//
   async nuxtServerInit ({ commit, dispatch }, { req }) {
-
     debug(`nuxtServerInit start on ${process.server ? 'server' : 'client'}`);
-
     let _initAuth = null;
     if(process.server && !process.static){
       _initAuth =  await initAuth({
@@ -25,8 +23,10 @@ const actions = {
   async checkAuth({ dispatch }){
     if(this.$util.isAccessToken()){
       try {
-        const response = await dispatch('auth/authenticate');
-        return response && response.accessToken;
+        let response = await dispatch('auth/authenticate');
+        const result = (!!response && !!response.accessToken);
+        debug('checkAuth.accessToken:', result);
+        return result;
       } catch (error) {
         if (error.message.includes('Could not find stored JWT')) {
           this.$util.removeAccessToken();

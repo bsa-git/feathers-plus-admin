@@ -24,7 +24,7 @@ module.exports = function (options = {}) {
     let records = getItems(context);
 
     // console.log('records');
-    debug('getItems(context).records:', records);
+    // debug('getItems(context).records:', records);
 
     /*
     Modify records and/or context.

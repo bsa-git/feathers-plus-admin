@@ -69,6 +69,13 @@
         "*app"
       ],
       "singleService": ""
+    },
+    "accounts-profile-data": {
+      "fileName": "accounts-profile-data",
+      "camelName": "accountsProfileData",
+      "ifMulti": "n",
+      "multiServices": [],
+      "singleService": "users"
     }
   },
   "authentication": {

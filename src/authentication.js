@@ -6,6 +6,7 @@ const local = require('@feathersjs/authentication-local');
 const oauth2 = require('@feathersjs/authentication-oauth2');
 const GoogleStrategy = require('passport-google-oauth20');
 const GithubStrategy = require('passport-github');
+const verifiers = require('./plugins/auth/verifiers');
 
 // !code: imports // !end
 // !code: init // !end
@@ -21,12 +22,16 @@ let moduleExports = function (app) {
 
   app.configure(oauth2(Object.assign({
     name: 'google',
-    Strategy: GoogleStrategy
+    Strategy: GoogleStrategy,
+    Verifier: verifiers.Oauth2Verifier,
+    emailField: 'email'
   }, config.google)));
 
   app.configure(oauth2(Object.assign({
     name: 'github',
-    Strategy: GithubStrategy
+    Strategy: GithubStrategy,
+    Verifier: verifiers.Oauth2Verifier,
+    emailField: 'email'
   }, config.github)));
 
   // !code: loc_2 // !end

@@ -31,6 +31,18 @@ let base = merge({},
         maxLength: 40,
         faker: "internet.email"
       },
+      googleId: {
+        type: "string"
+      },
+      githubId: {
+        type: "string"
+      },
+      googleTokens: {
+        type: "object"
+      },
+      githubTokens: {
+        type: "object"
+      },
       firstName: {
         type: "string",
         minLength: 2,
