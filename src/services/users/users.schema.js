@@ -1,3 +1,4 @@
+
 // Define the Feathers schema for service `users`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
@@ -37,23 +38,38 @@ let schema = {
     id: {type: 'ID'},
     email: {type: 'string', format: 'email', minLength: 8, maxLength: 40, faker: 'internet.email'},
     password: {type: 'string', faker: {exp: 'rec.email.slice(0, rec.email.indexOf("@"))'}},
-    googleId: {type: 'string'},
-    githubId: {type: 'string'},
     firstName: {type: 'string', minLength: 2, maxLength: 20, faker: 'name.firstName'},
     lastName: {type: 'string', minLength: 2, maxLength: 40, faker: 'name.lastName'},
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
-    googleTokens: {
-      type: 'object',
-      properties: {
-        accessToken: {type: 'string'}
-      }
+    googleId: {
+      type: 'string',
+      chance: 'natural'
     },
-    githubTokens: {
-      type: 'object',
-      properties: {
-        accessToken: {type: 'string'}
-      }
-    }
+    githubId: {
+      type: 'string',
+      chance: 'natural'
+    },
+    googleAccessToken: {
+      type: 'string',
+      // faker: {fk: 'random:uuid'}
+      chance: 'guid'
+    },
+    githubAccessToken: {
+      type: 'string',
+      chance: 'guid'
+    },
+    // googleTokens: {
+    //   type: 'object',
+    //   properties: {
+    //     accessToken: {type: 'string'}
+    //   }
+    // },
+    // githubTokens: {
+    //   type: 'object',
+    //   properties: {
+    //     accessToken: {type: 'string'}
+    //   }
+    // }
     //-------------------------
     // !end
   },

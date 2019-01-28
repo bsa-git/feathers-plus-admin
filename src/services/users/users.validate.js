@@ -31,17 +31,11 @@ let base = merge({},
         maxLength: 40,
         faker: "internet.email"
       },
-      googleId: {
-        type: "string"
-      },
-      githubId: {
-        type: "string"
-      },
-      googleTokens: {
-        type: "object"
-      },
-      githubTokens: {
-        type: "object"
+      password: {
+        type: "string",
+        faker: {
+          exp: "rec.email.slice(0, rec.email.indexOf(\"@\"))"
+        }
       },
       firstName: {
         type: "string",
@@ -55,17 +49,27 @@ let base = merge({},
         maxLength: 40,
         faker: "name.lastName"
       },
-      password: {
-        type: "string",
-        faker: {
-          exp: "rec.email.slice(0, rec.email.indexOf(\"@\"))"
-        }
-      },
       roleId: {
         type: ID,
         faker: {
           fk: "roles:random"
         }
+      },
+      googleId: {
+        type: "string",
+        chance: "natural"
+      },
+      githubId: {
+        type: "string",
+        chance: "natural"
+      },
+      googleAccessToken: {
+        type: "string",
+        chance: "guid"
+      },
+      githubAccessToken: {
+        type: "string",
+        chance: "guid"
       }
     }
   },

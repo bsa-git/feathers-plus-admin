@@ -6,9 +6,12 @@ const local = require('@feathersjs/authentication-local');
 const oauth2 = require('@feathersjs/authentication-oauth2');
 const GoogleStrategy = require('passport-google-oauth20');
 const GithubStrategy = require('passport-github');
-const verifiers = require('./plugins/auth/verifiers');
 
-// !code: imports // !end
+// !code: imports
+//---------------
+const verifiers = require('./plugins/auth/verifiers');
+//---------------
+// !end
 // !code: init // !end
 
 let moduleExports = function (app) {
@@ -22,19 +25,32 @@ let moduleExports = function (app) {
 
   app.configure(oauth2(Object.assign({
     name: 'google',
+    Strategy: GoogleStrategy
+  }, config.google)));
+
+  app.configure(oauth2(Object.assign({
+    name: 'github',
+    Strategy: GithubStrategy
+  }, config.github)));
+
+  // !code: loc_2
+  //--------------
+  // Override  oauth2 for google
+  app.configure(oauth2(Object.assign({
+    name: 'google',
     Strategy: GoogleStrategy,
     Verifier: verifiers.Oauth2Verifier,
     emailField: 'email'
   }, config.google)));
-
+  // Override  oauth2 for github
   app.configure(oauth2(Object.assign({
     name: 'github',
     Strategy: GithubStrategy,
     Verifier: verifiers.Oauth2Verifier,
     emailField: 'email'
   }, config.github)));
-
-  // !code: loc_2 // !end
+  //--------------
+  // !end
 
   // The `authentication` service is used to create a JWT.
   // The before `create` hook registers strategies that can be used

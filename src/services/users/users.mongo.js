@@ -21,17 +21,11 @@ let moduleExports = merge({},
         faker: "internet.email",
         bsonType: "string"
       },
-      googleId: {
+      password: {
+        faker: {
+          exp: "rec.email.slice(0, rec.email.indexOf(\"@\"))"
+        },
         bsonType: "string"
-      },
-      githubId: {
-        bsonType: "string"
-      },
-      googleTokens: {
-        bsonType: "object"
-      },
-      githubTokens: {
-        bsonType: "object"
       },
       firstName: {
         minLength: 2,
@@ -45,17 +39,27 @@ let moduleExports = merge({},
         faker: "name.lastName",
         bsonType: "string"
       },
-      password: {
-        faker: {
-          exp: "rec.email.slice(0, rec.email.indexOf(\"@\"))"
-        },
-        bsonType: "string"
-      },
       roleId: {
         faker: {
           fk: "roles:random"
         },
         bsonType: "objectId"
+      },
+      googleId: {
+        chance: "natural",
+        bsonType: "string"
+      },
+      githubId: {
+        chance: "natural",
+        bsonType: "string"
+      },
+      googleAccessToken: {
+        chance: "guid",
+        bsonType: "string"
+      },
+      githubAccessToken: {
+        chance: "guid",
+        bsonType: "string"
       }
     }
   },

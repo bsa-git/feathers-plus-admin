@@ -11,14 +11,14 @@ let moduleExports = merge({},
   // !<DEFAULT> code: model
   {
     email: String,
-    googleId: String,
-    githubId: String,
-    googleTokens: Object,
-    githubTokens: Object,
+    password: String,
     firstName: String,
     lastName: String,
-    password: String,
-    roleId: mongoose.Schema.Types.ObjectId
+    roleId: mongoose.Schema.Types.ObjectId,
+    googleId: String,
+    githubId: String,
+    googleAccessToken: String,
+    githubAccessToken: String
   },
   // !end
   // !code: moduleExports // !end

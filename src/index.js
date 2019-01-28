@@ -23,6 +23,7 @@ server.on('listening', () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
   // !code: listening
+  //--------------------
   process.on('nuxt:build:done', (err) => {
     if (err) {
       logger.error(err);
@@ -30,6 +31,7 @@ server.on('listening', () => {
     }
     logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   });
+  //--------------------
   // !end
   seedData(app);
 });

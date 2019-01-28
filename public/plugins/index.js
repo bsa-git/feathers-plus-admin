@@ -1,4 +1,5 @@
 
+// require('@babel/polyfill');
 import vueI18n from '~/plugins/localization/vue-i18n';
 import vuetify from '~/plugins/ui-framework/vuetify';
 import veeValidate from '~/plugins/validators/vee-validate';

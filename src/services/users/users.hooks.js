@@ -5,8 +5,9 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 // eslint-disable-next-line no-unused-vars
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 // eslint-disable-next-line no-unused-vars
-const verifyEmail = require('./hooks/verify-email');
 const accountsProfileData = require('./hooks/accounts-profile-data');
+// eslint-disable-next-line no-unused-vars
+const verifyEmail = require('./hooks/verify-email');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');

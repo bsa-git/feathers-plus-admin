@@ -34,37 +34,42 @@ module.exports = function (options = {}) {
     const getProfileData = (record) => {
       let newRecord = {};
       let _raw = {};
-      if(record.google){// Google account
+
+      debug('getProfileData.record:', record);
+
+      // Google account
+      if(record.google){
         _raw = JSON.parse(record.google.profile._raw);
-        if(record.googleId){
-          newRecord.googleId = record.googleId;
-        }
+        newRecord.googleId = record.googleId;
         newRecord.email = _raw.emails.find(email => {
           return email.type === 'account';
         }).value;
         newRecord.firstName = _raw.name.givenName;
         newRecord.lastName = _raw.name.familyName;
-        newRecord.googleTokens = {accessToken: record.google.accessToken};
+        // newRecord.googleTokens = {accessToken: record.google.accessToken};
+        newRecord.googleAccessToken = record.google.accessToken;
         return newRecord;
-      }else if(record.github){// GitHub account
-        if(record.githubId){
-          newRecord.githubId = record.githubId;
-        }
+
+        // GitHub account
+      }else if(record.github){
+        newRecord.githubId = record.githubId;
         newRecord.email = record.github.profile.emails[0].value;
         const names = record.github.profile.displayName.trim().split(' ');
         newRecord.firstName = names[0];
         if(names.length > 1){
           newRecord.lastName = names[1];
         }
-        newRecord.githubTokens = {accessToken: record.github.accessToken};
+        // newRecord.githubTokens = {accessToken: record.github.accessToken};
+        newRecord.githubAccessToken = record.github.accessToken;
         return newRecord;
-      }else {// No accounts
+
+        // No accounts
+      }else {
         return record;
       }
     };
 
     let newRecords = [];
-    // debug('getItems(context).records:', records);
 
     if (isArray(records)) {
       records.forEach(record => {

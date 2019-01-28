@@ -1,61 +1,73 @@
 {
   "users": [
     {
-      "email": "Sandrine.Torphy@yahoo.com",
-      "firstName": "Jermain",
-      "lastName": "Johns",
-      "roleId": "5bc5af338e15851484dc7486",
-      "password": "Sandrine.Torphy",
-      "_id": "5bc5af338e15851484dc7483"
+      "email": "Daphnee.Schultz@hotmail.com",
+      "password": "Daphnee.Schultz",
+      "firstName": "Yasmin",
+      "lastName": "Walter",
+      "roleId": "5c4eaa07e46e3f07a03315d6",
+      "googleId": "4943272568946688",
+      "githubId": "5339869586915328",
+      "googleAccessToken": "84838145-2e9a-5e12-9241-8bfb5af807c8",
+      "githubAccessToken": "02772375-654c-5073-bec7-2d4caf4c4d41",
+      "_id": "5c4eaa07e46e3f07a03315d2"
     },
     {
-      "email": "Sam_Bernier83@hotmail.com",
-      "firstName": "Rico",
-      "lastName": "Predovic",
-      "roleId": "5bc5af338e15851484dc7487",
-      "password": "Sam_Bernier83",
-      "_id": "5bc5af338e15851484dc7484"
+      "email": "Chasity3@yahoo.com",
+      "password": "Chasity3",
+      "firstName": "Maeve",
+      "lastName": "Legros",
+      "roleId": "5c4eaa07e46e3f07a03315d6",
+      "googleId": "8500526960345088",
+      "githubId": "8129884278751232",
+      "googleAccessToken": "2f4196ba-555c-5fc7-8f4a-500b5d5c054e",
+      "githubAccessToken": "22d4cfb5-fc7d-5f58-a85b-09230a426aa2",
+      "_id": "5c4eaa07e46e3f07a03315d3"
     },
     {
-      "email": "Boyd.Lueilwitz@hotmail.com",
-      "firstName": "Mylene",
-      "lastName": "Runolfsson",
-      "roleId": "5bc5af338e15851484dc7487",
-      "password": "Boyd.Lueilwitz",
-      "_id": "5bc5af338e15851484dc7485"
+      "email": "Adolph_Buckridge48@gmail.com",
+      "password": "Adolph_Buckridge48",
+      "firstName": "Woodrow",
+      "lastName": "Wunsch",
+      "roleId": "5c4eaa07e46e3f07a03315d5",
+      "googleId": "2547298634563584",
+      "githubId": "8823332868718592",
+      "googleAccessToken": "fe2b6f91-bd64-58e3-994b-efa58c568eec",
+      "githubAccessToken": "43ac8fac-4e66-501d-8494-d90522806be7",
+      "_id": "5c4eaa07e46e3f07a03315d4"
     }
   ],
   "roles": [
     {
-      "name": "Lead Applications Planner",
-      "_id": "5bc5af338e15851484dc7486"
+      "name": "Customer Markets Specialist",
+      "_id": "5c4eaa07e46e3f07a03315d5"
     },
     {
-      "name": "Forward Response Strategist",
-      "_id": "5bc5af338e15851484dc7487"
+      "name": "Investor Program Technician",
+      "_id": "5c4eaa07e46e3f07a03315d6"
     }
   ],
   "teams": [
     {
-      "name": "nisi quae et",
+      "name": "modi maiores et",
       "memberIds": [
-        "5bc5af338e15851484dc7483"
+        "5c4eaa07e46e3f07a03315d3"
       ],
-      "_id": "5bc5af338e15851484dc7488"
+      "_id": "5c4eaa07e46e3f07a03315d7"
     },
     {
-      "name": "quidem ut eaque",
+      "name": "illo explicabo et",
       "memberIds": [
-        "5bc5af338e15851484dc7484"
+        "5c4eaa07e46e3f07a03315d4"
       ],
-      "_id": "5bc5af338e15851484dc7489"
+      "_id": "5c4eaa07e46e3f07a03315d8"
     },
     {
-      "name": "totam sit delectus",
+      "name": "laborum cum molestias",
       "memberIds": [
-        "5bc5af338e15851484dc7485"
+        "5c4eaa07e46e3f07a03315d4"
       ],
-      "_id": "5bc5af338e15851484dc748a"
+      "_id": "5c4eaa07e46e3f07a03315d9"
     }
   ]
 }

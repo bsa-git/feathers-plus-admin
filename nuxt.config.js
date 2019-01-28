@@ -1,14 +1,15 @@
-require('@babel/polyfill');
+// require('@babel/polyfill');
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
+const generateDir = process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'docs-dist';
 
 module.exports = {
   mode: 'spa',// universal|spa
   srcDir: 'public',
   buildDir: 'nuxt-dist',
   generate: {
-    dir: 'docs',
+    dir: generateDir,
     routes: [
       '/ru/error/403',
       '/ru/error/404',
@@ -46,7 +47,12 @@ module.exports = {
       {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'}
     ],
     script: [
-      {src: '/static/js/polyfills/polyfill.min.js'}
+      // {src: '/static/js/polyfills/polyfill.min.js'}
+      // { src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,fetch,Object.entries' },
+      // https://polyfill.io/v3/polyfill.min.js?flags=always&features=default%2CObject.assign%2CObject.create%2CObject.defineProperties%2CObject.defineProperty%2CObject.entries%2CObject.freeze%2CObject.getOwnPropertyDescriptor%2CObject.getOwnPropertyNames%2CObject.getPrototypeOf%2CObject.is%2CObject.keys%2CObject.setPrototypeOf%2CObject.values
+      { src: 'https://polyfill.io/v3/polyfill.min.js?features=default' },
+      // { src: 'https://polyfill.io/v3/polyfill.min.js?features=default%2CObject.assign%2CObject.create%2CObject.defineProperties%2CObject.defineProperty%2CObject.entries%2CObject.freeze%2CObject.getOwnPropertyDescriptor%2CObject.getOwnPropertyNames%2CObject.getPrototypeOf%2CObject.is%2CObject.keys%2CObject.setPrototypeOf%2CObject.values' },
+
     ],
   },
   router: {
@@ -69,7 +75,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['@/plugins/index'],
+  plugins: [/*'@/plugins/polyfills/polyfill.min',*/ '@/plugins/index'],
 
   /*
   ** Nuxt.js modules
@@ -83,11 +89,21 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    extend (config, { isClient }) {
+      // Extend only webpack config for client-bundle
+      if (isClient) {
+        config.devtool = '#source-map';
+        // console.log('config.module.rules', config.module.rules.find(aRule => aRule.test === /\\.jsx?$/));
+      }
+    },
     plugins: [
       new Dotenv({
         path: './.env', // Path to .env file (this is the default)
         systemvars: true // It makes it possible to work in production mode on Heroku hosting
       })
     ]
+  },
+  render: {
+    // resourceHints: false
   }
 };

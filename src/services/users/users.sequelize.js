@@ -24,17 +24,29 @@ let moduleExports = merge({},
     email: {
       type: DataTypes.STRING
     },
+    password: {
+      type: DataTypes.TEXT
+    },
     firstName: {
       type: DataTypes.STRING
     },
     lastName: {
       type: DataTypes.STRING
     },
-    password: {
-      type: DataTypes.TEXT
-    },
     roleId: {
       type: DataTypes.INTEGER
+    },
+    googleId: {
+      type: DataTypes.TEXT
+    },
+    githubId: {
+      type: DataTypes.TEXT
+    },
+    googleAccessToken: {
+      type: DataTypes.TEXT
+    },
+    githubAccessToken: {
+      type: DataTypes.TEXT
     }
   },
   // !end

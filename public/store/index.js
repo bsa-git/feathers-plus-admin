@@ -6,6 +6,7 @@ import mutations from '~/store/mutations';
 import actions from '~/store/actions';
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
+// import feathersClient from '~/plugins/lib/feathers-client-es5';
 
 const { service, auth, FeathersVuex } = feathersVuex(feathersClient, { idField: '_id' });
 

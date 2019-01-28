@@ -23,6 +23,10 @@ type User {
   firstName: String
   lastName: String
   roleId: ID
+  googleId: String
+  githubId: String
+  googleAccessToken: String
+  githubAccessToken: String
   fullName: String!
   role(query: JSON, params: JSON, key: JSON): Role
   teams(query: JSON, params: JSON, key: JSON): [Team!]

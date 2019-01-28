@@ -46,8 +46,8 @@ module.exports = {
       localeFallback: 'en',
       // Custom seeders.
       // faz: {
-           // Invoked with: faker: 'faz.foo', faker: { 'faz.foo': 'bar' } or faker: { 'faz.foo': ['bar', 'baz'] }
-           // foo: (p1 = 'hello', p2 = 'world') => `${p1} ${p2}`,
+      // Invoked with: faker: 'faz.foo', faker: { 'faz.foo': 'bar' } or faker: { 'faz.foo': ['bar', 'baz'] }
+      // foo: (p1 = 'hello', p2 = 'world') => `${p1} ${p2}`,
       // },
     },
     // http://chancejs.com/usage/seed.html
