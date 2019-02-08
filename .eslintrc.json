@@ -12,6 +12,7 @@
   "extends": "eslint:recommended",
   "rules": {
     "no-console": "off",
+    "no-undef":"off",
     "indent": [
       "error",
       2

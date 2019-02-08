@@ -57,7 +57,15 @@ let moduleExports = merge({},
         chance: "guid",
         bsonType: "string"
       },
+      googleRefreshToken: {
+        chance: "guid",
+        bsonType: "string"
+      },
       githubAccessToken: {
+        chance: "guid",
+        bsonType: "string"
+      },
+      githubRefreshToken: {
         chance: "guid",
         bsonType: "string"
       }

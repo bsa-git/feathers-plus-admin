@@ -48,6 +48,9 @@ module.exports = function (options = {}) {
         newRecord.lastName = _raw.name.familyName;
         // newRecord.googleTokens = {accessToken: record.google.accessToken};
         newRecord.googleAccessToken = record.google.accessToken;
+        if(record.google.refreshToken){
+          newRecord.googleRefreshToken = record.google.refreshToken;
+        }
         return newRecord;
 
         // GitHub account
@@ -61,6 +64,9 @@ module.exports = function (options = {}) {
         }
         // newRecord.githubTokens = {accessToken: record.github.accessToken};
         newRecord.githubAccessToken = record.github.accessToken;
+        if(record.github.refreshToken){
+          newRecord.githubRefreshToken = record.github.refreshToken;
+        }
         return newRecord;
 
         // No accounts

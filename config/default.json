@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "port": "PORT",
+  "port": "3030",
   "public": "../public/",
   "paginate": {
     "default": 10,
@@ -14,7 +14,7 @@
       "password": "password"
     },
     "client": {
-      "port": "PORT",
+      "port": "3030",
       "ioOptions": {
         "transports": [
           "websocket"
@@ -27,7 +27,7 @@
         "transformer": "ws"
       },
       "restOptions": {
-        "url": "BASE_URL"
+        "url": "http://localhost:3030"
       },
       "overriddenAuth": {
         "users": {

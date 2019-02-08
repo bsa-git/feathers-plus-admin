@@ -85,7 +85,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    // devtool: 'eval-source-map', //'inline-source-map', 'eval-source-map'
     /*
     ** You can extend webpack config here
     */

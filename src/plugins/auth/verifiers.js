@@ -7,7 +7,6 @@ class Oauth2Verifier extends Verifier {
 
   constructor (app, options = {}) {
     options.emailField = options.emailField || 'email';
-    console.log('GitHubVerifier.constructor.emailField:', options.emailField);
     super(app, options);
   }
 

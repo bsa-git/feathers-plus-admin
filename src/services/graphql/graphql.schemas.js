@@ -26,7 +26,9 @@ type User {
   googleId: String
   githubId: String
   googleAccessToken: String
+  googleRefreshToken: String
   githubAccessToken: String
+  githubRefreshToken: String
   fullName: String!
   role(query: JSON, params: JSON, key: JSON): Role
   teams(query: JSON, params: JSON, key: JSON): [Team!]

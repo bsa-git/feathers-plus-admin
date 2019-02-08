@@ -1,6 +1,7 @@
 const resolve = require('path').resolve;
 const {Nuxt, Builder} = require('nuxt');
-const testNodeEnv = process.env.NODE_ENV === 'test';
+const genSpecs = require('../../feathers-gen-specs.json');
+const testNodeEnv = process.env.NODE_ENV === genSpecs.app.environmentsAllowingSeedData;
 
 // Add nuxt.js middleware
 module.exports = function (app) {

@@ -39,7 +39,7 @@ let moduleExports = function serviceResolvers(app, options) {
         // !<DEFAULT> code: resolver-Team-members
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: { $in: parent.memberIds }, $sort: 
+            query: { _id: { $in: parent.memberIds }, $sort:
               {
                 lastName: 1,
                 firstName: 1
@@ -90,7 +90,6 @@ let moduleExports = function serviceResolvers(app, options) {
           if (!(content.cache.User && content.cache.User.teams)) {
             content.cache.User = content.cache.User || {};
             let teamsForUser = await teams.find(feathersParams);
-            // teamsForUser = JSON.parse(JSON.stringify(teamsForUser));
             content.cache.User.teams = teamsForUser;
           }
 

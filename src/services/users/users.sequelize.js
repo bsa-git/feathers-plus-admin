@@ -45,7 +45,13 @@ let moduleExports = merge({},
     googleAccessToken: {
       type: DataTypes.TEXT
     },
+    googleRefreshToken: {
+      type: DataTypes.TEXT
+    },
     githubAccessToken: {
+      type: DataTypes.TEXT
+    },
+    githubRefreshToken: {
       type: DataTypes.TEXT
     }
   },

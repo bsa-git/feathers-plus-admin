@@ -18,7 +18,9 @@ let moduleExports = merge({},
     googleId: String,
     githubId: String,
     googleAccessToken: String,
-    githubAccessToken: String
+    googleRefreshToken: String,
+    githubAccessToken: String,
+    githubRefreshToken: String
   },
   // !end
   // !code: moduleExports // !end

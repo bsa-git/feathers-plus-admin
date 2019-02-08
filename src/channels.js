@@ -43,7 +43,9 @@ module.exports = function (app) {
     // To publish only for a specific event use `app.publish(eventname, () => {})`
 
     // eslint-disable-next-line
-    console.log('Publishing all events to all authenticated users.');
+    //--------------------------
+    // console.log('Publishing all events to all authenticated users.');
+    //--------------------------
 
     // e.g. to publish all service events to all authenticated users use
     return app.channel('authenticated');

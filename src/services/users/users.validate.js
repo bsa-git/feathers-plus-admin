@@ -67,7 +67,15 @@ let base = merge({},
         type: "string",
         chance: "guid"
       },
+      googleRefreshToken: {
+        type: "string",
+        chance: "guid"
+      },
       githubAccessToken: {
+        type: "string",
+        chance: "guid"
+      },
+      githubRefreshToken: {
         type: "string",
         chance: "guid"
       }

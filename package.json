@@ -22,7 +22,6 @@
     "npm": ">= 6.4.1"
   },
   "scripts": {
-    "test": "npm run eslint && npm run mocha",
     "test:all": "npm run eslint && cross-env NODE_ENV=test DEBUG=test:* npm run mocha",
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue,styl",

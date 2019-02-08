@@ -41,35 +41,12 @@ let schema = {
     firstName: {type: 'string', minLength: 2, maxLength: 20, faker: 'name.firstName'},
     lastName: {type: 'string', minLength: 2, maxLength: 40, faker: 'name.lastName'},
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
-    googleId: {
-      type: 'string',
-      chance: 'natural'
-    },
-    githubId: {
-      type: 'string',
-      chance: 'natural'
-    },
-    googleAccessToken: {
-      type: 'string',
-      // faker: {fk: 'random:uuid'}
-      chance: 'guid'
-    },
-    githubAccessToken: {
-      type: 'string',
-      chance: 'guid'
-    },
-    // googleTokens: {
-    //   type: 'object',
-    //   properties: {
-    //     accessToken: {type: 'string'}
-    //   }
-    // },
-    // githubTokens: {
-    //   type: 'object',
-    //   properties: {
-    //     accessToken: {type: 'string'}
-    //   }
-    // }
+    googleId: {type: 'string', chance: 'natural'},
+    githubId: {type: 'string', chance: 'natural'},
+    googleAccessToken: {type: 'string', chance: 'guid'},
+    googleRefreshToken: {type: 'string', chance: 'guid'},
+    githubAccessToken: {type: 'string', chance: 'guid'},
+    githubRefreshToken: {type: 'string', chance: 'guid'},
     //-------------------------
     // !end
   },
