@@ -113,7 +113,9 @@ compiled/
 
 # Others
 data/db/*
+!data/db/README.md
 data/log/*
+!data/log/README.md
 .nuxt/
 nuxt-dist/
 docs-dist/

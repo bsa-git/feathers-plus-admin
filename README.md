@@ -20,15 +20,35 @@ Getting  up and running is as easy as 1, 2, 3.
     cd path/to/feathers-plus-admin; npm install
     ```
 
-3. Start your app
+3. Environment variables
 
-    ```
-    npm start
-    ```
+Add file ".env" to your project to set user environment variables.
+See the sample file ".env.example". In environment variables, user's secret
+data such as user_id, user_secret, etc. are usually specified.
+
+4. Start your app for development mode
+
+to work with the MongoDB database
+
+```bash
+  npm run start-mongod
+  ```
+Start the local server, so that you can see the application running
+
+  ```bash
+  npm run dev
+  ```
+The application is now running on http://localhost:3030
+
+5. Start your app for production mode
+
+```bash
+npm start
+```
 
 ## Testing
 
-Simply run `npm test` and all your tests in the `test/` directory will be run.
+Simply run `npm run test:all` and all your tests in the `test/` directory will be run.
 
 ## Scaffolding
 
