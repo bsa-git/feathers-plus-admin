@@ -112,10 +112,9 @@ $RECYCLE.BIN/
 compiled/
 
 # Others
-lib/
-data/
+data/db/*
+data/log/*
 .nuxt/
 nuxt-dist/
 docs-dist/
-# test-debug/
 .env
