@@ -30,7 +30,7 @@
     },
     methods: {
       goHome () {
-        throw new Error('Test Error');
+//        throw new Error('Test Error');
         this.$router.push(this.homePath);
       }
     }
