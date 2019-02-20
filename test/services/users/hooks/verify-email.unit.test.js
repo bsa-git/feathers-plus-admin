@@ -1,8 +1,8 @@
 const assert = require('assert');
-const verifyEmail = require('../../../../src/services/users/hooks/verify-email');
-// const debug = require('debug')('test:verify-email.service.hook.test');
+const {appRoot} = require('../../../../src/plugins/lib');
+const verifyEmail = require(`${appRoot}/src/services/users/hooks/verify-email`);
 
-describe('=== Test users/hooks/verify-email.unit.test.js ===', () => {
+describe('<<< Test users/hooks/verify-email.unit.test.js >>>', () => {
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

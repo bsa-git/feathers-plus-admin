@@ -24,6 +24,9 @@ let base = merge({},
       id: {
         type: ID
       },
+      _id: {
+        type: ID
+      },
       email: {
         type: "string",
         format: "email",

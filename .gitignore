@@ -117,4 +117,5 @@ data/
 .nuxt/
 nuxt-dist/
 docs-dist/
+# test-debug/
 .env

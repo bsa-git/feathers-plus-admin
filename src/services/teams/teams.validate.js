@@ -24,6 +24,9 @@ let base = merge({},
       id: {
         type: ID
       },
+      _id: {
+        type: ID
+      },
       name: {
         minLength: 2,
         maxLength: 30,

@@ -6,12 +6,14 @@
 let moduleExports = `
 type Role {
   id: ID
+  _id: ID
   name: String
   users: [User!]
 }
  
 type Team {
   id: ID
+  _id: ID
   name: String
   memberIds: [String]
   members: [User!]
@@ -19,6 +21,7 @@ type Team {
  
 type User {
   id: ID
+  _id: ID
   email: String
   firstName: String
   lastName: String

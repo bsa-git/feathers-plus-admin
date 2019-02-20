@@ -33,12 +33,13 @@ let schema = {
   properties: {
     // !code: schema_properties
     //-------------------------
-    id: { type: 'ID' },
+    id: {type: 'ID'},
+    _id: {type: 'ID'},
     name: {minLength: 2, maxLength: 30, faker: 'lorem.words'},
     memberIds: {
       type: 'array',
       maxItems: 10,
-      items: [{ type: 'ID', faker: { fk: 'users:next' } }]
+      items: [{type: 'ID', faker: {fk: 'users:next'}}]
     }
     //-------------------------
     // !end
@@ -54,7 +55,7 @@ let extensions = {
     //----------------------
     name: 'Team',
     service: {
-      sort: { name: 1 },
+      sort: {name: 1},
     },
     // sql: {
     //   sqlTable: 'Teams',
@@ -71,7 +72,12 @@ let extensions = {
     add: {
       // !code: graphql_add
       //-------------------
-      members: { type: '[User!]', args: false, relation: { ourTable: 'memberIds', otherTable: '_id' }, sort: { lastName: 1, firstName: 1 } },
+      members: {
+        type: '[User!]',
+        args: false,
+        relation: {ourTable: 'memberIds', otherTable: '_id'},
+        sort: {lastName: 1, firstName: 1}
+      },
       //-------------------
       // !end
     },

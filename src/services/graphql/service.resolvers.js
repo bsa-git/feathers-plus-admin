@@ -39,7 +39,7 @@ let moduleExports = function serviceResolvers(app, options) {
         // !<DEFAULT> code: resolver-Team-members
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: { $in: parent.memberIds }, $sort:
+            query: { _id: { $in: parent.memberIds }, $sort: 
               {
                 lastName: 1,
                 firstName: 1
@@ -55,11 +55,7 @@ let moduleExports = function serviceResolvers(app, options) {
       // fullName: String!
       fullName:
         // !code: resolver-User-fullName-non
-        //-----------------------------------
-        (parent, args, content, ast) => {
-          return `${parent.firstName} ${parent.lastName}`;
-        },
-        //-----------------------------------
+        (parent, args, content, ast) => { return `${parent.firstName} ${parent.lastName}`; },
         // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
@@ -75,32 +71,23 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // teams(query: JSON, params: JSON, key: JSON): [Team!]
       teams:
-        // !code: resolver-User-teams
-        //---------------------------
-        async (parent, args, content, ast) => {
+        // !<DEFAULT> code: resolver-User-teams
+        (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: {
-              $sort:
-                {
-                  name: 1
-                }
-            }, paginate: false
+            query: { $sort: 
+              {
+                name: 1
+              } }, paginate: false
           });
 
           if (!(content.cache.User && content.cache.User.teams)) {
             content.cache.User = content.cache.User || {};
-            let teamsForUser = await teams.find(feathersParams);
-            content.cache.User.teams = teamsForUser;
+            content.cache.User.teams = teams.find(feathersParams).then(extractAllItems);
           }
 
-          const membersForUser = res => res.filter(rec => {
-            const index = rec.memberIds.indexOf(`${parent._id}`);
-            return index !== -1;
-          });
-
-          return membersForUser(content.cache.User.teams);
+          return Promise.resolve(content.cache.User.teams)
+            .then(res => res.filter(rec => rec.memberIds.indexOf(parent._id) !== -1));
         },
-        //---------------------------
         // !end
     },
 

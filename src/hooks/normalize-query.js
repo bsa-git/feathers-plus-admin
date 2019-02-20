@@ -2,6 +2,10 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
+const {inspector} = require('../plugins/lib');
+const debug = require('debug')('app:normalize-query.hook');
+
+const isLog = false;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -22,7 +26,10 @@ module.exports = function (options = {}) {
     Modify records and/or context.
      */
     if(records){
+      debug('Normalize query');
+      if (isLog) inspector('Before normalize query:', records);
       records = JSON.parse(JSON.stringify(records));
+      if (isLog) inspector('After normalize query:', records);
     }
 
     // Place the modified records back in the context.

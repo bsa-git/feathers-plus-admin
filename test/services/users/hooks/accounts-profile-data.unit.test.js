@@ -1,8 +1,9 @@
 
 const assert = require('assert');
-const accountsProfileData = require('../../../../src/services/users/hooks/accounts-profile-data');
+const {appRoot} = require('../../../../src/plugins/lib');
+const accountsProfileData = require(`${appRoot}/src/services/users/hooks/accounts-profile-data`);
 
-describe('=== Test users/hooks/accounts-profile-data.unit.test.js ===', () => {
+describe('<<< Test users/hooks/accounts-profile-data.unit.test.js >>>', () => {
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

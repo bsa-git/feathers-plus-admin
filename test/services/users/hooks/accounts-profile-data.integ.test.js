@@ -1,16 +1,15 @@
 
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
-const { join } = require('path');
-const { readJsonFileSync } = require('@feathers-plus/test-utils');
-const accountsProfileData = require('../../../../src/services/users/hooks/accounts-profile-data');
+const {readJsonFileSync, appRoot} = require('../../../../src/plugins/lib');
+const accountsProfileData = require(`${appRoot}/src/services/users/hooks/accounts-profile-data`);
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
-const fakeData = readJsonFileSync(join(__dirname, '../../../../seeds/fake-data.json')) || {};
+const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 const fakeDataUser = (fakeData['users'] || [])[0] || {email: 'test@example.com'};
 
-describe('=== Test users/hooks/accounts-profile-data.integ.test.js ===', () => {
+describe('<<< Test users/hooks/accounts-profile-data.integ.test.js >>>', () => {
   let app, params;
   // eslint-disable-next-line no-unused-vars
   let service;

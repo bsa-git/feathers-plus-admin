@@ -36,6 +36,7 @@ let schema = {
     // !code: schema_properties
     //-------------------------
     id: {type: 'ID'},
+    _id: {type: 'ID'},
     email: {type: 'string', format: 'email', minLength: 8, maxLength: 40, faker: 'internet.email'},
     password: {type: 'string', faker: {exp: 'rec.email.slice(0, rec.email.indexOf("@"))'}},
     firstName: {type: 'string', minLength: 2, maxLength: 20, faker: 'name.firstName'},

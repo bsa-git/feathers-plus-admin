@@ -12,7 +12,7 @@ const getUrl = pathname => url.format({
   pathname
 });
 
-describe('=== Feathers application tests ===', () => {
+describe('<<< Feathers application tests >>>', () => {
   let server;
 
   before(function (done) {

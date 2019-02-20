@@ -32,7 +32,8 @@ let schema = {
   properties: {
     // !code: schema_properties
     //-------------------------
-    id: { type: 'ID' },
+    id: {type: 'ID'},
+    _id: {type: 'ID'},
     name: {faker: 'name.title'}
     //-------------------------
     // !end
@@ -48,7 +49,7 @@ let extensions = {
     //----------------------
     name: 'Role',
     service: {
-      sort: { name: 1 },
+      sort: {name: 1},
     },
     // sql: {
     //   sqlTable: 'Roles',
@@ -65,7 +66,7 @@ let extensions = {
     add: {
       // !code: graphql_add
       //-------------------
-      users: { type: '[User!]', args: false, relation: { ourTable: '_id', otherTable: 'roleId' } },
+      users: {type: '[User!]', args: false, relation: {ourTable: '_id', otherTable: 'roleId'}},
       //-------------------
       // !end
     },

@@ -1,15 +1,14 @@
 
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
-const { join } = require('path');
-const { readJsonFileSync } = require('@feathers-plus/test-utils');
-const normalizeQuery = require('../../src/hooks/normalize-query');
+const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
+const normalizeQuery = require(`${appRoot}/src/hooks/normalize-query`);
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
-const fakeData = readJsonFileSync(join(__dirname, '../../seeds/fake-data.json')) || {};
+const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('=== Test /hooks/normalize-query.integ.test.js ===', () => {
+describe('<<< Test /hooks/normalize-query.integ.test.js >>>', () => {
   let app, params;
   // eslint-disable-next-line no-unused-vars
   let service;
