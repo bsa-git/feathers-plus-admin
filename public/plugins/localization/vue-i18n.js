@@ -4,7 +4,9 @@ import VueI18n from 'vue-i18n';
 
 Vue.use(VueI18n);
 
-export default ({app, store}) => {
+export default (context) => {
+  const app = context.app;
+  const  store = context.store;
   // Set i18n instance on app
   // This way we can use it in middleware and pages asyncData/fetch
   app.i18n = new VueI18n({
@@ -15,6 +17,7 @@ export default ({app, store}) => {
       'ru': require('~/plugins/localization/locales/ru.json')
     }
   });
+  context.$t = VueI18n.prototype.t.bind(app.i18n);
 
   app.i18n.path = (link) => {
     const _link = app.$util.stripSlashes(link);

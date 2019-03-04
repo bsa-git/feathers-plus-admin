@@ -133,13 +133,30 @@
     "page_not_found": "Page not found",
     "sorry_page_not_found": "Sorry, page not found",
     "server_is_down": "The server is down",
-    "sorry_server_is_down": "Sorry, the server is down"
+    "sorry_server_is_down": "Sorry, the server is down",
+    "not_enough_rights": "Access denied. Not enough rights",
+    "sorry_not_enough_rights": "Sorry, access denied. Not enough rights"
+
+  },
+  "form": {
+    "validation_error": "Validation Error"
   },
   "login": {
     "title": "Login",
     "description": "Enter credentials",
     "email": "Email",
     "password": "Password",
-    "clear": "Clear"
+    "clear": "Clear",
+    "success_login": "Success Login",
+    "not_authenticated": "Incorrect email or password",
+    "err_authenticated": "An error prevented login"
+  },
+  "sign_up": {
+    "title": "Sign Up",
+    "description": "User registration",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "confirm_password": "Confirm Password",
+    "success_sign_up": "Success registration"
   }
 }

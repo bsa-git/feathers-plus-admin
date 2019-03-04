@@ -21,6 +21,7 @@
       :logo-img="devAvatar"
       :home-path="config.homePath"
       :app-menu="appMenu"
+      :user="user"
       :drawer="navLeft"
       v-on:onNavLeft="modelNavLeft"
      ></app-drawer>
@@ -54,10 +55,10 @@
 
 <script>
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-  import appMenu from '~/api/data/app-menu';
-  import userMenu from '~/api/data/user-menu';
-  import notes from '~/api/data/app-notification';
-  import themeColorOptions from '~/api/data/theme-color-options';
+  import appMenu from '~/api/data/app-menu.json';
+  import userMenu from '~/api/data/user-menu.json';
+  import notes from '~/api/data/app-notification.json';
+  import themeColorOptions from '~/api/data/theme-color-options.json';
   import AppToolbar from '~/components/layout/AppToolbar';
   import NotificationList from '~/components/layout/NotificationList';
   import AppDrawer from '~/components/layout/AppDrawer';

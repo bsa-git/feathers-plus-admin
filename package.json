@@ -72,7 +72,7 @@
     "express-useragent": "^1.0.12",
     "feathers-hooks-common": "^4.19.6",
     "feathers-mongoose": "^6.3.0",
-    "feathers-vuex": "^1.6.2",
+    "feathers-vuex": "^1.7.0",
     "graphql-resolvers-ast": "^1.4.0",
     "helmet": "^3.15.0",
     "lodash.merge": "^4.6.1",

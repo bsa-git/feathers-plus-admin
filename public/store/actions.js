@@ -1,6 +1,7 @@
 import {initAuth} from 'feathers-vuex';
-
 const debug = require('debug')('app:store.actions');
+
+const isLog = false;
 
 const actions = {
 
@@ -25,7 +26,8 @@ const actions = {
       try {
         let response = await dispatch('auth/authenticate');
         const result = (!!response && !!response.accessToken);
-        debug('checkAuth.accessToken:', result ? response.accessToken : false);
+        debug('checkAuth.accessToken:');
+        if (isLog && result) this.$util.inspector('Response accessToken:', response);
         return result;
       } catch (error) {
         if (error.message.includes('Could not find stored JWT')) {
@@ -44,6 +46,7 @@ const actions = {
   async logout({dispatch}) {
     await dispatch('auth/logout');
     this.$util.removeAccessToken();
+    debug('logout');
   }
 
 };

@@ -4,7 +4,9 @@
 const logger = require('./logger');
 const app = require('./app');
 const seedData = require('./seed-data');
-// !code: imports // !end
+// !code: imports
+const chalk = require('chalk');
+// !end
 // !code: init // !end
 
 const port = app.get('port');
@@ -15,7 +17,9 @@ process.on('unhandledRejection', (reason, p) => {
   // !<DEFAULT> code: unhandled_rejection_log
   logger.error('Unhandled Rejection at: Promise ', p, reason);
   // !end
-  // !code: unhandled_rejection // !end
+  // !code: unhandled_rejection
+  console.log(chalk.red(reason), p);
+  // !end
 });
 
 server.on('listening', () => {

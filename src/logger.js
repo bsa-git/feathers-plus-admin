@@ -10,11 +10,14 @@ const moduleExports = createLogger({
   // To see more detailed errors, change this to debug'
   level: 'info',
   // !end
-  // !<DEFAULT> code: format
+  // !code: format
+  //---------------
   format: format.combine(
+    format.colorize(),
     format.splat(),
     format.simple()
   ),
+  //---------------
   // !end
   // !<DEFAULT> code: transport
   transports: [

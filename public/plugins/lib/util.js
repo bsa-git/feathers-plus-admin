@@ -180,6 +180,19 @@ function readCookie(cookies, name) {
   return null;
 }
 
+/**
+ * sort array by string field
+ * @param items
+ * @param name
+ */
+function sortByStringField(items, name) {
+  items.sort((x, y) => {
+    let textA = x[name].toLocaleUpperCase();
+    let textB = y[name].toLocaleUpperCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+  });
+}
+
 export default {
   toggleFullScreen,
   gravatar,
@@ -191,5 +204,6 @@ export default {
   isAccessToken,
   removeAccessToken,
   verifyJWT,
-  readCookie
+  readCookie,
+  sortByStringField
 };

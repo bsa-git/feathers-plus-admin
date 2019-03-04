@@ -26,7 +26,7 @@ module.exports = function (options = {}) {
     Modify records and/or context.
      */
     if(records){
-      debug('Normalize query');
+      debug(`${context.type} app.service('${context.path}').${context.method}()`);
       if (isLog) inspector('Before normalize query:', records);
       records = JSON.parse(JSON.stringify(records));
       if (isLog) inspector('After normalize query:', records);

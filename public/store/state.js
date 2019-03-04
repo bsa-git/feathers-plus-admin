@@ -1,6 +1,7 @@
 export default () => ({
-  locales: ['en', 'ru'],
+  locales: process.env.LOCALES.split(';'),
   locale: process.env.LOCALE || 'en',
+  fallbackLocale: process.env.FALLBACK_LOCALE || 'en',
   config: {
     //--- SYSTEM ---//
     debug: process.env.DEBUG,

@@ -20,11 +20,11 @@ module.exports = async function (app, aServiceName) {
   if (!ifDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
-    console.log(chalk.red('Cannot seed services as seed/fake-data.json doesn\'t have seed data.'));
+    console.error(chalk.red('Cannot seed services as seed/fake-data.json doesn\'t have seed data.'));
     return;
   }
   if (!services || !Object.keys(services).length) {
-    console.log(chalk.red('Cannot seed services as feathers-gen-specs.json has no services.'));
+    console.error(chalk.red('Cannot seed services as feathers-gen-specs.json has no services.'));
     return;
   }
 

@@ -6,7 +6,6 @@ const errors = require('@feathersjs/errors');
 const ajv = require('ajv')({allErrors: true});
 const createSchema = require('../users.validate').schema;
 const debug = require('debug')('app:verify-email.service.hook');
-// const loIsArray = require('lodash/isArray');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -31,8 +30,10 @@ module.exports = function (options = {}) {
     */
     const validateEmail = (email) => {
       const valid = ajv.validate(createSchema, {email});
-      debug(`${valid ? `Email '${email}' is valid` : `Email '${email}' not valid`}`);
-      if (!valid) {
+      if (valid) {
+        debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' is valid`);
+      }else {
+        debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' not valid`);
         throw new errors.BadRequest(`Invalid email: "${email}"`);
       }
     };

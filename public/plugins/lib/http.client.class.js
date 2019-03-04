@@ -1,7 +1,7 @@
 'use strict';
 
 import useragent from 'express-useragent';
-import LocationHelper from '~/plugins/lib/location-helper.class';
+import LocationHelper from './location-helper.class';
 import axios from 'axios';
 // const debug = require('debug')('app:plugin.HttpBox');
 

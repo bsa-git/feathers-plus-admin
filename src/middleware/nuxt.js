@@ -8,7 +8,6 @@ module.exports = function (app) {
 
   // Else NodeEnv == 'test' then return
   if (testNodeEnv) return;
-
   // Setup nuxt.js
   let nuxtConfig = {};
   try {

@@ -31,7 +31,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn href="/auth/google" icon :disabled="!!user" >
+          <v-btn href="/auth/google" icon :disabled="!!user">
             <v-icon color="red">fab fa-google fa-lg</v-icon>
           </v-btn>
           <v-btn href="/auth/github" icon :disabled="!!user">
@@ -53,6 +53,12 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import fakeData from '~~/seeds/fake-data.json'
+
+  const fakeUser = fakeData.users[0];
+  const isDev = process.env.NODE_ENV === 'development';
+  const _email = isDev ? fakeUser.email : '';
+  const _password = isDev ? fakeUser.email.slice(0, fakeUser.email.indexOf("@")) : '';
 
   export default {
     layout: 'user',
@@ -66,8 +72,8 @@
         loading: false,
         error: undefined,
         model: {
-          email: 'Sandrine.Torphy@yahoo.com',
-          password: 'Sandrine.Torphy'
+          email: _email,
+          password: _password
         },
       }
     },
@@ -92,7 +98,7 @@
         this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
-          this.showError('Validation Error!');
+          this.showError(`${this.$t('form.validation_error')}!`);
         } else {
           const response = await this.login(this.model.email, this.model.password);
           if (response && response.accessToken) {
@@ -103,7 +109,7 @@
           }
         }
       },
-      onClear () {
+      onClear() {
         this.model.password = '';
         this.model.email = '';
         this.$validator.reset();
@@ -117,15 +123,15 @@
       async login(email, password) {
         try {
           const response = await this.authenticate({strategy: 'local', email, password});
-          this.showSuccess('Success Login!');
+          this.showSuccess(`${this.$t('login.success_login')}!`);
           return response
         } catch (error) {
           // Convert the error to a plain object and add a message.
           let type = error.className;
           error = Object.assign({}, error);
           error.message = (type === 'not-authenticated')
-            ? 'Incorrect email or password.'
-            : 'An error prevented login.';
+            ? `${this.$t('login.not_authenticated')}.`
+            : `${this.$t('login.err_authenticated')}.`;
           this.error = error;
           this.showError(error.message);
         }

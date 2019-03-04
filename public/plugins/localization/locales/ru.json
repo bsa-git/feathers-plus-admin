@@ -133,13 +133,29 @@
     "page_not_found": "Страница не найдена",
     "sorry_page_not_found": "Извините, страница не найдена",
     "server_is_down": "Сервер не работает",
-    "sorry_server_is_down": "Извините, сервер не работает"
+    "sorry_server_is_down": "Извините, сервер не работает",
+    "not_enough_rights": "Доступ запрещен. Недостаточно прав",
+    "sorry_not_enough_rights": "Извините, доступ запрещен. Недостаточно прав"
+  },
+  "form": {
+    "validation_error": "Ошибка валидации"
   },
   "login": {
     "title": "Логин",
     "description": "Введите учетные данные",
     "email": "Почта",
     "password": "Пароль",
-    "clear": "Очистить"
+    "clear": "Очистить",
+    "success_login": "Успешная аутентификация",
+    "not_authenticated": "Не корректный эл.адрес или пароль",
+    "err_authenticated": "Неизвестная ошибка аутентификации"
+  },
+  "sign_up": {
+    "title": "Регистрация",
+    "description": "Регистрация пользователя",
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "confirm_password": "Подтвердите пароль",
+    "success_sign_up": "Успешная регистрация"
   }
 }

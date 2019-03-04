@@ -42,6 +42,10 @@ const mutations = {
     state.snackbar =  {show: true, color: 'info', text};
   },
 
+  SHOW_WARNING (state, text) {
+    state.snackbar =  {show: true, color: 'warning', text};
+  },
+
   SHOW_ERROR (state, text) {
     state.snackbar =  {show: true, color: 'error', text};
   },

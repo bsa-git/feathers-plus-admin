@@ -1,4 +1,3 @@
-
 // Configure Feathers app. (Can be re-generated.)
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -47,7 +46,7 @@ app.use(helmet());
 app.use(cors());
 app.use(compress());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
@@ -85,14 +84,18 @@ app.configure(nuxt);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
-app.use(express.errorHandler({ logger }));
+app.use(express.errorHandler({logger}));
 // !code: config_end // !end
 
 app.hooks(appHooks);
-
 const moduleExports = app;
 // !code: exports // !end
 module.exports = moduleExports;
 
 // !code: funcs // !end
 // !code: end // !end
+
+
+
+
+

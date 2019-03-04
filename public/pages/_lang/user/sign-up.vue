@@ -4,12 +4,28 @@
       <v-card class="elevation-1 pa-3">
         <v-card-text>
           <div class="layout column align-center">
-            <img src="/static/img/m.png" alt="Vue Material Admin" width="120" height="120">
+            <v-icon size="120">fas fa-user-plus</v-icon>
             <router-link :to="$i18n.path(config.homePath)">
               <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
             </router-link>
           </div>
           <v-form>
+            <v-text-field
+              :counter="10"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('first_name')"
+              data-vv-name="first_name"
+              v-model="model.first_name"
+              :label="$t('sign_up.first_name')"
+            ></v-text-field>
+            <v-text-field
+              :counter="10"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('last_name')"
+              data-vv-name="last_name"
+              v-model="model.last_name"
+              :label="$t('sign_up.last_name')"
+            ></v-text-field>
             <v-text-field
               append-icon="email"
               v-validate="'required|email'"
@@ -30,15 +46,12 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn href="/auth/google" icon :disabled="user? true : false" >
-            <v-icon color="red">fab fa-google fa-lg</v-icon>
-          </v-btn>
-          <v-btn href="/auth/github" icon :disabled="user? true : false">
-            <v-icon color="light-blue">fab fa-github fa-lg</v-icon>
-          </v-btn>
           <v-spacer></v-spacer>
-          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">
-            {{ $t('login.title') }}
+          <v-btn block color="primary" @click="onSubmit" :loading="loading" :disabled="!!user">
+            {{ $t('sign_up.title') }}
+          </v-btn>
+          <v-btn block @click="onClear">
+            {{ $t('login.clear') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -57,11 +70,13 @@
     },
     data() {
       return {
-        title: this.$t('login.title'),
-        description: this.$t('login.description'),
+        title: this.$t('sign_up.title'),
+        description: this.$t('sign_up.description'),
         loading: false,
         error: undefined,
         model: {
+          first_name: 'Thea',
+          last_name: 'Ferry',
           email: 'Sandrine.Torphy@yahoo.com',
           password: 'Sandrine.Torphy'
         },
@@ -75,37 +90,39 @@
         ],
       }
     },
-    mounted() {
-//      this.$validator.localize('en', this.dictionary)
-//      console.log('$i18n:', this.$t('login.title'));// this.$t('login.title')
-    },
     computed: {
-      ...mapGetters('users', {
-        user: 'current'
-      }),
       ...mapGetters({
         config: 'getConfig',
-      })
+      }),
+      ...mapState('auth', [
+        'user'
+      ]),
     },
     methods: {
-      async submit() {
-        const self = this;
+      async onSubmit() {
+        this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
           this.showError('Validation Error!');
         } else {
-          const response = await self.login(self.model.email, self.model.password);
+          const response = await this.login(this.model.email, this.model.password);
           if (response && response.accessToken) {
             this.loading = true;
             setTimeout(() => {
-              self.$router.push('/dashboard');
+              this.$router.push(this.$i18n.path(this.config.homePath));
             }, 1000);
           }
         }
       },
+      onClear () {
+        this.model.password = '';
+        this.model.email = '';
+        this.$validator.reset();
+        this.dismissError();
+      },
       dismissError() {
         this.error = undefined;
-        this.clearAuthenticateError()
+        this.clearError()
       },
 
       async login(email, password) {

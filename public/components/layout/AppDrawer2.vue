@@ -32,7 +32,7 @@
         >
           <v-list-tile slot="activator" ripple="ripple">
             <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ $t(`app_menu.${item.alias}`) }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <template v-for="(subItem, i) in item.items">
@@ -44,7 +44,7 @@
             >
               <v-list-tile slot="activator" ripple="ripple">
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                  <v-list-tile-title>{{ $t(`app_menu.${subItem.alias}`) }}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
               <v-list-tile v-for="(child, i) in subItem.children"
@@ -53,7 +53,7 @@
                            ripple="ripple"
               >
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ child.title }}</v-list-tile-title>
+                  <v-list-tile-title>{{ $t(`app_menu.${child.alias}`) }}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action v-if="child.icon">
                   <v-icon v-text="child.icon"></v-icon>
@@ -69,7 +69,7 @@
                          ripple="ripple"
             >
               <v-list-tile-content>
-                <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
+                <v-list-tile-title><span>{{ $t(`app_menu.${subItem.alias}`) }}</span></v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action v-if="subItem.icon">
                 <v-icon v-text="subItem.icon"></v-icon>
@@ -78,7 +78,7 @@
           </template>
         </v-list-group>
         <v-subheader v-else-if="item.header" :key="i">
-          {{ item.header }}
+          {{ $t(`app_menu.${item.alias}`) }}
         </v-subheader>
         <v-divider v-else-if="item.divider" :key="i"></v-divider>
         <!--top-level link-->
@@ -94,7 +94,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-title>{{ $t(`app_menu.${item.alias}`) }}</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action v-if="item.subAction">
             <v-icon class="success--text">{{ item.subAction }}</v-icon>
@@ -139,48 +139,47 @@
         }
       },
       filterAppMenu() {
-        const menu = this.appMenu.filter(item => {
-          if (item.divider) return true;
-          if (item.header) return true;
-          if (item.public) return true;
+//        this.sortAppMenu();
+        return this.appMenu.filter(item => {
+          if(item.divider) return true;
+          if(item.header) return true;
+          if(item.public) return true;
           return !!this.user;
-        }).map(item => {
-          if (item.header) {
-            item.header = this.$t(`app_menu.${item.alias}`);
-          }
-          if (item.title) {
-            item.title = this.$t(`app_menu.${item.alias}`);
-          }
-          if (item.items) {
-            item.items.forEach((i) => {
-              if (i.children) {
-                i.children.forEach((child) => {
-                  child.title = this.$t(`app_menu.${child.alias}`);
-                });
-              }
-              i.title = this.$t(`app_menu.${i.alias}`);
-            });
-          }
-          return item
+        }).map(item =>{
+
         });
-        return this.sortAppMenu(menu);
+      },
+    },
+    watch: {
+      locale:function () {
+        this.sortAppMenu();
       },
     },
     methods: {
-      sortAppMenu: function (menu) {
-        const self = this;
+      sortAppMenu: function () {
         // reorder menu
-        menu.forEach((item) => {
+        this.appMenu.forEach((item) => {
+//          if(item.alias){
+//            console.log('item.locale:', this.$t(`app_menu.${item.alias}`));
+//          }
+          // this.$t('login.title') app_menu
           if (item.items) {
             item.items.forEach((i) => {
-              if (i.children) {
-                self.$util.sortByStringField(i.children, 'title')
+              if(i.children){
+                i.children.sort((x, y) => {
+                  let textA = x.title.toLocaleUpperCase();
+                  let textB = y.title.toLocaleUpperCase();
+                  return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                });
               }
             });
-            self.$util.sortByStringField(item.items, 'title')
+            item.items.sort((x, y) => {
+              let textA = x.title.toLocaleUpperCase();
+              let textB = y.title.toLocaleUpperCase();
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
           }
         });
-        return menu
       },
     },
   };
