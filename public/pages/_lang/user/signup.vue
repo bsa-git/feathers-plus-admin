@@ -5,12 +5,27 @@
         <v-form @submit.prevent="onSubmit">
           <v-card-text>
             <div class="layout column align-center">
-              <v-icon v-if="user" size="120">fas fa-user-check</v-icon>
-              <v-icon v-else size="120">fas fa-user-alt-slash</v-icon>
+              <v-icon size="120">fas fa-user-plus</v-icon>
               <router-link :to="$i18n.path(config.homePath)">
                 <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
               </router-link>
             </div>
+            <v-text-field
+              :counter="10"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('firstName')"
+              data-vv-name="firstName"
+              v-model="model.firstName"
+              :label="$t('signup.firstName')"
+            ></v-text-field>
+            <v-text-field
+              :counter="20"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('lastName')"
+              data-vv-name="lastName"
+              v-model="model.lastName"
+              :label="$t('signup.lastName')"
+            ></v-text-field>
             <v-text-field
               append-icon="email"
               v-validate="'required|email'"
@@ -27,19 +42,23 @@
               v-model="model.password"
               :label="$t('login.password')"
               type="password"
+              ref="confirmation"
+            ></v-text-field>
+            <v-text-field
+              append-icon="lock"
+              v-validate="'confirmed:confirmation'"
+              :error-messages="errors.collect('passwordConfirmation')"
+              data-vv-name="passwordConfirmation"
+              v-model="model.passwordConfirmation"
+              :label="$t('signup.passwordConfirmation')"
+              type="password"
+
             ></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn href="/auth/google" icon :disabled="!!user">
-              <v-icon color="red">fab fa-google fa-lg</v-icon>
-            </v-btn>
-            <v-btn href="/auth/github" icon :disabled="!!user">
-              <v-icon color="light-blue">fab fa-github fa-lg</v-icon>
-            </v-btn>
             <v-spacer></v-spacer>
-            <!--  -->
             <v-btn block color="primary" type="submit" :loading="loadingSubmit" :disabled="!!user">
-              {{ $t('login.title') }}
+              {{ $t('signup.title') }}
             </v-btn>
             <v-btn block @click="btnClick" :loading="loadingLogout">
               {{ !!user ? $t('login.logout') : $t('login.clear') }}
@@ -52,18 +71,11 @@
 </template>
 
 <script>
-
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-  import fakeData from '~~/seeds/fake-data.json'
 
-  const debug = require('debug')('app:user.login');
+  const debug = require('debug')('app:user.signup');
 
-  const isLog = true;
-
-  const fakeUser = fakeData.users[0];
-  const isDev = process.env.NODE_ENV === 'development';
-  const fakeEmail = isDev ? fakeUser.email : '';
-  const fakePassword = isDev ? fakeUser.email.slice(0, fakeUser.email.indexOf("@")) : '';
+  const isLog = false;
 
   export default {
     layout: 'user',
@@ -72,14 +84,17 @@
     },
     data() {
       return {
-        title: this.$t('login.title'),
-        description: this.$t('login.description'),
+        title: this.$t('signup.title'),
+        description: this.$t('signup.description'),
         loadingSubmit: false,
         loadingLogout: false,
         error: undefined,
         model: {
-          email: fakeEmail,
-          password: fakePassword
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          passwordConfirmation: ''
         },
       }
     },
@@ -93,8 +108,9 @@
     },
     created: function () {
       if(this.user){
+        this.model.firstName = this.user.firstName;
+        this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
-        this.model.password = '';
       }
     },
     computed: {
@@ -110,16 +126,20 @@
         this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
-          this.showError(`${this.$t('form.validationError')}!`);
+          this.showError('Validation Error!');
         } else {
           this.loadingSubmit = true;
-          const loginResponse = await this.login(this.model.email, this.model.password);
-          if (loginResponse && loginResponse.accessToken) {
-            if (isLog) debug('loginResponse:', loginResponse);
-            this.showSuccess(`${this.$t('login.success')}!`);
-            setTimeout(() => {
-              this.$router.push(this.$i18n.path(this.config.homePath));
-            }, 1000);
+          const signupResponse = await this.save(this.model);
+          if (signupResponse) {
+            if (isLog) debug('signupResponse:', signupResponse);
+            const loginResponse = await this.login(this.model.email, this.model.password);
+            if (loginResponse && loginResponse.accessToken) {
+              if (isLog) debug('loginResponse:', loginResponse);
+              this.showSuccess(`${this.$t('signup.successSignupAndLogin')}!`);
+              setTimeout(() => {
+                this.$router.push(this.$i18n.path(this.config.homePath));
+              }, 1000);
+            }
           }
         }
       },
@@ -136,8 +156,11 @@
         }
       },
       onClear() {
-        this.model.password = '';
+        this.model.firstName = '';
+        this.model.lastName = '';
         this.model.email = '';
+        this.model.password = '';
+        this.model.passwordConfirmation = '';
         this.$validator.reset();
         this.dismissError();
       },
@@ -146,6 +169,22 @@
         this.clearError()
       },
 
+      async save(data) {
+        try {
+          const {User} = this.$FeathersVuex;
+          const user = new User({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password
+          });
+          return await user.save();
+        } catch (error) {
+          this.error = error;
+          console.error('error.type:', error.className, '; error.message:', error.message);
+          this.showError(error.message);
+        }
+      },
       async login(email, password) {
         try {
           return await this.authenticate({strategy: 'local', email, password});
@@ -158,7 +197,7 @@
             : `${this.$t('login.errAuthenticated')}.`;
           this.error = error;
           this.showError(error.message);
-          console.error('error.type:', type, '; error.message:', error.message);
+          console.error('error.className:', type, '; error.message:', error.message);
         }
       },
       ...mapMutations('auth', {

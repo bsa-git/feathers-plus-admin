@@ -28,9 +28,9 @@
   },
   {
     "icon": "person_add",
-    "to": "/user/sign-up",
-    "title": "SignUp",
-    "name": "sign_up"
+    "to": "/user/signup",
+    "title": "Signup",
+    "name": "signup"
   },
   {
     "icon": "input",

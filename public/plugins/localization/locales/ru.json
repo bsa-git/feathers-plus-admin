@@ -138,7 +138,7 @@
     "sorry_not_enough_rights": "Извините, доступ запрещен. Недостаточно прав"
   },
   "form": {
-    "validation_error": "Ошибка валидации"
+    "validationError": "Ошибка валидации"
   },
   "login": {
     "title": "Логин",
@@ -146,16 +146,19 @@
     "email": "Почта",
     "password": "Пароль",
     "clear": "Очистить",
-    "success_login": "Успешная аутентификация",
-    "not_authenticated": "Не корректный эл.адрес или пароль",
-    "err_authenticated": "Неизвестная ошибка аутентификации"
+    "logout": "Выход",
+    "success": "Успешная аутентификация",
+    "successLogout": "Успешный выход",
+    "notAuthenticated": "Не корректный эл.адрес или пароль",
+    "errAuthenticated": "Неизвестная ошибка аутентификации"
   },
-  "sign_up": {
+  "signup": {
     "title": "Регистрация",
     "description": "Регистрация пользователя",
-    "first_name": "Имя",
-    "last_name": "Фамилия",
-    "confirm_password": "Подтвердите пароль",
-    "success_sign_up": "Успешная регистрация"
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "passwordConfirmation": "Подтвердите пароль",
+    "success": "Успешная регистрация",
+    "successSignupAndLogin": "Успешная регистрация и аутентификация"
   }
 }

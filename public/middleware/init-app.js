@@ -15,7 +15,7 @@ export default async function (context) {
 
     if (!auth.publicPages.includes(route.path) && !auth.payload) {
       debug(`This path '${route.path}' is not available. Not enough rights.`);
-      store.commit('SHOW_WARNING', `${$t('error.not_enough_rights')}.`);
+      store.commit('SHOW_ERROR', `${$t('error.not_enough_rights')}.`);
       const fullPath = (store.state.locale === store.state.fallbackLocale)? '/user/login':`/${store.state.locale}/user/login`;
       return redirect(fullPath);
     }

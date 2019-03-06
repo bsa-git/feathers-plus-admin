@@ -78,6 +78,7 @@
     "extras": "Extras",
     "pages": "Pages",
     "login": "Login",
+    "signup": "Signup",
     "404": "404",
     "403": "403",
     "500": "500"
@@ -90,7 +91,7 @@
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout",
-    "sign_up": "SignUp",
+    "signup": "Signup",
     "login": "Login"
   },
   "app_notification": {
@@ -139,7 +140,7 @@
 
   },
   "form": {
-    "validation_error": "Validation Error"
+    "validationError": "Validation Error"
   },
   "login": {
     "title": "Login",
@@ -147,16 +148,19 @@
     "email": "Email",
     "password": "Password",
     "clear": "Clear",
-    "success_login": "Success Login",
-    "not_authenticated": "Incorrect email or password",
-    "err_authenticated": "An error prevented login"
+    "logout": "Logout",
+    "success": "Success login",
+    "successLogout": "Success logout",
+    "notAuthenticated": "Incorrect email or password",
+    "errAuthenticated": "An error prevented login"
   },
-  "sign_up": {
-    "title": "Sign Up",
+  "signup": {
+    "title": "Signup",
     "description": "User registration",
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "confirm_password": "Confirm Password",
-    "success_sign_up": "Success registration"
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "passwordConfirmation": "Confirm the password",
+    "success": "Success registration",
+    "successSignupAndLogin": "Success registration and login"
   }
 }

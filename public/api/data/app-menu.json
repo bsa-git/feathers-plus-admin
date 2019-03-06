@@ -429,6 +429,12 @@
         "to": "/user/login"
       },
       {
+        "name": "system-signup",
+        "alias": "signup",
+        "title": "Signup",
+        "to": "/user/signup"
+      },
+      {
         "name": "system-404",
         "alias": "404",
         "title": "404",

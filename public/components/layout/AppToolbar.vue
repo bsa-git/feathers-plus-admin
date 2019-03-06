@@ -94,7 +94,7 @@
             case 'logout':
               return !!this.user;
               break;
-            case 'sign_up':
+            case 'signup':
             case 'login':
               return !this.user;
               break;
@@ -121,6 +121,7 @@
             break;
           case 'logout':
             await this.logout();
+            this.showSuccess(`${this.$t('login.successLogout')}!`);
             break;
           default:
         }
@@ -129,6 +130,7 @@
         this.$emit('onNavLeft')
       },
       ...mapMutations({
+        showSuccess: 'SHOW_SUCCESS',
         setLang: 'SET_LANG'
       }),
       ...mapActions(['logout'])
