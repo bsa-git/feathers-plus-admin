@@ -50,6 +50,11 @@ npm start
 
 Simply run `npm run test:all` and all your tests in the `test/` directory will be run.
 
+## Seed data
+
+Simply run `npm run start:seed` and all your `fake data` in the `seeds/fake-data.json` 
+will be written to the appropriate database.
+
 ## Scaffolding
 
 Feathers-plus has a powerful command line interface. Here are a few things it can do:
