@@ -30,7 +30,7 @@ let schema = {
   uniqueItemProperties: [
     // !code: schema_unique
     //---------------------
-    // 'email',
+    'email',
     //---------------------
     // !end
   ],

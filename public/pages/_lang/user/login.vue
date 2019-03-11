@@ -112,11 +112,11 @@
         if (this.$validator.errors.any()) {
           this.showError(`${this.$t('form.validationError')}!`);
         } else {
-          this.loadingSubmit = true;
           const loginResponse = await this.login(this.model.email, this.model.password);
           if (loginResponse && loginResponse.accessToken) {
             if (isLog) debug('loginResponse:', loginResponse);
             this.showSuccess(`${this.$t('login.success')}!`);
+            this.loadingSubmit = true;
             setTimeout(() => {
               this.$router.push(this.$i18n.path(this.config.homePath));
             }, 1000);
@@ -150,6 +150,7 @@
         try {
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
+          this.loadingSubmit = false;
           // Convert the error to a plain object and add a message.
           let type = error.className;
           error = Object.assign({}, error);

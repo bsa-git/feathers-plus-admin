@@ -22,7 +22,8 @@ let moduleExports = merge({},
       primaryKey: true
     },
     email: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      unique: true
     },
     password: {
       type: DataTypes.TEXT

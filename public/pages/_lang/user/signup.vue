@@ -180,6 +180,7 @@
           });
           return await user.save();
         } catch (error) {
+          this.loadingSubmit = false;
           this.error = error;
           console.error('error.type:', error.className, '; error.message:', error.message);
           this.showError(error.message);
@@ -189,6 +190,7 @@
         try {
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
+          this.loadingSubmit = false;
           // Convert the error to a plain object and add a message.
           let type = error.className;
           error = Object.assign({}, error);
