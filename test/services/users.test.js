@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
+const {readJsonFileSync, appRoot} = require('../../src/plugins/lib/index');
 const app = require(`${appRoot}/src/app`);
 const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
 
@@ -27,5 +27,23 @@ describe('<<< Test \'users\' service >>>', () => {
         assert.deepEqual(result, fake);
       });
     }
+  });
+
+  it('Error writing to database when field uniqueness violation', async () => {
+    try {
+      const rec = fakes['users'][0];
+      const ourSeedId = 'id' in rec ? 'id' : '_id';
+      const prop = 'email';
+      const patchEmail = fakes['users'][1][prop];
+      const service = app.service('users');
+      await service.patch(rec[ourSeedId], { [prop]: patchEmail });
+      assert.ok(false);
+    } catch (ex) {
+      const patchEmail = fakes['users'][1]['email'];
+      assert.strictEqual(ex.code, 409, 'unexpected error.code');
+      assert.strictEqual(ex.message, `email: ${patchEmail} already exists.`, 'unexpected error.message');
+      assert.strictEqual(ex.name, 'Conflict', 'unexpected error.name');
+    }
+
   });
 });
