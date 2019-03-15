@@ -23,7 +23,8 @@
     "media": "Медиа",
     "service": "Сервис",
     "admins": "Администрирование",
-    "management": "Аккаунты",
+    "accounts": "Aккаунты",
+    "management": "Управление",
     "settings": "Конфигурирование",
     "actions": "Действия",
     "create": "Создать",
@@ -78,6 +79,7 @@
     "jumbotrons": "Jumbotrons",
     "selection_controls": "Selection Controls",
     "selects": "Selects",
+    "signup": "Регистрация",
     "403": "403",
     "404": "404",
     "500": "500"
@@ -90,7 +92,7 @@
     "profile": "Профайл",
     "settings": "Конфигурация",
     "logout": "Выход",
-    "sign_up": "Регистрация",
+    "signup": "Регистрация",
     "login": "Логин"
   },
   "app_notification": {
@@ -159,6 +161,20 @@
     "lastName": "Фамилия",
     "passwordConfirmation": "Подтвердите пароль",
     "success": "Успешная регистрация",
-    "successSignupAndLogin": "Успешная регистрация и аутентификация"
+    "successSignupAndLogin": "Успешная регистрация и аутентификация",
+    "conflictEmail": "Такой email уже существует",
+    "errSignup": "Неизвестная ошибка регистрации"
+  },
+  "accounts": {
+    "title": "Аккаунты",
+    "description": "Пользовательские аккаунты",
+    "open": "Открыть",
+    "close": "Закрыть",
+    "users": "Пользователи",
+    "roles": "Роли",
+    "teams": "Команды",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "fullName": "Имя/Фамилия"
   }
 }

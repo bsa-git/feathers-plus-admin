@@ -48,17 +48,24 @@
     "to": "/service",
     "items": [
       {
-        "title": "Admins",
+        "title": "Administration",
         "group": "admins",
         "name": "service-admins",
         "alias": "admins",
         "to": "/service/admins",
         "children": [
           {
+            "name": "service-admins-accounts",
+            "alias": "accounts",
+            "title": "Accounts",
+            "icon": "people_outline",
+            "to": "/service/admins/accounts"
+          },
+          {
             "name": "service-admins-management",
             "alias": "management",
             "title": "Management",
-            "icon": "people_outline",
+            "icon": "group_add",
             "to": "/service/admins/management"
           },
           {

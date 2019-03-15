@@ -181,8 +181,13 @@
           return await user.save();
         } catch (error) {
           this.loadingSubmit = false;
+          let type = error.className;
+          error = Object.assign({}, error);
+          error.message = (type === 'conflict')
+            ? `${this.$t('signup.conflictEmail')}.`
+            : `${this.$t('signup.errSignup')}.`;
           this.error = error;
-          console.error('error.type:', error.className, '; error.message:', error.message);
+          console.error('error.type:', type, '; error.message:', error.message);
           this.showError(error.message);
         }
       },
@@ -195,8 +200,8 @@
           let type = error.className;
           error = Object.assign({}, error);
           error.message = (type === 'not-authenticated')
-            ? `${this.$t('login.notAuthenticated')}.`
-            : `${this.$t('login.errAuthenticated')}.`;
+            ? `${this.$t('login.notAuthenticated')}`
+            : `${this.$t('login.errAuthenticated')}`;
           this.error = error;
           this.showError(error.message);
           console.error('error.className:', type, '; error.message:', error.message);

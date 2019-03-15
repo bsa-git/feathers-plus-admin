@@ -4,7 +4,7 @@
     "value": {
       "sideNav": "blue",
       "mainNav": "blue",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -12,7 +12,7 @@
     "value": {
       "sideNav": "teal",
       "mainNav": "teal",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -20,7 +20,7 @@
     "value": {
       "sideNav": "red",
       "mainNav": "red",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -28,7 +28,7 @@
     "value": {
       "sideNav": "orange",
       "mainNav": "orange",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -36,7 +36,7 @@
     "value": {
       "sideNav": "purple",
       "mainNav": "purple",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -44,7 +44,7 @@
     "value": {
       "sideNav": "indigo",
       "mainNav": "indigo",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -52,7 +52,7 @@
     "value": {
       "sideNav": "cyan",
       "mainNav": "cyan",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -60,7 +60,7 @@
     "value": {
       "sideNav": "pink",
       "mainNav": "pink",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   },
   {
@@ -68,7 +68,7 @@
     "value": {
       "sideNav": "green",
       "mainNav": "green",
-      "sideManu": "white"
+      "sideMenu": "white"
     }
   }
 ]

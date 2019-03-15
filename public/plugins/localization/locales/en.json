@@ -22,7 +22,8 @@
     "inbox": "Inbox",
     "media": "Media",
     "service": "Service",
-    "admins": "Admins",
+    "admins": "Administration",
+    "accounts": "Accounts",
     "management": "Management",
     "settings": "Settings",
     "actions": "Actions",
@@ -79,8 +80,8 @@
     "pages": "Pages",
     "login": "Login",
     "signup": "Signup",
-    "404": "404",
     "403": "403",
+    "404": "404",
     "500": "500"
   },
   "user_menu": {
@@ -161,6 +162,20 @@
     "lastName": "Last Name",
     "passwordConfirmation": "Confirm the password",
     "success": "Success registration",
-    "successSignupAndLogin": "Success registration and login"
+    "successSignupAndLogin": "Success registration and login",
+    "conflictEmail": "This email already exists.",
+    "errSignup": "An error prevented signup"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "description": "User accounts",
+    "open": "Open",
+    "close": "Close",
+    "users": "Users",
+    "roles": "Roles",
+    "teams": "Teams",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "fullName": "Full Name"
   }
 }

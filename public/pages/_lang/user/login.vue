@@ -58,7 +58,7 @@
 
   const debug = require('debug')('app:user.login');
 
-  const isLog = true;
+  const isLog = false;
 
   const fakeUser = fakeData.users[0];
   const isDev = process.env.NODE_ENV === 'development';

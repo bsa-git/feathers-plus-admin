@@ -6,7 +6,7 @@
     ></app-page-header>
     <v-layout align-center justify-center row>
       <div class="text-md-center">
-        <h1>Service/Actions/Management</h1>
+        <h1>Service/Administration/Management</h1>
       </div>
     </v-layout>
   </v-container>
