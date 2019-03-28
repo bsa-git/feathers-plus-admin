@@ -43,9 +43,10 @@ const actions = {
     }
   },
 
-  async logout({dispatch}) {
+  async logout({commit, dispatch}) {
     await dispatch('auth/logout');
     this.$util.removeAccessToken();
+    commit('users/clearAll');
     debug('logout');
   }
 

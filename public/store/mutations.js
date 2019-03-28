@@ -3,11 +3,6 @@ import cookies from 'browser-cookies';
 
 const mutations = {
 
-  //--- AUTH ---//
-  CLEAR_AUTH_DATA (state) {
-    // state.snackbar =  Object.assign(state.snackbar, snackbar);
-  },
-
   //--- LOCALE ---//
   SET_LANG(state, locale) {
     if (state.locales.indexOf(locale) !== -1) {

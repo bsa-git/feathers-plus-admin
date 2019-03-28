@@ -169,8 +169,8 @@
   "accounts": {
     "title": "Accounts",
     "description": "User accounts",
-    "open": "Open",
-    "close": "Close",
+    "open": "Open All",
+    "close": "Close All",
     "users": "Users",
     "roles": "Roles",
     "teams": "Teams",
