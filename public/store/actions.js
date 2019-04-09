@@ -27,7 +27,7 @@ const actions = {
         let response = await dispatch('auth/authenticate');
         const result = (!!response && !!response.accessToken);
         debug('checkAuth.accessToken:');
-        if (isLog && result) this.$util.inspector('Response accessToken:', response);
+        if (isLog && result) debug('Response accessToken:', response);
         return result;
       } catch (error) {
         if (error.message.includes('Could not find stored JWT')) {
@@ -43,11 +43,27 @@ const actions = {
     }
   },
 
-  async logout({commit, dispatch}) {
+  async logout({commit, dispatch, getters}) {
+    debug('logout');
+    // logout
     await dispatch('auth/logout');
     this.$util.removeAccessToken();
+    // clearAll
+    // while (getters['users/list'].length) {
+    //   commit('users/clearAll');
+    // }
+    // while (getters['roles/list'].length) {
+    //   commit('roles/clearAll');
+    // }
+    // while (getters['teams/list'].length) {
+    //   commit('teams/clearAll');
+    // }
     commit('users/clearAll');
-    debug('logout');
+    commit('roles/clearAll');
+    commit('teams/clearAll');
+    // Go to homePath
+    const config = getters.getConfig;
+    this.$redirect(config.homePath);
   }
 
 };

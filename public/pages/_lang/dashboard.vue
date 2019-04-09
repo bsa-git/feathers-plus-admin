@@ -43,6 +43,7 @@
   import AppPageHeader from '~/components/layout/AppPageHeader';
 
   export default {
+    name: 'dashboard',
     components: {
       AppPageHeader
     },

@@ -193,6 +193,41 @@ function sortByStringField(items, name) {
   });
 }
 
+/**
+ * Query params
+ * @param obj
+ * @returns {string}
+ */
+const qlParams = function (obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    throw new Error('Expected object. (qlParams)');
+  }
+
+  return stringify(obj, undefined, undefined, '', '');
+};
+
+/**
+ * Stringify to represent an object as a string
+ * @param obj
+ * @param spacer
+ * @param separator
+ * @param leader
+ * @param trailer
+ * @returns {string}
+ */
+const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', trailer = '}') {
+  if (typeof obj !== 'object' || Array.isArray(obj)) {
+    return JSON.stringify(obj);
+  }
+
+  const str = Object
+    .keys(obj)
+    .map(key => `${key}:${spacer}${stringify(obj[key], spacer, separator)}`)
+    .join(', ');
+
+  return `${leader}${str}${trailer}`;
+};
+
 export default {
   toggleFullScreen,
   gravatar,
@@ -205,5 +240,7 @@ export default {
   removeAccessToken,
   verifyJWT,
   readCookie,
-  sortByStringField
+  sortByStringField,
+  qlParams,
+  stringify
 };

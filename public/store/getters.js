@@ -7,6 +7,10 @@ const getters = {
   getSnackBar(state) {
     return state.snackbar;
   },
+
+  isAuth(state) {
+    return !!state.auth.accessToken;
+  },
 };
 
 export default getters;

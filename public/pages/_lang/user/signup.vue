@@ -75,7 +75,7 @@
 
   const debug = require('debug')('app:user.signup');
 
-  const isLog = false;
+  const isLog = true;
 
   export default {
     layout: 'user',
@@ -95,7 +95,7 @@
           email: '',
           password: '',
           passwordConfirmation: ''
-        },
+        }
       }
     },
     head() {
@@ -129,6 +129,7 @@
           this.showError('Validation Error!');
         } else {
           this.loadingSubmit = true;
+          if (isLog) debug('formData:', this.model);
           const signupResponse = await this.save(this.model);
           if (signupResponse) {
             if (isLog) debug('signupResponse:', signupResponse);

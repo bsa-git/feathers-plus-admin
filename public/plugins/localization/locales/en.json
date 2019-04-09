@@ -168,14 +168,18 @@
   },
   "accounts": {
     "title": "Accounts",
-    "description": "User accounts",
-    "open": "Open All",
-    "close": "Close All",
+    "description": "User Accounts",
+    "allOpen": "Open All",
+    "allClose": "Close All",
     "users": "Users",
     "roles": "Roles",
     "teams": "Teams",
     "firstName": "First Name",
     "lastName": "Last Name",
     "fullName": "Full Name"
+  },
+  "management": {
+    "title": "Management",
+    "description": "User Management"
   }
 }

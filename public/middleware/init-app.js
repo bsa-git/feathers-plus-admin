@@ -22,7 +22,7 @@ export default async function (context) {
 
     // GoTo homePath
     if (context.route.path === '/') {
-      const config = context.store.getters.getConfig();
+      const config = context.store.getters.getConfig;
       context.redirect(config.homePath);
     }
     // Set userAgent for context

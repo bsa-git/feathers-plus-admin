@@ -17,6 +17,7 @@ export default async (context, inject) => {
   inject('util', util);
   inject('HttpBox', HttpBox);
   inject('colors', colors);
+  inject('redirect', context.redirect);
 
   // Set Vue plugins
   vueI18n(context);

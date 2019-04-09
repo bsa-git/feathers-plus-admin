@@ -75,6 +75,7 @@ let moduleExports = {
 //---------------
 // Add hooks
 moduleExports.before.create = loConcat([accountsProfileData(), verifyEmail(), validateCreate()], moduleExports.before.create);
+// moduleExports.before.create = loConcat([accountsProfileData(), verifyEmail()], moduleExports.before.create);
 moduleExports.before.update = loConcat([accountsProfileData(), verifyEmail(), validateUpdate()], moduleExports.before.update);
 moduleExports.before.patch = loConcat([accountsProfileData(), verifyEmail(), validatePatch()], moduleExports.before.patch);
 //---------------
