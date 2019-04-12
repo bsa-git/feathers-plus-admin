@@ -14,7 +14,7 @@
       </div>
 
       <v-expansion-panel
-        v-model="panel"
+        v-model="panels"
         expand
         light
       >
@@ -45,7 +45,7 @@
   import AppPageHeader from '~/components/layout/AppPageHeader';
   const debug = require('debug')('app:page.accounts');
 
-  const isLog = false;
+  const isLog = true;
 
   export default {
     name: 'accounts',
@@ -57,7 +57,7 @@
         title: this.$t('accounts.title'),
         description: this.$t('accounts.description'),
         appMenu: appMenu,
-        panel: [],
+        panels: [],
         items: [
           {
             panel: 'users',
@@ -86,21 +86,6 @@
       }
     },
     created: async function () {
-      let response;
-      if (isLog) debug('created: OK');
-      const {Role, User, Team} = this.$FeathersVuex;
-      // findRoles
-      response = await Role.find({query: {}});
-      const roles = response.data || response;
-      if (isLog) debug('Roles from server:', roles);
-      // findUsers
-      response = await User.find({query: {}});
-      const users = response.data || response;
-      if (isLog) debug('Users from server:', users);
-      // findUsers
-      response = await Team.find({query: {}});
-      const teams = response.data || response;
-      if (isLog) debug('Teams from server:', teams);
     },
     computed: {
       ...mapGetters({
@@ -131,6 +116,7 @@
             children: [
               {id: `user.id_${user[idField]}`, name: `id : ${user[idField]}`},
               {id: `user.email_${user[idField]}`, name: `email : ${user.email}`},
+              {id: `user.isAdmin_${user[idField]}`, name: `isAdmin : ${user.isAdmin}`},
               {
                 id: `user.role_${user[idField]}`,
                 name: `Role :`,
@@ -201,6 +187,7 @@
               name: `${member.fullName}`,
               children: [
                 {id: `member.id_${member[idField]}`, name: `id : ${member[idField]}`},
+                {id: `member.isAdmin_${member[idField]}`, name: `isAdmin : ${member.isAdmin}`},
                 {id: `member.email_${member[idField]}`, name: `email : ${member.email}`},
               ]
             })
@@ -234,13 +221,13 @@
           return this.teams;
         }
       },
-      // Open the panel
+      // Open the panels
       allOpen() {
-        this.panel = this.items.map(item => true)
+        this.panels = this.items.map(item => true)
       },
-      // Reset the panel
+      // Reset the panels
       allClose() {
-        this.panel = []
+        this.panels = []
       }
     }
   }

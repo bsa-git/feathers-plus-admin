@@ -14,7 +14,7 @@
       </div>
 
       <v-expansion-panel
-        v-model="panel"
+        v-model="panels"
         expand
         light
       >
@@ -31,6 +31,9 @@
           <v-card>
             <v-card-text class="grey lighten-3">
               <!--<v-treeview :items="getItems(item.panel)" activatable open-on-click></v-treeview>-->
+              <page-management-users v-if="item.panel === 'users'"></page-management-users>
+              <page-management-roles v-else-if="item.panel === 'roles'"></page-management-roles>
+              <page-management-teams v-else-if="item.panel === 'teams'"></page-management-teams>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -43,6 +46,9 @@
   import {mapGetters} from 'vuex'
   import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
+  import PageManagementUsers from '~/components/service-admins-management/users';
+  import PageManagementRoles from '~/components/service-admins-management/roles';
+  import PageManagementTeams from '~/components/service-admins-management/teams';
 
   const debug = require('debug')('app:page.accounts');
 
@@ -51,14 +57,17 @@
   export default {
     name: 'management',
     components: {
-      AppPageHeader
+      AppPageHeader,
+      PageManagementUsers,
+      PageManagementRoles,
+      PageManagementTeams
     },
     data() {
       return {
         title: this.$t('management.title'),
         description: this.$t('management.description'),
         appMenu: appMenu,
-        panel: [],
+        panels: [],
         items: [
           {
             panel: 'users',
@@ -87,21 +96,6 @@
       }
     },
     created: async function () {
-      let response;
-      if (isLog) debug('created: OK');
-      const {Role, User, Team} = this.$FeathersVuex;
-      // findRoles
-      response = await Role.find({query: {}});
-      const roles = response.data || response;
-      if (isLog) debug('Roles from server:', roles);
-      // findUsers
-      response = await User.find({query: {}});
-      const users = response.data || response;
-      if (isLog) debug('Users from server:', users);
-      // findUsers
-      response = await Team.find({query: {}});
-      const teams = response.data || response;
-      if (isLog) debug('Teams from server:', teams);
     },
     computed: {
       ...mapGetters({
@@ -130,13 +124,13 @@
       }
     },
     methods: {
-      // Open the panel
+      // Open the panels
       allOpen() {
-        this.panel = this.items.map(item => true)
+        this.panels = this.items.map(item => true)
       },
-      // Reset the panel
+      // Reset the panels
       allClose() {
-        this.panel = []
+        this.panels = []
       }
     }
   }

@@ -24,7 +24,15 @@ const servicePlugin = service(servicePath, {
         if (data[idField]) {
           const users = Models.User.findInStore({query: {roleId: data[idField], $sort: {fullName: 1}}}).data;
           if (users.length) {
-            return users;
+            return users.map(user => {
+              return {
+                [idField]: user[idField],
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                fullName: user.fullName
+              };
+            });
           } else {
             return [];
           }

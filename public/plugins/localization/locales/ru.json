@@ -116,7 +116,8 @@
     "full_size": "Полный Размер",
     "notifications": "Уведомления",
     "user": "Пользователь",
-    "search": "Поиск"
+    "search": "Поиск",
+    "not_authorized": "Не Авторизирован"
   },
   "app_footer": {
     "designed_with_by": "РАЗРАБОТАН С "
@@ -179,6 +180,6 @@
   },
   "management": {
     "title": "Управление",
-    "description": "Управление Пользоавтелями"
+    "description": "Управление Пользователями"
   }
 }

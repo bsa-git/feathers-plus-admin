@@ -169,8 +169,7 @@
         showSuccess: 'SHOW_SUCCESS',
         showError: 'SHOW_ERROR',
       }),
-      ...mapActions('auth', ['authenticate']),
-      ...mapActions(['logout'])
+      ...mapActions(['authenticate', 'logout'])
     }
 
   };

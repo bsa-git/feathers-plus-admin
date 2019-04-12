@@ -116,7 +116,8 @@
     "full_size": "Full Size",
     "notifications": "Notification",
     "user": "User",
-    "search": "Search"
+    "search": "Search",
+    "not_authorized": "Not Authorized"
   },
   "app_footer": {
     "designed_with_by": "DESIGNED WITH BY"

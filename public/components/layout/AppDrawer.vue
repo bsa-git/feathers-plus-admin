@@ -142,8 +142,10 @@
         const menu = this.appMenu.filter(item => {
           if (item.divider) return true;
           if (item.header) return true;
-          if (item.public) return true;
-          return !!this.user;
+          if (item.isPublic) return true;
+          if (this.user && this.user.isAdmin) return true;
+          if (this.user && !this.user.isAdmin && !item.isAdmin) return true;
+          return false;
         }).map(item => {
           if (item.header) {
             item.header = this.$t(`app_menu.${item.alias}`);

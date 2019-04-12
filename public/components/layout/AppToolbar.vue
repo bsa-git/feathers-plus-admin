@@ -44,9 +44,19 @@
     </v-menu>
     <!-- User menu -->
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
-      <v-btn icon flat slot="activator" :title="$t('app_toolbar.user')">
-        <v-icon v-if="user">fas fa-user-check</v-icon>
-        <v-icon v-else>fas fa-user-alt-slash</v-icon>
+      <v-btn icon flat slot="activator">
+        <v-tooltip v-if="user" bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon v-on="on">fas fa-user-check</v-icon>
+          </template>
+          <span>{{ user.fullName }}</span>
+        </v-tooltip>
+        <v-tooltip v-else bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon v-on="on">fas fa-user-alt-slash</v-icon>
+          </template>
+          <span>{{ $t('app_toolbar.not_authorized') }}</span>
+        </v-tooltip>
       </v-btn>
       <v-list class="pa-0" expand>
         <template v-for="(item, i) in filterUserMenu">

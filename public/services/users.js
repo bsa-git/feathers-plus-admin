@@ -1,10 +1,11 @@
+const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import normalizeQuery from '~/services/hooks/normalize-query';
 
 const debug = require('debug')('app:service.users');
 
-const isLog = true;
+const isLog = false;
 
 const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
@@ -33,20 +34,25 @@ const servicePlugin = service(servicePath, {
           let role = Models.Role.getFromStore(this.roleId);
           // Fetch the Role record if we don't already have it
           if (!role) {
-            if(isAuth) Models.Role.get(this.roleId);
+            if (isAuth) Models.Role.get(this.roleId);
           }
-          return role;
+          return role ? loPick(role, [idField, 'name']) : null;
         } else {
           return null;
         }
       },
+      get isAdmin() {
+        return this.role ? this.role.name.toLowerCase() === 'administrator' : false;
+      },
       get teams() {
         let teams = Models.Team.findInStore({query: {$sort: {name: 1}}}).data;
         if (!teams.length) {
-          if(isAuth) Models.Team.find({query: {$sort: {name: 1}}});
+          if (isAuth) Models.Team.find({query: {$sort: {name: 1}}});
           return [];
         }
-        return Array.isArray(teams) ? teams.filter(team => team.memberIds.indexOf(data[idField]) !== -1) : [];
+        return Array.isArray(teams) ? teams.filter(team => team.memberIds.indexOf(data[idField]) !== -1).map(team => {
+          return {[idField]: team[idField], name: team['name']};
+        }) : [];
       }
     };
   }

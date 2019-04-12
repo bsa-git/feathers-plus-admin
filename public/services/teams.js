@@ -22,12 +22,20 @@ const servicePlugin = service(servicePath, {
       name: '',
       memberIds: [],
       get members() {
-        if ( Array.isArray(data['memberIds']) && data['memberIds'].length ) {
-        // if (Array.isArray(this.memberIds) && this.memberIds.length) {
+        if (Array.isArray(data['memberIds']) && data['memberIds'].length) {
           const query = {query: {[idField]: {$in: data['memberIds']}, $sort: {fullName: 1}}};
           const users = Models.User.findInStore(query).data;
           if (users.length) {
-            return users;
+            return users.map(user => {
+              return {
+                [idField]: user[idField],
+                isAdmin: user.isAdmin,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                fullName: user.fullName
+              };
+            });
           } else {
             return [];
           }
