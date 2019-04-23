@@ -2,7 +2,6 @@
 /* eslint no-console: 0 */
 const { join } = require('path');
 const { readJsonFileSync } = require('@feathers-plus/test-utils');
-const config = require('../config/default.json');
 
 // !code: imports // !end
 
@@ -10,8 +9,13 @@ const config = require('../config/default.json');
 let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
 
 // Determine if environment allows test to mutate existing DB data.
-let env = (config.tests || {}).environmentsAllowingSeedData || [];
-let ifDbChangesAllowed = env.includes(process.env.NODE_ENV);
+function areDbChangesAllowed(testConfig) {
+  let { environmentsAllowingSeedData = [] } = testConfig;
+  if (process.env.NODE_ENV) {
+    return environmentsAllowingSeedData.includes(process.env.NODE_ENV);
+  }
+  return false;
+}
 
 // Get generated fake data
 let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {};
@@ -21,6 +25,7 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 // !code: init // !end
 
 module.exports = async function (app) {
+  const ifDbChangesAllowed = areDbChangesAllowed(app.get('tests'));
   // !code: func_init // !end
   if (!ifSeedServices) return;
   if (!ifDbChangesAllowed) return;

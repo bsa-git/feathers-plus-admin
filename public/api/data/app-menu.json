@@ -9,7 +9,6 @@
     "icon": "dashboard",
     "name": "dashboard",
     "alias": "dashboard",
-    "isPublic": true,
     "to": "/dashboard"
   },
   {
@@ -19,7 +18,7 @@
     "target": "_blank",
     "name": "chat",
     "alias": "chat",
-    "to": "/admin/chat"
+    "to": "/chat"
   },
   {
     "title": "Inbox",
@@ -28,7 +27,7 @@
     "alias": "inbox",
     "target": "_blank",
     "icon": "email",
-    "to": "/admin/mail"
+    "to": "/mail"
   },
   {
     "title": "Media",
@@ -36,8 +35,7 @@
     "name": "media",
     "alias": "media",
     "icon": "perm_media",
-    "isPublic": true,
-    "to": "/admin/media"
+    "to": "/media"
   },
   {
     "title": "Administration",
@@ -45,7 +43,6 @@
     "name": "admins",
     "alias": "admins",
     "icon": "build",
-    "isAdmin": true,
     "to": "/admins",
     "items": [
       {
@@ -125,7 +122,6 @@
     "alias": "widgets",
     "icon": "widgets",
     "disabled": false,
-    "isPublic": true,
     "to": "/widgets",
     "items": [
       {
@@ -164,7 +160,6 @@
     "name": "components",
     "alias": "general",
     "icon": "tune",
-    "isPublic": true,
     "to": "/components",
     "items": [
       {
@@ -283,7 +278,6 @@
     "name": "pickers",
     "alias": "pickers",
     "icon": "filter_vintage",
-    "isPublic": true,
     "to": "/pickers",
     "items": [
       {
@@ -306,7 +300,6 @@
     "name": "layout",
     "alias": "layout",
     "icon": "view_compact",
-    "isPublic": true,
     "to": "/layout",
     "items": [
       {
@@ -372,7 +365,6 @@
     "name": "forms",
     "alias": "forms_controls",
     "icon": "edit",
-    "isPublic": true,
     "to": "/forms",
     "items": [
       {
@@ -428,7 +420,6 @@
     "alias": "pages",
     "icon": "list",
     "disabled": true,
-    "isPublic": true,
     "to": "/system",
     "items": [
       {

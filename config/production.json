@@ -1,5 +1,8 @@
 {
   "host": "HOST",
   "port": "PORT",
-  "mongodb": "MONGODB"
+  "mongodb": "MONGODB",
+  "authentication": {
+    "secret": "SECRET"
+  }
 }

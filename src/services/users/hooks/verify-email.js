@@ -7,6 +7,8 @@ const ajv = require('ajv')({allErrors: true});
 const createSchema = require('../users.validate').schema;
 const debug = require('debug')('app:verify-email.service.hook');
 
+const isDebug = false;
+
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
 
@@ -31,9 +33,9 @@ module.exports = function (options = {}) {
     const validateEmail = (email) => {
       const valid = ajv.validate(createSchema, {email});
       if (valid) {
-        debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' is valid`);
+        if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' is valid`);
       }else {
-        debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' not valid`);
+        if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}(). `, `Email '${email}' not valid`);
         throw new errors.BadRequest(`Invalid email: "${email}"`);
       }
     };

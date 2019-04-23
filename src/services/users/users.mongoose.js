@@ -12,11 +12,21 @@ let moduleExports = merge({},
   {
     email: {
       type: String,
+      minLength: 8,
+      maxLength: 40,
       unique: true
     },
     password: String,
-    firstName: String,
-    lastName: String,
+    firstName: {
+      type: String,
+      minLength: 2,
+      maxLength: 20
+    },
+    lastName: {
+      type: String,
+      minLength: 2,
+      maxLength: 40
+    },
     roleId: mongoose.Schema.Types.ObjectId,
     googleId: String,
     githubId: String,

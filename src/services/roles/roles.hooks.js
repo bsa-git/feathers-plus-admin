@@ -2,6 +2,8 @@
 // Hooks for service `roles`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
+// eslint-disable-next-line no-unused-vars
+const rolesPopulate = require('./roles.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');

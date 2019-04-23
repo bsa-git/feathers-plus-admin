@@ -1,8 +1,15 @@
+import util from '~/plugins/lib/util';
+
 export default () => ({
-  locales: process.env.LOCALES.split(';'),
+  locales: util.stripSpecific(process.env.LOCALES, ';').split(';').map(item => item.trim()),
   locale: process.env.LOCALE || 'en',
   fallbackLocale: process.env.FALLBACK_LOCALE || 'en',
   config: {
+    //--- AUTH ---//
+    roles: util.stripSpecific(process.env.ROLES, ';').split(';').map(role => {
+      const items = role.trim().split(':').map(item => item.trim());
+      return {[items[0]]: items[1]};
+    }),
     //--- SYSTEM ---//
     debug: process.env.DEBUG,
     baseUrl: process.env.BASE_URL,

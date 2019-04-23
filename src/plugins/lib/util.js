@@ -19,11 +19,23 @@ const delayTime = function (sec = 1) {
 
 /**
  * Strip slashes
- * @param name String
+ * @param value String
  * @return {XML|string|*|void}
  */
-const stripSlashes = function (name) {
-  return name.replace(/^(\/*)|(\/*)$/g, '');
+const stripSlashes = function (value) {
+  return value.replace(/^(\/*)|(\/*)$/g, '');
+};
+
+/**
+ * Strip slashes
+ * @param value String
+ * @param symbol String
+ * @return {string|*|void}
+ */
+const stripSpecific = function (value, symbol = '') {
+  const regEx = new RegExp('^[' + symbol + ']+|[' + symbol + ']+$', 'g');
+  const trimValue = symbol ? value.replace(regEx, '') : value.trim();
+  return trimValue;
 };
 
 /**
@@ -105,7 +117,7 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
   return `${leader}${str}${trailer}`;
 };
 
-const logHookContext = function (context) {
+const getHookContext = function (context) {
   let target = {};
   let {path, method, type, params, id, data, result, dispatch, statusCode, error, grapql} = context;
 
@@ -127,10 +139,11 @@ module.exports = {
   appRoot,
   delayTime,
   stripSlashes,
+  stripSpecific,
   parseBool,
   isTrue,
   inspector,
   qlParams,
   stringify,
-  logHookContext
+  getHookContext
 };

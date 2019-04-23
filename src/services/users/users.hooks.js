@@ -8,6 +8,8 @@ const { hashPassword, protect } = require('@feathersjs/authentication-local').ho
 const accountsProfileData = require('./hooks/accounts-profile-data');
 // eslint-disable-next-line no-unused-vars
 const verifyEmail = require('./hooks/verify-email');
+// eslint-disable-next-line no-unused-vars
+const usersPopulate = require('./users.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');

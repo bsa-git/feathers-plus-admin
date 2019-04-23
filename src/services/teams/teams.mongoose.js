@@ -10,9 +10,15 @@ const mongoose = require('mongoose');
 let moduleExports = merge({},
   // !<DEFAULT> code: model
   {
-    name: String,
+    name: {
+      type: String,
+      minLength: 2,
+      maxLength: 30
+    },
     memberIds: [
-      mongoose.Schema.Types.ObjectId
+      {
+        type: mongoose.Schema.Types.ObjectId
+      }
     ]
   },
   // !end

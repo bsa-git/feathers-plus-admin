@@ -120,3 +120,4 @@ data/log/*
 nuxt-dist/
 docs-dist/
 .env
+.env.prod

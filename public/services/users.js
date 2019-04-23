@@ -2,6 +2,7 @@ const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import normalizeQuery from '~/services/hooks/normalize-query';
+import log from '~/services/hooks/log';
 
 const debug = require('debug')('app:service.users');
 
@@ -42,7 +43,7 @@ const servicePlugin = service(servicePath, {
         }
       },
       get isAdmin() {
-        return this.role ? this.role.name.toLowerCase() === 'administrator' : false;
+        return this.role ? store.getters.isAdmin : false;
       },
       get teams() {
         let teams = Models.Team.findInStore({query: {$sort: {name: 1}}}).data;
@@ -61,7 +62,7 @@ const servicePlugin = service(servicePath, {
 feathersClient.service(servicePath)
   .hooks({
     before: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [normalizeQuery({service: 'users'})],
@@ -70,7 +71,7 @@ feathersClient.service(servicePath)
       remove: []
     },
     after: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [],
@@ -79,7 +80,7 @@ feathersClient.service(servicePath)
       remove: []
     },
     error: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [],

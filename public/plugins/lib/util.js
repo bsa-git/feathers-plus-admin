@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 import cookies from 'browser-cookies';
-const debug = require('debug')('app:util');
+
+const debug = require('debug')('app:plugins.util');
+const isLog = false;
 
 /**
  * toggleFullScreen
@@ -46,7 +48,7 @@ const gravatar = function (email, size) {
 const delayTime = function (sec = 1) {
   return new Promise(function (resolve) {
     setTimeout(() => {
-      debug(`delayTime: ${sec * 1000} MSec`);
+      if(isLog) debug(`delayTime: ${sec * 1000} MSec`);
       resolve('done!');
     }, sec * 1000);
   });
@@ -54,11 +56,23 @@ const delayTime = function (sec = 1) {
 
 /**
  * Strip slashes
- * @param name String
- * @return {XML|string|*|void}
+ * @param value String
+ * @return {string|*|void}
  */
-const stripSlashes = function (name) {
-  return name.replace(/^(\/*)|(\/*)$/g, '');
+const stripSlashes = function (value) {
+  return value.replace(/^(\/*)|(\/*)$/g, '');
+};
+
+/**
+ * Strip slashes
+ * @param value String
+ * @param symbol String
+ * @return {string|*|void}
+ */
+const stripSpecific = function (value, symbol = '') {
+  const regEx = new RegExp('^[' + symbol + ']+|[' + symbol + ']+$', 'g');
+  const trimValue = symbol ? value.replace(regEx, '') : value.trim();
+  return trimValue;
 };
 
 /**
@@ -153,8 +167,6 @@ const verifyJWT = async function (token) {
 };
 
 
-
-
 /**
  * readCookie
  * Reads and returns the contents of a cookie with the provided name for server.
@@ -228,11 +240,32 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
   return `${leader}${str}${trailer}`;
 };
 
+/**
+ * Get context for log
+ * @param context
+ * @return {Object}
+ */
+const logHookContext = function (context) {
+  let target = {};
+  let {path, method, type, params, id, data, result, error} = context;
+
+  if (path) target.path = path;
+  if (method) target.method = method;
+  if (type) target.type = type;
+  if (params) target.params = params;
+  if (id) target.id = id;
+  if (data && type === 'before') target.data = data;
+  if (result) target.result = result;
+  if (error) target.error = error;
+  return target;
+};
+
 export default {
   toggleFullScreen,
   gravatar,
   delayTime,
   stripSlashes,
+  stripSpecific,
   parseBool,
   isTrue,
   getAccessToken,
@@ -242,5 +275,6 @@ export default {
   readCookie,
   sortByStringField,
   qlParams,
-  stringify
+  stringify,
+  logHookContext
 };

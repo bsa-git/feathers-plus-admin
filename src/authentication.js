@@ -10,12 +10,14 @@ const GithubStrategy = require('passport-github');
 // !code: imports
 //---------------
 const verifiers = require('./plugins/auth/verifiers');
+const {payloadExtension} = require('./hooks/auth');
 //---------------
 // !end
 // !code: init // !end
 
 let moduleExports = function (app) {
   const config = app.get('authentication');
+  // !code: func_init // !end
 
   // Set up authentication with the secret
   app.configure(authentication(config));
@@ -25,12 +27,14 @@ let moduleExports = function (app) {
 
   app.configure(oauth2(Object.assign({
     name: 'google',
-    Strategy: GoogleStrategy
+    Strategy: GoogleStrategy,
+    // !code: google_options // !end
   }, config.google)));
 
   app.configure(oauth2(Object.assign({
     name: 'github',
-    Strategy: GithubStrategy
+    Strategy: GithubStrategy,
+    // !code: github_options // !end
   }, config.github)));
 
   // !code: loc_2
@@ -58,8 +62,10 @@ let moduleExports = function (app) {
   app.service('authentication').hooks({
     before: {
       create: [
-        // !<DEFAULT> code: before_create
+        // !code: before_create
         authentication.hooks.authenticate(config.strategies),
+        // Add data to payload
+        payloadExtension()
         // !end
       ],
       remove: [

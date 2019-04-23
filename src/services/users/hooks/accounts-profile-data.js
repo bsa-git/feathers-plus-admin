@@ -6,6 +6,7 @@ const {inspector} = require('../../../plugins/lib');
 const debug = require('debug')('app:accounts-profile-data.hook');
 
 const isLog = false;
+const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -39,7 +40,7 @@ module.exports = function (options = {}) {
 
       // Google account
       if(record.google){
-        debug(`${context.type} app.service('${context.path}').${context.method}().`, 'Google account');
+        if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}().`, 'Google account');
         isAccount = true;
         _raw = JSON.parse(record.google.profile._raw);
         newRecord.googleId = record.googleId;
@@ -57,7 +58,7 @@ module.exports = function (options = {}) {
 
         // GitHub account
       }else if(record.github){
-        debug(`${context.type} app.service('${context.path}').${context.method}(). `, 'Github account');
+        if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}(). `, 'Github account');
         isAccount = true;
         newRecord.githubId = record.githubId;
         newRecord.email = record.github.profile.emails[0].value;
@@ -75,7 +76,7 @@ module.exports = function (options = {}) {
 
         // No accounts
       }else {
-        debug(`${context.type} app.service('${context.path}').${context.method}(). `, 'No accounts');
+        if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}(). `, 'No accounts');
         return record;
       }
     };

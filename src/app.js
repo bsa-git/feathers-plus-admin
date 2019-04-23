@@ -1,11 +1,15 @@
 
 // Configure Feathers app. (Can be re-generated.)
+// !code: preface // !end
 const path = require('path');
-const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('./logger');
+
+// !<DEFAULT> code: favicon_import
+const favicon = require('serve-favicon');
+// !end
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -43,14 +47,31 @@ app.set('generatorSpecs', generatorSpecs);
 // !end
 
 // Enable security, CORS, compression, favicon and body parsing
-app.use(helmet());
-app.use(cors());
-app.use(compress());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(helmet(
+  // !code: helmet_config // !end
+));
+app.use(cors(
+  // !code: cors_config // !end
+));
+app.use(compress(
+  // !code: compress_config // !end
+));
+app.use(express.json(
+  // !code: json_config // !end
+));
+app.use(express.urlencoded(
+  // !<DEFAULT> code: urlencoded_config
+  { extended: true }
+  // !end
+));
+// !<DEFAULT> code: use_favicon
+// Use favicon
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+// !end
+// !<DEFAULT> code: use_static
 // Host the public folder
 app.use('/', express.static(app.get('public')));
+// !end
 // !code: use_end
 //----------------
 app.use(useragent.express());

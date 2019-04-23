@@ -4,8 +4,12 @@ const commonHooks = require('feathers-hooks-common');
 // eslint-disable-next-line no-unused-vars
 const normalizeQuery = require('./hooks/normalize-query');
 // !code: imports
+//---------------
 const log = require('./hooks/log');
+const {userRightsCheck} = require('./hooks/auth');
+// const normalizeQuery = require('./hooks/normalize-query');
 const loConcat = require('lodash/concat');
+//---------------
 // !end
 
 // !<DEFAULT> code: used
@@ -56,7 +60,7 @@ let moduleExports = {
 // !code: exports
 //---------------
 // Add hooks
-// moduleExports.before.all = loConcat([normalizeQuery()], moduleExports.before.all);
+moduleExports.before.all = loConcat(moduleExports.before.all, [userRightsCheck()]);
 moduleExports.after.all = loConcat([normalizeQuery()], moduleExports.after.all);
 //---------------
 // !end

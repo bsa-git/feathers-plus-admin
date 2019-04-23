@@ -86,7 +86,7 @@ let moduleExports = function serviceResolvers(app, options) {
           }
 
           return Promise.resolve(content.cache.User.teams)
-            .then(res => res.filter(rec => rec.memberIds.indexOf(parent._id) !== -1));
+            .then(res => res.filter(rec => rec.memberIds.map(key => key.toString()).indexOf(parent._id.toString()) !== -1));
         },
         // !end
     },

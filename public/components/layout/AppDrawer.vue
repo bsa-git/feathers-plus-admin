@@ -106,6 +106,8 @@
 </template>
 <script>
 
+  import AuthClient from '~/plugins/lib/auth-client.class';
+
   export default {
     props: {
       isIcon: Boolean,
@@ -139,14 +141,10 @@
         }
       },
       filterAppMenu() {
-        const menu = this.appMenu.filter(item => {
-          if (item.divider) return true;
-          if (item.header) return true;
-          if (item.isPublic) return true;
-          if (this.user && this.user.isAdmin) return true;
-          if (this.user && !this.user.isAdmin && !item.isAdmin) return true;
-          return false;
-        }).map(item => {
+        // Create auth
+        const auth = new AuthClient(this.$store);
+        // Filter, update and sort menu
+        const menu = auth.filterMenu().map(item => {
           if (item.header) {
             item.header = this.$t(`app_menu.${item.alias}`);
           }

@@ -1,6 +1,7 @@
 
 /* eslint-disable no-console */
 // Start the server. (Can be re-generated.)
+// !code: preface // !end
 const logger = require('./logger');
 const app = require('./app');
 const seedData = require('./seed-data');
@@ -22,7 +23,7 @@ process.on('unhandledRejection', (reason, p) => {
   // !end
 });
 
-server.on('listening', () => {
+server.on('listening', async () => {
   // !<DEFAULT> code: listening_log
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
@@ -37,7 +38,8 @@ server.on('listening', () => {
   });
   //--------------------
   // !end
-  seedData(app);
+  await seedData(app);
+  // !code: listening1 // !end
 });
 
 // !code: funcs // !end

@@ -4,7 +4,7 @@ const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const debug = require('debug')('app:normalize-query.hook');
 
 
-const isLog = true;
+const isLog = false;
 
 // eslint-disable-next-line no-unused-vars
 export default function (options = {}) {
@@ -23,10 +23,10 @@ export default function (options = {}) {
      */
     if (records) {
       debug(`${context.type} app.service('${context.path}').${context.method}()`);
+      debug('Hook Context:', context);
+
       if (isLog) debug('Before normalize-query:', records);
 
-      // let beforeFields = [];
-      // let afterFields = [];
       switch (options.service) {
       case 'users':
         if(records['roleId']){

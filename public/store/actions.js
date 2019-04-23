@@ -2,13 +2,13 @@ import {initAuth} from 'feathers-vuex';
 
 const debug = require('debug')('app:store.actions');
 
-const isLog = true;
+const isLog = false;
 
 const actions = {
 
   //--- ServerInit ---//
   async nuxtServerInit({commit, dispatch}, {req}) {
-    debug(`nuxtServerInit start on ${process.server ? 'server' : 'client'}`);
+    debug(`Start nuxtServerInit on ${process.server ? 'server' : 'client'}`);
     let _initAuth = null;
     if (process.server && !process.static) {
       _initAuth = await initAuth({
@@ -25,11 +25,11 @@ const actions = {
   async checkAuth({dispatch}) {
     if (this.$util.isAccessToken()) {
       try {
+        debug('<<checkAuth>>Start checkAuth');
         // let response = await dispatch('auth/authenticate');
         let response = await dispatch('authenticate');
         const result = (!!response && !!response.accessToken);
-        debug('checkAuth.accessToken:');
-        if (isLog && result) debug('Response accessToken:', response);
+        if (isLog && result) debug('<<checkAuth>>Response accessToken:', response);
         return result;
       } catch (error) {
         if (error.message.includes('Could not find stored JWT')) {
@@ -46,7 +46,7 @@ const actions = {
   },
 
   async logout({commit, dispatch, getters}) {
-    debug('logout');
+    debug('<<logout>>Start logout');
     // logout
     await dispatch('auth/logout');
     this.$util.removeAccessToken();
@@ -61,33 +61,32 @@ const actions = {
 
   async authenticate({dispatch, getters}, credentials = null) {
     let response;
+    debug('<<authenticate>>Start authenticate');
     // authenticate
     if (credentials) {
       response = await dispatch('auth/authenticate', credentials);
     } else {
       response = await dispatch('auth/authenticate');
     }
-
+    // Get users data only for admins
     if (response && response.accessToken) {
-      // The delay is needed to fully create a user object in store
-      await this.$util.delayTime(1);
-      const user = getters.getUser;
-      const isAuth = !!user;
-      const isAdmin = isAuth ? user.isAdmin : false;
-      debug(`Run authenticate; <<isAuth>>: ${isAuth}; <<isAdmin>>: ${isAdmin}`);
+      const isAuth = getters.isAuth;
+      const isAdmin = getters.isAdmin;
+      debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
+      // return response;
       if(!isAdmin) return response;
       // findRoles
       let roles = await dispatch('roles/find', {query: {$sort: {name: 1}}});
       roles = roles.data || roles;
-      if (isLog) debug('Roles from server:', roles);
+      if (isLog) debug('<<authenticate>>Roles from server:', roles);
       // findTeams
       let teams = await dispatch('teams/find', {query: {$sort: {name: 1}}});
       teams = teams.data || teams;
-      if (isLog) debug('Teams from server:', teams);
+      if (isLog) debug('<<authenticate>>Teams from server:', teams);
       // findUsers
       let users = await dispatch('users/find', {query: {$sort: {lastName: 1}}});
       users = users.data || users;
-      if (isLog) debug('Users from server:', users);
+      if (isLog) debug('<<authenticate>>Users from server:', users);
     }
     return response;
   }

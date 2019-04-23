@@ -1,6 +1,6 @@
 import useragent from 'express-useragent';
 import i18n from '~/middleware/i18n';
-import util from '~/plugins/lib/util';
+import AuthClient from '~/plugins/lib/auth-client.class';
 const debug = require('debug')('app:middleware.init-app');
 
 const isLog = false;
@@ -10,19 +10,14 @@ export default async function (context) {
     // Init locales
     i18n(context);
 
-    // Redirect to login
+    // Get context content
     const {$t, store, redirect, route} = context;
-    const {auth} = store.state;
-    const isAuth = !!auth.user;
-    // The delay is needed to fully create a user object in store
-    await util.delayTime(1);
-    const isAdmin = auth.user ? auth.user.isAdmin : false;
-    debug(`Start on ${process.server ? 'server' : 'client'}; <<isAuth>>: ${isAuth}; <<isAdmin>>: ${isAdmin}`);
-
+    // Create auth
+    const auth = new AuthClient(store);
+    debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${auth.isAuth()}; <<myRole>>: ${auth.getMyRole()}`);
     if(isLog) debug('<<user>>:', auth.user);
-
-    if ((!isAuth && !auth.publicPages.includes(route.path)) ||
-      (isAuth && !isAdmin && auth.adminPages.includes(route.path))) {
+    // Check auth access for route.path
+    if (!auth.isAuthAccess(route.path)) {
       debug(`This path '${route.path}' is not available. Not enough rights.`);
       store.commit('SHOW_ERROR', `${$t('error.not_enough_rights')}.`);
       const fullPath = (store.state.locale === store.state.fallbackLocale) ? '/user/login' : `/${store.state.locale}/user/login`;

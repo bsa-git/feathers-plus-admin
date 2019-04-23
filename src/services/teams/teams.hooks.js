@@ -2,6 +2,8 @@
 // Hooks for service `teams`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
+// eslint-disable-next-line no-unused-vars
+const teamsPopulate = require('./teams.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');
