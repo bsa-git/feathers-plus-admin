@@ -20,33 +20,12 @@ class AuthClient {
     this.envRoles = store.getters.getRoles;
     const {auth} = store.state;
     this.user = auth.user;
+    this.isAuth = store.getters.isAuth;
+    this.isAdmin = store.getters.isAdmin;
+    this.getMyRole = store.getters.getMyRole;
 
     // Set this.envRoles
     if (isLog) debug('envRoles:', this.envRoles);
-  }
-
-  /**
-   * Is authentication
-   * @return Boolean
-   */
-  isAuth() {
-    return !!this.store.getters.isAuth;
-  }
-
-  /**
-   * Is administrator
-   * @return Boolean
-   */
-  isAdmin() {
-    return this.user ? this.user.isAdmin : false;
-  }
-
-  /**
-   * Get my role
-   * @return String
-   */
-  getMyRole() {
-    return this.store.getters.getMyRole;
   }
 
   /**
@@ -54,9 +33,9 @@ class AuthClient {
    * @param path
    * @return Boolean
    */
-  isAuthAccess(path) {
-    const notAccess = (!this.isAuth() && !this.publicPaths().includes(path)) ||
-      (this.isAuth() && !this.isAdmin() && this.adminPaths().includes(path));
+  isAccess(path) {
+    const notAccess = (!this.isAuth && !this.publicPaths().includes(path)) ||
+      (this.isAuth && !this.isAdmin && this.adminPaths().includes(path));
     return !notAccess;
   }
 
@@ -126,8 +105,8 @@ class AuthClient {
       if (item.divider) return true;
       if (item.header) return true;
       if (this.envPublicPaths.includes(item.to)) return true;
-      if (this.isAuth() && this.isAdmin()) return true;
-      if (this.isAuth() && !this.isAdmin() && !this.envAdminPaths.includes(item.to)) return true;
+      if (this.isAuth && this.isAdmin) return true;
+      if (this.isAuth && !this.isAdmin && !this.envAdminPaths.includes(item.to)) return true;
       return false;
     });
   }

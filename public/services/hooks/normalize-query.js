@@ -5,6 +5,7 @@ const debug = require('debug')('app:normalize-query.hook');
 
 
 const isLog = false;
+const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
 export default function (options = {}) {
@@ -22,9 +23,7 @@ export default function (options = {}) {
     Modify records and/or context.
      */
     if (records) {
-      debug(`${context.type} app.service('${context.path}').${context.method}()`);
-      debug('Hook Context:', context);
-
+      if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}()`);
       if (isLog) debug('Before normalize-query:', records);
 
       switch (options.service) {

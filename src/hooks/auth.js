@@ -5,13 +5,14 @@ const {AuthServer} = require('../plugins/auth');
 const debug = require('debug')('app:auth.hook');
 
 const isLog = false;
-const isDebug = false;
+const isDebug = true;
 
 /**
  * User rights check for hook
+ * @param isTest
  * @return {function(*=)}
  */
-const userRightsCheck = function () {
+const userRightsCheck = function (isTest = false) {
   return context => {
     // Create auth
     const auth = new AuthServer(context);
@@ -22,8 +23,8 @@ const userRightsCheck = function () {
         debug(`<<userRightsCheck>>: isAuth: ${auth.isAuth ? auth.isAuth : 'Not'}; Access: ${auth.isAccess() ? 'Yes' : 'Not'}; MyRole: ${auth.isAuth ? auth.myRole : 'Not'};`);
       }
     }
-    if (!auth.isAccess()) {
-      throw new errors.Forbidden('Access to the service is denied. Not enough rights');
+    if (!auth.isAccess(isTest)) {
+      throw new errors.Forbidden(`Access to the service method "${context.path}.${context.method}" is denied. Not enough rights`);
     }
 
   };
@@ -31,15 +32,17 @@ const userRightsCheck = function () {
 
 /**
  * Payload extension for hook
+ * @param isTest
  * @return {function(*=)}
  */
-const payloadExtension = function () {
+const payloadExtension = function (isTest = false) {
   return async context => {
     // Create auth
-    const auth = new AuthServer(context);
+    const provider = context.params.provider ? context.params.provider : '';
     // Debug info
-    if (isDebug) debug(`<<payloadExtension>>: Provider: ${auth.provider}; ${context.type} app.service('${context.path}').${context.method}()`);
-    if (!auth.isTest() && context.params.user) {
+    if (isDebug) debug(`<<payloadExtension>>: Provider: ${provider}; ${context.type} app.service('${context.path}').${context.method}()`);
+    const _isTest = isTest ? true : !AuthServer.isTest();
+    if (_isTest && context.params.user) {
       const roleId = context.params.user.roleId;
       const role = await context.app.service('roles').get(roleId);
       if (isLog) inspector('Role for authorized user:', role);

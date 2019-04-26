@@ -7,36 +7,32 @@ const isDebug = false;
 class AuthServer {
   /**
    * Constructor
-   * @param store
+   * @param context
    */
   constructor(context) {
     this.context = context;
-    this.isAuth = !!context.params.payload;
-    this.myRole = this.isAuth ? context.params.payload.role : '';
+    this.isAuth = !!context.params.authenticated;
+    this.myRole = context.params.payload ? context.params.payload.role : '';
     this.provider = context.params.provider ? context.params.provider : '';
-    this.envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
-      const items = role.trim().split(':').map(item => item.trim());
-      return {[items[0]]: items[1]};
-    });
-    this.isAdmin = this.myRole === this.getRoles()['isAdmin'];
+    this.isAdmin = this.myRole === AuthServer.getRoles()['isAdmin'];
 
-    if(isDebug) debug('Start AuthServer constructor');
+    if (isDebug) debug(`Start AuthServer constructor. <<isAuth>>:${this.isAuth}; <<myRole>>:${this.myRole}; <<isAdmin>>:${this.isAdmin};`);
   }
 
   /**
    * Is access right for service methods
-   * @param path
+   * @param isTest
    * @return Boolean
    */
-  isAccess() {
-    const publicServices = this.listServices(process.env.PUBLIC_SERVICES);
-    const adminServices = this.listServices(process.env.ADMIN_SERVICES);
+  isAccess(isTest = false) {
+    const publicServices = AuthServer.listServices(process.env.PUBLIC_SERVICES);
+    const adminServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
     const isPublicAccess = !!publicServices[this.context.path] && publicServices[this.context.path].includes(this.context.method);
     const isAdminAccess = !!adminServices[this.context.path] && adminServices[this.context.path].includes(this.context.method);
 
-    const notAccess = (!this.isTest() && !!this.provider && !this.isAuth && !isPublicAccess) ||
-      (  !this.isTest() && !!this.provider && this.isAuth && !this.isAdmin && isAdminAccess);
-
+    const _isTest = isTest ? true : !AuthServer.isTest();
+    const notAccess = (_isTest && !!this.provider && !this.isAuth && !isPublicAccess) ||
+      (  _isTest && !!this.provider && this.isAuth && !this.isAdmin && isAdminAccess);
     return !notAccess;
   }
 
@@ -46,7 +42,7 @@ class AuthServer {
    * @param envServices
    * @return {Object}
    */
-  listServices(envServices = ''){
+  static listServices(envServices = '') {
     const all = ['find', 'get', 'create', 'update', 'patch', 'remove'];
     const _services = {};
     const services = stripSpecific(envServices, ';').split(';').map(service => {
@@ -64,9 +60,13 @@ class AuthServer {
    * exx. { isAdmin: 'Administrator', isGlobalConfiguration: 'Global Configuration Officer' }
    * @return {Object}
    */
-  getRoles(){
+  static getRoles() {
     const _roles = {};
-    this.envRoles.forEach(role => {
+    const envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
+      const items = role.trim().split(':').map(item => item.trim());
+      return {[items[0]]: items[1]};
+    });
+    envRoles.forEach(role => {
       Object.assign(_roles, role);
     });
     return _roles;
@@ -76,7 +76,7 @@ class AuthServer {
    * Determine if environment allows test
    * @return {boolean}
    */
-  isTest(){
+  static isTest() {
     const config = readJsonFileSync(`${appRoot}/config/default.json`) || {};
     // Determine if environment allows test
     let env = (config.tests || {}).environmentsAllowingSeedData || [];

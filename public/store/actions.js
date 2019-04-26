@@ -3,12 +3,13 @@ import {initAuth} from 'feathers-vuex';
 const debug = require('debug')('app:store.actions');
 
 const isLog = false;
+const isDebug = true;
 
 const actions = {
 
   //--- ServerInit ---//
   async nuxtServerInit({commit, dispatch}, {req}) {
-    debug(`Start nuxtServerInit on ${process.server ? 'server' : 'client'}`);
+    if(isDebug) debug(`Start nuxtServerInit on ${process.server ? 'server' : 'client'}`);
     let _initAuth = null;
     if (process.server && !process.static) {
       _initAuth = await initAuth({
@@ -25,7 +26,7 @@ const actions = {
   async checkAuth({dispatch}) {
     if (this.$util.isAccessToken()) {
       try {
-        debug('<<checkAuth>>Start checkAuth');
+        if(isDebug) debug('<<checkAuth>>Start checkAuth');
         // let response = await dispatch('auth/authenticate');
         let response = await dispatch('authenticate');
         const result = (!!response && !!response.accessToken);
@@ -46,7 +47,7 @@ const actions = {
   },
 
   async logout({commit, dispatch, getters}) {
-    debug('<<logout>>Start logout');
+    if(isDebug) debug('<<logout>>Start logout');
     // logout
     await dispatch('auth/logout');
     this.$util.removeAccessToken();
@@ -61,7 +62,7 @@ const actions = {
 
   async authenticate({dispatch, getters}, credentials = null) {
     let response;
-    debug('<<authenticate>>Start authenticate');
+    if(isDebug) debug('<<authenticate>>Start authenticate');
     // authenticate
     if (credentials) {
       response = await dispatch('auth/authenticate', credentials);
@@ -72,7 +73,7 @@ const actions = {
     if (response && response.accessToken) {
       const isAuth = getters.isAuth;
       const isAdmin = getters.isAdmin;
-      debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
+      if(isDebug) debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
       // return response;
       if(!isAdmin) return response;
       // findRoles

@@ -10,7 +10,7 @@ const GithubStrategy = require('passport-github');
 // !code: imports
 //---------------
 const verifiers = require('./plugins/auth/verifiers');
-const {payloadExtension} = require('./hooks/auth');
+const auth = require('./hooks/auth');
 //---------------
 // !end
 // !code: init // !end
@@ -65,7 +65,7 @@ let moduleExports = function (app) {
         // !code: before_create
         authentication.hooks.authenticate(config.strategies),
         // Add data to payload
-        payloadExtension()
+        auth.payloadExtension()
         // !end
       ],
       remove: [

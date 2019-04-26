@@ -76,6 +76,15 @@
       "ifMulti": "n",
       "multiServices": [],
       "singleService": "users"
+    },
+    "auth": {
+      "fileName": "auth",
+      "camelName": "auth",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
     }
   },
   "authentication": {

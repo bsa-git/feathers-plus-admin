@@ -62,7 +62,6 @@ describe('<<< Test users/hooks/verify-email.unit.test.js >>>', () => {
       }else {
         assert(false, 'The function "verifyEmail()" generated an error of the wrong type.');
       }
-
     }
   });
 });

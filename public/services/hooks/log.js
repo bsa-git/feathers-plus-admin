@@ -6,11 +6,12 @@ const debug = require('debug')('app:log.hook');
 
 
 const isLog = false;
+const isDebug = false;
 
 export default function () {
   return context => {
     // Debug info
-    debug(`${context.type} app.service('${context.path}').${context.method}()`);
+    if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}()`);
     // Log context
     const logContext = util.logHookContext(context);
     if (isLog) debug('Hook Context:', logContext);

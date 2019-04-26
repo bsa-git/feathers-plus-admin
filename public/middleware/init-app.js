@@ -4,6 +4,7 @@ import AuthClient from '~/plugins/lib/auth-client.class';
 const debug = require('debug')('app:middleware.init-app');
 
 const isLog = false;
+const isDebug = true;
 
 export default async function (context) {
   try {
@@ -14,10 +15,10 @@ export default async function (context) {
     const {$t, store, redirect, route} = context;
     // Create auth
     const auth = new AuthClient(store);
-    debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${auth.isAuth()}; <<myRole>>: ${auth.getMyRole()}`);
+    if(isDebug) debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${auth.isAuth}; <<myRole>>: ${auth.getMyRole}`);
     if(isLog) debug('<<user>>:', auth.user);
     // Check auth access for route.path
-    if (!auth.isAuthAccess(route.path)) {
+    if (!auth.isAccess(route.path)) {
       debug(`This path '${route.path}' is not available. Not enough rights.`);
       store.commit('SHOW_ERROR', `${$t('error.not_enough_rights')}.`);
       const fullPath = (store.state.locale === store.state.fallbackLocale) ? '/user/login' : `/${store.state.locale}/user/login`;

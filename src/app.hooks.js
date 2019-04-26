@@ -2,14 +2,11 @@
 // Application hooks that run for every service. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 // eslint-disable-next-line no-unused-vars
+const auth = require('./hooks/auth');
+// eslint-disable-next-line no-unused-vars
 const normalizeQuery = require('./hooks/normalize-query');
-// !code: imports
-//---------------
+// !<DEFAULT> code: imports
 const log = require('./hooks/log');
-const {userRightsCheck} = require('./hooks/auth');
-// const normalizeQuery = require('./hooks/normalize-query');
-const loConcat = require('lodash/concat');
-//---------------
 // !end
 
 // !<DEFAULT> code: used
@@ -59,8 +56,9 @@ let moduleExports = {
 
 // !code: exports
 //---------------
+const loConcat = require('lodash/concat');
 // Add hooks
-moduleExports.before.all = loConcat(moduleExports.before.all, [userRightsCheck()]);
+moduleExports.before.all = loConcat(moduleExports.before.all, [auth.userRightsCheck()]);
 moduleExports.after.all = loConcat([normalizeQuery()], moduleExports.after.all);
 //---------------
 // !end
