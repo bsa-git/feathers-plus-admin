@@ -58,7 +58,7 @@
 
   const debug = require('debug')('app:user.login');
 
-  const isLog = false;
+  const isLog = true;
 
   const fakeUser = fakeData.users[0];
   const isDev = process.env.NODE_ENV === 'development';
@@ -150,9 +150,10 @@
         try {
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
+          if (isLog) debug('authenticate.error:', error);
           this.loadingSubmit = false;
           // Convert the error to a plain object and add a message.
-          let type = error.className;
+          let type = error.className ? error.className : 'error';
           error = Object.assign({}, error);
           error.message = (type === 'not-authenticated')
             ? `${this.$t('login.notAuthenticated')}.`

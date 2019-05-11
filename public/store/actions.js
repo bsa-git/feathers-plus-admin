@@ -1,5 +1,4 @@
 import {initAuth} from 'feathers-vuex';
-
 const debug = require('debug')('app:store.actions');
 
 const isLog = false;
@@ -76,6 +75,7 @@ const actions = {
       if(isDebug) debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
       // return response;
       if(!isAdmin) return response;
+
       // findRoles
       let roles = await dispatch('roles/find', {query: {$sort: {name: 1}}});
       roles = roles.data || roles;

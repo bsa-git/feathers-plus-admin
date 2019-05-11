@@ -181,6 +181,30 @@
   },
   "management": {
     "title": "Management",
-    "description": "User Management"
+    "description": "User Management",
+    "new_item": "New Item",
+    "edit_item": "Edit Item",
+    "user_management": "User Management",
+    "role_management": "Role Management",
+    "team_management": "Team Management",
+    "cancel": "Cancel",
+    "save": "Save",
+    "reset": "Reset",
+    "agree": "Yes",
+    "disagree": "No",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirmation": "Confirm the password",
+    "roleName": "Role Name",
+    "userTeams": "User Teams",
+    "confirm_delete_title": "Are you sure you want to delete this item",
+    "confirm_delete_description": "This item will be removed from the server database as well as from the client store",
+    "success": "Operation successful",
+    "errSave": "An error prevented save of data",
+    "errDelete": "An error prevented delete of data",
+    "errDeleteYourself": "You can not delete yourself",
+    "errForbidden": "Access to the service method is denied. Not enough rights"
   }
 }

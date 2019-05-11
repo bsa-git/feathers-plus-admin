@@ -2,7 +2,7 @@ const crypto = require('crypto');
 import cookies from 'browser-cookies';
 
 const debug = require('debug')('app:plugins.util');
-const isLog = false;
+const isDebug = false;
 
 /**
  * toggleFullScreen
@@ -48,7 +48,7 @@ const gravatar = function (email, size) {
 const delayTime = function (sec = 1) {
   return new Promise(function (resolve) {
     setTimeout(() => {
-      if(isLog) debug(`delayTime: ${sec * 1000} MSec`);
+      if(isDebug) debug(`delayTime: ${sec * 1000} MSec`);
       resolve('done!');
     }, sec * 1000);
   });
@@ -245,10 +245,12 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
  * @param context
  * @return {Object}
  */
-const logHookContext = function (context) {
+const getHookContext = function (context) {
   let target = {};
-  let {path, method, type, params, id, data, result, error} = context;
+  let {service, path, method, type, params, id, data, result, error} = context;
 
+  if (service) target.service = service;
+  if (service && service.FeathersVuexModel) target.Model = service.FeathersVuexModel;
   if (path) target.path = path;
   if (method) target.method = method;
   if (type) target.type = type;
@@ -276,5 +278,5 @@ export default {
   sortByStringField,
   qlParams,
   stringify,
-  logHookContext
+  getHookContext
 };

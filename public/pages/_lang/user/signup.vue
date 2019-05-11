@@ -10,50 +10,63 @@
                 <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
               </router-link>
             </div>
-            <v-text-field
-              :counter="10"
-              v-validate="'required|max:20'"
-              :error-messages="errors.collect('firstName')"
-              data-vv-name="firstName"
-              v-model="model.firstName"
-              :label="$t('signup.firstName')"
-            ></v-text-field>
-            <v-text-field
-              :counter="20"
-              v-validate="'required|max:20'"
-              :error-messages="errors.collect('lastName')"
-              data-vv-name="lastName"
-              v-model="model.lastName"
-              :label="$t('signup.lastName')"
-            ></v-text-field>
-            <v-text-field
-              append-icon="email"
-              v-validate="'required|email'"
-              :error-messages="errors.collect('email')"
-              data-vv-name="email"
-              v-model="model.email"
-              :label="$t('login.email')"
-            ></v-text-field>
-            <v-text-field
-              append-icon="lock"
-              v-validate="'required|min:3'"
-              :error-messages="errors.collect('password')"
-              data-vv-name="password"
-              v-model="model.password"
-              :label="$t('login.password')"
-              type="password"
-              ref="confirmation"
-            ></v-text-field>
-            <v-text-field
-              append-icon="lock"
-              v-validate="'confirmed:confirmation'"
-              :error-messages="errors.collect('passwordConfirmation')"
-              data-vv-name="passwordConfirmation"
-              v-model="model.passwordConfirmation"
-              :label="$t('signup.passwordConfirmation')"
-              type="password"
-
-            ></v-text-field>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    :counter="10"
+                    v-validate="'required|max:20'"
+                    :error-messages="errors.collect('firstName')"
+                    data-vv-name="firstName"
+                    v-model="model.firstName"
+                    :label="$t('signup.firstName')"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    :counter="20"
+                    v-validate="'required|max:20'"
+                    :error-messages="errors.collect('lastName')"
+                    data-vv-name="lastName"
+                    v-model="model.lastName"
+                    :label="$t('signup.lastName')"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field
+                    append-icon="email"
+                    v-validate="'required|email'"
+                    :error-messages="errors.collect('email')"
+                    data-vv-name="email"
+                    v-model="model.email"
+                    :label="$t('login.email')"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    append-icon="lock"
+                    v-validate="'required|min:3'"
+                    :error-messages="errors.collect('password')"
+                    data-vv-name="password"
+                    v-model="model.password"
+                    :label="$t('login.password')"
+                    type="password"
+                    ref="confirmation"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-text-field
+                    append-icon="lock"
+                    v-validate="'required|confirmed:confirmation'"
+                    :error-messages="errors.collect('passwordConfirmation')"
+                    data-vv-name="passwordConfirmation"
+                    v-model="model.passwordConfirmation"
+                    :label="$t('signup.passwordConfirmation')"
+                    type="password"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -107,7 +120,7 @@
       }
     },
     created: function () {
-      if(this.user){
+      if (this.user) {
         this.model.firstName = this.user.firstName;
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
@@ -181,8 +194,9 @@
           });
           return await user.save();
         } catch (error) {
+          if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
-          let type = error.className;
+          let type = error.className ? error.className : 'error';
           error = Object.assign({}, error);
           error.message = (type === 'conflict')
             ? `${this.$t('signup.conflictEmail')}.`
@@ -196,9 +210,9 @@
         try {
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
+          if (isLog) debug('authenticate.error:', error);
           this.loadingSubmit = false;
-          // Convert the error to a plain object and add a message.
-          let type = error.className;
+          let type = error.className ? error.className : 'error';
           error = Object.assign({}, error);
           error.message = (type === 'not-authenticated')
             ? `${this.$t('login.notAuthenticated')}`

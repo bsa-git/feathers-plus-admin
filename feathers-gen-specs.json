@@ -85,6 +85,15 @@
         "*app"
       ],
       "singleService": ""
+    },
+    "my-log": {
+      "fileName": "my-log",
+      "camelName": "myLog",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
     }
   },
   "authentication": {

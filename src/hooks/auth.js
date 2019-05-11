@@ -5,7 +5,7 @@ const {AuthServer} = require('../plugins/auth');
 const debug = require('debug')('app:auth.hook');
 
 const isLog = false;
-const isDebug = true;
+const isDebug = false;
 
 /**
  * User rights check for hook
@@ -17,12 +17,9 @@ const userRightsCheck = function (isTest = false) {
     // Create auth
     const auth = new AuthServer(context);
     // Debug info
-    if (isDebug) debug(`<<userRightsCheck>>: Provider: ${auth.provider ? auth.provider : 'Not'}; ${context.type} app.service('${context.path}').${context.method}()`);
-    if (isDebug) {
-      if (auth.provider) {
-        debug(`<<userRightsCheck>>: isAuth: ${auth.isAuth ? auth.isAuth : 'Not'}; Access: ${auth.isAccess() ? 'Yes' : 'Not'}; MyRole: ${auth.isAuth ? auth.myRole : 'Not'};`);
-      }
-    }
+    const msg1 = `<<userRightsCheck>>: Provider: ${auth.provider ? auth.provider : 'Not'}; ${context.type} app.service('${context.path}').${context.method}()`;
+    const msg2 = `; isAuth: ${auth.isAuth ? auth.isAuth : 'Not'}; MyRole: ${auth.isAuth ? auth.myRole : 'Not'};`;
+    if (isDebug) debug(`${msg1}${auth.provider ? msg2 : ''}`);
     if (!auth.isAccess(isTest)) {
       throw new errors.Forbidden(`Access to the service method "${context.path}.${context.method}" is denied. Not enough rights`);
     }
@@ -43,13 +40,17 @@ const payloadExtension = function (isTest = false) {
     if (isDebug) debug(`<<payloadExtension>>: Provider: ${provider}; ${context.type} app.service('${context.path}').${context.method}()`);
     const _isTest = isTest ? true : !AuthServer.isTest();
     if (_isTest && context.params.user) {
+      let role = {};
       const roleId = context.params.user.roleId;
-      const role = await context.app.service('roles').get(roleId);
-      if (isLog) inspector('Role for authorized user:', role);
+      if (roleId) {
+        role = await context.app.service('roles').get(roleId);
+        if (isLog) inspector('Role for authorized user:', role);
+      }
+
       // make sure params.payload exists
       context.params.payload = context.params.payload || {};
       // merge in a `role` property
-      Object.assign(context.params.payload, {role: `${role.name}`});
+      Object.assign(context.params.payload, {role: `${role.name ? role.name : ''}`});
     }
   };
 };

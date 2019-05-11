@@ -5,12 +5,13 @@ import normalizeQuery from '~/services/hooks/normalize-query';
 const debug = require('debug')('app:service.teams');
 
 const isLog = false;
+// const isDebug = true;
 
 const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
 const servicePath = 'teams';
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model, Models}) {
+  instanceDefaults(data, {store, Model}) {
     const idField = store.state.teams.idField;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
@@ -21,30 +22,19 @@ const servicePlugin = service(servicePath, {
     return {
       name: '',
       memberIds: [],
-      get members() {
-        if (Array.isArray(data['memberIds']) && data['memberIds'].length) {
-          const query = {query: {[idField]: {$in: data['memberIds']}, $sort: {fullName: 1}}};
-          const users = Models.User.findInStore(query).data;
-          if (users.length) {
-            return users.map(user => {
-              return {
-                [idField]: user[idField],
-                isAdmin: user.isAdmin,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                fullName: user.fullName
-              };
-            });
-          } else {
-            return [];
-          }
-        } else {
-          return [];
-        }
-      }
     };
-  }
+  },
+  getters: {
+    getTeamsForUser: (state, getters) => (userId = null) => {
+      const idField = state.idField;
+      let teams = getters.find({query: {$sort: {name: 1}}}).data;
+      return teams.filter(team => {
+        return team.memberIds.indexOf(userId) !== -1;
+      }).map(team => {
+        return {[idField]: team[idField], name: team['name']};
+      });
+    },
+  },
 });
 
 feathersClient.service(servicePath)

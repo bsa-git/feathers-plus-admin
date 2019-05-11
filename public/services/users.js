@@ -1,4 +1,4 @@
-const loPick = require('lodash/pick');
+// const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import normalizeQuery from '~/services/hooks/normalize-query';
@@ -7,13 +7,14 @@ import log from '~/services/hooks/log';
 const debug = require('debug')('app:service.users');
 
 const isLog = false;
+// const isDebug = true;
 
 const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
 const servicePath = 'users';
 
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model, Models}) {
+  instanceDefaults(data, {store, Model}) {
     const idField = store.state.users.idField;
     const isAuth = store.getters.isAuth;
     if (isLog) debug('ServiceInfo:', {
@@ -30,33 +31,62 @@ const servicePlugin = service(servicePath, {
         return `${this.firstName} ${this.lastName}`;
       },
       roleId: null,
-      get role() {
+      get roleName() {
         if (this.roleId) {
-          let role = Models.Role.getFromStore(this.roleId);
-          // Fetch the Role record if we don't already have it
-          if (!role) {
-            if (isAuth) Models.Role.get(this.roleId);
-          }
-          return role ? loPick(role, [idField, 'name']) : null;
+          return isAuth ? store.getters.getMyRole : null;
         } else {
           return null;
         }
       },
       get isAdmin() {
-        return this.role ? store.getters.isAdmin : false;
+        return this.roleId ? store.getters.isAdmin : false;
       },
-      get teams() {
-        let teams = Models.Team.findInStore({query: {$sort: {name: 1}}}).data;
-        if (!teams.length) {
-          if (isAuth) Models.Team.find({query: {$sort: {name: 1}}});
+    };
+  },
+  getters: {
+    getMembersForTeam: (state, getters) => (memberIds = []) => {
+      if (Array.isArray(memberIds) && memberIds.length) {
+        const idField = state.idField;
+        const query = {query: {[idField]: {$in: memberIds}, $sort: {fullName: 1}}};
+        const users = getters.find(query).data;
+        if (users.length) {
+          return users.map(user => {
+            return {
+              [idField]: user[idField],
+              isAdmin: user.isAdmin,
+              roleName: user.roleName,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              fullName: user.fullName
+            };
+          });
+        } else {
           return [];
         }
-        return Array.isArray(teams) ? teams.filter(team => team.memberIds.indexOf(data[idField]) !== -1).map(team => {
-          return {[idField]: team[idField], name: team['name']};
-        }) : [];
+      }else {
+        return [];
       }
-    };
-  }
+    },
+    getUsersForRole: (state, getters) => (roleId = null) => {
+      const idField = state.idField;
+      const users = getters.find({query: {roleId: roleId, $sort: {fullName: 1}}}).data;
+      if (users.length) {
+        return users.map(user => {
+          return {
+            [idField]: user[idField],
+            isAdmin: user.isAdmin,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            fullName: user.fullName
+          };
+        });
+      } else {
+        return [];
+      }
+    },
+  },
 });
 
 feathersClient.service(servicePath)

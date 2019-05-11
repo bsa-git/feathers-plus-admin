@@ -10,8 +10,8 @@ const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
 const servicePath = 'roles';
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model, Models}) {
-    const idField = store.state.users.idField;
+  instanceDefaults(data, {store, Model}) {
+    const idField = store.state.roles.idField;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
       namespace: Model.namespace,
@@ -20,28 +20,22 @@ const servicePlugin = service(servicePath, {
     });
     return {
       name: '',
-      get users() {
-        if (data[idField]) {
-          const users = Models.User.findInStore({query: {roleId: data[idField], $sort: {fullName: 1}}}).data;
-          if (users.length) {
-            return users.map(user => {
-              return {
-                [idField]: user[idField],
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                fullName: user.fullName
-              };
-            });
-          } else {
-            return [];
-          }
-        } else {
-          return [];
-        }
-      },
     };
-  }
+  },
+  getters: {
+    getRoleForUser: (state, getters) => (roleId = null) => {
+      const idField = state.idField;
+      let role = getters.get(roleId);
+      if (role) {
+        return {
+          [idField]: role[idField],
+          name: role.name,
+        };
+      } else {
+        return null;
+      }
+    }
+  },
 });
 
 feathersClient.service(servicePath)

@@ -1,3 +1,9 @@
+// const debug = require('debug')('app:store.getters');
+//
+// const isLog = true;
+// const isDebug = true;
+
+
 const getters = {
 
   getConfig(state) {
@@ -22,7 +28,7 @@ const getters = {
 
   getMyRole(state) {
     const role = state.auth.payload ? state.auth.payload.role : '';
-    return role ? role : 'No';
+    return role ? role : '';
   },
 
   /**

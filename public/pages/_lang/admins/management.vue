@@ -30,10 +30,9 @@
           </template>
           <v-card>
             <v-card-text class="grey lighten-3">
-              <!--<v-treeview :items="getItems(item.panel)" activatable open-on-click></v-treeview>-->
-              <page-management-users v-if="item.panel === 'users'"></page-management-users>
-              <page-management-roles v-else-if="item.panel === 'roles'"></page-management-roles>
-              <page-management-teams v-else-if="item.panel === 'teams'"></page-management-teams>
+              <admins-management-users v-if="item.panel === 'users'"></admins-management-users>
+              <admins-management-roles v-else-if="item.panel === 'roles'"></admins-management-roles>
+              <admins-management-teams v-else-if="item.panel === 'teams'"></admins-management-teams>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -46,21 +45,16 @@
   import {mapGetters} from 'vuex'
   import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
-  import PageManagementUsers from '~/components/service-admins-management/users';
-  import PageManagementRoles from '~/components/service-admins-management/roles';
-  import PageManagementTeams from '~/components/service-admins-management/teams';
-
-  const debug = require('debug')('app:page.accounts');
-
-  const isLog = true;
+  import AdminsManagementUsers from '~/components/admins/management/users';
+  import AdminsManagementRoles from '~/components/admins/management/roles';
+  import AdminsManagementTeams from '~/components/admins/management/teams';
 
   export default {
-    name: 'management',
     components: {
       AppPageHeader,
-      PageManagementUsers,
-      PageManagementRoles,
-      PageManagementTeams
+      AdminsManagementUsers,
+      AdminsManagementRoles,
+      AdminsManagementTeams
     },
     data() {
       return {
@@ -101,27 +95,6 @@
       ...mapGetters({
         config: 'getConfig',
       }),
-      users() {
-        const data = [];
-        const idField = this.$store.state.users.idField;
-        const {User} = this.$FeathersVuex;
-        const users = User.findInStore({query: {}}).data;
-        if (isLog) debug('Users from store:', users);
-      },
-      roles() {
-        const data = [];
-        const idField = this.$store.state.roles.idField;
-        const {Role} = this.$FeathersVuex;
-        const roles = Role.findInStore({query: {}}).data;
-        if (isLog) debug('Roles from store:', roles);
-      },
-      teams() {
-        const data = [];
-        const idField = this.$store.state.teams.idField;
-        const {Team} = this.$FeathersVuex;
-        const teams = Team.findInStore({query: {}}).data;
-        if (isLog) debug('Teams from store:', teams);
-      }
     },
     methods: {
       // Open the panels
