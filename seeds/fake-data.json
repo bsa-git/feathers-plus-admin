@@ -1,12 +1,13 @@
 {
   "users": [
     {
-      "_id": "5c66723fa819c80b804de64f",
-      "email": "Dorcas.Aufderhar@gmail.com",
-      "password": "Dorcas.Aufderhar",
-      "firstName": "Thea",
-      "lastName": "Ferry",
-      "roleId": "5c66723fa819c80b804de653",
+      "_id": "5cee1f0939fb561390d665af",
+      "email": "Dewayne.Kuhlman84@yahoo.com",
+      "password": "Dewayne.Kuhlman84",
+      "firstName": "Cheyanne",
+      "lastName": "Hegmann",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/alterchuca/128.jpg",
+      "roleId": "5cee1f0939fb561390d665b2",
       "googleId": "4943272568946688",
       "githubId": "5339869586915328",
       "googleAccessToken": "84838145-2e9a-5e12-9241-8bfb5af807c8",
@@ -15,12 +16,13 @@
       "githubRefreshToken": "e122d4cf-55fc-5d0f-9b48-b009230a426a"
     },
     {
-      "_id": "5c66723fa819c80b804de650",
-      "email": "Mattie42@hotmail.com",
-      "password": "Mattie42",
-      "firstName": "Darby",
-      "lastName": "Hills",
-      "roleId": "5c66723fa819c80b804de652",
+      "_id": "5cee1f0939fb561390d665b0",
+      "email": "Luciano_Mitchell@gmail.com",
+      "password": "Luciano_Mitchell",
+      "firstName": "Jade",
+      "lastName": "Mante",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/itsajimithing/128.jpg",
+      "roleId": "5cee1f0939fb561390d665b2",
       "googleId": "352972223545344",
       "githubId": "3978578282676224",
       "googleAccessToken": "0bfe2b6f-19bd-5448-89b9-b9efa58c568e",
@@ -29,12 +31,13 @@
       "githubRefreshToken": "cbeb4f43-a505-51d9-b109-7362bb9f6208"
     },
     {
-      "_id": "5c66723fa819c80b804de651",
-      "email": "Damien40@gmail.com",
-      "password": "Damien40",
-      "firstName": "Christop",
-      "lastName": "Wunsch",
-      "roleId": "5c66723fa819c80b804de653",
+      "_id": "5cee1f0939fb561390d665b1",
+      "email": "August.Labadie@hotmail.com",
+      "password": "August.Labadie",
+      "firstName": "Cornelius",
+      "lastName": "Labadie",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/wegotvices/128.jpg",
+      "roleId": "5cee1f0939fb561390d665b3",
       "googleId": "1346110658445312",
       "githubId": "8148342487908352",
       "googleAccessToken": "ac34cb78-714c-5ab0-b16a-f0a8da7f066c",
@@ -45,35 +48,57 @@
   ],
   "roles": [
     {
-      "_id": "5c66723fa819c80b804de652",
-      "name": "Global Configuration Officer"
+      "_id": "5cee1f0939fb561390d665b2",
+      "name": "Administrator",
+      "description": "Administrator is a role with maximum rights"
     },
     {
-      "_id": "5c66723fa819c80b804de653",
-      "name": "Administrator"
+      "_id": "5cee1f0939fb561390d665b3",
+      "name": "Guest",
+      "description": "Guest is a role with minimal rights"
     }
   ],
   "teams": [
     {
-      "_id": "5c66723fa819c80b804de654",
-      "name": "quos dicta aut",
+      "_id": "5cee1f0939fb561390d665b4",
+      "name": "Refined Plastic Shirt",
+      "description": "They are to pay what has been said and accepted that either in the as possible",
       "memberIds": [
-        "5c66723fa819c80b804de651"
+        "5cee1f0939fb561390d665b1"
       ]
     },
     {
-      "_id": "5c66723fa819c80b804de655",
-      "name": "tempora quia ut",
+      "_id": "5cee1f0939fb561390d665b5",
+      "name": "Sleek Concrete Chicken",
+      "description": "The wise denouncing it as a whole",
       "memberIds": [
-        "5c66723fa819c80b804de64f"
+        "5cee1f0939fb561390d665af"
       ]
     },
     {
-      "_id": "5c66723fa819c80b804de656",
-      "name": "quam recusandae voluptas",
+      "_id": "5cee1f0939fb561390d665b6",
+      "name": "Ergonomic Wooden Salad",
+      "description": "However small, but the agony of the truth",
       "memberIds": [
-        "5c66723fa819c80b804de651"
+        "5cee1f0939fb561390d665af"
       ]
+    }
+  ],
+  "userTeams": [
+    {
+      "_id": "5cee1f0939fb561390d665b7",
+      "teamId": "5cee1f0939fb561390d665b4",
+      "userId": "5cee1f0939fb561390d665b1"
+    },
+    {
+      "_id": "5cee1f0939fb561390d665b8",
+      "teamId": "5cee1f0939fb561390d665b5",
+      "userId": "5cee1f0939fb561390d665af"
+    },
+    {
+      "_id": "5cee1f0939fb561390d665b9",
+      "teamId": "5cee1f0939fb561390d665b6",
+      "userId": "5cee1f0939fb561390d665af"
     }
   ]
 }

@@ -7,8 +7,6 @@ const { hashPassword, protect } = require('@feathersjs/authentication-local').ho
 // eslint-disable-next-line no-unused-vars
 const accountsProfileData = require('./hooks/accounts-profile-data');
 // eslint-disable-next-line no-unused-vars
-const verifyEmail = require('./hooks/verify-email');
-// eslint-disable-next-line no-unused-vars
 const usersPopulate = require('./users.populate');
 // !code: imports
 //---------------
@@ -76,10 +74,10 @@ let moduleExports = {
 // !code: exports
 //---------------
 // Add hooks
-moduleExports.before.create = loConcat([accountsProfileData(), verifyEmail(), validateCreate()], moduleExports.before.create);
+moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create);
 // moduleExports.before.create = loConcat([accountsProfileData(), verifyEmail()], moduleExports.before.create);
-moduleExports.before.update = loConcat([accountsProfileData(), verifyEmail(), validateUpdate()], moduleExports.before.update);
-moduleExports.before.patch = loConcat([accountsProfileData(), verifyEmail(), validatePatch()], moduleExports.before.patch);
+moduleExports.before.update = loConcat([accountsProfileData(), validateUpdate()], moduleExports.before.update);
+moduleExports.before.patch = loConcat([accountsProfileData(), validatePatch()], moduleExports.before.patch);
 //---------------
 // !end
 module.exports = moduleExports;

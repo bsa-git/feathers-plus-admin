@@ -19,7 +19,9 @@ let base = merge({},
     description: "Roles database.",
     fakeRecords: 2,
     required: [],
-    uniqueItemProperties: [],
+    uniqueItemProperties: [
+      "name"
+    ],
     properties: {
       id: {
         type: ID
@@ -29,6 +31,10 @@ let base = merge({},
       },
       name: {
         faker: "name.title",
+        type: "string"
+      },
+      description: {
+        faker: "lorem.sentence",
         type: "string"
       }
     }

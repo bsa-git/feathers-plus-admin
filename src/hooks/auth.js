@@ -2,7 +2,7 @@ const errors = require('@feathersjs/errors');
 const {inspector} = require('../plugins/lib');
 const {AuthServer} = require('../plugins/auth');
 
-const debug = require('debug')('app:auth.hook');
+const debug = require('debug')('app:auth.all.hook');
 
 const isLog = false;
 const isDebug = false;

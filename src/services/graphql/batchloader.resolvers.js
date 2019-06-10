@@ -23,6 +23,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // !<DEFAULT> code: services
   let roles = app.service('/roles');
   let teams = app.service('/teams');
+  let userTeams = app.service('/user-teams');
   let users = app.service('/users');
   // !end
 
@@ -154,6 +155,9 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // !end
     },
 
+    UserTeam: {
+    },
+
     User: {
 
       // fullName: String!
@@ -200,6 +204,20 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       findTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-UserTeam
+      // getUserTeam(query: JSON, params: JSON, key: JSON): UserTeam
+      getUserTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return userTeams.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findUserTeam(query: JSON, params: JSON): [UserTeam!]
+      findUserTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   teamId: 1,   userId: 1 } } });
+        return userTeams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 

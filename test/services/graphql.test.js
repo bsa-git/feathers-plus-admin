@@ -2,6 +2,7 @@ const assert = require('assert');
 const {readJsonFileSync, inspector, appRoot} = require('../../src/plugins/lib');
 const app = require(`${appRoot}/src/app`);
 const {seedService, graphqlQuery, graphqlExpected} = require(`${appRoot}/src/plugins/test-helpers`);
+const debug = require('debug')('app:graphql.test');
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
@@ -45,6 +46,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
             delete result['__v'];
             assert.deepEqual(result, fake);
           });
+        } else {
+          debug('seedService.results:', results);
+          assert.ok(false);
         }
       });
 
@@ -66,6 +70,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
             delete result['__v'];
             assert.deepEqual(result, fake);
           });
+        } else {
+          debug('seedService.results:', results);
+          assert.ok(false);
         }
       });
 
@@ -85,6 +92,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
             delete result['__v'];
             assert.deepEqual(result, fake);
           });
+        } else {
+          debug('seedService.results:', results);
+          assert.ok(false);
         }
       });
     }

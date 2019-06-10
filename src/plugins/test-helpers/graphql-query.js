@@ -1,56 +1,59 @@
 
 const {readJsonFileSync, appRoot} = require('../lib');
 
-const idName = '_id';
-
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
-const userKey = fakeData['users'][0][idName];
-const roleKey = fakeData['roles'][0][idName];
-const teamKey = fakeData['teams'][0][idName];
+
+const idFieldUser = 'id' in fakeData['users'][0] ? 'id' : '_id';
+const idFieldRole = 'id' in fakeData['roles'][0] ? 'id' : '_id';
+const idFieldTeam = 'id' in fakeData['teams'][0] ? 'id' : '_id';
+
+const userId = fakeData['users'][0][idFieldUser];
+const roleId = fakeData['roles'][0][idFieldRole];
+const teamId = fakeData['teams'][0][idFieldTeam];
 
 const getUser = `{
-  getUser(key: "${userKey}") {
-    ${idName}
+  getUser(key: "${userId}") {
+    ${idFieldUser}
     email
     firstName
     lastName
     fullName
     role{
-      ${idName}
+      ${idFieldRole}
       name
     }
     teams{
-      ${idName}
+      ${idFieldTeam}
       name
     }
   }
 }`;
 
 const findUser = `{
-  findUser(query: {${idName}: "${userKey}"}) {
-    ${idName}
+  findUser(query: {${idFieldUser}: "${userId}"}) {
+    ${idFieldUser}
     email
     firstName
     lastName
     fullName
     role{
-      ${idName}
+      ${idFieldRole}
       name
     }
     teams{
-      ${idName}
+      ${idFieldTeam}
       name
     }
   }
 }`;
 
 const getRole = `{
-  getRole(key: "${roleKey}") {
-    ${idName}
+  getRole(key: "${roleId}") {
+    ${idFieldRole}
     name
     users{
-      ${idName}
+      ${idFieldUser}
       email
       fullName
     }
@@ -58,11 +61,11 @@ const getRole = `{
 }`;
 
 const findRole = `{
-  findRole(query: {${idName}: "${roleKey}"}) {
-    ${idName}
+  findRole(query: {${idFieldRole}: "${roleId}"}) {
+    ${idFieldRole}
     name
     users{
-      ${idName}
+      ${idFieldUser}
       email
       fullName
     }
@@ -70,11 +73,11 @@ const findRole = `{
 }`;
 
 const getTeam = `{
-  getTeam(key: "${teamKey}") {
-    ${idName}
+  getTeam(key: "${teamId}") {
+    ${idFieldTeam}
     name
     members{
-      ${idName}
+      ${idFieldUser}
       email
       fullName
     }
@@ -82,11 +85,11 @@ const getTeam = `{
 }`;
 
 const findTeam = `{
-  findTeam(query: {${idName}: "${teamKey}"}) {
-    ${idName}
+  findTeam(query: {${idFieldTeam}: "${teamId}"}) {
+    ${idFieldTeam}
     name
     members{
-      ${idName}
+      ${idFieldUser}
       email
       fullName
     }

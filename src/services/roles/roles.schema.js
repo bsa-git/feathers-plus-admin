@@ -25,7 +25,11 @@ let schema = {
   ],
   // Fields with unique values.
   uniqueItemProperties: [
-    // !code: schema_unique // !end
+    // !code: schema_unique
+    //-----------------------
+    'name'
+    //-----------------------
+    // !end
   ],
 
   // Fields in the model.
@@ -34,7 +38,8 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     _id: {type: 'ID'},
-    name: {faker: 'name.title'}
+    name: {faker: 'name.title'},
+    description: {faker: 'lorem.sentence'}
     //-------------------------
     // !end
   },

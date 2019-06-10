@@ -1,4 +1,4 @@
-const {readJsonFileSync, stripSpecific, appRoot} = require('../lib');
+const {readJsonFileSync, stripSpecific, isTrue, appRoot} = require('../lib');
 
 const debug = require('debug')('app:plugins.auth-server.class');
 
@@ -14,7 +14,8 @@ class AuthServer {
     this.isAuth = !!context.params.authenticated;
     this.myRole = context.params.payload ? context.params.payload.role : '';
     this.provider = context.params.provider ? context.params.provider : '';
-    this.isAdmin = this.myRole === AuthServer.getRoles()['isAdmin'];
+    this.isAdmin = this.myRole === AuthServer.getRoles('isAdmin');
+    this.isCheckAuth = isTrue(process.env.CHECK_AUTH);
 
     if (isDebug) debug(`Start AuthServer constructor. <<isAuth>>:${this.isAuth}; <<myRole>>:${this.myRole}; <<isAdmin>>:${this.isAdmin};`);
   }
@@ -25,6 +26,9 @@ class AuthServer {
    * @return Boolean
    */
   isAccess(isTest = false) {
+
+    if (!this.isCheckAuth) return true;
+
     const publicServices = AuthServer.listServices(process.env.PUBLIC_SERVICES);
     const adminServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
     const isPublicAccess = !!publicServices[this.context.path] && publicServices[this.context.path].includes(this.context.method);
@@ -57,10 +61,11 @@ class AuthServer {
 
   /**
    * Get roles
-   * exx. { isAdmin: 'Administrator', isGlobalConfiguration: 'Global Configuration Officer' }
+   * exx. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * @param isRole
    * @return {Object}
    */
-  static getRoles() {
+  static getRoles(isRole = '') {
     const _roles = {};
     const envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
       const items = role.trim().split(':').map(item => item.trim());
@@ -69,7 +74,7 @@ class AuthServer {
     envRoles.forEach(role => {
       Object.assign(_roles, role);
     });
-    return _roles;
+    return isRole ? _roles[isRole] : _roles;
   }
 
   /**

@@ -34,6 +34,9 @@ let moduleExports = merge({},
     lastName: {
       type: DataTypes.STRING
     },
+    avatar: {
+      type: DataTypes.TEXT
+    },
     roleId: {
       type: DataTypes.INTEGER
     },

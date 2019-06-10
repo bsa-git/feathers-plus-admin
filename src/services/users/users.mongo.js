@@ -39,6 +39,10 @@ let moduleExports = merge({},
         faker: "name.lastName",
         bsonType: "string"
       },
+      avatar: {
+        faker: "internet.avatar",
+        bsonType: "string"
+      },
       roleId: {
         faker: {
           fk: "roles:random"

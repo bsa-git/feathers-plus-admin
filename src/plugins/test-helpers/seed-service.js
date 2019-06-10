@@ -3,6 +3,7 @@ const {readJsonFileSync, inspector} = require('../lib');
 const config = require('../../../config/default.json');
 const chalk = require('chalk');
 
+const isDebug = false;
 const isLog = false;
 
 // Determine if environment allows test to mutate existing DB data.
@@ -39,7 +40,7 @@ module.exports = async function (app, aServiceName, aAddFakeData = true) {
             const service = app.service(path);
             const deleted = await service.remove(null);
             if(aAddFakeData) result = await service.create(fakeData[name]);
-            console.log(chalk.green(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`));
+            if(isDebug) console.log(chalk.green(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`));
             if (isLog) inspector(`Seeded '${name}' service for fakeData:`, result);
             return aAddFakeData? result : deleted;
           } catch (err) {

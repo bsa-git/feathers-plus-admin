@@ -100,6 +100,7 @@ const twoLevelsFields = {
     password: 1,
     firstName: 1,
     lastName: 1,
+    avatar: 1,
     roleId: 1,
     googleId: 1,
     githubId: 1,
@@ -115,6 +116,7 @@ const twoLevelsFields = {
       id: 1,
       _id: 1,
       name: 1,
+      description: 1,
       users: {},
     },
     teams: {
@@ -122,6 +124,7 @@ const twoLevelsFields = {
       id: 1,
       _id: 1,
       name: 1,
+      description: 1,
       memberIds: 1,
       members: {},
     },

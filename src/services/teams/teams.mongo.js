@@ -17,7 +17,11 @@ let moduleExports = merge({},
       name: {
         minLength: 2,
         maxLength: 30,
-        faker: "lorem.words",
+        faker: "commerce.productName",
+        bsonType: "string"
+      },
+      description: {
+        faker: "lorem.sentence",
         bsonType: "string"
       },
       memberIds: {

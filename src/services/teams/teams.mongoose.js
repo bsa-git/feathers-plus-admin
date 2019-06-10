@@ -13,8 +13,10 @@ let moduleExports = merge({},
     name: {
       type: String,
       minLength: 2,
-      maxLength: 30
+      maxLength: 30,
+      unique: true
     },
+    description: String,
     memberIds: [
       {
         type: mongoose.Schema.Types.ObjectId

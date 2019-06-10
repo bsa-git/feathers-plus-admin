@@ -19,7 +19,9 @@ let base = merge({},
     description: "Teams database.",
     fakeRecords: 3,
     required: [],
-    uniqueItemProperties: [],
+    uniqueItemProperties: [
+      "name"
+    ],
     properties: {
       id: {
         type: ID
@@ -30,7 +32,11 @@ let base = merge({},
       name: {
         minLength: 2,
         maxLength: 30,
-        faker: "lorem.words",
+        faker: "commerce.productName",
+        type: "string"
+      },
+      description: {
+        faker: "lorem.sentence",
         type: "string"
       },
       memberIds: {

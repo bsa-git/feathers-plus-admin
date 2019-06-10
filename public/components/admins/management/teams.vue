@@ -1,240 +1,487 @@
 <template>
   <div>
+    <!-- Confirm Dialog -->
+    <v-dialog v-model="confirmDialog" persistent max-width="320">
+      <v-card>
+        <v-card-title class="headline">{{ $t('management.confirm_delete_title') }}?</v-card-title>
+        <v-card-text>
+          {{ $t('management.confirm_delete_description') }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="confirmDialog = false">{{ $t('management.disagree') }}</v-btn>
+          <v-btn color="primary" flat @click="deleteItem">{{ $t('management.agree') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Users for team dialog -->
+    <v-dialog v-model="teamUsersDialog" scrollable max-width="400px">
+      <v-card>
+        <v-card-title>
+          <v-icon class="mr-3">people</v-icon>
+          <span>{{ selItem.teamName }}</span>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 300px;">
+          <v-list three-line>
+            <template v-for="(member, index) in selItem.members">
+              <v-list-tile
+                :key="member.id"
+                avatar
+                @click=""
+              >
+                <v-list-tile-avatar>
+                  <img :src="member.avatar">
+                </v-list-tile-avatar>
+
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="member.fullName"></v-list-tile-title>
+                  <v-list-tile-sub-title
+                    v-html="`<span class='font-italic'>Email:</span> ${member.email}`"></v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <!--<v-divider v-if="index < selItem.members.length - 1"></v-divider>-->
+            </template>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat @click="teamUsersDialog = false">{{ $t('management.close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Toolbar for table -->
     <v-toolbar flat color="white">
-      <v-toolbar-title>My CRUD</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        :label="$t('management.search')"
+        single-line
+        hide-details
+      ></v-text-field>
       <v-spacer></v-spacer>
-      <v-dialog v-model="dialog" max-width="500px">
+      <!-- Save Dialog -->
+      <v-dialog v-model="dialog" max-width="620">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+          <v-btn color="primary" dark class="mb-2" v-on="on">{{ $t('management.new_item') }}</v-btn>
         </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
+        <v-card class="elevation-1 pa-3">
+          <v-form @submit.prevent="onSubmit">
+            <v-card-text>
+              <div class="layout column align-center">
+                <!--<v-icon size="120">people</v-icon>-->
+                <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
+              </div>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-text-field
+                      :counter="60"
+                      v-validate="'required|max:60'"
+                      :error-messages="errors.collect('teamName')"
+                      data-vv-name="teamName"
+                      v-model="editedItem.teamName"
+                      :label="$t('management.teamName')"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-textarea
+                      v-model="editedItem.description"
+                      :value="editedItem.description"
+                      :label="$t('management.formDescription')"
+                    ></v-textarea>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-autocomplete
+                      v-model="editedItem.userIds"
+                      :items="users"
+                      box
+                      chips
+                      :label="$t('management.selectUsers')"
+                      item-text="fullName"
+                      item-value="id"
+                      multiple
+                    >
+                      <template v-slot:selection="data">
+                        <v-chip
+                          :selected="data.selected"
+                          close
+                          class="chip--select-multi"
+                          @input="deleteItemFromSelection(data.item)"
+                        >
+                          <v-avatar>
+                            <img :src="data.item.avatar">
+                          </v-avatar>
+                          {{ data.item.fullName }}
+                        </v-chip>
+                      </template>
+                    </v-autocomplete>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn block color="primary" type="submit" :loading="loadingSubmit">
+                {{ $t('management.save') }}
+              </v-btn>
+              <v-btn block @click="close">
+                {{ $t('management.cancel') }}
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-toolbar>
+    <!-- Data Table -->
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="teams"
+      :search="search"
       class="elevation-1"
     >
       <template v-slot:items="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td>{{ props.item.id }}</td>
+        <td>{{ props.item.teamName }}</td>
+        <td>{{ props.item.description }}</td>
+        <td>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" flat icon v-if="props.item.userNames === ''">
+                <v-icon>code</v-icon>
+              </v-btn>
+              <v-btn v-on="on" flat icon v-else>
+                <v-icon @click="clickItem(props.item)">settings_ethernet</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ props.item.userNames === '' ? '[ ]' : props.item.userNames}}</span>
+          </v-tooltip>
+        </td>
         <td class="justify-center layout px-0">
           <v-icon
             small
             class="mr-2"
-            @click="editItem(props.item)"
+            @click="clickEditItem(props.item)"
           >
             edit
           </v-icon>
           <v-icon
             small
-            @click="deleteItem(props.item)"
+            @click="clickDeleteItem(props.item)"
           >
             delete
           </v-icon>
         </td>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <span color="primary" class="headline">{{ $t('management.noData') }}</span>
+      </template>
+      <template v-slot:no-results>
+        <v-alert :value="true" color="error" icon="warning">
+          {{ $t('management.searchNoResults') }}
+        </v-alert>
       </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
+  import {mapGetters, mapMutations} from 'vuex'
+
+  const errors = require('@feathersjs/errors');
+  const debug = require('debug')('app:comp.admins-management-roles');
+
+  const isLog = false;
+  const isDebug = false;
+
   export default {
+    $_veeValidate: {
+      validator: 'new'
+    },
     data: () => ({
+      search: '',
       dialog: false,
+      confirmDialog: false,
+      teamUsersDialog: false,
+      loadingSubmit: false,
+      error: undefined,
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'ID',
           align: 'left',
+          value: 'id',
           sortable: false,
-          value: 'name'
         },
-        {text: 'Calories', value: 'calories'},
-        {text: 'Fat (g)', value: 'fat'},
-        {text: 'Carbs (g)', value: 'carbs'},
-        {text: 'Protein (g)', value: 'protein'},
-        {text: 'Actions', value: 'name', sortable: false}
+        {
+          text: 'Team Name',
+          align: 'left',
+          value: 'teamName'
+        },
+        {
+          text: 'Description',
+          align: 'left',
+          value: 'description',
+          sortable: false,
+        },
+        {
+          text: 'Users',
+          align: 'left',
+          value: 'userNames',
+          sortable: false,
+        },
+        {
+          text: 'Actions',
+          value: 'name',
+          sortable: false
+        }
       ],
-      desserts: [],
       editedIndex: -1,
+      idItem: null,
+      selItem: {users: []},
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        teamName: '',
+        description: '',
+        userIds: [],
+        userNames: '',
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        teamName: '',
+        description: '',
+        userIds: [],
+        userNames: '',
       }
     }),
-
+    created: function () {
+    },
     computed: {
       formTitle() {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      }
+        return this.editedIndex === -1 ? this.$t('management.new_item') : this.$t('management.edit_item')
+      },
+      isNewItem() {
+        return this.editedIndex === -1
+      },
+      ...mapGetters({
+        user: 'getUser',
+      }),
+      users() {
+        const data = [];
+        const idFieldUser = this.$store.state.users.idField;
+        const {User} = this.$FeathersVuex;
+        const users = User.findInStore({query: {$sort: {fullName: 1}}}).data;
+        users.forEach(user => {
+          const userId = user[idFieldUser];
+          // Get user
+          let item = {
+            id: userId,
+            fullName: user.fullName,
+            email: user.email,
+            avatar: user.avatar,
+            roleId: user.roleId ? user.roleId : '',
+            roleName: user.role ? user.role.name : '',
+          };
+          data.push(item);
+        });
+        if (isLog) debug('users.data:', data);
+        return data
+      },
+      teams() {
+        const data = [];
+        const idFieldTeam = this.$store.state.teams.idField;
+        const {Team} = this.$FeathersVuex;
+        const teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
+        teams.forEach(team => {
+          const teamId = team[idFieldTeam];
+          // Get team
+          let item = {
+            id: teamId,
+            teamName: team.name,
+            description: team.description,
+            members: team.members,
+            userIds: team.members.map(member => member.id),
+            userNames: team.members.map(member => member.fullName).join(', ')
+          };
+          data.push(item);
+        });
+        if (isLog) debug('teams.data:', data);
+        return data
+      },
     },
 
     watch: {
       dialog(val) {
-        val || this.close()
+        if (val) {
+          this.$validator.reset();
+          this.dismissError();
+        }
       }
     },
-
-    created() {
-      this.initialize()
-    },
-
     methods: {
-      initialize() {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7
-          }
-        ]
+
+      isYouSelf(userId) {
+        const idField = this.$store.state.users.idField;
+        return userId === this.user[idField];
       },
 
-      editItem(item) {
-        this.editedIndex = this.desserts.indexOf(item);
-        this.editedItem = Object.assign({}, item);
+      clickEditItem(item) {
+        this.editedIndex = this.teams.indexOf(item);
+        const team = this.getTeam(item.id);
+        this.editedItem = Object.assign({}, team);
         this.dialog = true;
       },
 
-      deleteItem(item) {
-        const index = this.desserts.indexOf(item);
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      clickDeleteItem(item) {
+        this.idItem = item.id;
+        this.confirmDialog = true;
+      },
+
+      clickItem(item) {
+        this.selItem = item;
+        this.teamUsersDialog = true;
+      },
+
+      deleteItemFromSelection(item) {
+        const index = this.editedItem.userIds.indexOf(item.id);
+        if (index >= 0) this.editedItem.userIds.splice(index, 1)
       },
 
       close() {
         this.dialog = false;
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1
-        }, 300)
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+        this.$validator.reset();
+        this.dismissError();
       },
 
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
+      dismissError() {
+        this.error = undefined;
+      },
+
+      getTeam(id) {
+        const idFieldTeam = this.$store.state.teams.idField;
+        const {Team} = this.$FeathersVuex;
+        const team = Team.getFromStore(id);
+        const teamId = team[idFieldTeam];
+        // Get role
+        let item = {
+          id: teamId,
+          teamName: team.name,
+          description: team.description,
+          userIds: team.members.map(member => member.id),
+          userNames: team.members.map(member => member.fullName).join(', ')
+        };
+        if (isLog) debug('getTeam.item:', item);
+        return item
+      },
+
+      async onSubmit() {
+        try {
+          this.dismissError();
+          await this.$validator.validateAll();
+          if (this.$validator.errors.any()) {
+            this.showError('Validation Error!');
+          } else {
+            this.loadingSubmit = true;
+            if (isLog) debug('formData:', this.editedItem);
+            const saveResponse = await this.save(this.editedItem);
+            if (saveResponse) {
+              if (isLog) debug('save().response:', saveResponse);
+              const idFieldTeam = this.$store.state.teams.idField;
+              const teamId = saveResponse[idFieldTeam];
+              const updatedUserIds = await this.updateUserIds(teamId, this.editedItem.userIds);
+              if (isLog) debug('updatedUserIds:', updatedUserIds);
+              this.showSuccess(`${this.$t('management.success')}!`);
+              setTimeout(() => {
+                this.loadingSubmit = false;
+                this.close();
+              }, 1000);
+            }
+          }
+        } catch (error) {
+          if (isLog) debug('onSubmit.error:', error);
         }
-        this.close()
-      }
+      },
+
+      async save(data) {
+        try {
+          let team;
+          const idField = this.$store.state.teams.idField;
+          const {Team} = this.$FeathersVuex;
+          if (this.isNewItem) {
+            team = new Team({
+              name: data.teamName,
+              description: data.description
+            });
+          } else {
+            team = new Team({
+              [idField]: data.id,
+              name: data.teamName,
+              description: data.description
+            });
+          }
+          return await team.save();
+        } catch (error) {
+          if (isLog) debug('team.save.error:', error);
+          this.loadingSubmit = false;
+          this.showError(error.message);
+        }
+      },
+
+      async updateUserIds(teamId, userIds = []) {
+        try {
+          if (isDebug) debug('updateUserIds.teamId:', teamId, 'userIds:', userIds);
+          let omitUserIds = [];
+          const updatedUserIds = {added: [], removed: []};
+          const idFieldUserTeams = this.$store.state['user-teams'].idField;
+          const {UserTeam} = this.$FeathersVuex;
+          // Users excluded from the team
+          const userTeams = UserTeam.findInStore({query: {teamId: teamId}}).data;
+          userTeams.forEach(async userTeam => {
+            const userId = userTeam[userId];
+            const isUserId = userIds.indexOf(userId) >= 0;
+            if (isUserId) {
+              omitUserIds.push(userId);
+            } else {
+              const userTeamId = userTeam[idFieldUserTeams];
+              userTeam = new UserTeam({[idFieldUserTeams]: userTeamId});
+              const removeResponse = await userTeam.remove();
+              updatedUserIds.removed.push(removeResponse);
+            }
+          });
+          if (isLog) debug('updateUserIds.removed', updatedUserIds.removed);
+          // Users added to the team
+          const filterUserIds = userIds.filter(userId => omitUserIds.indexOf(userId) < 0);
+          filterUserIds.forEach(async userId => {
+            const userTeam = new UserTeam({teamId: teamId, userId: userId});
+            const saveResponse = await userTeam.save();
+            updatedUserIds.added.push(saveResponse);
+          });
+          if (isLog) debug('updateUserIds.added', updatedUserIds.added);
+          return updatedUserIds;
+        } catch (error) {
+          if (isLog) debug('updateUserIds.error:', error);
+          this.showError(error.message);
+        }
+      },
+
+      async deleteItem() {
+        try {
+          this.confirmDialog = false;
+          const {Team} = this.$FeathersVuex;
+          const idField = this.$store.state.teams.idField;
+          const team = new Team({[idField]: this.idItem});
+          await team.remove();
+          this.showSuccess(`${this.$t('management.success')}!`);
+          this.idItem = null;
+        } catch (error) {
+          if (isLog) debug('deleteItem.error:', error);
+          this.showError(error.message);
+        }
+      },
+      ...mapMutations({
+        showSuccess: 'SHOW_SUCCESS',
+        showError: 'SHOW_ERROR',
+      }),
     }
   }
 </script>

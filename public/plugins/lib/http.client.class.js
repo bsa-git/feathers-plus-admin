@@ -1,9 +1,10 @@
-'use strict';
-
 import useragent from 'express-useragent';
 import LocationHelper from './location-helper.class';
+// import util from './util';
 import axios from 'axios';
-// const debug = require('debug')('app:plugin.HttpBox');
+const debug = require('debug')('app:plugin.HttpBox');
+
+const isDebug = true;
 
 /**
  * HttpBox class
@@ -145,6 +146,28 @@ class HttpBox extends LocationHelper {
     } else {
       return null;
     }
+  }
+
+  /**
+   * urlEncode
+   * made js equivalent to phpencode()
+   * exx. var myOtherUrl = "http://example.com/index.html?url=" + urlEncode(myUrl);
+   *
+   * @param str
+   * @return {string}
+   */
+  static urlEncode(str) {
+    str = (str + '').toString();
+
+    // Tilde should be allowed unescaped in future versions of PHP (as reflected below), but if you want to reflect current
+    // PHP behavior, you would need to add ".replace(/~/g, '%7E');" to the following.
+    return encodeURIComponent(str)
+      .replace(/!/g, '%21')
+      .replace(/'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/\*/g, '%2A')
+      .replace(/%20/g, '+');
   }
 
   /**

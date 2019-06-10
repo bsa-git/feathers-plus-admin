@@ -51,19 +51,23 @@
       "isAuthEntity": false,
       "requiresAuth": true,
       "graphql": true
+    },
+    "userTeams": {
+      "name": "userTeams",
+      "nameSingular": "userTeam",
+      "subFolder": "",
+      "fileName": "user-teams",
+      "adapter": "mongoose",
+      "path": "/user-teams",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
     }
   },
   "hooks": {
-    "verify-email": {
-      "fileName": "verify-email",
-      "camelName": "verifyEmail",
-      "ifMulti": "n",
-      "multiServices": [],
-      "singleService": "users"
-    },
-    "normalize-query": {
-      "fileName": "normalize-query",
-      "camelName": "normalizeQuery",
+    "normalize": {
+      "fileName": "normalize",
+      "camelName": "normalize",
       "ifMulti": "y",
       "multiServices": [
         "*app"
@@ -89,6 +93,15 @@
     "my-log": {
       "fileName": "my-log",
       "camelName": "myLog",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
+    },
+    "constraints": {
+      "fileName": "constraints",
+      "camelName": "constraints",
       "ifMulti": "y",
       "multiServices": [
         "*app"

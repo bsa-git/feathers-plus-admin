@@ -1,7 +1,7 @@
-// const loPick = require('lodash/pick');
+const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
-import normalizeQuery from '~/services/hooks/normalize-query';
+import normalize from '~/services/hooks/normalize';
 import log from '~/services/hooks/log';
 
 const debug = require('debug')('app:service.users');
@@ -14,9 +14,8 @@ const {service} = feathersVuex(feathersClient, {idField: '_id'});
 const servicePath = 'users';
 
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model}) {
+  instanceDefaults(data, {store, Model, Models}) {
     const idField = store.state.users.idField;
-    const isAuth = store.getters.isAuth;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
       namespace: Model.namespace,
@@ -27,66 +26,61 @@ const servicePlugin = service(servicePath, {
       email: '',
       firstName: '',
       lastName: '',
+      avatar: '',
       get fullName() {
         return `${this.firstName} ${this.lastName}`;
       },
       roleId: null,
-      get roleName() {
+      get role() {
         if (this.roleId) {
-          return isAuth ? store.getters.getMyRole : null;
+          const idFieldRole = store.state.roles.idField;
+          let role = Models.Role.getFromStore(this.roleId);
+          if (role) {
+            const id = role[idFieldRole];
+            role = loPick(role, ['name', 'description']);
+            role.id = id;
+            role.isAdmin = store.getters.isAdmin;
+          } else {
+            role = null;
+          }
+          return role;
         } else {
           return null;
         }
       },
-      get isAdmin() {
-        return this.roleId ? store.getters.isAdmin : false;
+      get teams() {
+        const idFieldTeam = store.state.teams.idField;
+        const idFieldUser = store.state.users.idField;
+        const userId = data[idFieldUser];
+        let users = {};
+        let userTeams = Models.UserTeam.findInStore({query: {$sort: {userId: 1, teamId: 1}}}).data;
+        userTeams.forEach(userTeam => {
+          if (!users[userTeam.userId]) {
+            users[userTeam.userId] = [];
+          }
+          users[userTeam.userId].push(userTeam.teamId);
+        });
+        if(isLog)debug('teams.users:', users);
+        const teamIds = users[userId] ? users[userId] : [];
+        if(isLog)debug('teams.teamIds:', teamIds);
+        let teams = teamIds.map(teamId => {
+          let team = Models.Team.getFromStore(teamId);
+          if (team) {
+            const id = team[idFieldTeam];
+            team = loPick(team, ['name', 'description']);
+            team.id = id;
+          } else {
+            team = null;
+          }
+          return team;
+        });
+        if(isLog)debug('teams:', teams);
+        teams = teams.filter(team => !(team === null));
+        return teams;
       },
     };
   },
-  getters: {
-    getMembersForTeam: (state, getters) => (memberIds = []) => {
-      if (Array.isArray(memberIds) && memberIds.length) {
-        const idField = state.idField;
-        const query = {query: {[idField]: {$in: memberIds}, $sort: {fullName: 1}}};
-        const users = getters.find(query).data;
-        if (users.length) {
-          return users.map(user => {
-            return {
-              [idField]: user[idField],
-              isAdmin: user.isAdmin,
-              roleName: user.roleName,
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              fullName: user.fullName
-            };
-          });
-        } else {
-          return [];
-        }
-      }else {
-        return [];
-      }
-    },
-    getUsersForRole: (state, getters) => (roleId = null) => {
-      const idField = state.idField;
-      const users = getters.find({query: {roleId: roleId, $sort: {fullName: 1}}}).data;
-      if (users.length) {
-        return users.map(user => {
-          return {
-            [idField]: user[idField],
-            isAdmin: user.isAdmin,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: user.fullName
-          };
-        });
-      } else {
-        return [];
-      }
-    },
-  },
+  getters: {},
 });
 
 feathersClient.service(servicePath)
@@ -95,9 +89,9 @@ feathersClient.service(servicePath)
       all: [log()],
       find: [],
       get: [],
-      create: [normalizeQuery({service: 'users'})],
-      update: [normalizeQuery({service: 'users'})],
-      patch: [normalizeQuery({service: 'users'})],
+      create: [normalize()],
+      update: [normalize()],
+      patch: [normalize()],
       remove: []
     },
     after: {

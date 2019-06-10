@@ -5,7 +5,8 @@
         <v-form @submit.prevent="onSubmit">
           <v-card-text>
             <div class="layout column align-center">
-              <v-icon size="120">fas fa-user-plus</v-icon>
+              <v-avatar size="120" v-if="user"><img :src="model.avatar"></v-avatar>
+              <v-icon size="120" v-else>fas fa-user-plus</v-icon>
               <router-link :to="$i18n.path(config.homePath)">
                 <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
               </router-link>
@@ -106,6 +107,7 @@
           firstName: '',
           lastName: '',
           email: '',
+          avatar: '',
           password: '',
           passwordConfirmation: ''
         }
@@ -121,6 +123,7 @@
     },
     created: function () {
       if (this.user) {
+        this.model.avatar = this.user.avatar;
         this.model.firstName = this.user.firstName;
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;

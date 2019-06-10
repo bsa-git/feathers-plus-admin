@@ -1,8 +1,7 @@
-const crypto = require('crypto');
 import cookies from 'browser-cookies';
 
 const debug = require('debug')('app:plugins.util');
-const isDebug = false;
+const isDebug = true;
 
 /**
  * toggleFullScreen
@@ -23,24 +22,6 @@ const toggleFullScreen = () => {
 };
 
 /**
- * gravatar
- * Get avatar URL for user email
- * @param email
- * @param size
- * @returns {string}
- */
-const gravatar = function (email, size) {
-  if (!size) {
-    size = 200;
-  }
-  if (!email) {
-    return `https://gravatar.com/avatar/?s=${size}&d=retro`;
-  }
-  const md5 = crypto.createHash('md5').update(email).digest('hex');
-  return `https://secure.gravatar.com/avatar/${md5}?s=${size}&d=retro`;
-};
-
-/**
  * Delay time
  * @param sec
  * @return {Promise}
@@ -48,11 +29,18 @@ const gravatar = function (email, size) {
 const delayTime = function (sec = 1) {
   return new Promise(function (resolve) {
     setTimeout(() => {
-      if(isDebug) debug(`delayTime: ${sec * 1000} MSec`);
+      if (isDebug) debug(`delayTime: ${sec * 1000} MSec`);
       resolve('done!');
     }, sec * 1000);
   });
 };
+
+/**
+ * Pause
+ * @param ms
+ * @return {Promise}
+ */
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * Strip slashes
@@ -264,8 +252,8 @@ const getHookContext = function (context) {
 
 export default {
   toggleFullScreen,
-  gravatar,
   delayTime,
+  pause,
   stripSlashes,
   stripSpecific,
   parseBool,

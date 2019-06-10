@@ -17,7 +17,7 @@ class AuthClient {
     this.locales = util.stripSpecific(process.env.LOCALES, ';').split(';').filter(locale => locale.trim() !== process.env.FALLBACK_LOCALE);
     this.envPublicPaths = util.stripSpecific(process.env.PUBLIC_PATHS, ';').split(';').map(item => item.trim());
     this.envAdminPaths = util.stripSpecific(process.env.ADMIN_PATHS, ';').split(';').map(item => item.trim());
-    this.envRoles = store.getters.getRoles;
+    this.envRoles = store.getters.getRoles();
     const {auth} = store.state;
     this.user = auth.user;
     this.isAuth = store.getters.isAuth;

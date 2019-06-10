@@ -1,5 +1,37 @@
 <template>
   <v-container fluid>
+    <!-- Dialog for items -->
+    <v-dialog v-model="dialog" scrollable max-width="550px">
+      <v-card>
+        <v-card-title>
+          <v-icon class="mr-3">check_circle_outline</v-icon>
+          <span>{{ modelName }}</span>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 400px;">
+          <v-list three-line>
+            <template v-for="(item, index) in selItems">
+              <v-list-tile
+                :key="index"
+                @click=""
+              >
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item[0] }} :</v-list-tile-title>
+                  <!--<v-list-tile-sub-title v-html="item[1]"></v-list-tile-sub-title>-->
+                  <v-list-tile-sub-title>{{ item[1] }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat @click="dialog = false">{{ $t('management.close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Expansion panels -->
     <app-page-header
       :app-menu="appMenu"
       :home-path="config.homePath"
@@ -30,9 +62,21 @@
           </template>
           <v-card>
             <v-card-text class="grey lighten-3">
-              <admins-accounts-users v-if="item.panel === 'users'"></admins-accounts-users>
-              <admins-accounts-roles v-else-if="item.panel === 'roles'"></admins-accounts-roles>
-              <admins-accounts-teams v-else-if="item.panel === 'teams'"></admins-accounts-teams>
+              <admins-accounts-users
+                v-if="item.panel === 'users'"
+                :get-sel-object="getSelObject"
+                v-on:onOpenDialog="dialog = true"
+              ></admins-accounts-users>
+              <admins-accounts-roles
+                v-else-if="item.panel === 'roles'"
+                :get-sel-object="getSelObject"
+                v-on:onOpenDialog="dialog = true"
+              ></admins-accounts-roles>
+              <admins-accounts-teams
+                v-else-if="item.panel === 'teams'"
+                :get-sel-object="getSelObject"
+                v-on:onOpenDialog="dialog = true"
+              ></admins-accounts-teams>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -60,6 +104,9 @@
       return {
         title: this.$t('accounts.title'),
         description: this.$t('accounts.description'),
+        dialog: false,
+        modelName: '',
+        selItems: [],
         appMenu: appMenu,
         panels: [],
         items: [
@@ -102,6 +149,33 @@
       // Reset the panels
       allClose() {
         this.panels = []
+      },
+      getSelObject(selItem) {
+        const loCapitalize = require('lodash/capitalize');
+        const loForIn = require('lodash/forIn');
+        const loIsObject = require('lodash/isObject');
+        const loToPairs = require('lodash/toPairs');
+        //----------------------------------------
+        const id = selItem.split('_')[1];
+        let model = loCapitalize(selItem.split('.')[0]);
+        this.modelName = model;
+        model = this.$FeathersVuex[model];
+        // Get item from store
+        const objItem = model.getFromStore(id);
+        // Get simple object
+        let newObj = {};
+        loForIn(objItem, (value, key) => {
+          if (key !== '__v' && !loIsObject(value)) newObj[key] = value;
+        });
+        // Sort keys for newObj
+        const keys = Object.keys(newObj);
+        keys.sort();
+        let sortObj = {};
+        keys.forEach(key => {
+          sortObj[key] = newObj[key];
+        });
+        this.selItems = loToPairs(sortObj);
+        return sortObj
       }
     }
   }

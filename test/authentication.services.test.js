@@ -1,5 +1,7 @@
 const {appRoot} = require('../src/plugins/lib/index');
 const { authenticationServices } = require(`${appRoot}/src/plugins/test-helpers`);
+// const { join } = require('path');
+// const { authenticationServices } = require('@feathers-plus/test-utils');
 const config = require('../config/default.json');
 
 // Determine if environment allows test to mutate existing DB data.
@@ -8,6 +10,7 @@ if (!env.includes(process.env.NODE_ENV) || process.argv.includes('--noclient')) 
   // eslint-disable-next-line no-console
   console.log('SKIPPED - Test authentication.services.js');// clear-services
 } else {
+  // const appRoot = join(__dirname, '..');
   authenticationServices(appRoot, {
     delayAfterServerOnce: 500,
     delayAfterServerClose: 500,

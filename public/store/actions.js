@@ -54,6 +54,7 @@ const actions = {
     commit('users/clearAll');
     commit('roles/clearAll');
     commit('teams/clearAll');
+    commit('user-teams/clearAll');
     // Go to homePath
     const config = getters.getConfig;
     this.$redirect(config.homePath);
@@ -75,7 +76,10 @@ const actions = {
       if(isDebug) debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
       // return response;
       if(!isAdmin) return response;
-
+      // findUserTeams
+      let userTeams = await dispatch('user-teams/find', {query: {$sort: {teamId: 1, userId: 1}}});
+      userTeams = userTeams.data || userTeams;
+      if (isLog) debug('<<authenticate>>userTeams from server:', userTeams);
       // findRoles
       let roles = await dispatch('roles/find', {query: {$sort: {name: 1}}});
       roles = roles.data || roles;

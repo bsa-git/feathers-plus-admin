@@ -18,7 +18,7 @@
     <app-drawer
       isAvatar
       :logo-title="config.logoTitle"
-      :logo-img="devAvatar"
+      :logo-img="devAvatar()"
       :home-path="config.homePath"
       :app-menu="appMenu"
       :user="user"
@@ -104,12 +104,14 @@
       modelSnackBar: function (newValue) {
         this.$store.commit('SET_SNACK_BAR', { show: newValue });
       },
+      devAvatar(){
+        const avatar = new this.$Avatar(this.config.email);
+        return avatar.imageUrl();
+      },
       ...mapActions(['checkAuth'])
     },
     computed: {
-      devAvatar(){
-        return this.$util.gravatar(this.config.email)
-      },
+
       ...mapGetters({
         config: 'getConfig',
         snackBar: 'getSnackBar'

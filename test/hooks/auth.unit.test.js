@@ -115,7 +115,7 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
       assert.strictEqual(ex.code, 403, 'unexpected error.code');
       assert.strictEqual(ex.message, `Access to the service method "${contextBefore.path}.${contextBefore.method}" is denied. Not enough rights`, 'unexpected error.message');
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
-      console.error(chalk.red(ex.message));
+      // console.error(chalk.red(ex.message));
     }
 
   });
@@ -170,7 +170,7 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
       assert.strictEqual(ex.code, 403, 'unexpected error.code');
       assert.strictEqual(ex.message, `Access to the service method "${contextBefore.path}.${contextBefore.method}" is denied. Not enough rights`, 'unexpected error.message');
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
-      console.error(chalk.red(ex.message));
+      // console.error(chalk.red(ex.message));
     }
   });
 });

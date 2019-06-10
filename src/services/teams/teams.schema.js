@@ -26,7 +26,11 @@ let schema = {
   ],
   // Fields with unique values.
   uniqueItemProperties: [
-    // !code: schema_unique // !end
+    // !code: schema_unique
+    //-----------------------
+    'name'
+    //-----------------------
+    // !end
   ],
 
   // Fields in the model.
@@ -35,7 +39,8 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     _id: {type: 'ID'},
-    name: {minLength: 2, maxLength: 30, faker: 'lorem.words'},
+    name: {minLength: 2, maxLength: 30, faker: 'commerce.productName'},
+    description: {faker: 'lorem.sentence'},
     memberIds: {
       type: 'array',
       maxItems: 10,
@@ -76,7 +81,7 @@ let extensions = {
         type: '[User!]',
         args: false,
         relation: {ourTable: 'memberIds', otherTable: '_id'},
-        sort: {lastName: 1, firstName: 1}
+        // sort: {lastName: 1, firstName: 1}
       },
       //-------------------
       // !end

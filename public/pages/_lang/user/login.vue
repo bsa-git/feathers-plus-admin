@@ -5,7 +5,7 @@
         <v-form @submit.prevent="onSubmit">
           <v-card-text>
             <div class="layout column align-center">
-              <v-icon v-if="user" size="120">fas fa-user-check</v-icon>
+              <v-avatar size="120" v-if="user && model.avatar"><img :src="model.avatar"></v-avatar>
               <v-icon v-else size="120">fas fa-user-alt-slash</v-icon>
               <router-link :to="$i18n.path(config.homePath)">
                 <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
@@ -79,7 +79,8 @@
         error: undefined,
         model: {
           email: fakeEmail,
-          password: fakePassword
+          password: fakePassword,
+          avatar: ''
         },
       }
     },
@@ -93,6 +94,7 @@
     },
     created: function () {
       if(this.user){
+        this.model.avatar = this.user.avatar;
         this.model.email = this.user.email;
         this.model.password = '';
       }

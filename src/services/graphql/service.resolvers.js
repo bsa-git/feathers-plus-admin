@@ -13,6 +13,7 @@ let moduleExports = function serviceResolvers(app, options) {
   // !<DEFAULT> code: services
   let roles = app.service('/roles');
   let teams = app.service('/teams');
+  let userTeams = app.service('/user-teams');
   let users = app.service('/users');
   // !end
 
@@ -39,15 +40,14 @@ let moduleExports = function serviceResolvers(app, options) {
         // !<DEFAULT> code: resolver-Team-members
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: { $in: parent.memberIds }, $sort: 
-              {
-                lastName: 1,
-                firstName: 1
-              } }, paginate: false
+            query: { _id: { $in: parent.memberIds }, $sort: undefined }, paginate: false
           });
           return users.find(feathersParams).then(extractAllItems);
         },
         // !end
+    },
+
+    UserTeam: {
     },
 
     User: {
@@ -74,10 +74,7 @@ let moduleExports = function serviceResolvers(app, options) {
         // !<DEFAULT> code: resolver-User-teams
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { $sort: 
-              {
-                name: 1
-              } }, paginate: false
+            query: { $sort: undefined }, paginate: false
           });
 
           if (!(content.cache.User && content.cache.User.teams)) {
@@ -120,6 +117,20 @@ let moduleExports = function serviceResolvers(app, options) {
       findTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-UserTeam
+      // getUserTeam(query: JSON, params: JSON, key: JSON): UserTeam
+      getUserTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return userTeams.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findUserTeam(query: JSON, params: JSON): [UserTeam!]
+      findUserTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   teamId: 1,   userId: 1 } } });
+        return userTeams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 

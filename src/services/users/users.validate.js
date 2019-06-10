@@ -54,6 +54,10 @@ let base = merge({},
         maxLength: 40,
         faker: "name.lastName"
       },
+      avatar: {
+        type: "string",
+        faker: "internet.avatar"
+      },
       roleId: {
         type: ID,
         faker: {

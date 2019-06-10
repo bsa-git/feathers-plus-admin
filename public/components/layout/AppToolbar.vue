@@ -45,17 +45,11 @@
     <!-- User menu -->
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
       <v-btn icon flat slot="activator">
-        <v-tooltip v-if="user" bottom>
+        <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-icon v-on="on">fas fa-user-check</v-icon>
+            <v-icon v-on="on" v-text="user? 'fas fa-user-check':'fas fa-user-alt-slash'"></v-icon>
           </template>
-          <span>{{ user.fullName }}</span>
-        </v-tooltip>
-        <v-tooltip v-else bottom>
-          <template v-slot:activator="{ on }">
-            <v-icon v-on="on">fas fa-user-alt-slash</v-icon>
-          </template>
-          <span>{{ $t('app_toolbar.not_authorized') }}</span>
+          <span>{{ user? user.fullName : $t('app_toolbar.not_authorized') }}</span>
         </v-tooltip>
       </v-btn>
       <v-list class="pa-0" expand>

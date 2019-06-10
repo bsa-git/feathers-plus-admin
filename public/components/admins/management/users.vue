@@ -14,16 +14,52 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- Save Dialog -->
+    <!-- Teams for user dialog -->
+    <v-dialog v-model="userTeamsDialog" scrollable max-width="400px">
+      <v-card>
+        <v-card-title>
+          <v-icon class="mr-3">person</v-icon>
+          <span>{{ `${selItem.firstName} ${selItem.lastName}` }}</span>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 300px;">
+          <v-list three-line>
+            <template v-for="(team, index) in selItem.teams">
+              <v-list-tile
+                :key="team.id"
+                avatar
+                @click=""
+              >
+                <v-list-tile-avatar>
+                  <v-icon>people</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="team.name"></v-list-tile-title>
+                  <v-list-tile-sub-title v-html="team.description"></v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <!--<v-divider v-if="index < selItem.teams.length - 1"></v-divider>-->
+            </template>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat @click="userTeamsDialog = false">{{ $t('management.close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Toolbar for table -->
     <v-toolbar flat color="white">
-      <v-toolbar-title>{{ $t('management.user_management') }}</v-toolbar-title>
-      <v-divider
-        class="mx-2"
-        inset
-        vertical
-      ></v-divider>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        :label="$t('management.search')"
+        single-line
+        hide-details
+      ></v-text-field>
       <v-spacer></v-spacer>
-
+      <!-- Save Dialog -->
       <v-dialog v-model="dialog" max-width="600">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark class="mb-2" v-on="on">{{ $t('management.new_item') }}</v-btn>
@@ -32,8 +68,8 @@
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
               <div class="layout column align-center">
-                <v-icon size="120" v-if="isNewItem">fas fa-user-plus</v-icon>
-                <v-icon size="120" v-else>fas fa-user</v-icon>
+                <v-icon size="120" v-if="isNewItem" v-text="isNewItem? 'fas fa-user-plus':'fas fa-user'"></v-icon>
+                <v-avatar size="120" v-else><img :src="editedItem.avatar"></v-avatar>
                 <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
               </div>
               <v-container grid-list-md>
@@ -69,33 +105,6 @@
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6>
-                    <v-select
-                      append-icon="security"
-                      v-model="editedItem.roleId"
-                      v-validate=""
-                      item-text="name"
-                      item-value="id"
-                      :items="roles"
-                      :error-messages="errors.collect('roleId')"
-                      label="Select Role"
-                      data-vv-name="roleId"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select
-                      append-icon="group"
-                      v-model="editedItem.teamIds"
-                      v-validate=""
-                      item-text="name"
-                      item-value="id"
-                      :items="teams"
-                      :error-messages="errors.collect('teamIds')"
-                      label="Select Teams"
-                      data-vv-name="teamIds"
-                      multiple
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
                     <v-text-field
                       v-if="isNewItem"
                       append-icon="lock"
@@ -120,6 +129,49 @@
                       type="password"
                     ></v-text-field>
                   </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      append-icon="security"
+                      v-model="editedItem.roleId"
+                      v-validate=""
+                      item-text="name"
+                      item-value="id"
+                      :items="roles"
+                      :error-messages="errors.collect('roleId')"
+                      :label="$t('management.selectRole')"
+                      data-vv-name="roleId"
+                    >
+                      <template v-slot:selection="{ item }">
+                        <v-chip>
+                          <span>{{ (item.name.length > 25) ? item.name.slice(0, 24) + '...' : item.name }}</span>
+                        </v-chip>
+                      </template>
+                    </v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select
+                      append-icon="group"
+                      v-model="editedItem.teamIds"
+                      v-validate=""
+                      item-text="name"
+                      item-value="id"
+                      :items="teams"
+                      :error-messages="errors.collect('teamIds')"
+                      :label="$t('management.selectTeams')"
+                      data-vv-name="teamIds"
+                      multiple
+                    >
+                      <template v-slot:selection="{ item, index }">
+                        <v-chip v-if="index === 0">
+                          <span>{{ (item.name.length > 15) ? item.name.slice(0, 15) + '...' : item.name }}</span>
+                        </v-chip>
+                        <span
+                          v-if="index === 1"
+                          class="grey--text caption"
+                        >(+{{ editedItem.teamIds.length - 1 }} {{ $t('management.others') }})</span>
+                      </template>
+                    </v-select>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -140,21 +192,28 @@
     <v-data-table
       :headers="headers"
       :items="users"
+      :search="search"
       class="elevation-1"
     >
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
-        <td>{{ props.item.firstName }}</td>
-        <td>{{ props.item.lastName }}</td>
+        <td>
+          <v-avatar size="32"><img :src="props.item.avatar"></v-avatar>
+        </td>
+        <td>{{ props.item.fullName }}</td>
         <td>{{ props.item.email }}</td>
         <td>{{ props.item.roleName }}</td>
         <td>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-icon v-on="on" v-if="props.item.userTeams === '[]'">code</v-icon>
-              <v-icon v-on="on" v-else>settings_ethernet</v-icon>
+              <v-btn v-on="on" flat icon v-if="props.item.teamNames === ''">
+                <v-icon>code</v-icon>
+              </v-btn>
+              <v-btn v-on="on" flat icon v-else>
+                <v-icon @click="clickItem(props.item)">settings_ethernet</v-icon>
+              </v-btn>
             </template>
-            <span>{{ props.item.userTeams === '[]' ? '[ ]' : props.item.userTeams}}</span>
+            <span>{{ props.item.teamNames === '' ? '[ ]' : props.item.teamNames}}</span>
           </v-tooltip>
         </td>
         <td class="justify-center layout px-0">
@@ -162,19 +221,26 @@
             small
             class="mr-2"
             @click="clickEditItem(props.item)"
+            :disabled="isYouSelf(props.item.id)"
           >
             edit
           </v-icon>
           <v-icon
             small
             @click="clickDeleteItem(props.item)"
+            :disabled="isYouSelf(props.item.id)"
           >
             delete
           </v-icon>
         </td>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">{{ $t('management.reset') }}</v-btn>
+        <span color="primary" class="headline">{{ $t('management.noData') }}</span>
+      </template>
+      <template v-slot:no-results>
+        <v-alert :value="true" color="error" icon="warning">
+          {{ $t('management.searchNoResults') }}
+        </v-alert>
       </template>
     </v-data-table>
   </div>
@@ -185,16 +251,18 @@
 
   const debug = require('debug')('app:comp.admins-management-users');
 
-  const isLog = true;
-  const isDebug = true;
+  const isLog = false;
+  const isDebug = false;
 
   export default {
     $_veeValidate: {
       validator: 'new'
     },
     data: () => ({
+      search: '',
       dialog: false,
       confirmDialog: false,
+      userTeamsDialog: false,
       loadingSubmit: false,
       error: undefined,
       headers: [
@@ -205,14 +273,14 @@
           sortable: false,
         },
         {
-          text: 'First Name',
-          align: 'left',
-          value: 'firstName'
+          text: 'Avatar',
+          value: 'avatar',
+          sortable: false,
         },
         {
-          text: 'Last Name',
+          text: 'Full Name',
           align: 'left',
-          value: 'lastName'
+          value: 'fullName'
         },
         {
           text: 'Email',
@@ -225,9 +293,9 @@
           value: 'roleName'
         },
         {
-          text: 'User Teams',
+          text: 'Teams',
           align: 'left',
-          value: 'userTeams',
+          value: 'teamNames',
           sortable: false,
         },
         {
@@ -238,13 +306,15 @@
       ],
       editedIndex: -1,
       idItem: null,
+      selItem: {teams: []},
       editedItem: {
         firstName: '',
         lastName: '',
         email: '',
+        avatar: '',
         roleId: '',
         teamIds: [],
-        userTeams: '',
+        teamNames: '',
         password: '',
         passwordConfirmation: ''
       },
@@ -252,14 +322,17 @@
         firstName: '',
         lastName: '',
         email: '',
+        avatar: '',
         roleId: '',
         teamIds: [],
-        userTeams: '',
+        teamNames: '',
         password: '',
         passwordConfirmation: ''
       }
     }),
-
+    created: function () {
+//      this.$refs.admins.value = true;
+    },
     computed: {
       formTitle() {
         return this.editedIndex === -1 ? this.$t('management.new_item') : this.$t('management.edit_item')
@@ -269,30 +342,27 @@
       },
       ...mapGetters({
         user: 'getUser',
-        getTeamsForUser: 'teams/getTeamsForUser',
-        getRoleForUser: 'roles/getRoleForUser',
       }),
       users() {
         const data = [];
         const idFieldUser = this.$store.state.users.idField;
-        const idFieldTeam = this.$store.state.teams.idField;
         const {User} = this.$FeathersVuex;
-        const users = User.findInStore({query: {$sort: {lastName: 1}}}).data;
+        const users = User.findInStore({query: {$sort: {fullName: 1}}}).data;
         users.forEach(user => {
-          // Find teams for user
-          const teams = this.getTeamsForUser(user[idFieldUser]);
-          const userRole = user.roleId ? this.getRoleForUser(user.roleId) : null;
-
+          const userId = user[idFieldUser];
           // Get user
           let item = {
-            id: `${user[idFieldUser]}`,
+            id: userId,
             firstName: user.firstName,
             lastName: user.lastName,
+            fullName: user.fullName,
             email: user.email,
+            avatar: user.avatar,
+            teams: user.teams,
             roleId: user.roleId ? user.roleId : '',
-            roleName: userRole ? userRole.name : '',
-            teamIds: teams.map(team => team[idFieldTeam]),
-            userTeams: JSON.stringify(teams.map(team => team.name)),
+            roleName: user.role ? user.role.name : '',
+            teamIds: user.teams.map(team => team.id),
+            teamNames: user.teams.map(team => team.name).join(', ')
           };
           data.push(item);
         });
@@ -305,9 +375,10 @@
         const {Role} = this.$FeathersVuex;
         const roles = Role.findInStore({query: {$sort: {name: 1}}}).data;
         roles.forEach(role => {
+          const roleId = role[idFieldRole];
           // Get role
           let item = {
-            id: `${role[idFieldRole]}`,
+            id: roleId,
             name: role.name,
           };
           data.push(item);
@@ -321,9 +392,10 @@
         const {Team} = this.$FeathersVuex;
         const teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
         teams.forEach(team => {
+          const teamId = team[idFieldTeam];
           // Get role
           let item = {
-            id: `${team[idFieldTeam]}`,
+            id: teamId,
             name: team.name,
           };
           data.push(item);
@@ -342,8 +414,37 @@
       }
     },
     methods: {
+      isYouSelf(userId) {
+        const idField = this.$store.state.users.idField;
+        return userId === this.user[idField];
+      },
 
-      initialize() {
+      clickEditItem(item) {
+        this.editedIndex = this.users.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
+      },
+
+      clickDeleteItem(item) {
+        this.idItem = item.id;
+        this.confirmDialog = true;
+      },
+
+      clickItem(item) {
+        this.selItem = item;
+        this.userTeamsDialog = true;
+      },
+
+      close() {
+        this.dialog = false;
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+        this.$validator.reset();
+        this.dismissError();
+      },
+
+      dismissError() {
+        this.error = undefined;
       },
 
       async onSubmit() {
@@ -357,10 +458,11 @@
             if (isLog) debug('formData:', this.editedItem);
             const saveResponse = await this.save(this.editedItem);
             if (saveResponse) {
-              if (isLog) debug('saveResponse:', saveResponse);
+              if (isLog) debug('user.save().response:', saveResponse);
               const idFieldUser = this.$store.state.users.idField;
-              const updatedTeams = await this.updateMemberIds(saveResponse[idFieldUser], this.editedItem.teamIds);
-              if (isLog && updatedTeams.length) debug('updatedTeams:', updatedTeams);
+              const userId = saveResponse[idFieldUser];
+              const updateMemberIds = await this.updateMemberIds(userId, this.editedItem.teamIds);
+              if (isLog) debug('updateMemberIds:', updateMemberIds);
               this.showSuccess(`${this.$t('management.success')}!`);
               setTimeout(() => {
                 this.loadingSubmit = false;
@@ -379,19 +481,30 @@
           const idField = this.$store.state.users.idField;
           const {User} = this.$FeathersVuex;
           if (this.isNewItem) {
+            if (!data.avatar) {
+              const avatar = new this.$Avatar(data.email);
+              data.avatar = await avatar.getImage();
+            }
             user = new User({
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
+              avatar: data.avatar,
               roleId: data.roleId,
               password: data.password
             });
           } else {
+            user = User.getFromStore(data.id);
+            if ((data.email !== user.email) || !data.avatar) {
+              const avatar = new this.$Avatar(data.email);
+              data.avatar = await avatar.getImage();
+            }
             user = new User({
               [idField]: data.id,
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
+              avatar: data.avatar,
               roleId: data.roleId
             });
           }
@@ -399,88 +512,64 @@
         } catch (error) {
           if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
-          let type = error.className ? error.className : 'error';
-          error = Object.assign({}, error);
-          error.message = (type === 'conflict')
-            ? `${this.$t('signup.conflictEmail')}.`
-            : `${this.$t('management.errSave')}.`;
-          this.error = error;
           this.showError(error.message);
         }
       },
 
       async updateMemberIds(userId, teamIds = []) {
         try {
-          if(isDebug)debug('updateMemberIds.userId:', userId, 'updateMemberIds.teamIds:', teamIds);
-          let newTeam = null;
-          const updatedTeams = [];
+          if (isDebug) debug(`updateMemberIds: userId=${userId}; teamIds=${teamIds}`);
+          let userTeam = null;
+          const updateMemberIds = {created: [], removed: []};
           const idFieldTeam = this.$store.state.teams.idField;
-          const {Team} = this.$FeathersVuex;
+          const idFieldUserTeams = this.$store.state['user-teams'].idField;
+          const {Team, UserTeam} = this.$FeathersVuex;
           const teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
+          if (isLog) debug('updateMemberIds.teams:', teams);
           teams.forEach(async team => {
-            const id = team[idFieldTeam];
-            const isTeamId = teamIds.indexOf(id) !== -1;
-            const indexUserId = team.memberIds.indexOf(userId);
-            const isUserId = indexUserId !== -1;
+            const teamId = team[idFieldTeam];
+            const data = {
+              teamId: '',
+              userId: ''
+            };
+            const isTeamId = teamIds.indexOf(teamId) >= 0;
+            const memberIds = team.members.map(member => member.id);
+            const indexUserId = memberIds.indexOf(userId);
+            const isUserId = indexUserId >= 0;
             // Add userId to this team
             if (isTeamId && !isUserId) {
-              team.memberIds.push(userId);
-              newTeam = new Team({
-                [idFieldTeam]: id,
-                memberIds: team.memberIds,
-              });
-              const saveResponse = await newTeam.save();
-              updatedTeams.push(saveResponse);
+              data.teamId = teamId;
+              data.userId = userId;
+              userTeam = new UserTeam(data);
+              const saveResponse = await userTeam.save();
+              updateMemberIds.created.push(saveResponse);
             }
             // Remove userId from this team
             if (isUserId && !isTeamId) {
-              team.memberIds.splice(indexUserId, 1);
-              newTeam = new Team({
-                [idFieldTeam]: id,
-                memberIds: team.memberIds,
-              });
-              const saveResponse = await newTeam.save();
-              updatedTeams.push(saveResponse);
+              const items = UserTeam.findInStore({query: {teamId: teamId, userId: userId}}).data;
+              if (items.length) {
+                userTeam = new UserTeam({[idFieldUserTeams]: items[0][idFieldUserTeams]});
+                const removeResponse = await userTeam.remove();
+                updateMemberIds.removed.push(removeResponse);
+              }
             }
           });
-          return updatedTeams;
+          return updateMemberIds;
         } catch (error) {
           if (isLog) debug('team.save.error:', error);
-          let type = error.className;
-          error = Object.assign({}, error);
-          error.message = (type === 'forbidden')
-            ? `${this.$t('management.errForbidden')}.`
-            : `${this.$t('management.errSave')}.`;
-          this.error = error;
           this.showError(error.message);
         }
-      },
-
-      clickEditItem(item) {
-        this.editedIndex = this.users.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialog = true;
-      },
-
-      clickDeleteItem(item) {
-        this.idItem = item.id;
-        this.confirmDialog = true;
       },
 
       async deleteItem() {
         try {
           this.confirmDialog = false;
+          const {User} = this.$FeathersVuex;
           const idField = this.$store.state.users.idField;
-          // You can not delete yourself
-          if (this.idItem === this.user[idField]) {
-            this.showError(this.$t('management.errDeleteYourself'));
-          } else {
-            const {User} = this.$FeathersVuex;
-            const user = new User({[idField]: this.idItem});
-            await user.remove();
-            this.showSuccess(`${this.$t('management.success')}!`);
-            this.idItem = null;
-          }
+          const user = new User({[idField]: this.idItem});
+          await user.remove();
+          this.showSuccess(`${this.$t('management.success')}!`);
+          this.idItem = null;
         } catch (error) {
           if (isLog) debug('user.remove.error:', error);
           let type = error.className ? error.className : 'error';
@@ -491,18 +580,6 @@
           this.error = error;
           this.showError(error.message);
         }
-      },
-
-      close() {
-        this.dialog = false;
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-        this.$validator.reset();
-        this.dismissError();
-      },
-
-      dismissError() {
-        this.error = undefined;
       },
       ...mapMutations({
         showSuccess: 'SHOW_SUCCESS',

@@ -2,13 +2,13 @@
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
-const normalizeQuery = require(`${appRoot}/src/hooks/normalize-query`);
+const normalize = require(`${appRoot}/src/hooks/normalize`);
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
 const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('<<< Test /hooks/normalize-query.integ.test.js >>>', () => {
+describe('<<< Test /hooks/normalize.integ.test.js >>>', () => {
   let app, params;
   // eslint-disable-next-line no-unused-vars
   let service;
@@ -24,7 +24,7 @@ describe('<<< Test /hooks/normalize-query.integ.test.js >>>', () => {
 
     app.service('/test-service').hooks({
       before: {
-        create: normalizeQuery()
+        create: normalize()
       }
     });
 
@@ -38,8 +38,8 @@ describe('<<< Test /hooks/normalize-query.integ.test.js >>>', () => {
   });
 
 
-  it('Hook exists', () => {
-    assert(typeof normalizeQuery === 'function', 'Hook is not a function.');
+  it('Normalize hook exists', () => {
+    assert(typeof normalize === 'function', 'Hook is not a function.');
   });
 
   it('Test hook for fake data', async () => {

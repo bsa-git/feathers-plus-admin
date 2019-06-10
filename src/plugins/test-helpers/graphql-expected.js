@@ -1,51 +1,51 @@
 const {readJsonFileSync, appRoot} = require('../lib');
-
-const idName = '_id';
+const loPick = require('lodash/pick');
 
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 //--- Users --//
 const usersFakeData = fakeData['users'];
 const userFakeData = usersFakeData[0];
-const userKey = userFakeData[idName];
+const idFieldUser = 'id' in userFakeData ? 'id' : '_id';
+const userId = userFakeData[idFieldUser];
 //--- Roles --//
 const rolesFakeData = fakeData['roles'];
 const roleFakeData = rolesFakeData[0];
-const roleKey = roleFakeData[idName];
+const idFieldRole = 'id' in roleFakeData ? 'id' : '_id';
+const roleId = roleFakeData[idFieldRole];
 //--- Teams --//
 const teamsFakeData = fakeData['teams'];
 const teamFakeData = teamsFakeData[0];
-const teamKey = teamFakeData[idName];
+const idFieldTeam = 'id' in teamFakeData ? 'id' : '_id';
+const teamId = teamFakeData[idFieldTeam];
 
 //--- User --//
 const userRolesFakeData = rolesFakeData.filter(role => {
-  return (role[idName] === userFakeData['roleId']);
+  return (role[idFieldRole] === userFakeData['roleId']);
+}).map(role => {
+  return loPick(role, [idFieldRole, 'name']);
 });
-const userTeamsFakeData = fakeData['teams'].filter(team => {
-  return team.memberIds.includes(userFakeData[idName]);
+const userTeamsFakeData = teamsFakeData.filter(team => {
+  return team.memberIds.includes(userFakeData[idFieldUser]);
 }).map(team => {
-  delete team.memberIds;
-  return team;
+  return loPick(team, [idFieldTeam, 'name']);
 });
 
 //--- Role --//
 const roleUsersFakeData = usersFakeData.filter(user => {
-  return (roleFakeData[idName] === user['roleId']);
+  return (roleFakeData[idFieldRole] === user['roleId']);
 }).map(user => {
-  let _user = {};
-  _user[idName] = user[idName];
-  Object.assign(_user, {email: user.email, fullName: `${user.firstName} ${user.lastName}`});
+  let _user = loPick(user, [idFieldUser, 'email']);
+  Object.assign(_user, {fullName: `${user.firstName} ${user.lastName}`});
   return _user;
 });
 
 //--- Team --//
 const teamUsersFakeData = usersFakeData.filter(user => {
-  // return (roleFakeData[idName] === user['roleId']);
-  return teamFakeData.memberIds.includes(user[idName]);
+  return teamFakeData.memberIds.includes(user[idFieldUser]);
 }).map(user => {
-  let _user = {};
-  _user[idName] = user[idName];
-  Object.assign(_user, {email: user.email, fullName: `${user.firstName} ${user.lastName}`});
+  let _user = loPick(user, [idFieldUser, 'email']);
+  Object.assign(_user, {fullName: `${user.firstName} ${user.lastName}`});
   return _user;
 });
 
@@ -60,7 +60,7 @@ let getUser = {
     teams: userTeamsFakeData
   }
 };
-getUser.getUser[idName] = userKey;
+getUser.getUser[idFieldUser] = userId;
 
 let findUser = [{
   findUser: [{
@@ -72,7 +72,7 @@ let findUser = [{
     teams: userTeamsFakeData
   }]
 }];
-findUser[0].findUser[0][idName] = userKey;
+findUser[0].findUser[0][idFieldUser] = userId;
 
 let getRole = {
   getRole: {
@@ -80,7 +80,7 @@ let getRole = {
     users: roleUsersFakeData
   }
 };
-getRole.getRole[idName] = roleKey;
+getRole.getRole[idFieldRole] = roleId;
 
 let findRole = [{
   findRole: [{
@@ -88,7 +88,7 @@ let findRole = [{
     users: roleUsersFakeData
   }]
 }];
-findRole[0].findRole[0][idName] = roleKey;
+findRole[0].findRole[0][idFieldRole] = roleId;
 
 let getTeam = {
   getTeam: {
@@ -96,7 +96,7 @@ let getTeam = {
     members: teamUsersFakeData
   }
 };
-getTeam.getTeam[idName] = teamKey;
+getTeam.getTeam[idFieldTeam] = teamId;
 
 let findTeam = [{
   findTeam: [{
@@ -104,7 +104,7 @@ let findTeam = [{
     members: teamUsersFakeData
   }]
 }];
-findTeam[0].findTeam[0][idName] = teamKey;
+findTeam[0].findTeam[0][idFieldTeam] = teamId;
 
 
 module.exports = {

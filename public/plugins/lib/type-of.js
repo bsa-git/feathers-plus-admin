@@ -13,7 +13,7 @@ function isFunction (func) {
   return typeof func === 'function';
 }
 
-function isNullsy (obj) {
+function isNull (obj) {
   return obj === null || obj === undefined;
 }
 
@@ -29,7 +29,7 @@ export default {
   isArray,
   isBoolean,
   isFunction,
-  isNullsy,
+  isNull,
   isObject,
   isString
 };

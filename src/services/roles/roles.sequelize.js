@@ -17,6 +17,10 @@ let moduleExports = merge({},
       primaryKey: true
     },
     name: {
+      type: DataTypes.TEXT,
+      unique: true
+    },
+    description: {
       type: DataTypes.TEXT
     }
   },

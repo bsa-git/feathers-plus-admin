@@ -1,64 +1,92 @@
 <template>
-  <v-treeview :items="users" activatable open-on-click></v-treeview>
+  <v-card
+    class="mx-auto"
+  >
+    <v-sheet class="pa-3">
+      <v-text-field
+        v-model="search"
+        :label="$t('management.search')"
+        hide-details
+        clearable
+        clear-icon="highlight_off"
+        append-icon="search"
+      ></v-text-field>
+    </v-sheet>
+    <v-card-text>
+      <v-treeview
+        :items="users"
+        :search="search"
+        :active.sync="active"
+        :open.sync="open"
+        activatable
+        open-on-click
+        active-class="primary--text"
+        class="grey lighten-5"
+        transition
+      >
+        <template v-slot:prepend="{ item, active }">
+          <v-icon v-if="item.id.startsWith('user.role')">security</v-icon>
+          <v-icon v-else-if="item.id.startsWith('user.teams')">people</v-icon>
+          <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : 'teal darken-2'">
+            check_circle_outline
+          </v-icon>
+        </template>
+      </v-treeview>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
   import {mapGetters} from 'vuex'
+
   const debug = require('debug')('app:comp.admins-accounts-users');
 
-  const isLog = false;
+  const isLog = true;
   //  const isDebug = true;
 
   export default {
+    props: {
+      getSelObject: Function
+    },
+    data: () => ({
+      search: '',
+      active: [],
+      open: [],
+    }),
     computed: {
-      ...mapGetters({
-        getTeamsForUser: 'teams/getTeamsForUser',
-        getRoleForUser: 'roles/getRoleForUser',
-      }),
       users() {
         const data = [];
         const idFieldUser = this.$store.state.users.idField;
-        const idFieldTeam = this.$store.state.teams.idField;
-        const idFieldRole = this.$store.state.roles.idField;
         const {User} = this.$FeathersVuex;
         const users = User.findInStore({query: {$sort: {fullName: 1}}}).data;
         if (isLog) debug('Users from store:', users);
 
         users.forEach(user => {
-          // Find teams for user
+          const userId = user[idFieldUser];
           const teams = [];
-          const userTeams = this.getTeamsForUser(user[idFieldUser]);
-          if (isLog) debug('userTeams from store:', userTeams);
-          const userRole = user.roleId ? this.getRoleForUser(user.roleId) : null;
-          if (isLog) debug('userRole from store:', userRole);
-          userTeams.forEach(team => {
+          user.teams.forEach(team => {
             teams.push({
-              id: `team.name_${team[idFieldTeam]}`,
+              id: `team.name_${team.id}`,
               name: `${team.name}`,
-              children: [
-                {id: `team.id_${team[idFieldTeam]}`, name: `id : ${team[idFieldTeam]}`}
-              ]
             })
           });
           if (isLog) debug('teams:', teams);
           // Get user
           let item = {
-            id: `user.fullName_${user[idFieldUser]}`,
+            id: `user.fullName_${userId}`,
             name: `${user.fullName} :`,
             children: [
-              {id: `user.id_${user[idFieldUser]}`, name: `id : ${user[idFieldUser]}`},
-              {id: `user.email_${user[idFieldUser]}`, name: `email : ${user.email}`},
+              {id: `user.id_${userId}`, name: `id : ${userId}`},
               {
-                id: `user.role_${user[idFieldUser]}`,
+                id: `user.role_${userId}`,
                 name: `Role :`,
-                children: userRole ? [
-                  {id: `role.id_${userRole[idFieldRole]}`, name: `id : ${userRole[idFieldRole]}`},
-                  {id: `role.name_${userRole[idFieldRole]}`, name: `name : ${userRole.name}`},
+                children: user.role ? [
+                  {id: `role.name_${user.role.id}`, name: `${user.role.name}`},
                 ] : []
               },
               {
-                id: `user.teams_${user[idFieldUser]}`,
-                name: 'Teams :',
+                id: `user.teams_${userId}`,
+                name: `Teams(${teams.length ? teams.length : 'Not'}) :`,
                 children: teams
               }
             ]
@@ -67,6 +95,21 @@
         });
         return data
       },
+      selected() {
+        if (!this.active.length) return undefined;
+        const selItem = this.active[0];
+        return this.getSelObject(selItem);
+      }
     },
+    watch: {
+      selected: function (val) {
+        if (val) this.openDialog();
+      }
+    },
+    methods: {
+      openDialog() {
+        this.$emit('onOpenDialog')
+      },
+    }
   }
 </script>

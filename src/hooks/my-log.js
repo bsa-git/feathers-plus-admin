@@ -5,11 +5,10 @@
 // const logger = require('../logger');
 const {inspector, getHookContext} = require('../plugins/lib');
 const chalk = require('chalk');
-const debug = require('debug')('app:my-log.hook');
+const debug = require('debug')('app:my-log.all.hook');
 
-
-const isLog = true;
-const isDebug = true;
+const isDebug = false;
+const isLog = false;
 
 /**
  * Get provider

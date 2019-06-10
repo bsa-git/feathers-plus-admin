@@ -8,6 +8,7 @@ type Role {
   id: ID
   _id: ID
   name: String
+  description: String
   users: [User!]
 }
  
@@ -15,8 +16,16 @@ type Team {
   id: ID
   _id: ID
   name: String
+  description: String
   memberIds: [String]
   members: [User!]
+}
+ 
+type UserTeam {
+  id: ID
+  _id: ID
+  teamId: ID
+  userId: ID
 }
  
 type User {
@@ -25,6 +34,7 @@ type User {
   email: String
   firstName: String
   lastName: String
+  avatar: String
   roleId: ID
   googleId: String
   githubId: String
@@ -43,6 +53,8 @@ type Query {
   findRole(query: JSON, params: JSON): [Role]!
   getTeam(key: JSON, query: JSON, params: JSON): Team
   findTeam(query: JSON, params: JSON): [Team]!
+  getUserTeam(key: JSON, query: JSON, params: JSON): UserTeam
+  findUserTeam(query: JSON, params: JSON): [UserTeam]!
   getUser(key: JSON, query: JSON, params: JSON): User
   findUser(query: JSON, params: JSON): [User]!
 }

@@ -45,6 +45,7 @@ let schema = {
     password: {type: 'string', faker: {exp: 'rec.email.slice(0, rec.email.indexOf("@"))'}},
     firstName: {type: 'string', minLength: 2, maxLength: 20, faker: 'name.firstName'},
     lastName: {type: 'string', minLength: 2, maxLength: 40, faker: 'name.lastName'},
+    avatar: {type: 'string', faker: 'internet.avatar'},
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
     googleId: {type: 'string', chance: 'natural'},
     githubId: {type: 'string', chance: 'natural'},
@@ -89,7 +90,7 @@ let extensions = {
       //-------------------
       fullName: {type: 'String!', args: false},
       role: {type: 'Role', args: true, relation: {ourTable: 'roleId', otherTable: '_id'}},
-      teams: {type: '[Team!]', args: true, relation: {ourTable: '_id', otherTable: 'memberIds'}, sort: {name: 1}},
+      teams: {type: '[Team!]', args: true, relation: {ourTable: '_id', otherTable: 'memberIds'}, /*sort: {name: 1}*/},
       //-------------------
       // !end
     },

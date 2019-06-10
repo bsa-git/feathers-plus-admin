@@ -1,8 +1,8 @@
 const assert = require('assert');
 const {appRoot} = require('../../src/plugins/lib');
-const normalizeQuery = require(`${appRoot}/src/hooks/normalize-query`);
+const normalize = require(`${appRoot}/src/hooks/normalize`);
 
-describe('<<< Test /hooks/normalize-query.unit.test.js >>>', () => {
+describe('<<< Test /hooks/normalize.unit.test.js >>>', () => {
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars
@@ -39,28 +39,28 @@ describe('<<< Test /hooks/normalize-query.unit.test.js >>>', () => {
   });
 
   it('Hook exists', () => {
-    assert(typeof normalizeQuery === 'function', 'Hook is not a function.');
+    assert(typeof normalize === 'function', 'Hook is not a function.');
   });
 
   it('Test hook for different contexts', () => {
     // Test hook for contextBefore
     contextBefore.method = 'create';
-    normalizeQuery()(contextBefore);
+    normalize()(contextBefore);
     assert.deepEqual(contextBefore.data, {});
 
     // Test hook for contextAfter
     contextAfter.method = 'create';
-    normalizeQuery()(contextAfter);
+    normalize()(contextAfter);
     assert.deepEqual(contextAfter.result, {});
 
     // Test hook for contextAfterMultiple
     contextAfterMultiple.method = 'create';
-    normalizeQuery()(contextAfterMultiple);
+    normalize()(contextAfterMultiple);
     assert.deepEqual(contextAfterMultiple.result, []);
 
     // Test hook for contextAfterPaginated
     contextAfterPaginated.method = 'create';
-    normalizeQuery()(contextAfterPaginated);
+    normalize()(contextAfterPaginated);
     assert.deepEqual(contextAfterPaginated.result.data, []);
   });
 });

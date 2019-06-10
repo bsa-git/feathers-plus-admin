@@ -17,6 +17,10 @@ let moduleExports = merge({},
       name: {
         faker: "name.title",
         bsonType: "string"
+      },
+      description: {
+        faker: "lorem.sentence",
+        bsonType: "string"
       }
     }
   },

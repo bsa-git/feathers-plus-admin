@@ -47,6 +47,12 @@
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
+        },
+        "userTeams": {
+          "create": "auth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
         }
       }
     }
