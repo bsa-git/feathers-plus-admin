@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
     <!-- Dialog for items -->
-    <v-dialog v-model="dialog" scrollable max-width="550px">
+    <v-dialog v-model="dialog" scrollable max-width="570px">
       <v-card>
         <v-card-title>
           <v-icon class="mr-3">check_circle_outline</v-icon>
-          <span>{{ modelName }}</span>
+          <span class="headline">{{ modelName + ' - ' + itemName }}</span>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text style="height: 400px;">
@@ -16,9 +16,8 @@
                 @click=""
               >
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ item[0] }} :</v-list-tile-title>
-                  <!--<v-list-tile-sub-title v-html="item[1]"></v-list-tile-sub-title>-->
-                  <v-list-tile-sub-title>{{ item[1] }}</v-list-tile-sub-title>
+                  <v-list-tile-title v-html="item[0] + ' :'"></v-list-tile-title>
+                  <v-list-tile-sub-title v-html="item[1]"></v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
@@ -106,6 +105,7 @@
         description: this.$t('accounts.description'),
         dialog: false,
         modelName: '',
+        itemName: '',
         selItems: [],
         appMenu: appMenu,
         panels: [],
@@ -150,6 +150,23 @@
       allClose() {
         this.panels = []
       },
+      getFieldName(model) {
+        let fieldName = '';
+        switch (model) {
+          case 'Role':
+            fieldName = 'name';
+            break;
+          case 'Team':
+            fieldName = 'name';
+            break;
+          case 'User':
+            fieldName = 'fullName';
+            break;
+          default:
+            fieldName = '';
+        }
+        return fieldName
+      },
       getSelObject(selItem) {
         const loCapitalize = require('lodash/capitalize');
         const loForIn = require('lodash/forIn');
@@ -159,9 +176,11 @@
         const id = selItem.split('_')[1];
         let model = loCapitalize(selItem.split('.')[0]);
         this.modelName = model;
+        const fieldName = this.getFieldName(model);
         model = this.$FeathersVuex[model];
         // Get item from store
         const objItem = model.getFromStore(id);
+        this.itemName = fieldName ? objItem[fieldName] : '';
         // Get simple object
         let newObj = {};
         loForIn(objItem, (value, key) => {

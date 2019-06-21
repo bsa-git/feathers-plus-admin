@@ -63,14 +63,6 @@ const stripSpecific = function (value, symbol = '') {
   return trimValue;
 };
 
-/**
- * Parse bool
- * @param b String|Any
- * @return boolean
- */
-const parseBool = function (b) {
-  return !(/^(false|0)$/i).test(b) && !!b;
-};
 
 /**
  * Is true
@@ -256,7 +248,6 @@ export default {
   pause,
   stripSlashes,
   stripSpecific,
-  parseBool,
   isTrue,
   getAccessToken,
   isAccessToken,

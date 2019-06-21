@@ -21,7 +21,7 @@ export default async function (context) {
     if (!auth.isAccess(route.path)) {
       debug(`This path '${route.path}' is not available. Not enough rights.`);
       store.commit('SHOW_ERROR', `${$t('error.not_enough_rights')}.`);
-      const fullPath = (store.state.locale === store.state.fallbackLocale) ? '/user/login' : `/${store.state.locale}/user/login`;
+      const fullPath = (store.state.config.locale === store.state.config.fallbackLocale) ? '/user/login' : `/${store.state.config.locale}/user/login`;
       return redirect(fullPath);
     }
 

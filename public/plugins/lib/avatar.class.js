@@ -12,6 +12,14 @@ const localAvatars = [
   '/static/img/avatar/user_7.png',
 ];
 
+const vuetifyAvatars = [
+  'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+  'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+  'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+  'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+  'https://cdn.vuetifyjs.com/images/lists/5.jpg'
+];
+
 const avataaars = [
   '?accessoriesType=Blank&avatarStyle=Circle&clotheColor=PastelGreen&clotheType=ShirtScoopNeck&eyeType=Wink&eyebrowType=UnibrowNatural&facialHairColor=Black&facialHairType=MoustacheMagnum&hairColor=Platinum&mouthType=Concerned&skinColor=Tanned&topType=Turban',
   '?accessoriesType=Sunglasses&avatarStyle=Circle&clotheColor=Gray02&clotheType=ShirtScoopNeck&eyeType=EyeRoll&eyebrowType=RaisedExcited&facialHairColor=Red&facialHairType=BeardMagestic&hairColor=Red&hatColor=White&mouthType=Twinkle&skinColor=DarkBrown&topType=LongHairBun',
@@ -27,7 +35,8 @@ class Avatar {
       defaultType: 'mp', // '404'
       size: 80,
       defaultImage: '/static/img/avatar/user_default.png',
-      multiImages: true
+      isMultiImages: true,
+      multiImages: 'vuetifyAvatars',// avataaars || vuetifyAvatars || localAvatars
     };
     Object.assign(this.params, params);
     this.email = email;
@@ -71,21 +80,42 @@ class Avatar {
     });
   }
 
+  /**
+   * Get image
+   * @return {Promise.<*>}
+   */
   async getImage() {
     try {
       const url = this.imageUrl('404');
       await this.loadImage(url);
       return url;
     } catch (error) {
-      // return this.params.defaultImage;
-      return  this.params.multiImages? this.randomAvatar(): this.params.defaultImage;
+      return  this.params.isMultiImages? this.getRandomAvatar(): this.params.defaultImage;
     }
   }
 
-  randomAvatar(local = false) {
-    const localAvatar = localAvatars[Math.floor(Math.random() * localAvatars.length)];
-    const avataaar = avataaars[Math.floor(Math.random() * avataaars.length)];
-    return local ? localAvatar : `https://avataaars.io/${avataaar}`;
+  /**
+   * Get random avatar
+   * @return {string}
+   */
+  getRandomAvatar() {
+
+    let avatar = '';
+    switch(this.params.multiImages) {
+    case 'localAvatars':
+      avatar = localAvatars[Math.floor(Math.random() * localAvatars.length)];
+      break;
+    case 'vuetifyAvatars':
+      avatar = vuetifyAvatars[Math.floor(Math.random() * vuetifyAvatars.length)];
+      break;
+    case 'avataaars':
+      avatar = avataaars[Math.floor(Math.random() * avataaars.length)];
+      avatar = `https://avataaars.io/${avatar}`;
+      break;
+    default:
+      avatar = this.params.defaultImage;
+    }
+    return avatar;
   }
 }
 

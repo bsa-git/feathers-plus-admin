@@ -8,11 +8,10 @@
   >
     <!-- Logo -->
     <v-toolbar class="" color="primary darken-1" dark>
-      <v-icon v-if="isIcon">{{ logoImg }}</v-icon>
-      <v-avatar v-else-if="isAvatar" size="36px">
-        <img :src="logoImg">
+      <v-avatar v-if="isAvatar" size="36px">
+        <img :src="logoImage">
       </v-avatar>
-      <img v-else :src="logoImg" height="36" alt="Vue Material Admin Template">
+      <v-icon v-else>{{ logoImage }}</v-icon>
       <v-toolbar-title class="headline ml-0 pl-3">
         <span class="font-weight-black font-italic">{{ logoTitle }}</span>
       </v-toolbar-title>
@@ -112,9 +111,8 @@
     props: {
       isIcon: Boolean,
       isAvatar: Boolean,
-      isImg: Boolean,
       logoTitle: String,
-      logoImg: String,
+      logoImage: String,
       homePath: String,
       locale: String,
       appMenu: Array,

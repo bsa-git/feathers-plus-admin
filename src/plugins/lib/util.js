@@ -39,15 +39,6 @@ const stripSpecific = function (value, symbol = '') {
 };
 
 /**
- * Parse bool
- * @param b String|Any
- * @return boolean
- */
-const parseBool = function (b) {
-  return !(/^(false|0)$/i).test(b) && !!b;
-};
-
-/**
  * Is true
  * @param value String|Any
  * @return boolean
@@ -140,7 +131,6 @@ module.exports = {
   delayTime,
   stripSlashes,
   stripSpecific,
-  parseBool,
   isTrue,
   inspector,
   qlParams,

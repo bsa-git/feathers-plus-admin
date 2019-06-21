@@ -39,7 +39,7 @@
   },
   {
     "title": "Administration",
-    "group": "apps",
+    "group": "admins",
     "name": "admins",
     "alias": "admins",
     "icon": "build",
@@ -69,47 +69,33 @@
     ]
   },
   {
-    "title": "Service",
-    "group": "service",
-    "name": "service",
-    "alias": "service",
+    "title": "Services",
+    "group": "services",
+    "name": "services",
+    "alias": "services",
     "icon": "account_circle",
-    "to": "/service",
+    "to": "/services",
     "items": [
       {
-        "title": "Actions",
-        "group": "actions",
-        "name": "service-actions",
-        "alias": "actions",
-        "to": "/service/actions",
+        "title": "GraphQL",
+        "group": "services",
+        "name": "services-graphql",
+        "alias": "graphql",
+        "to": "/services/graphql",
         "children": [
           {
-            "name": "service-actions-create",
-            "alias": "create",
-            "title": "Create",
-            "icon": "add",
-            "to": "/service/actions/create"
+            "name": "services-graphql-find",
+            "alias": "find",
+            "title": "Find",
+            "icon": "youtube_searched_for",
+            "to": "/services/graphql/find"
           },
           {
-            "name": "service-actions-read",
-            "alias": "read",
-            "title": "Read",
-            "icon": "insert_drive_file",
-            "to": "/service/actions/read"
-          },
-          {
-            "name": "service-actions-update",
-            "alias": "update",
-            "title": "Update",
-            "icon": "update",
-            "to": "/service/actions/update"
-          },
-          {
-            "name": "service-actions-delete",
-            "alias": "delete",
-            "title": "Delete",
-            "icon": "delete",
-            "to": "/service/actions/delete"
+            "name": "services-graphql-get",
+            "alias": "get",
+            "title": "Get",
+            "icon": "get_app",
+            "to": "/services/graphql/get"
           }
         ]
       }

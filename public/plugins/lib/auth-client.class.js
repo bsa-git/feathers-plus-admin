@@ -1,6 +1,6 @@
 const loConcat = require('lodash/concat');
 import appMenu from '~/api/data/app-menu';
-import util from '~/plugins/lib/util';
+// import util from '~/plugins/lib/util';
 
 const debug = require('debug')('app:plugins.auth-client.class');
 
@@ -14,9 +14,12 @@ class AuthClient {
   constructor(store) {
     this.store = store;
     this.menu = appMenu;
-    this.locales = util.stripSpecific(process.env.LOCALES, ';').split(';').filter(locale => locale.trim() !== process.env.FALLBACK_LOCALE);
-    this.envPublicPaths = util.stripSpecific(process.env.PUBLIC_PATHS, ';').split(';').map(item => item.trim());
-    this.envAdminPaths = util.stripSpecific(process.env.ADMIN_PATHS, ';').split(';').map(item => item.trim());
+    this.config = store.getters.getConfig;
+    this.locales = this.config.locales.filter(locale => locale !== this.config.fallbackLocale);
+    this.envPublicPaths = this.config.publicPaths;
+    this.envAdminPaths = this.config.adminPaths;
+    this.envPublicServices = this.config.publicServices;
+    this.envAdminServices = this.config.adminServices;
     this.envRoles = store.getters.getRoles();
     const {auth} = store.state;
     this.user = auth.user;
@@ -112,6 +115,20 @@ class AuthClient {
   }
 
   /**
+   * Get list services
+   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * @param envServices
+   * @return {Object}
+   */
+  listServices(envServices = '') {
+    const _services = {};
+    envServices.forEach(service => {
+      Object.assign(_services, service);
+    });
+    return _services;
+  }
+
+  /**
    * Get public paths for auth
    * @return Array
    */
@@ -125,6 +142,24 @@ class AuthClient {
    */
   adminPaths() {
     return this.listPaths(this.envAdminPaths);
+  }
+
+  /**
+   * Get public services for auth
+   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * @return Object
+   */
+  publicServices() {
+    return this.listServices(this.envPublicServices);
+  }
+
+  /**
+   * Get admin services for auth
+   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * @return Object
+   */
+  adminServices() {
+    return this.listServices(this.envAdminServices);
   }
 
 }

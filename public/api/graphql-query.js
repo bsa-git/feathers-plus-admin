@@ -1,8 +1,5 @@
-
-const {readJsonFileSync, appRoot} = require('../lib');
-
 // Get generated fake data
-let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+import fakeData from '~~/seeds/fake-data.json';
 
 const idFieldUser = 'id' in fakeData['users'][0] ? 'id' : '_id';
 const idFieldRole = 'id' in fakeData['roles'][0] ? 'id' : '_id';
@@ -12,7 +9,7 @@ const userId = fakeData['users'][0][idFieldUser];
 const roleId = fakeData['roles'][0][idFieldRole];
 const teamId = fakeData['teams'][0][idFieldTeam];
 
-const getUser = `{
+let getUser = `{
   getUser(key: "${userId}") {
     ${idFieldUser}
     email
@@ -30,7 +27,31 @@ const getUser = `{
   }
 }`;
 
-const findUser = `{
+let getRole = `{
+  getRole(key: "${roleId}") {
+    ${idFieldRole}
+    name
+    users{
+      ${idFieldUser}
+      email
+      fullName
+    }
+  }
+}`;
+
+let getTeam = `{
+  getTeam(key: "${teamId}") {
+    ${idFieldTeam}
+    name
+    members{
+      ${idFieldUser}
+      email
+      fullName
+    }
+  }
+}`;
+
+let findUser = `{
   findUser(query: {${idFieldUser}: "${userId}"}) {
     ${idFieldUser}
     email
@@ -48,19 +69,7 @@ const findUser = `{
   }
 }`;
 
-const getRole = `{
-  getRole(key: "${roleId}") {
-    ${idFieldRole}
-    name
-    users{
-      ${idFieldUser}
-      email
-      fullName
-    }
-  }
-}`;
-
-const findRole = `{
+let findRole = `{
   findRole(query: {${idFieldRole}: "${roleId}"}) {
     ${idFieldRole}
     name
@@ -72,19 +81,7 @@ const findRole = `{
   }
 }`;
 
-const getTeam = `{
-  getTeam(key: "${teamId}") {
-    ${idFieldTeam}
-    name
-    members{
-      ${idFieldUser}
-      email
-      fullName
-    }
-  }
-}`;
-
-const findTeam = `{
+let findTeam = `{
   findTeam(query: {${idFieldTeam}: "${teamId}"}) {
     ${idFieldTeam}
     name
@@ -96,11 +93,11 @@ const findTeam = `{
   }
 }`;
 
-module.exports = {
+export default {
   getUser,
-  findUser,
   getRole,
-  findRole,
   getTeam,
-  findTeam
+  findUser,
+  findRole,
+  findTeam,
 };

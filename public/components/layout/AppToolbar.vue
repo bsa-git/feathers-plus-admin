@@ -107,10 +107,9 @@
           }
         });
       },
-      ...mapState([
-          'locale'
-        ]
-      ),
+      ...mapState({
+        locale: state => state.config.locale
+      }),
     },
     methods: {
       async itemClick(type) {

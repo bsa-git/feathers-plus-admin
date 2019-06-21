@@ -62,9 +62,9 @@ let moduleExports = {
 //---------------
 const loConcat = require('lodash/concat');
 // Add hooks
-// moduleExports.before.all = loConcat(moduleExports.before.all, [myLog(), auth.userRightsCheck()]);
+// moduleExports.before.all = loConcat(moduleExports.before.all, [myLog(), auth.authCheck()]);
 // moduleExports.after.all = loConcat([normalizeQuery(), myLog()], moduleExports.after.all);
-moduleExports.before.all = loConcat([myLog(), auth.userRightsCheck(), constraints()]);
+moduleExports.before.all = loConcat([myLog(), auth.authCheck(), constraints()]);
 moduleExports.after.all = loConcat([normalize(), constraints(), myLog()]);
 //---------------
 // !end

@@ -16,15 +16,15 @@
     </app-toolbar>
     <!-- Left toolbar -->
     <app-drawer
-      isAvatar
+      :isAvatar="config.isAvatar"
+      :logo-image="config.isAvatar? devAvatar():config.logoImage"
       :logo-title="config.logoTitle"
-      :logo-img="devAvatar()"
       :home-path="config.homePath"
       :app-menu="appMenu"
       :user="user"
       :drawer="navLeft"
       v-on:onNavLeft="modelNavLeft"
-     ></app-drawer>
+    ></app-drawer>
     <!-- Page content -->
     <app-page-content>
       <app-footer
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import appMenu from '~/api/data/app-menu.json';
   import userMenu from '~/api/data/user-menu.json';
   import notes from '~/api/data/app-notification.json';
@@ -102,9 +102,9 @@
         this.navLeft = newValue
       },
       modelSnackBar: function (newValue) {
-        this.$store.commit('SET_SNACK_BAR', { show: newValue });
+        this.$store.commit('SET_SNACK_BAR', {show: newValue});
       },
-      devAvatar(){
+      devAvatar() {
         const avatar = new this.$Avatar(this.config.email);
         return avatar.imageUrl();
       },

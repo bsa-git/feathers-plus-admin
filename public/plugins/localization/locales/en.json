@@ -21,12 +21,16 @@
     "chat": "Chat",
     "inbox": "Inbox",
     "media": "Media",
-    "service": "Service",
+    "services": "Services",
     "admins": "Administration",
     "accounts": "Accounts",
     "management": "Management",
     "settings": "Settings",
     "actions": "Actions",
+    "graphql": "GraphQL",
+    "request": "Request",
+    "find": "Find",
+    "get": "Get",
     "create": "Create",
     "read": "Read",
     "update": "Update",
@@ -219,5 +223,24 @@
     "searchNoResults": "Your search found no results",
     "errRoleNameNotExistInEnv": "Role name does not exist in .env",
     "errGuestRoleNotExist": "The guest role does not exist in data base"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "User Settings",
+    "environment": "Environment settings",
+    "general": "General",
+    "personalData": "Personal Data",
+    "secretData": "Secret Data",
+    "authorization": "Authorization",
+    "database": "Data Base"
+  },
+  "graphql": {
+    "title": "GraphQL",
+    "description": "GraphQL is a query language for APIs",
+    "findData": "Find Data",
+    "getData": "Get Data",
+    "searchQuery": "Search Query",
+    "enterGraphLQuery": "Enter the GraphL query string",
+    "responseToRequest": "Response to the request"
   }
 }

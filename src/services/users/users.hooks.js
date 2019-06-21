@@ -11,6 +11,7 @@ const usersPopulate = require('./users.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');
+// const {authCheck} = require('../../hooks/auth');
 //---------------
 // !end
 
@@ -75,7 +76,6 @@ let moduleExports = {
 //---------------
 // Add hooks
 moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create);
-// moduleExports.before.create = loConcat([accountsProfileData(), verifyEmail()], moduleExports.before.create);
 moduleExports.before.update = loConcat([accountsProfileData(), validateUpdate()], moduleExports.before.update);
 moduleExports.before.patch = loConcat([accountsProfileData(), validatePatch()], moduleExports.before.patch);
 //---------------

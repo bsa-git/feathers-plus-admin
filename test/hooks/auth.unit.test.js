@@ -49,8 +49,8 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
     contextAfterPaginated.result.total = contextAfterPaginated.result.data.length;
   });
 
-  it('auth.userRightsCheck hook exists', () => {
-    assert(typeof authHook.userRightsCheck() === 'function', 'auth.userRightsCheck hook is not a function.');
+  it('authHook.authCheck hook exists', () => {
+    assert(typeof authHook.authCheck() === 'function', 'authHook.authCheck hook is not a function.');
   });
 
   it('auth.payloadExtension hook exists', () => {
@@ -75,52 +75,47 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
     });
   });
 
-  it('Check access to public services', () => {
+  it('Check access to public services', async () => {
     try {
       const objServices = AuthServer.listServices(process.env.PUBLIC_SERVICES);
       const serviceNames = Object.keys(objServices);
-      serviceNames.forEach(name => {
-        objServices[name].forEach(method => {
-          contextBefore.path = name;
-          contextBefore.method = method;
-          authHook.userRightsCheck(true)(contextBefore);
-          if (isLog) inspector('Check access to public services.contextBefore:', contextBefore);
-          if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
-        });
-      });
+      const name = serviceNames[0];
+      const method = objServices[name][0];
+      contextBefore.path = name;
+      contextBefore.method = method;
+      await authHook.authCheck(true)(contextBefore);
+      if (isLog) inspector('Check access to public services.contextBefore:', contextBefore);
+      if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
       assert(true);
     }
     catch (ex) {
       console.error(chalk.red(ex.message));
-      assert(false, 'The hook "auth.userRightsCheck()" generated an error of the wrong type.');
+      assert(false, 'The hook "authHook.authCheck()" generated an error of the wrong type.');
     }
   });
 
-  it('Error accessing services to public services', () => {
+  it('Error accessing services to not public services', async () => {
     try {
       const objServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
       const serviceNames = Object.keys(objServices);
-      serviceNames.forEach(name => {
-        objServices[name].forEach(method => {
-          contextBefore.path = name;
-          contextBefore.method = method;
-          if (isLog) inspector('Error accessing services to public services.contextBefore:', contextBefore);
-          if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
-          authHook.userRightsCheck(true)(contextBefore);
-        });
-      });
-      assert(false, 'The hook "auth.userRightsCheck()" generated an error of the wrong type.');
+      const name = serviceNames[0];
+      const method = objServices[name][0];
+      contextBefore.path = name;
+      contextBefore.method = method;
+      if (isLog) inspector('Error accessing services to not public services.contextBefore:', contextBefore);
+      if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
+      await authHook.authCheck(true)(contextBefore);
+      assert(false, 'The hook "authHook.authCheck()" generated an error of the wrong type.');
     }
     catch (ex) {
       assert.strictEqual(ex.code, 403, 'unexpected error.code');
       assert.strictEqual(ex.message, `Access to the service method "${contextBefore.path}.${contextBefore.method}" is denied. Not enough rights`, 'unexpected error.message');
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
-      // console.error(chalk.red(ex.message));
     }
 
   });
 
-  it('Check access to services for the administrator role', () => {
+  it('Check access to services for the administrator role', async () => {
     try {
       // Set context params
       contextBefore.params.authenticated = true;
@@ -129,24 +124,22 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
 
       const objServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
       const serviceNames = Object.keys(objServices);
-      serviceNames.forEach(name => {
-        objServices[name].forEach(method => {
-          contextBefore.path = name;
-          contextBefore.method = method;
-          authHook.userRightsCheck(true)(contextBefore);
-          if (isLog) inspector('Check access to services for the administrator role.contextBefore:', contextBefore);
-          if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
-        });
-      });
+      const name = serviceNames[0];
+      const method = objServices[name][0];
+      contextBefore.path = name;
+      contextBefore.method = method;
+      await authHook.authCheck(true)(contextBefore);
+      if (isLog) inspector('Check access to services for the administrator role.contextBefore:', contextBefore);
+      if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
       assert(true);
     }
     catch (ex) {
       console.error(chalk.red(ex.message));
-      assert(false, 'The hook "auth.userRightsCheck()" generated an error of the wrong type.');
+      assert(false, 'The hook "authHook.authCheck()" generated an error of the wrong type.');
     }
   });
 
-  it('Error accessing services if the role is not an administrator', () => {
+  it('Error accessing services if the role is not an administrator', async () => {
     try {
       // Set context params
       contextBefore.params.authenticated = true;
@@ -155,22 +148,19 @@ describe('<< Test /hooks/auth.unit.test.js >>', () => {
 
       const objServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
       const serviceNames = Object.keys(objServices);
-      serviceNames.forEach(name => {
-        objServices[name].forEach(method => {
-          contextBefore.path = name;
-          contextBefore.method = method;
-          if (isLog) inspector('Error accessing services if the role is not an administrator.contextBefore:', contextBefore);
-          if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
-          authHook.userRightsCheck(true)(contextBefore);
-        });
-      });
-      assert(false, 'The hook "auth.userRightsCheck()" generated an error of the wrong type.');
+      const name = serviceNames[0];
+      const method = objServices[name][0];
+      contextBefore.path = name;
+      contextBefore.method = method;
+      if (isLog) inspector('Error accessing services if the role is not an administrator.contextBefore:', contextBefore);
+      if (isDebug) debug(`Check access to service method - "${contextBefore.path}.${contextBefore.method}"`);
+      await authHook.authCheck(true)(contextBefore);
+      assert(false, 'The hook "authHook.authCheck()" generated an error of the wrong type.');
     }
     catch (ex) {
       assert.strictEqual(ex.code, 403, 'unexpected error.code');
       assert.strictEqual(ex.message, `Access to the service method "${contextBefore.path}.${contextBefore.method}" is denied. Not enough rights`, 'unexpected error.message');
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
-      // console.error(chalk.red(ex.message));
     }
   });
 });

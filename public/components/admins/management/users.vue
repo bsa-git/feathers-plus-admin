@@ -572,12 +572,6 @@
           this.idItem = null;
         } catch (error) {
           if (isLog) debug('user.remove.error:', error);
-          let type = error.className ? error.className : 'error';
-          error = Object.assign({}, error);
-          error.message = (type === 'forbidden')
-            ? `${this.$t('management.errForbidden')}.`
-            : `${this.$t('management.errDelete')}.`;
-          this.error = error;
           this.showError(error.message);
         }
       },

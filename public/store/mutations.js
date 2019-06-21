@@ -1,12 +1,17 @@
 
 import cookies from 'browser-cookies';
+const debug = require('debug')('app:store.mutations');
+
+const isLog = false;
 
 const mutations = {
 
   //--- LOCALE ---//
   SET_LANG(state, locale) {
-    if (state.locales.indexOf(locale) !== -1) {
-      state.locale = locale;
+    const locales = state.config.locales;
+    if(isLog) debug('SET_LANG.state.config.locales', locales);
+    if ( Array.isArray(locales) && locales.indexOf(locale) >= 0) {
+      state.config.locale = locale;
       if( process.client && cookies.get('locale') !== locale){
         cookies.set('locale', locale);
       }

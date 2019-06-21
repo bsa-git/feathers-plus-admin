@@ -14,6 +14,10 @@ const getters = {
     return state.snackbar;
   },
 
+  getTheme(state) {
+    return state.theme;
+  },
+
   isAuth(state) {
     return !!state.auth.accessToken;
   },

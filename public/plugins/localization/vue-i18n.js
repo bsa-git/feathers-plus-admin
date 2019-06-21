@@ -6,12 +6,12 @@ Vue.use(VueI18n);
 
 export default (context) => {
   const app = context.app;
-  const  store = context.store;
+  const config = context.store.state.config
   // Set i18n instance on app
   // This way we can use it in middleware and pages asyncData/fetch
   app.i18n = new VueI18n({
-    locale: store.state.locale,
-    fallbackLocale: process.env.FALLBACK_LOCALE || 'en',
+    locale: config.locale,
+    fallbackLocale: config.fallbackLocale,
     messages: {
       'en': require('~/plugins/localization/locales/en.json'),
       'ru': require('~/plugins/localization/locales/ru.json')
