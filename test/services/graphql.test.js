@@ -77,7 +77,7 @@ describe('<<< Test \'graphql\' service >>>', () => {
       });
 
       it('registered the \'teams\' service', () => {
-        const service = app.service('roles');
+        const service = app.service('teams');
         assert.ok(service, 'Registered the service');
       });
 
@@ -87,6 +87,28 @@ describe('<<< Test \'graphql\' service >>>', () => {
         if (Array.isArray(results)) {
           results.forEach((result, index) => {
             let fake = fakes['teams'][index];
+            delete result.createdAt;
+            delete result.updatedAt;
+            delete result['__v'];
+            assert.deepEqual(result, fake);
+          });
+        } else {
+          debug('seedService.results:', results);
+          assert.ok(false);
+        }
+      });
+
+      it('registered the \'userTeams\' service', () => {
+        const service = app.service('user-teams');
+        assert.ok(service, 'Registered the service');
+      });
+
+      it('Save fake data to \'userTeams\' service', async () => {
+        // Seed service data
+        const results = await seedService(app, 'userTeams');
+        if (Array.isArray(results)) {
+          results.forEach((result, index) => {
+            let fake = fakes['userTeams'][index];
             delete result.createdAt;
             delete result.updatedAt;
             delete result['__v'];

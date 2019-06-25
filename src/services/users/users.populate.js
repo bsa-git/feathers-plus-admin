@@ -125,7 +125,6 @@ const twoLevelsFields = {
       _id: 1,
       name: 1,
       description: 1,
-      memberIds: 1,
       members: {},
     },
   }

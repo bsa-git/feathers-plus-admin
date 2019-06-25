@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Validation definitions for validateSchema hook for service `teams`. (Can be re-generated.)
+// Validation definitions for validateSchema hook for service `userProfiles`. (Can be re-generated.)
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash.merge');
 const ajv = require('ajv');
@@ -15,31 +15,11 @@ const ID = 'string';
 let base = merge({},
   // !<DEFAULT> code: base
   {
-    title: "Teams",
-    description: "Teams database.",
-    fakeRecords: 3,
+    title: "UserProfiles",
+    description: "UserProfiles database.",
     required: [],
-    uniqueItemProperties: [
-      "name"
-    ],
-    properties: {
-      id: {
-        type: ID
-      },
-      _id: {
-        type: ID
-      },
-      name: {
-        minLength: 2,
-        maxLength: 30,
-        faker: "commerce.productName",
-        type: "string"
-      },
-      description: {
-        faker: "lorem.sentence",
-        type: "string"
-      }
-    }
+    uniqueItemProperties: [],
+    properties: {}
   },
   // !end
   // !code: base_more // !end

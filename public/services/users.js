@@ -52,31 +52,18 @@ const servicePlugin = service(servicePath, {
         const idFieldTeam = store.state.teams.idField;
         const idFieldUser = store.state.users.idField;
         const userId = data[idFieldUser];
-        let users = {};
-        let userTeams = Models.UserTeam.findInStore({query: {$sort: {userId: 1, teamId: 1}}}).data;
-        userTeams.forEach(userTeam => {
-          if (!users[userTeam.userId]) {
-            users[userTeam.userId] = [];
-          }
-          users[userTeam.userId].push(userTeam.teamId);
+        let teamIdsForUser = Models.UserTeam.findInStore({query: {userId: userId, $sort: {teamId: 1}}}).data;
+        teamIdsForUser = teamIdsForUser.map(row => row.teamId.toString());
+        let teamsForUser = Models.Team.findInStore({query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}}).data;
+        teamsForUser = teamsForUser.map(row => {
+          return {
+            id: row[idFieldTeam],
+            name: row.name,
+            description: row.description,
+          };
         });
-        if(isLog)debug('teams.users:', users);
-        const teamIds = users[userId] ? users[userId] : [];
-        if(isLog)debug('teams.teamIds:', teamIds);
-        let teams = teamIds.map(teamId => {
-          let team = Models.Team.getFromStore(teamId);
-          if (team) {
-            const id = team[idFieldTeam];
-            team = loPick(team, ['name', 'description']);
-            team.id = id;
-          } else {
-            team = null;
-          }
-          return team;
-        });
-        if(isLog)debug('teams:', teams);
-        teams = teams.filter(team => !(team === null));
-        return teams;
+        if(isLog)debug('teams.teamsForUser:', teamsForUser);
+        return  teamsForUser;
       },
     };
   },

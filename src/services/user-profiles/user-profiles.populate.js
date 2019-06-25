@@ -1,5 +1,5 @@
 
-// fgraphql populate hook for service `teams`. (Can be re-generated.)
+// fgraphql populate hook for service `userProfiles`. (Can be re-generated.)
 const runTime = require('@feathers-plus/graphql/lib/run-time');
 const { fgraphql, serialize } = require('feathers-hooks-common');
 const { parse } = require('graphql');
@@ -16,23 +16,17 @@ const queries = {
   // All resolver fields 1 level deep.
   oneLevel: {
     query: {
-      members: {},
     }
   },
   // All resolver fields 2 levels deep.
   twoLevels: {
     query: {
-      members: {
-        fullName: {},
-        role: {},
-        teams: {},
-      },
     }
   },
   // !code: queries // !end
 };
 
-async function teamsPopulate (context) {
+async function userProfilesPopulate (context) {
   // eslint-disable-next-line no-unused-vars
   const params = context.params;
   let query, options, serializer;
@@ -62,7 +56,7 @@ async function teamsPopulate (context) {
     runTime,
     schema,
     resolvers,
-    recordType: 'Team',
+    recordType: 'UserProfile',
     query,
     options,
   })(context);
@@ -78,7 +72,7 @@ async function teamsPopulate (context) {
 }
 
 // !code: more // !end
-let moduleExports = teamsPopulate;
+let moduleExports = userProfilesPopulate;
 
 // !code: exports // !end
 module.exports = moduleExports;
@@ -89,30 +83,6 @@ module.exports = moduleExports;
 /* For your information: all record and resolver fields 2 levels deep.
 const twoLevelsFields = {
   query: {
-    id: 1,
-    _id: 1,
-    name: 1,
-    description: 1,
-    members: {
-      _args: {},
-      id: 1,
-      _id: 1,
-      email: 1,
-      password: 1,
-      firstName: 1,
-      lastName: 1,
-      avatar: 1,
-      roleId: 1,
-      googleId: 1,
-      githubId: 1,
-      googleAccessToken: 1,
-      googleRefreshToken: 1,
-      githubAccessToken: 1,
-      githubRefreshToken: 1,
-      fullName: {},
-      role: {},
-      teams: {},
-    },
   }
 };
 */

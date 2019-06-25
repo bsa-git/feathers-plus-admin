@@ -17,8 +17,11 @@ type Team {
   _id: ID
   name: String
   description: String
-  memberIds: [String]
   members: [User!]
+}
+ 
+type UserProfile {
+  
 }
  
 type UserTeam {
@@ -44,7 +47,7 @@ type User {
   githubRefreshToken: String
   fullName: String!
   role(query: JSON, params: JSON, key: JSON): Role
-  teams(query: JSON, params: JSON, key: JSON): [Team!]
+  teams: [Team!]
 }
  
 
@@ -53,6 +56,8 @@ type Query {
   findRole(query: JSON, params: JSON): [Role]!
   getTeam(key: JSON, query: JSON, params: JSON): Team
   findTeam(query: JSON, params: JSON): [Team]!
+  getUserProfile(key: JSON, query: JSON, params: JSON): UserProfile
+  findUserProfile(query: JSON, params: JSON): [UserProfile]!
   getUserTeam(key: JSON, query: JSON, params: JSON): UserTeam
   findUserTeam(query: JSON, params: JSON): [UserTeam]!
   getUser(key: JSON, query: JSON, params: JSON): User

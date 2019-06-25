@@ -2,6 +2,7 @@
 // Configure the Feathers services. (Can be re-generated.)
 let roles = require('./roles/roles.service');
 let teams = require('./teams/teams.service');
+let userProfiles = require('./user-profiles/user-profiles.service');
 let userTeams = require('./user-teams/user-teams.service');
 let users = require('./users/users.service');
 
@@ -13,6 +14,7 @@ let graphql = require('./graphql/graphql.service');
 let moduleExports = function (app) {
   app.configure(roles);
   app.configure(teams);
+  app.configure(userProfiles);
   app.configure(userTeams);
   app.configure(users);
 

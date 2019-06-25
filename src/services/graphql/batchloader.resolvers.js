@@ -23,6 +23,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // !<DEFAULT> code: services
   let roles = app.service('/roles');
   let teams = app.service('/teams');
+  let userProfiles = app.service('/user-profiles');
   let userTeams = app.service('/user-teams');
   let users = app.service('/users');
   // !end
@@ -87,10 +88,10 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     // Team.members: [User!]
     // !<DEFAULT> code: bl-Team-members
     case 'Team.members':
-      return feathersBatchLoader(dataLoaderName, '[!]', '_id',
+      return feathersBatchLoader(dataLoaderName, '[!]', '__NO_RELATION_OTHER_TABLE__',
         keys => {
           feathersParams = convertArgs(args, content, null, {
-            query: { _id: { $in: keys }, $sort: undefined },
+            query: { __NO_RELATION_OTHER_TABLE__: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
           return users.find(feathersParams);
@@ -114,13 +115,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       );
       // !end
 
-    // User.teams(query: JSON, params: JSON, key: JSON): [Team!]
+    // User.teams: [Team!]
     // !<DEFAULT> code: bl-User-teams
     case 'User.teams':
-      return feathersBatchLoader(dataLoaderName, '[!]', 'memberIds',
+      return feathersBatchLoader(dataLoaderName, '[!]', '__NO_RELATION_OTHER_TABLE__',
         keys => {
           feathersParams = convertArgs(args, content, null, {
-            query: { memberIds: { $in: keys }, $sort: undefined },
+            query: { __NO_RELATION_OTHER_TABLE__: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
           return teams.find(feathersParams);
@@ -151,8 +152,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
       // members: [User!]
       // !<DEFAULT> code: resolver-Team-members
-      members: getResult('Team.members', 'memberIds', true),
+      members: getResult('Team.members', '__NO_RELATION_OUR_TABLE__', true),
       // !end
+    },
+
+    UserProfile: {
     },
 
     UserTeam: {
@@ -170,9 +174,9 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       role: getResult('User.role', 'roleId'),
       // !end
 
-      // teams(query: JSON, params: JSON, key: JSON): [Team!]
+      // teams: [Team!]
       // !<DEFAULT> code: resolver-User-teams
-      teams: getResult('User.teams', '_id', true),
+      teams: getResult('User.teams', '__NO_RELATION_OUR_TABLE__', true),
       // !end
     },
 
@@ -204,6 +208,20 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       findTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-UserProfile
+      // getUserProfile(query: JSON, params: JSON, key: JSON): UserProfile
+      getUserProfile(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return userProfiles.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findUserProfile(query: JSON, params: JSON): [UserProfile!]
+      findUserProfile(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return userProfiles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 

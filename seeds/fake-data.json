@@ -1,13 +1,13 @@
 {
   "users": [
     {
-      "_id": "5cee1f0939fb561390d665af",
-      "email": "Dewayne.Kuhlman84@yahoo.com",
-      "password": "Dewayne.Kuhlman84",
-      "firstName": "Cheyanne",
-      "lastName": "Hegmann",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/alterchuca/128.jpg",
-      "roleId": "5cee1f0939fb561390d665b2",
+      "_id": "5d1061f448dcfa11ec4860cc",
+      "email": "Annabelle_Hane77@hotmail.com",
+      "password": "Annabelle_Hane77",
+      "firstName": "Dovie",
+      "lastName": "Parisian",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/emsgulam/128.jpg",
+      "roleId": "5d1061f448dcfa11ec4860cf",
       "googleId": "4943272568946688",
       "githubId": "5339869586915328",
       "googleAccessToken": "84838145-2e9a-5e12-9241-8bfb5af807c8",
@@ -16,13 +16,13 @@
       "githubRefreshToken": "e122d4cf-55fc-5d0f-9b48-b009230a426a"
     },
     {
-      "_id": "5cee1f0939fb561390d665b0",
-      "email": "Luciano_Mitchell@gmail.com",
-      "password": "Luciano_Mitchell",
-      "firstName": "Jade",
-      "lastName": "Mante",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/itsajimithing/128.jpg",
-      "roleId": "5cee1f0939fb561390d665b2",
+      "_id": "5d1061f448dcfa11ec4860cd",
+      "email": "Birdie.Gorczany@hotmail.com",
+      "password": "Birdie.Gorczany",
+      "firstName": "Marquise",
+      "lastName": "Christiansen",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/nasirwd/128.jpg",
+      "roleId": "5d1061f448dcfa11ec4860d0",
       "googleId": "352972223545344",
       "githubId": "3978578282676224",
       "googleAccessToken": "0bfe2b6f-19bd-5448-89b9-b9efa58c568e",
@@ -31,13 +31,13 @@
       "githubRefreshToken": "cbeb4f43-a505-51d9-b109-7362bb9f6208"
     },
     {
-      "_id": "5cee1f0939fb561390d665b1",
-      "email": "August.Labadie@hotmail.com",
-      "password": "August.Labadie",
-      "firstName": "Cornelius",
-      "lastName": "Labadie",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/wegotvices/128.jpg",
-      "roleId": "5cee1f0939fb561390d665b3",
+      "_id": "5d1061f448dcfa11ec4860ce",
+      "email": "Kristina_Becker@yahoo.com",
+      "password": "Kristina_Becker",
+      "firstName": "Tyrel",
+      "lastName": "Swaniawski",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/arashmanteghi/128.jpg",
+      "roleId": "5d1061f448dcfa11ec4860d0",
       "googleId": "1346110658445312",
       "githubId": "8148342487908352",
       "googleAccessToken": "ac34cb78-714c-5ab0-b16a-f0a8da7f066c",
@@ -48,57 +48,48 @@
   ],
   "roles": [
     {
-      "_id": "5cee1f0939fb561390d665b2",
+      "_id": "5d1061f448dcfa11ec4860cf",
       "name": "Administrator",
-      "description": "Administrator is a role with maximum rights"
+      "description": "Sequi et quam reiciendis aliquid quidem quas repellendus sed a."
     },
     {
-      "_id": "5cee1f0939fb561390d665b3",
+      "_id": "5d1061f448dcfa11ec4860d0",
       "name": "Guest",
-      "description": "Guest is a role with minimal rights"
+      "description": "Veritatis eius odio qui ullam quidem quidem eos inventore."
     }
   ],
   "teams": [
     {
-      "_id": "5cee1f0939fb561390d665b4",
-      "name": "Refined Plastic Shirt",
-      "description": "They are to pay what has been said and accepted that either in the as possible",
-      "memberIds": [
-        "5cee1f0939fb561390d665b1"
-      ]
+      "_id": "5d1061f448dcfa11ec4860d1",
+      "name": "Handcrafted Frozen Pants",
+      "description": "Laborum odio aut quo quia sunt repellat sequi adipisci."
     },
     {
-      "_id": "5cee1f0939fb561390d665b5",
-      "name": "Sleek Concrete Chicken",
-      "description": "The wise denouncing it as a whole",
-      "memberIds": [
-        "5cee1f0939fb561390d665af"
-      ]
+      "_id": "5d1061f448dcfa11ec4860d2",
+      "name": "Tasty Rubber Keyboard",
+      "description": "Et consequatur doloribus dolores eos quos natus cupiditate nihil."
     },
     {
-      "_id": "5cee1f0939fb561390d665b6",
-      "name": "Ergonomic Wooden Salad",
-      "description": "However small, but the agony of the truth",
-      "memberIds": [
-        "5cee1f0939fb561390d665af"
-      ]
+      "_id": "5d1061f448dcfa11ec4860d3",
+      "name": "Awesome Frozen Bike",
+      "description": "Iste dignissimos impedit voluptatem aliquid autem rerum ab at aperiam."
     }
   ],
   "userTeams": [
     {
-      "_id": "5cee1f0939fb561390d665b7",
-      "teamId": "5cee1f0939fb561390d665b4",
-      "userId": "5cee1f0939fb561390d665b1"
+      "_id": "5d1061f448dcfa11ec4860d4",
+      "teamId": "5d1061f448dcfa11ec4860d2",
+      "userId": "5d1061f448dcfa11ec4860cc"
     },
     {
-      "_id": "5cee1f0939fb561390d665b8",
-      "teamId": "5cee1f0939fb561390d665b5",
-      "userId": "5cee1f0939fb561390d665af"
+      "_id": "5d1061f448dcfa11ec4860d5",
+      "teamId": "5d1061f448dcfa11ec4860d1",
+      "userId": "5d1061f448dcfa11ec4860cd"
     },
     {
-      "_id": "5cee1f0939fb561390d665b9",
-      "teamId": "5cee1f0939fb561390d665b6",
-      "userId": "5cee1f0939fb561390d665af"
+      "_id": "5d1061f448dcfa11ec4860d6",
+      "teamId": "5d1061f448dcfa11ec4860d3",
+      "userId": "5d1061f448dcfa11ec4860cd"
     }
   ]
 }

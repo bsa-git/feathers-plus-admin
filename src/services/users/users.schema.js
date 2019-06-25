@@ -90,7 +90,7 @@ let extensions = {
       //-------------------
       fullName: {type: 'String!', args: false},
       role: {type: 'Role', args: true, relation: {ourTable: 'roleId', otherTable: '_id'}},
-      teams: {type: '[Team!]', args: true, relation: {ourTable: '_id', otherTable: 'memberIds'}, /*sort: {name: 1}*/},
+      teams: {type: '[Team!]', args: false},
       //-------------------
       // !end
     },

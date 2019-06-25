@@ -50,27 +50,13 @@ const servicePlugin = service(servicePath, {
     };
   },
   getters: {
-    usersForTeam: (state, getters) => (teamId = null) => {
-      let teams = {};
-      let userTeams = getters.find({query: {$sort: {teamId: 1, userId: 1}}}).data;
-      userTeams.forEach(userTeam => {
-        if (!teams[userTeam.teamId]) {
-          teams[userTeam.teamId] = [];
-        }
-        teams[userTeam.teamId].push(userTeam.userId);
-      });
-      return teams[teamId] ? teams[teamId] : [];
+    userIdsForTeam: (state, getters) => (teamId = null) => {
+      const _usersForTeam = getters.find({query: {teamId: teamId, $sort: {userId: 1}}}).data;
+      return _usersForTeam.map(row => row.userId.toString());
     },
-    teamsForUser: (state, getters) => (userId = null) => {
-      let users = {};
-      let userTeams = getters.find({query: {$sort: {userId: 1, teamId: 1}}}).data;
-      userTeams.forEach(userTeam => {
-        if (!users[userTeam.userId]) {
-          users[userTeam.userId] = [];
-        }
-        users[userTeam.userId].push(userTeam.teamId);
-      });
-      return users[userId] ? users[userId] : [];
+    teamIdsForUser: (state, getters) => (userId = null) => {
+      const _teamsForUser = getters.find({query: {userId: userId, $sort: {teamId: 1}}}).data;
+      return _teamsForUser.map(row => row.teamId.toString());
     },
   },
 });

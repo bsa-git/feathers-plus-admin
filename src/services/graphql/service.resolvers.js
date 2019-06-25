@@ -1,7 +1,13 @@
 
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
-// !code: imports // !end
+// !code: imports
+const {inspector, getGraphQLContext} = require('../../plugins/lib');
+const debug = require('debug')('app:service.graphql.resolvers');
+
+// const isDebug = true;
+const isLog = false;
+// !end
 // !code: init // !end
 
 let moduleExports = function serviceResolvers(app, options) {
@@ -13,6 +19,7 @@ let moduleExports = function serviceResolvers(app, options) {
   // !<DEFAULT> code: services
   let roles = app.service('/roles');
   let teams = app.service('/teams');
+  let userProfiles = app.service('/user-profiles');
   let userTeams = app.service('/user-teams');
   let users = app.service('/users');
   // !end
@@ -37,14 +44,28 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // members: [User!]
       members:
-        // !<DEFAULT> code: resolver-Team-members
-        (parent, args, content, ast) => {
+        // !code: resolver-Team-members
+        async (parent, args, content, ast) => {
+          // Get content.cache.User.userTeams
+          if (!(content.cache.Team && content.cache.Team.userIdsForTeam)) {
+            content.cache.Team = content.cache.Team || {};
+            const userIdsForTeam = await userTeams.find({query: {teamId: parent._id.toString(),  $sort: {userId: 1}}}).then(extractAllItems);
+            content.cache.Team.userIdsForTeam = userIdsForTeam.map(userTeam => userTeam.userId.toString());
+            if(isLog) inspector('content.cache.Team.userIdsForTeam', content.cache.Team.userIdsForTeam);
+          }
+          // Set query for user
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: { $in: parent.memberIds }, $sort: undefined }, paginate: false
+            query: {_id: {$in: content.cache.Team.userIdsForTeam}, $sort: undefined}, paginate: false
           });
-          return users.find(feathersParams).then(extractAllItems);
+          if(isLog) inspector('Team.members.feathersParams', feathersParams);
+          const usersForTeam = await users.find(feathersParams).then(extractAllItems);
+          if(isLog) inspector('Team.members.usersForTeam', usersForTeam);
+          return usersForTeam;
         },
         // !end
+    },
+
+    UserProfile: {
     },
 
     UserTeam: {
@@ -55,7 +76,9 @@ let moduleExports = function serviceResolvers(app, options) {
       // fullName: String!
       fullName:
         // !code: resolver-User-fullName-non
-        (parent, args, content, ast) => { return `${parent.firstName} ${parent.lastName}`; },
+        (parent, args, content, ast) => {
+          return `${parent.firstName} ${parent.lastName}`;
+        },
         // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
@@ -69,21 +92,36 @@ let moduleExports = function serviceResolvers(app, options) {
         },
         // !end
 
-      // teams(query: JSON, params: JSON, key: JSON): [Team!]
+      // teams: [Team!]
       teams:
-        // !<DEFAULT> code: resolver-User-teams
-        (parent, args, content, ast) => {
-          const feathersParams = convertArgs(args, content, ast, {
-            query: { $sort: undefined }, paginate: false
-          });
+        // !code: resolver-User-teams
+        async (parent, args, content, ast) => {
 
+          // if(isLog) inspector('User.teams.parent', parent);
+          if(isLog) inspector('User.teams.args', args);
+          // if(isLog) inspector('User.teams.content', getGraphQLContext(content));
+
+          const feathersParams = convertArgs(args, content, ast, {
+            query: {$sort: undefined}, paginate: false
+          });
+          if(isLog) inspector('User.teams.feathersParams', feathersParams);
+          // Get content.cache.User.teams
           if (!(content.cache.User && content.cache.User.teams)) {
             content.cache.User = content.cache.User || {};
-            content.cache.User.teams = teams.find(feathersParams).then(extractAllItems);
+            content.cache.User.teams = await teams.find(feathersParams).then(extractAllItems);
           }
-
-          return Promise.resolve(content.cache.User.teams)
-            .then(res => res.filter(rec => rec.memberIds.map(key => key.toString()).indexOf(parent._id.toString()) !== -1));
+          if(isLog) inspector('content.cache.User.teams', content.cache.User.teams);
+          // Get content.cache.User.teamIdsForUser
+          if (!(content.cache.User && content.cache.User.teamIdsForUser)) {
+            content.cache.User = content.cache.User || {};
+            const teamIdsForUser = await userTeams.find({query: {userId: parent._id.toString(), $sort: {teamId: 1}}}).then(extractAllItems);
+            content.cache.User.teamIdsForUser = teamIdsForUser.map(userTeam => userTeam.teamId.toString());
+            if(isLog) inspector('content.cache.User.teamIdsForUser', content.cache.User.teamIdsForUser);
+          }
+          // Get teams for user
+          const teamsForUser = content.cache.User.teams.filter(team => content.cache.User.teamIdsForUser.indexOf(team._id.toString()) >= 0);
+          if(isLog) inspector('User.teams.teamsForUser', teamsForUser);
+          return teamsForUser;
         },
         // !end
     },
@@ -117,6 +155,20 @@ let moduleExports = function serviceResolvers(app, options) {
       findTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-UserProfile
+      // getUserProfile(query: JSON, params: JSON, key: JSON): UserProfile
+      getUserProfile(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return userProfiles.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findUserProfile(query: JSON, params: JSON): [UserProfile!]
+      findUserProfile(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return userProfiles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 

@@ -41,11 +41,11 @@ let schema = {
     _id: {type: 'ID'},
     name: {minLength: 2, maxLength: 30, faker: 'commerce.productName'},
     description: {faker: 'lorem.sentence'},
-    memberIds: {
-      type: 'array',
-      maxItems: 10,
-      items: [{type: 'ID', faker: {fk: 'users:next'}}]
-    }
+    // memberIds: {
+    //   type: 'array',
+    //   maxItems: 10,
+    //   items: [{type: 'ID', faker: {fk: 'users:next'}}]
+    // }
     //-------------------------
     // !end
   },
@@ -77,12 +77,8 @@ let extensions = {
     add: {
       // !code: graphql_add
       //-------------------
-      members: {
-        type: '[User!]',
-        args: false,
-        relation: {ourTable: 'memberIds', otherTable: '_id'},
-        // sort: {lastName: 1, firstName: 1}
-      },
+      // members: {type: '[User!]', args: false, relation: {ourTable: 'memberIds', otherTable: '_id'}},
+      members: {type: '[User!]', args: false},
       //-------------------
       // !end
     },

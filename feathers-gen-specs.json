@@ -62,6 +62,17 @@
       "isAuthEntity": false,
       "requiresAuth": true,
       "graphql": true
+    },
+    "userProfiles": {
+      "name": "userProfiles",
+      "nameSingular": "userProfile",
+      "subFolder": "",
+      "fileName": "user-profiles",
+      "adapter": "mongoose",
+      "path": "/user-profiles",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
     }
   },
   "hooks": {

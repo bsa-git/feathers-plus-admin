@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Defines the MongoDB $jsonSchema for service `teams`. (Can be re-generated.)
+// Defines the MongoDB $jsonSchema for service `userProfiles`. (Can be re-generated.)
 const merge = require('lodash.merge');
 // !code: imports // !end
 // !code: init // !end
@@ -13,16 +13,6 @@ let moduleExports = merge({},
     properties: {
       _id: {
         bsonType: "objectId"
-      },
-      name: {
-        minLength: 2,
-        maxLength: 30,
-        faker: "commerce.productName",
-        bsonType: "string"
-      },
-      description: {
-        faker: "lorem.sentence",
-        bsonType: "string"
       }
     }
   },

@@ -126,6 +126,19 @@ const getHookContext = function (context) {
   return target;
 };
 
+const getGraphQLContext = function (context) {
+  let target = {};
+  let {batchLoaders, cache, provider, authenticated, pagination, user,} = context;
+
+  if (batchLoaders) target.batchLoaders = batchLoaders;
+  if (cache) target.cache = cache;
+  if (provider) target.provider = provider;
+  if (authenticated) target.authenticated = authenticated;
+  if (pagination) target.pagination = pagination;
+  if (user) target.user = user;
+  return target;
+};
+
 module.exports = {
   appRoot,
   delayTime,
@@ -135,5 +148,6 @@ module.exports = {
   inspector,
   qlParams,
   stringify,
-  getHookContext
+  getHookContext,
+  getGraphQLContext
 };
