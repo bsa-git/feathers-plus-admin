@@ -21,8 +21,6 @@ const servicePlugin = service(servicePath, {
       data: data
     });
     return {
-      name: '',
-      description: '',
       get members() {
         const idFieldUser = store.state.users.idField;
         const idFieldTeam = store.state.teams.idField;
@@ -31,13 +29,11 @@ const servicePlugin = service(servicePath, {
         userIdsForTeam = userIdsForTeam.map(row => row.userId.toString());
         if(isLog)debug('members.userIdsForTeam:', userIdsForTeam);
         let usersForTeam = Models.User.findInStore({query: {[idFieldUser]: {$in: userIdsForTeam}, $sort: {fullName: 1}}}).data;
-        usersForTeam = usersForTeam.map(row => {
-          return {
-            id: row[idFieldUser],
-            email: row.email,
-            fullName: row.fullName,
-            avatar: row.avatar
-          };
+        usersForTeam = usersForTeam.map(user => {
+          const id = user[idFieldUser];
+          user = loPick(user, ['email', 'fullName', 'avatar']);
+          user.id = id;
+          return user;
         });
         if(isLog)debug('members.usersForTeam:', usersForTeam);
         return  usersForTeam;

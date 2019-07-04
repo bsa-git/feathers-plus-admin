@@ -1,7 +1,13 @@
 <template>
   <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4 lg4>
+    <v-flex xs12 sm8 md6 lg4>
       <v-card class="elevation-1 pa-3">
+        <v-card-title>
+          <v-spacer></v-spacer>
+          <router-link :to="$i18n.path(config.homePath)" class="close-icon">
+            <v-icon>clear</v-icon>
+          </router-link>
+        </v-card-title>
         <v-form @submit.prevent="onSubmit">
           <v-card-text>
             <div class="layout column align-center">

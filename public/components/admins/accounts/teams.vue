@@ -65,19 +65,19 @@
           const members = [];
           team.members.forEach(member => {
             members.push({
-              id: `user.fullName_${member.id}`,
+              id: `User.fullName_${member.id}`,
               name: `${member.fullName}`,
             })
           });
           if (isLog) debug('members:', members);
           // Get team
           let item = {
-            id: `team.name_${teamId}`,
+            id: `Team.name_${teamId}`,
             name: `${team.name} :`,
             children: [
-              {id: `team.id_${teamId}`, name: `id : ${teamId}`},
+              {id: `Team.id_${teamId}`, name: `id : ${teamId}`},
               {
-                id: `team.members${teamId}`,
+                id: `Team.members${teamId}`,
                 name: `Members(${members.length ? members.length : 'Not'}) :`,
                 children: members
               }

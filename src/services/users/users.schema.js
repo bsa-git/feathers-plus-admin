@@ -31,6 +31,7 @@ let schema = {
     // !code: schema_unique
     //---------------------
     'email',
+    'profileId'
     //---------------------
     // !end
   ],
@@ -47,6 +48,7 @@ let schema = {
     lastName: {type: 'string', minLength: 2, maxLength: 40, faker: 'name.lastName'},
     avatar: {type: 'string', faker: 'internet.avatar'},
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
+    profileId: {type: 'ID', faker: {fk: 'userProfiles:next'}},
     googleId: {type: 'string', chance: 'natural'},
     githubId: {type: 'string', chance: 'natural'},
     googleAccessToken: {type: 'string', chance: 'guid'},
@@ -90,6 +92,7 @@ let extensions = {
       //-------------------
       fullName: {type: 'String!', args: false},
       role: {type: 'Role', args: true, relation: {ourTable: 'roleId', otherTable: '_id'}},
+      profile: {type: 'UserProfile', args: true, relation: {ourTable: 'profileId', otherTable: '_id'}},
       teams: {type: '[Team!]', args: false},
       //-------------------
       // !end

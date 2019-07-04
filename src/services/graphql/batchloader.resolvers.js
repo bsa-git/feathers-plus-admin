@@ -100,6 +100,21 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       );
       // !end
 
+    // UserProfile.user: User!
+    // !<DEFAULT> code: bl-UserProfile-user
+    case 'UserProfile.user':
+      return feathersBatchLoader(dataLoaderName, '!', 'profileId',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { profileId: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
     // User.role(query: JSON, params: JSON, key: JSON): Role
     // !<DEFAULT> code: bl-User-role
     case 'User.role':
@@ -110,6 +125,21 @@ let moduleExports = function batchLoaderResolvers(app, options) {
             _populate: 'skip', paginate: false
           });
           return roles.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
+    // User.profile(query: JSON, params: JSON, key: JSON): UserProfile
+    // !<DEFAULT> code: bl-User-profile
+    case 'User.profile':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return userProfiles.find(feathersParams);
         },
         maxBatchSize // Max #keys in a BatchLoader func call.
       );
@@ -157,6 +187,16 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     },
 
     UserProfile: {
+
+      // addressFull: String!
+      // !<DEFAULT> code: resolver-UserProfile-addressFull-non
+      addressFull: (parent, args, content, ast) => { throw Error('GraphQL fieldName UserProfile.addressFull is not calculated.'); },
+      // !end
+
+      // user: User!
+      // !<DEFAULT> code: resolver-UserProfile-user
+      user: getResult('UserProfile.user', '_id'),
+      // !end
     },
 
     UserTeam: {
@@ -172,6 +212,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // role(query: JSON, params: JSON, key: JSON): Role
       // !<DEFAULT> code: resolver-User-role
       role: getResult('User.role', 'roleId'),
+      // !end
+
+      // profile(query: JSON, params: JSON, key: JSON): UserProfile
+      // !<DEFAULT> code: resolver-User-profile
+      profile: getResult('User.profile', 'profileId'),
       // !end
 
       // teams: [Team!]

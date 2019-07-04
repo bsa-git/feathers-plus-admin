@@ -2,9 +2,9 @@ const assert = require('assert');
 const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
 const app = require(`${appRoot}/src/app`);
 const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
-const debug = require('debug')('app:user-teams.service.test');
+const debug = require('debug')('app:teams.test');
 
-const isLog = true;
+const isLog = false;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};

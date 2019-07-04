@@ -9,7 +9,11 @@ let schema = {
   title: 'UserProfiles',
   description: 'UserProfiles database.',
   // !end
-  // !code: schema_definitions // !end
+  // !code: schema_definitions
+  //--------------------------
+  fakeRecords: 3,
+  //--------------------------
+  // !end
 
   // Required fields.
   required: [
@@ -22,7 +26,30 @@ let schema = {
 
   // Fields in the model.
   properties: {
-    // !code: schema_properties // !end
+    // !code: schema_properties
+    //-------------------------
+    id: {type: 'ID'},
+    _id: {type: 'ID'},
+    personalPhone: {type: 'string', faker: 'phone.phoneNumberFormat'},
+    personalWebSite: {type: 'string', faker: 'internet.url'},
+    addressSuite: {type: 'string', faker: 'address.secondaryAddress'},
+    addressStreet: {type: 'string', faker: 'address.streetAddress'},
+    addressCity: {type: 'string', faker: 'address.city'},
+    addressState: {type: 'string', faker: 'address.state'},
+    addressStateAbbr: {type: 'string', faker: 'address.stateAbbr'},
+    addressCountry: {type: 'string', faker: 'address.country'},
+    addressCountryCode: {type: 'string', faker: 'address.countryCode'},
+    addressZipCode: {type: 'string', faker: 'address.zipCode'},
+    addressLatitude: {type: 'string', faker: 'address.latitude'},
+    addressLongitude: {type: 'string', faker: 'address.longitude'},
+    jobCompanyName: {type: 'string', faker: 'company.companyName'},
+    jobTitle: {type: 'string', faker: 'name.jobTitle'},
+    jobType: {type: 'string', faker: 'name.jobType'},
+    jobPhone: {type: 'string', faker: 'phone.phoneNumberFormat'},
+    jobWebSite: {type: 'string', faker: 'internet.url'},
+    jobEmail: {type: 'string', format: 'email', minLength: 8, maxLength: 40, faker: 'internet.exampleEmail'},
+    //-------------------------
+    // !end
   },
   // !code: schema_more // !end
 };
@@ -48,8 +75,11 @@ let extensions = {
       // !code: graphql_discard // !end
     ],
     add: {
-      // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // !code: graphql_add
+      //-------------------
+      addressFull: {type: 'String!', args: false},
+      user: {type: 'User!', args: false, relation: {ourTable: '_id', otherTable: 'profileId'}},
+      //-------------------
       // !end
     },
     // !code: graphql_more // !end

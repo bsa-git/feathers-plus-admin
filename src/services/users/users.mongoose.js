@@ -29,6 +29,10 @@ let moduleExports = merge({},
     },
     avatar: String,
     roleId: mongoose.Schema.Types.ObjectId,
+    profileId: {
+      type: mongoose.Schema.Types.ObjectId,
+      unique: true
+    },
     googleId: String,
     githubId: String,
     googleAccessToken: String,

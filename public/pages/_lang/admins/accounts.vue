@@ -5,10 +5,10 @@
       <v-card>
         <v-card-title>
           <v-icon class="mr-3">check_circle_outline</v-icon>
-          <span class="headline">{{ modelName + ' - ' + itemName }}</span>
+          <span class="headline">{{`${modelName} ${itemName? ' - ' + itemName : ''}`}}</span>
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text style="height: 400px;">
+        <v-card-text style="">
           <v-list three-line>
             <template v-for="(item, index) in selItems">
               <v-list-tile
@@ -92,6 +92,10 @@
   import AdminsAccountsRoles from '~/components/admins/accounts/roles';
   import AdminsAccountsTeams from '~/components/admins/accounts/teams';
 
+  const debug = require('debug')('app:page.admins-accounts');
+
+  const isDebug = true;
+
   export default {
     components: {
       AppPageHeader,
@@ -168,13 +172,13 @@
         return fieldName
       },
       getSelObject(selItem) {
-        const loCapitalize = require('lodash/capitalize');
         const loForIn = require('lodash/forIn');
         const loIsObject = require('lodash/isObject');
         const loToPairs = require('lodash/toPairs');
         //----------------------------------------
         const id = selItem.split('_')[1];
-        let model = loCapitalize(selItem.split('.')[0]);
+        let model = selItem.split('.')[0];
+        if(isDebug) debug('getSelObject.model:', model);
         this.modelName = model;
         const fieldName = this.getFieldName(model);
         model = this.$FeathersVuex[model];

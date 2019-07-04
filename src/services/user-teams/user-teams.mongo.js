@@ -16,13 +16,13 @@ let moduleExports = merge({},
       },
       teamId: {
         faker: {
-          fk: "teams:random"
+          fk: "teams:next"
         },
         bsonType: "objectId"
       },
       userId: {
         faker: {
-          fk: "users:random"
+          fk: "users:next"
         },
         bsonType: "objectId"
       }

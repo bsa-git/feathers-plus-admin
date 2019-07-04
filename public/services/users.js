@@ -1,6 +1,7 @@
 const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
+import util from '~/plugins/lib/util';
 import normalize from '~/services/hooks/normalize';
 import log from '~/services/hooks/log';
 
@@ -23,12 +24,24 @@ const servicePlugin = service(servicePath, {
       data: data
     });
     return {
-      email: '',
-      firstName: '',
-      lastName: '',
-      avatar: '',
       get fullName() {
         return `${this.firstName} ${this.lastName}`;
+      },
+      get profile() {
+        if (this.profileId) {
+          const idFieldProfile = store.state['user-profiles'].idField;
+          let profile = Models.UserProfile.getFromStore(this.profileId);
+          if(profile){
+            const id = profile[idFieldProfile];
+            profile = loPick(profile, util.serviceKeys('userProfiles'));
+            profile.id = id;
+          }else {
+            profile = null;
+          }
+          return profile;
+        } else {
+          return null;
+        }
       },
       roleId: null,
       get role() {
@@ -37,7 +50,7 @@ const servicePlugin = service(servicePath, {
           let role = Models.Role.getFromStore(this.roleId);
           if (role) {
             const id = role[idFieldRole];
-            role = loPick(role, ['name', 'description']);
+            role = loPick(role, util.serviceKeys('roles'));
             role.id = id;
             role.isAdmin = store.getters.isAdmin;
           } else {
@@ -55,12 +68,11 @@ const servicePlugin = service(servicePath, {
         let teamIdsForUser = Models.UserTeam.findInStore({query: {userId: userId, $sort: {teamId: 1}}}).data;
         teamIdsForUser = teamIdsForUser.map(row => row.teamId.toString());
         let teamsForUser = Models.Team.findInStore({query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}}).data;
-        teamsForUser = teamsForUser.map(row => {
-          return {
-            id: row[idFieldTeam],
-            name: row.name,
-            description: row.description,
-          };
+        teamsForUser = teamsForUser.map(team => {
+          const id = team[idFieldTeam];
+          team = loPick(team, util.serviceKeys('teams'));
+          team.id = id;
+          return team;
         });
         if(isLog)debug('teams.teamsForUser:', teamsForUser);
         return  teamsForUser;

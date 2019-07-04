@@ -4,7 +4,7 @@ const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:user-teams.service.test');
 
-const isLog = true;
+const isLog = false;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};

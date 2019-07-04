@@ -12,8 +12,6 @@ const debug = require('debug')('app:plugin.index');
 
 export default async (context, inject) => {
 
-  debug(`Start on ${process.server ? 'server' : 'client'}`);
-
   // Inject to app
   inject('util', util);
   inject('HttpBox', HttpBox);
@@ -31,5 +29,7 @@ export default async (context, inject) => {
   syncStore.setThemePrimary(context);
   syncStore.setThemeDark(context);
   syncStore.setLocale(context);
+
+  debug(`Start on ${process.server ? 'server' : 'client'}`);
 
 };

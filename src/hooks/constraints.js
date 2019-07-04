@@ -4,7 +4,6 @@
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const {inspector, AuthServer} = require('../plugins');
-// const {AuthServer} = require(`${appRoot}/src/plugins/auth`);
 const debug = require('debug')('app:constraints.all.hook');
 
 const isDebug = false;
@@ -31,6 +30,9 @@ module.exports = function (isTest = false) {
 
     const isCheck = isTest ? true : !AuthServer.isTest();
 
+    /**
+     * Show debug info
+     */
     const showDebugInfo = () => {
       if (isDebug) debug(`Provider: ${context.params.provider ? context.params.provider : 'Not'}; ${context.type} app.service('${context.path}').${context.method}()`);
       if (isLog) inspector('constraints.all.hook.records:', records);
@@ -38,11 +40,15 @@ module.exports = function (isTest = false) {
 
     let idField;
 
+    /**
+     * Uniqueness check
+     * @param query
+     * @param id
+     * @return {Promise.<void>}
+     */
     const validateUnique = async (query = {}, id = null) => {
       let valid = true;
-      const results = await context.service.find({
-        query: query
-      });
+      const results = await context.service.find({query: query});
       if (isLog) inspector(`validateUnique(query=${JSON.stringify(query)}).results:`, results.data);
       if (context.method === 'create') {
         valid = results.data.length === 0;
@@ -60,6 +66,12 @@ module.exports = function (isTest = false) {
       }
     };
 
+    /**
+     * Relationship check
+     * @param path
+     * @param id
+     * @return {Promise.<void>}
+     */
     const validateRelationship = async (path = '', id = null) => {
       const service = context.app.service(path);
       if (service) {
@@ -73,6 +85,46 @@ module.exports = function (isTest = false) {
       }
     };
 
+    /**
+     * Get item
+     * @param path
+     * @param id
+     * @return {Promise.<*>}
+     */
+    // const getItem = async (path = '', id = null) => {
+    //   const service = context.app.service(path);
+    //   if (service) {
+    //     const getResult = await service.get(id);
+    //     if (isLog) inspector(`getItem(path='${path}', id='${id}').getResult:`, getResult);
+    //     return getResult;
+    //   } else {
+    //     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+    //   }
+    // };
+
+    /**
+     * Find items
+     * @param path
+     * @param query
+     * @return {Promise.<*>}
+     */
+    const findItems = async (path = '', query = {}) => {
+      const service = context.app.service(path);
+      if (service) {
+        const findResults = await service.find({query: query});
+        if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults.data);
+        return findResults.data;
+      } else {
+        throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+      }
+    };
+
+    /**
+     * Remove items
+     * @param path
+     * @param query
+     * @return {Promise.<*>}
+     */
     const removeItems = async (path = '', query = {}) => {
       const service = context.app.service(path);
       if (service) {
@@ -84,6 +136,30 @@ module.exports = function (isTest = false) {
       }
     };
 
+    /**
+     * Remove item
+     * @param path
+     * @param id
+     * @return {Promise.<*>}
+     */
+    const removeItem = async (path = '', id = null) => {
+      const service = context.app.service(path);
+      if (service) {
+        const removeResult = await service.remove(id);
+        if (isLog) inspector(`removeItem(path='${path}', id=${id}).removeResult:`, removeResult);
+        return removeResult;
+      } else {
+        throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+      }
+    };
+
+    /**
+     * Patch items
+     * @param path
+     * @param data
+     * @param query
+     * @return {Promise.<*>}
+     */
     const patchItems = async (path = '', data = {}, query = {}) => {
       const service = context.app.service(path);
       if (service) {
@@ -95,6 +171,28 @@ module.exports = function (isTest = false) {
       }
     };
 
+    /**
+     * Create item
+     * @param path
+     * @param data
+     * @return {Promise.<*>}
+     */
+    const createItem = async (path = '', data = {}) => {
+      const service = context.app.service(path);
+      if (service) {
+        const createResults = await service.create(data);
+        if (isLog) inspector(`createItem(path='${path}', data=${JSON.stringify(data)}).createResults:`, createResults);
+        return createResults;
+      } else {
+        throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+      }
+    };
+
+    /**
+     * Get roleId
+     * @param isRole
+     * @return {Promise.<string>}
+     */
     const getRoleId = async (isRole = '') => {
       let roleId = '';
       const roles = context.app.service('roles');
@@ -133,12 +231,47 @@ module.exports = function (isTest = false) {
               const roleId = await getRoleId('isGuest');
               if(roleId) record.roleId = roleId;
             }
+            if (context.method === 'create' && !record.profileId) {
+              const newItem = await createItem('user-profiles');
+              if(newItem){
+                idField = 'id' in newItem ? 'id' : '_id';
+                record.profileId = newItem[idField];
+              }
+            }
           });
         } else {
           if (records.roleId) await validateRelationship('roles', records.roleId);
           if (context.method === 'create' && !records.roleId) {
             const roleId = await getRoleId('isGuest');
             if(roleId) records.roleId = roleId;
+          }
+          if (context.method === 'create' && !records.profileId) {
+            const newItem = await createItem('user-profiles');
+            if(newItem){
+              idField = 'id' in newItem ? 'id' : '_id';
+              records.profileId = newItem[idField];
+            }
+          }
+        }
+        break;
+      case 'before.user-profiles.remove':
+        showDebugInfo();
+        if (Array.isArray(records)) {
+          records.forEach(async record => {
+            const idField = 'id' in record ? 'id' : '_id';
+            const profileId = record[idField];
+            let servicePath = 'users';
+            const findResults = await findItems(servicePath, {profileId});
+            if(findResults.length){
+              throw new errors.BadRequest('Error deleting item from \'user-profiles\' service. You can not delete an item if it is referenced by other services.');
+            }
+          });
+        } else {
+          let profileId = context.id;
+          let servicePath = 'users';
+          const findResults = await findItems(servicePath, {profileId: profileId});
+          if(Array.isArray(findResults) && findResults.length){
+            throw new errors.BadRequest('Error deleting item from \'user-profiles\' service. You can not delete an item if it is referenced by other services.');
           }
         }
         break;
@@ -148,16 +281,35 @@ module.exports = function (isTest = false) {
           records.forEach(async record => {
             const idFieldUser = 'id' in record ? 'id' : '_id';
             const userId = record[idFieldUser];
+            const profileId = record.profileId;
+
+            // Remove items for 'user-teams' service
             let servicePath = 'user-teams';
-            const removed = await removeItems(servicePath, {userId: userId});
+            let removed = await removeItems(servicePath, {userId: userId});
             if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+
+            // Remove item for 'user-profiles' service
+            servicePath = 'user-profiles';
+            removed = await removeItem(servicePath, {[idFieldUser]: profileId});
+            if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the ${servicePath} service`);
           });
         } else {
           const idFieldUser = 'id' in records ? 'id' : '_id';
           const userId = records[idFieldUser];
+          const profileId = records.profileId;
+
+          // Remove items for 'user-teams' service
           let servicePath = 'user-teams';
-          const removed = await removeItems(servicePath, {userId: userId});
+          let removed = await removeItems(servicePath, {userId: userId});
           if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+
+          // Remove item for 'user-profiles' service
+          servicePath = 'user-profiles';
+          removed = await removeItem(servicePath, profileId);
+          if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the ${servicePath} service`);
+
+          // removed = await removeItems(servicePath, {[idFieldUser]: profileId});
+          // if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
         }
         break;
       case 'after.teams.remove':

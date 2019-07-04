@@ -1,19 +1,13 @@
 <template>
   <div>
     <!-- Confirm Dialog -->
-    <v-dialog v-model="confirmDialog" persistent max-width="320">
-      <v-card>
-        <v-card-title class="headline">{{ $t('management.confirm_delete_title') }}?</v-card-title>
-        <v-card-text>
-          {{ $t('management.confirm_delete_description') }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat @click="confirmDialog = false">{{ $t('management.disagree') }}</v-btn>
-          <v-btn color="primary" flat @click="deleteItem">{{ $t('management.agree') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <confirm-dialog
+      :confirm-dialog="confirmDialog"
+      :title-dialog="$t('management.confirm_delete_title')"
+      :text-dialog="$t('management.confirm_delete_description')"
+      :run-action="deleteItem"
+      v-on:onCloseDialog="confirmDialog = false"
+    ></confirm-dialog>
     <!-- Teams for user dialog -->
     <v-dialog v-model="userTeamsDialog" scrollable max-width="400px">
       <v-card>
@@ -22,7 +16,7 @@
           <span>{{ `${selItem.firstName} ${selItem.lastName}` }}</span>
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text style="height: 300px;">
+        <v-card-text style="">
           <v-list three-line>
             <template v-for="(team, index) in selItem.teams">
               <v-list-tile
@@ -38,7 +32,6 @@
                   <v-list-tile-sub-title v-html="team.description"></v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
-              <!--<v-divider v-if="index < selItem.teams.length - 1"></v-divider>-->
             </template>
           </v-list>
         </v-card-text>
@@ -46,6 +39,56 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" flat @click="userTeamsDialog = false">{{ $t('management.close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Profile for user dialog -->
+    <v-dialog v-model="userProfileDialog" scrollable max-width="400px">
+      <v-card>
+        <v-card-title>
+          <v-icon class="mr-3">how_to_reg</v-icon>
+          <span>{{ `${selItem.firstName} ${selItem.lastName}` }}</span>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="">
+          <span v-if="!profileList(selItem.profileId).length">{{ $t('management.noData') }}</span>
+          <v-list two-line v-else>
+            <template v-for="(item, index) in profileList(selItem.profileId)">
+              <v-subheader
+                v-if="item.header"
+                :key="item.header"
+              >
+                {{ item.header }}
+              </v-subheader>
+
+              <v-divider
+                v-else-if="item.divider"
+                :key="index"
+                :inset="item.inset"
+              ></v-divider>
+
+              <v-list-tile
+                v-else
+                :key="item.name"
+                avatar
+                @click=""
+              >
+                <v-list-tile-avatar>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="item.name"></v-list-tile-title>
+                  <v-list-tile-sub-title v-html="item.val"></v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <!--<v-divider v-if="index < selItem.teams.length - 1"></v-divider>-->
+            </template>
+          </v-list>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat @click="userProfileDialog = false">{{ $t('management.close') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -201,6 +244,11 @@
           <v-avatar size="32"><img :src="props.item.avatar"></v-avatar>
         </td>
         <td>{{ props.item.fullName }}</td>
+        <td>
+          <v-btn flat icon>
+            <v-icon @click="clickUserProfile(props.item)">settings_ethernet</v-icon>
+          </v-btn>
+        </td>
         <td>{{ props.item.email }}</td>
         <td>{{ props.item.roleName }}</td>
         <td>
@@ -210,7 +258,7 @@
                 <v-icon>code</v-icon>
               </v-btn>
               <v-btn v-on="on" flat icon v-else>
-                <v-icon @click="clickItem(props.item)">settings_ethernet</v-icon>
+                <v-icon @click="clickUserTeams(props.item)">settings_ethernet</v-icon>
               </v-btn>
             </template>
             <span>{{ props.item.teamNames === '' ? '[ ]' : props.item.teamNames}}</span>
@@ -248,7 +296,7 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-
+  import ConfirmDialog from '~/components/layout/ConfirmDialog';
   const debug = require('debug')('app:comp.admins-management-users');
 
   const isLog = false;
@@ -258,11 +306,15 @@
     $_veeValidate: {
       validator: 'new'
     },
+    components: {
+      ConfirmDialog,
+    },
     data: () => ({
       search: '',
       dialog: false,
       confirmDialog: false,
       userTeamsDialog: false,
+      userProfileDialog: false,
       loadingSubmit: false,
       error: undefined,
       headers: [
@@ -281,6 +333,11 @@
           text: 'Full Name',
           align: 'left',
           value: 'fullName'
+        },
+        {
+          text: 'Profile',
+          align: 'left',
+          value: 'profile'
         },
         {
           text: 'Email',
@@ -342,6 +399,7 @@
       },
       ...mapGetters({
         user: 'getUser',
+        profileList: 'user-profiles/profileList'
       }),
       users() {
         const data = [];
@@ -358,6 +416,8 @@
             fullName: user.fullName,
             email: user.email,
             avatar: user.avatar,
+            profileId: user.profileId,
+//            profile: user.profile,
             teams: user.teams,
             roleId: user.roleId ? user.roleId : '',
             roleName: user.role ? user.role.name : '',
@@ -430,9 +490,14 @@
         this.confirmDialog = true;
       },
 
-      clickItem(item) {
+      clickUserTeams(item) {
         this.selItem = item;
         this.userTeamsDialog = true;
+      },
+
+      clickUserProfile(item) {
+        this.selItem = item;
+        this.userProfileDialog = true;
       },
 
       close() {

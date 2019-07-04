@@ -20,7 +20,8 @@ let base = merge({},
     fakeRecords: 3,
     required: [],
     uniqueItemProperties: [
-      "email"
+      "email",
+      "profileId"
     ],
     properties: {
       id: {
@@ -62,6 +63,12 @@ let base = merge({},
         type: ID,
         faker: {
           fk: "roles:random"
+        }
+      },
+      profileId: {
+        type: ID,
+        faker: {
+          fk: "userProfiles:next"
         }
       },
       googleId: {

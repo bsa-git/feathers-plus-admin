@@ -53,6 +53,12 @@
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
+        },
+        "userProfiles": {
+          "create": "noauth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
         }
       }
     }

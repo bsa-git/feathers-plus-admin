@@ -92,6 +92,10 @@ const actions = {
       let users = await dispatch('users/find', {query: {$sort: {lastName: 1}}});
       users = users.data || users;
       if (isLog) debug('<<authenticate>>Users from server:', users);
+      // findUserProfiles
+      let userProfiles = await dispatch('user-profiles/find', {query: {$sort: {}}});
+      userProfiles = userProfiles.data || userProfiles;
+      if (isLog) debug('<<authenticate>>userProfiles from server:', userProfiles);
     }
     return response;
   }

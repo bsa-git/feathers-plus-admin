@@ -16,9 +16,13 @@ const getUser = `{
   getUser(key: "${userId}") {
     ${idFieldUser}
     email
-    firstName
-    lastName
     fullName
+    profile{
+      personalPhone
+      personalWebSite
+      addressFull
+      jobCompanyName
+    }
     role{
       ${idFieldRole}
       name
@@ -34,9 +38,13 @@ const findUser = `{
   findUser(query: {${idFieldUser}: "${userId}"}) {
     ${idFieldUser}
     email
-    firstName
-    lastName
     fullName
+    profile{
+      personalPhone
+      personalWebSite
+      addressFull
+      jobCompanyName
+    }
     role{
       ${idFieldRole}
       name

@@ -30,13 +30,13 @@ let base = merge({},
       teamId: {
         type: ID,
         faker: {
-          fk: "teams:random"
+          fk: "teams:next"
         }
       },
       userId: {
         type: ID,
         faker: {
-          fk: "users:random"
+          fk: "users:next"
         }
       }
     }

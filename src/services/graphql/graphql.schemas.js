@@ -21,7 +21,28 @@ type Team {
 }
  
 type UserProfile {
-  
+  id: ID
+  _id: ID
+  personalPhone: String
+  personalWebSite: String
+  addressSuite: String
+  addressStreet: String
+  addressCity: String
+  addressState: String
+  addressStateAbbr: String
+  addressCountry: String
+  addressCountryCode: String
+  addressZipCode: String
+  addressLatitude: String
+  addressLongitude: String
+  jobCompanyName: String
+  jobTitle: String
+  jobType: String
+  jobPhone: String
+  jobWebSite: String
+  jobEmail: String
+  addressFull: String!
+  user: User!
 }
  
 type UserTeam {
@@ -39,6 +60,7 @@ type User {
   lastName: String
   avatar: String
   roleId: ID
+  profileId: ID
   googleId: String
   githubId: String
   googleAccessToken: String
@@ -47,6 +69,7 @@ type User {
   githubRefreshToken: String
   fullName: String!
   role(query: JSON, params: JSON, key: JSON): Role
+  profile(query: JSON, params: JSON, key: JSON): UserProfile
   teams: [Team!]
 }
  

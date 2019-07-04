@@ -9,7 +9,30 @@ const mongoose = require('mongoose');
 
 let moduleExports = merge({},
   // !<DEFAULT> code: model
-  {},
+  {
+    personalPhone: String,
+    personalWebSite: String,
+    addressSuite: String,
+    addressStreet: String,
+    addressCity: String,
+    addressState: String,
+    addressStateAbbr: String,
+    addressCountry: String,
+    addressCountryCode: String,
+    addressZipCode: String,
+    addressLatitude: String,
+    addressLongitude: String,
+    jobCompanyName: String,
+    jobTitle: String,
+    jobType: String,
+    jobPhone: String,
+    jobWebSite: String,
+    jobEmail: {
+      type: String,
+      minLength: 8,
+      maxLength: 40
+    }
+  },
   // !end
   // !code: moduleExports // !end
 );

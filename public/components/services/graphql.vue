@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Response dialog -->
-    <v-dialog v-model="responseDialog" scrollable max-width="500px">
+    <v-dialog v-model="responseDialog" scrollable max-width="550px">
       <v-card>
         <v-card-title>
           <v-icon class="mr-3">search</v-icon>

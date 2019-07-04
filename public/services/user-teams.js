@@ -1,4 +1,4 @@
-const loPick = require('lodash/pick');
+// const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import normalize from '~/services/hooks/normalize';
@@ -12,7 +12,7 @@ const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
 const servicePath = 'user-teams';
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model, Models}) {
+  instanceDefaults(data, {store, Model}) {
     const idField = store.state['user-teams'].idField;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
@@ -20,34 +20,7 @@ const servicePlugin = service(servicePath, {
       idField: idField,
       data: data
     });
-    return {
-      teamId: null,
-      userId: null,
-      get user() {
-        const idFieldUser = store.state.users.idField;
-        let user = Models.User.getFromStore(this.userId);
-        if (user) {
-          const id = user[idFieldUser];
-          user = loPick(user, ['fullName', 'email']);
-          user.id = id;
-        } else {
-          user = null;
-        }
-        return user;
-      },
-      get team() {
-        const idFieldTeam = store.state.teams.idField;
-        let team = Models.Team.getFromStore(this.teamId);
-        if (team) {
-          const id = team[idFieldTeam];
-          team = loPick(team, ['name']);
-          team.id = id;
-        } else {
-          team = null;
-        }
-        return team;
-      },
-    };
+    return {};
   },
   getters: {
     userIdsForTeam: (state, getters) => (teamId = null) => {

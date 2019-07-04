@@ -66,6 +66,26 @@ let moduleExports = function serviceResolvers(app, options) {
     },
 
     UserProfile: {
+
+      // addressFull: String!
+      addressFull:
+        // !code: resolver-UserProfile-addressFull-non
+        (parent, args, content, ast) => {
+          // ex. 438 Dark Spurt Apt. 420, San Francisco, CA 94528, USA
+          return `${parent.addressStreet} ${parent.addressSuite}, ${parent.addressCity}, ${parent.addressStateAbbr} ${parent.addressZipCode}, ${parent.addressCountry}`;
+        },
+        // !end
+
+      // user: User!
+      user:
+        // !<DEFAULT> code: resolver-UserProfile-user
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { profileId: parent._id }, paginate: false
+          });
+          return users.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
     },
 
     UserTeam: {
@@ -89,6 +109,17 @@ let moduleExports = function serviceResolvers(app, options) {
             query: { _id: parent.roleId }, paginate: false
           });
           return roles.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
+      // profile(query: JSON, params: JSON, key: JSON): UserProfile
+      profile:
+        // !<DEFAULT> code: resolver-User-profile
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.profileId }, paginate: false
+          });
+          return userProfiles.find(feathersParams).then(extractFirstItem);
         },
         // !end
 

@@ -8,6 +8,9 @@ const usersFakeData = fakeData['users'];
 const userFakeData = usersFakeData[0];
 const idFieldUser = 'id' in userFakeData ? 'id' : '_id';
 const userId = userFakeData[idFieldUser];
+//--- userProfiles --//
+const userProfilesFakeData = fakeData['userProfiles'];
+const userProfileFakeData = userProfilesFakeData.find(profile => profile[idFieldUser] === userFakeData.profileId);
 //--- Roles --//
 const rolesFakeData = fakeData['roles'];
 const roleFakeData = rolesFakeData[0];
@@ -83,60 +86,67 @@ const usersForTeam = () => {
 
 let getUser = {
   getUser: {
+    [idFieldUser]: userId,
     email: userFakeData.email,
-    firstName: userFakeData.firstName,
-    lastName: userFakeData.lastName,
     fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
+    profile: {
+      personalPhone: userProfileFakeData.personalPhone,
+      personalWebSite: userProfileFakeData.personalWebSite,
+      addressFull: `${userProfileFakeData.addressStreet} ${userProfileFakeData.addressSuite}, ${userProfileFakeData.addressCity}, ${userProfileFakeData.addressStateAbbr} ${userProfileFakeData.addressZipCode}, ${userProfileFakeData.addressCountry}`,
+      jobCompanyName: userProfileFakeData.jobCompanyName,
+    },
     role: rolesForUser[0],
     teams: teamsForUser()
   }
 };
-getUser.getUser[idFieldUser] = userId;
 
 let findUser = [{
   findUser: [{
+    [idFieldUser]: userId,
     email: userFakeData.email,
-    firstName: userFakeData.firstName,
-    lastName: userFakeData.lastName,
     fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
+    profile: {
+      personalPhone: userProfileFakeData.personalPhone,
+      personalWebSite: userProfileFakeData.personalWebSite,
+      addressFull: `${userProfileFakeData.addressStreet} ${userProfileFakeData.addressSuite}, ${userProfileFakeData.addressCity}, ${userProfileFakeData.addressStateAbbr} ${userProfileFakeData.addressZipCode}, ${userProfileFakeData.addressCountry}`,
+      jobCompanyName: userProfileFakeData.jobCompanyName,
+    },
     role: rolesForUser[0],
     teams: teamsForUser()
   }]
 }];
-findUser[0].findUser[0][idFieldUser] = userId;
 
 let getRole = {
   getRole: {
+    [idFieldRole]: roleId,
     name: roleFakeData.name,
     users: usersForRole
   }
 };
-getRole.getRole[idFieldRole] = roleId;
 
 let findRole = [{
   findRole: [{
+    [idFieldRole]: roleId,
     name: roleFakeData.name,
     users: usersForRole
   }]
 }];
-findRole[0].findRole[0][idFieldRole] = roleId;
 
 let getTeam = {
   getTeam: {
+    [idFieldTeam]: teamId,
     name: teamFakeData.name,
     members: usersForTeam()
   }
 };
-getTeam.getTeam[idFieldTeam] = teamId;
 
 let findTeam = [{
   findTeam: [{
+    [idFieldTeam]: teamId,
     name: teamFakeData.name,
     members: usersForTeam()
   }]
 }];
-findTeam[0].findTeam[0][idFieldTeam] = teamId;
-
 
 module.exports = {
   getUser,

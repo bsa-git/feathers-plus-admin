@@ -49,6 +49,12 @@ let moduleExports = merge({},
         },
         bsonType: "objectId"
       },
+      profileId: {
+        faker: {
+          fk: "userProfiles:next"
+        },
+        bsonType: "objectId"
+      },
       googleId: {
         chance: "natural",
         bsonType: "string"

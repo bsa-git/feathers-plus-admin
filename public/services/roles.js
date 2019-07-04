@@ -20,8 +20,6 @@ const servicePlugin = service(servicePath, {
       data: data
     });
     return {
-      name: '',
-      description: '',
       get users() {
         const idFieldUser = store.state.users.idField;
         const idFieldRole = store.state.roles.idField;

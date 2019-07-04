@@ -36,7 +36,7 @@ const setThemeDark = (ct) => {
  * @param ct {Object}
  */
 const setLocale = (ct) => {
-  const storeLocale = ct.store.state.locale;
+  const storeLocale = ct.store.state.config.locale;
   const serverCookie = (process.server && !process.static)? util.readCookie(ct.req.headers.cookie, 'locale'): storeLocale;
   const cookiesLocale = process.server ? serverCookie : cookies.get('locale');
   if (process.client && !cookiesLocale) {

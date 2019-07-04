@@ -1,7 +1,13 @@
 <template>
   <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4 lg4>
+    <v-flex xs12 sm8 md6 lg4>
       <v-card class="elevation-1 pa-3">
+        <v-card-title>
+          <v-spacer></v-spacer>
+          <router-link :to="$i18n.path(config.homePath)" class="close-icon">
+            <v-icon>clear</v-icon>
+          </router-link>
+        </v-card-title>
         <v-form @submit.prevent="onSubmit">
           <v-card-text>
             <div class="layout column align-center">
@@ -15,7 +21,7 @@
               <v-layout wrap>
                 <v-flex xs12 sm6>
                   <v-text-field
-                    :counter="10"
+                    :counter="15"
                     v-validate="'required|max:20'"
                     :error-messages="errors.collect('firstName')"
                     data-vv-name="firstName"
@@ -87,9 +93,9 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 
-  const debug = require('debug')('app:user.signup');
+  const debug = require('debug')('app:page.user-signup');
 
-  const isLog = true;
+  const isLog = false;
 
   export default {
     layout: 'user',
@@ -189,10 +195,15 @@
       async save(data) {
         try {
           const {User} = this.$FeathersVuex;
+          if (!data.avatar) {
+            const avatar = new this.$Avatar(data.email);
+            data.avatar = await avatar.getImage();
+          }
           const user = new User({
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
+            avatar: data.avatar,
             password: data.password
           });
           return await user.save();

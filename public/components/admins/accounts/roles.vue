@@ -64,19 +64,19 @@
           const users = [];
           role.users.forEach(user => {
             users.push({
-              id: `user.fullName_${user.id}`,
+              id: `User.fullName_${user.id}`,
               name: `${user.fullName}`,
             })
           });
           if (isLog) debug('users:', users);
           // Get role
           let item = {
-            id: `role.name_${roleId}`,
+            id: `Role.name_${roleId}`,
             name: `${role.name} :`,
             children: [
-              {id: `role.id_${roleId}`, name: `id : ${roleId}`},
+              {id: `Role.id_${roleId}`, name: `id : ${roleId}`},
               {
-                id: `role.users_${roleId}`,
+                id: `Role.users_${roleId}`,
                 name: `Users(${users.length ? users.length : 'Not'}) :`,
                 children: users
               }

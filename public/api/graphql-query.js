@@ -13,16 +13,22 @@ let getUser = `{
   getUser(key: "${userId}") {
     ${idFieldUser}
     email
-    firstName
-    lastName
     fullName
+    profile{
+      personalPhone
+      personalWebSite
+      addressFull
+      jobCompanyName
+    }
     role{
       ${idFieldRole}
       name
+      description
     }
     teams{
       ${idFieldTeam}
       name
+      description
     }
   }
 }`;
@@ -31,6 +37,7 @@ let getRole = `{
   getRole(key: "${roleId}") {
     ${idFieldRole}
     name
+    description
     users{
       ${idFieldUser}
       email
@@ -43,6 +50,7 @@ let getTeam = `{
   getTeam(key: "${teamId}") {
     ${idFieldTeam}
     name
+    description
     members{
       ${idFieldUser}
       email
@@ -55,16 +63,22 @@ let findUser = `{
   findUser(query: {${idFieldUser}: "${userId}"}) {
     ${idFieldUser}
     email
-    firstName
-    lastName
     fullName
+    profile{
+      personalPhone
+      personalWebSite
+      addressFull
+      jobCompanyName
+    }
     role{
       ${idFieldRole}
       name
+      description
     }
     teams{
       ${idFieldTeam}
       name
+      description
     }
   }
 }`;
@@ -73,6 +87,7 @@ let findRole = `{
   findRole(query: {${idFieldRole}: "${roleId}"}) {
     ${idFieldRole}
     name
+    description
     users{
       ${idFieldUser}
       email
@@ -85,6 +100,7 @@ let findTeam = `{
   findTeam(query: {${idFieldTeam}: "${teamId}"}) {
     ${idFieldTeam}
     name
+    description
     members{
       ${idFieldUser}
       email

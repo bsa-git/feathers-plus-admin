@@ -25,6 +25,7 @@ const queries = {
       members: {
         fullName: {},
         role: {},
+        profile: {},
         teams: {},
       },
     }
@@ -103,6 +104,7 @@ const twoLevelsFields = {
       lastName: 1,
       avatar: 1,
       roleId: 1,
+      profileId: 1,
       googleId: 1,
       githubId: 1,
       googleAccessToken: 1,
@@ -111,6 +113,7 @@ const twoLevelsFields = {
       githubRefreshToken: 1,
       fullName: {},
       role: {},
+      profile: {},
       teams: {},
     },
   }

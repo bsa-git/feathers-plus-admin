@@ -119,6 +119,28 @@ describe('<<< Test \'graphql\' service >>>', () => {
           assert.ok(false);
         }
       });
+
+      it('registered the \'userProfiles\' service', () => {
+        const service = app.service('user-profiles');
+        assert.ok(service, 'Registered the service');
+      });
+
+      it('Save fake data to \'userProfiles\' service', async () => {
+        // Seed service data
+        const results = await seedService(app, 'userProfiles');
+        if (Array.isArray(results)) {
+          results.forEach((result, index) => {
+            let fake = fakes['userProfiles'][index];
+            delete result.createdAt;
+            delete result.updatedAt;
+            delete result['__v'];
+            assert.deepEqual(result, fake);
+          });
+        } else {
+          debug('seedService.results:', results);
+          assert.ok(false);
+        }
+      });
     }
   });
 

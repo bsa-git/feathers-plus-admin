@@ -1,5 +1,6 @@
 
 const loPick = require('lodash/pick');
+import util from '~/plugins/lib/util';
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const debug = require('debug')('app:normalize.hook');
 
@@ -18,6 +19,7 @@ export default function (options = {}) {
     // Get the record(s) from context.data (before), context.result.data or context.result (after).
     // getItems always returns an array to simplify your processing.
     let records = getItems(context);
+    let _records = {};
 
     /*
     Modify records and/or context.
@@ -28,29 +30,29 @@ export default function (options = {}) {
 
       switch (context.path) {
       case 'users':
-        if(records['roleId']){
-          records = loPick(records, ['avatar', 'email', 'password', 'firstName', 'lastName', 'roleId']);
-        }else {
-          records = loPick(records, ['avatar', 'email', 'password', 'firstName', 'lastName']);
-        }
+        Object.assign(_records, loPick(records, util.serviceKeys('users')));
+        break;
+      case 'user-profiles':
+        Object.assign(_records, loPick(records, util.serviceKeys('userProfiles')));
         break;
       case 'roles':
-        records = loPick(records, ['name', 'description']);
+        Object.assign(_records, loPick(records, util.serviceKeys('roles')));
+        // records = loPick(records, ['name', 'description']);
         break;
       case 'teams':
-        records = loPick(records, ['name', 'description']);
+        Object.assign(_records, loPick(records, util.serviceKeys('teams')));
         break;
       case 'user-teams':
-        records = loPick(records, ['teamId', 'userId']);
+        Object.assign(_records, loPick(records, util.serviceKeys('userTeams')));
         break;
       default:
-        // code block
+        Object.assign(_records, records);
       }
-      if (isLog) debug('After normalize-query:', records);
+      if (isLog) debug('After normalize-query:', _records);
     }
 
     // Place the modified records back in the context.
-    replaceItems(context, records);
+    replaceItems(context, _records);
     // Best practice: hooks should always return the context.
     return context;
   };

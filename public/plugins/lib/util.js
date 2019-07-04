@@ -1,4 +1,5 @@
 import cookies from 'browser-cookies';
+import fakeData from '~~/seeds/fake-data.json';
 
 const debug = require('debug')('app:plugins.util');
 const isDebug = true;
@@ -242,6 +243,62 @@ const getHookContext = function (context) {
   return target;
 };
 
+/**
+ * Get service keys
+ * @param serviceName
+ * @param isId
+ * @return {Array.<*>}
+ */
+const serviceKeys = function (serviceName = '', isId = false) {
+  const serviceFakeData = fakeData[serviceName][0];
+  const idField = 'id' in serviceFakeData ? 'id' : '_id';
+  return Object.keys(serviceFakeData).filter(key => isId ? true : key !== idField);
+};
+
+/**
+ * Get profile icon
+ * @param key
+ * @return {string}
+ */
+const getProfileIcon = function(key){
+  let icon = '';
+  switch (key) {
+  case 'jobEmail':
+    icon = 'alternate_email';
+    break;
+  case 'personalPhone':
+  case 'jobPhone':
+    icon = 'phone';
+    break;
+  case 'personalWebSite':
+  case 'jobWebSite':
+    icon = 'language';
+    break;
+  case 'addressLatitude':
+  case 'addressLongitude':
+    icon = 'place';
+    break;
+  case 'addressSuite':
+  case 'addressStreet':
+  case 'addressCity':
+  case 'addressState':
+  case 'addressStateAbbr':
+  case 'addressCountry':
+  case 'addressCountryCode':
+  case 'addressZipCode':
+    icon = 'email';
+    break;
+  case 'jobCompanyName':
+  case 'jobTitle':
+  case 'jobType':
+    icon = 'business_center';
+    break;
+  default:
+    icon = 'perm_identity';
+  }
+  return icon;
+};
+
 export default {
   toggleFullScreen,
   delayTime,
@@ -257,5 +314,7 @@ export default {
   sortByStringField,
   qlParams,
   stringify,
-  getHookContext
+  getHookContext,
+  serviceKeys,
+  getProfileIcon
 };

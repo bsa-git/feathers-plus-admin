@@ -1,69 +1,134 @@
 <template>
-  <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4 lg4>
-      <v-card class="elevation-1 pa-3">
-        <v-card-text>
-          <div class="layout column align-center">
-            <img src="/static/img/m.png" alt="Vue Material Admin" width="120" height="120">
-            <router-link :to="$i18n.path(config.homePath)">
-              <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
+  <v-container fluid>
+    <confirm-dialog
+      :confirm-dialog="confirmDialog"
+      :title-dialog="$t('profile.titleDialog')"
+      :text-dialog="$t('profile.textDialog')"
+      :run-action="remove"
+      v-on:onCloseDialog="confirmDialog = false"
+    ></confirm-dialog>
+    <v-layout align-center justify-center>
+      <v-flex xs12 sm8 md6 lg4>
+        <v-card class="elevation-1 pa-3">
+          <v-card-title>
+            <v-spacer></v-spacer>
+            <router-link :to="$i18n.path(config.homePath)" class="close-icon">
+              <v-icon>clear</v-icon>
             </router-link>
-          </div>
-          <v-form>
-            <v-text-field
-              append-icon="email"
-              v-validate="'required|email'"
-              :error-messages="errors.collect('email')"
-              data-vv-name="email"
-              v-model="model.email"
-              :label="$t('login.email')"
-            ></v-text-field>
-            <v-text-field
-              append-icon="lock"
-              v-validate="'required|min:3'"
-              :error-messages="errors.collect('password')"
-              data-vv-name="password"
-              v-model="model.password"
-              :label="$t('login.password')"
-              type="password"
-            ></v-text-field>
+          </v-card-title>
+          <v-form @submit.prevent="onSubmit">
+            <v-card-text>
+              <div class="layout column align-center">
+                <v-avatar size="120"><img :src="model.avatar"></v-avatar>
+                <router-link :to="$i18n.path(config.homePath)">
+                  <h1 class="my-4 primary--text font-weight-light">Material Admin Template</h1>
+                </router-link>
+              </div>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      :counter="15"
+                      v-validate="'required|max:20'"
+                      :error-messages="errors.collect('firstName')"
+                      data-vv-name="firstName"
+                      v-model="model.firstName"
+                      :label="$t('signup.firstName')"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      :counter="20"
+                      v-validate="'required|max:20'"
+                      :error-messages="errors.collect('lastName')"
+                      data-vv-name="lastName"
+                      v-model="model.lastName"
+                      :label="$t('signup.lastName')"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      append-icon="email"
+                      v-validate="'required|email'"
+                      :error-messages="errors.collect('email')"
+                      data-vv-name="email"
+                      v-model="model.email"
+                      :label="$t('login.email')"
+                    ></v-text-field>
+                  </v-flex>
+                  <!--<v-flex xs12 sm6>-->
+                  <!--<v-text-field-->
+                  <!--append-icon="lock"-->
+                  <!--v-validate="'required|min:3'"-->
+                  <!--:error-messages="errors.collect('password')"-->
+                  <!--data-vv-name="password"-->
+                  <!--v-model="model.password"-->
+                  <!--:label="$t('login.password')"-->
+                  <!--type="password"-->
+                  <!--ref="confirmation"-->
+                  <!--&gt;</v-text-field>-->
+                  <!--</v-flex>-->
+                  <!--<v-flex xs12 sm6>-->
+                  <!--<v-text-field-->
+                  <!--append-icon="lock"-->
+                  <!--v-validate="'required|confirmed:confirmation'"-->
+                  <!--:error-messages="errors.collect('passwordConfirmation')"-->
+                  <!--data-vv-name="passwordConfirmation"-->
+                  <!--v-model="model.passwordConfirmation"-->
+                  <!--:label="$t('signup.passwordConfirmation')"-->
+                  <!--type="password"-->
+                  <!--&gt;</v-text-field>-->
+                  <!--</v-flex>-->
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn block color="primary" type="submit" :loading="loadingSubmit" >
+                {{ $t('profile.save') }}
+              </v-btn>
+              <v-btn block @click="confirmDialog = true" :loading="loadingRemove" color="error">
+                {{ $t('profile.removeAccount') }}
+              </v-btn>
+            </v-card-actions>
           </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn href="/auth/google" icon :disabled="user? true : false" >
-            <v-icon color="red">fab fa-google fa-lg</v-icon>
-          </v-btn>
-          <v-btn href="/auth/github" icon :disabled="user? true : false">
-            <v-icon color="light-blue">fab fa-github fa-lg</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn block color="primary" @click="submit" :loading="loading" :disabled="user? true : false">
-            {{ $t('login.title') }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import ConfirmDialog from '~/components/layout/ConfirmDialog';
+  const debug = require('debug')('app:page.user-profile');
+
+  const isLog = true;
 
   export default {
     layout: 'user',
     $_veeValidate: {
       validator: 'new'
     },
+    components: {
+      ConfirmDialog,
+    },
     data() {
       return {
-        title: this.$t('login.title'),
-        description: this.$t('login.description'),
-        loading: false,
+        title: this.$t('profile.title'),
+        description: this.$t('profile.description'),
+        confirmDialog: false,
+        loadingSubmit: false,
+        loadingRemove: false,
         error: undefined,
         model: {
-          email: 'Sandrine.Torphy@yahoo.com',
-          password: 'Sandrine.Torphy'
+          firstName: '',
+          lastName: '',
+          email: '',
+          avatar: '',
+          password: '',
+          passwordConfirmation: ''
         },
       }
     },
@@ -75,55 +140,106 @@
         ],
       }
     },
-    mounted() {
-//      this.$validator.localize('en', this.dictionary)
-//      console.log('$i18n:', this.$t('login.title'));// this.$t('login.title')
+    created: function () {
+      if (this.user) {
+        this.model.avatar = this.user.avatar;
+        this.model.firstName = this.user.firstName;
+        this.model.lastName = this.user.lastName;
+        this.model.email = this.user.email;
+      }
     },
     computed: {
-      ...mapGetters('users', {
-        user: 'current'
-      }),
       ...mapGetters({
         config: 'getConfig',
-      })
+      }),
+      ...mapState('auth', [
+        'user'
+      ]),
     },
     methods: {
-      async submit() {
-        const self = this;
+      async onSubmit() {
+        this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
           this.showError('Validation Error!');
         } else {
-          const response = await self.login(self.model.email, self.model.password);
-          if (response && response.accessToken) {
-            this.loading = true;
+          this.loadingSubmit = true;
+          if (isLog) debug('onSubmit.formData:', this.model);
+          const profileResponse = await this.save(this.model);
+          if (profileResponse) {
+            if (isLog) debug('onSubmit.profileResponse:', profileResponse);
+            this.showSuccess(`${this.$t('profile.successSaveUser')}!`);
             setTimeout(() => {
-              self.$router.push('/dashboard');
+              this.$router.push(this.$i18n.path(this.config.homePath));
             }, 1000);
           }
         }
       },
+      logout() {
+        if (this.user) {
+          this.logout();
+          this.loadingLogout = true;
+          this.showSuccess(`${this.$t('login.successLogout')}!`);
+          setTimeout(() => {
+            this.$router.push(this.$i18n.path(this.config.homePath));
+          }, 1000);
+        }
+      },
+      clearAll() {
+        this.$validator.reset();
+        this.dismissError();
+      },
       dismissError() {
         this.error = undefined;
-        this.clearAuthenticateError()
+        this.clearError()
       },
 
-      async login(email, password) {
+      async save(data) {
         try {
-          const response = await this.authenticate({strategy: 'local', email, password});
-          this.showSuccess('Success Login!');
-          return response
+          const idFieldUser = this.$store.state.users.idField;
+          const {User} = this.$FeathersVuex;
+          if (!data.avatar) {
+            const avatar = new this.$Avatar(data.email);
+            data.avatar = await avatar.getImage();
+          }
+          const user = new User({
+            [idFieldUser]: this.user[idFieldUser],
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            avatar: data.avatar,
+          });
+          return await user.save();
         } catch (error) {
-          // Convert the error to a plain object and add a message.
-          let type = error.className;
-          error = Object.assign({}, error);
-          error.message = (type === 'not-authenticated')
-            ? 'Incorrect email or password.'
-            : 'An error prevented login.';
+          if (isLog) debug('user.save.error:', error);
+          this.loadingSubmit = false;
           this.error = error;
           this.showError(error.message);
         }
       },
+
+      async remove() {
+        try {
+          this.loadingRemove = true;
+          const idFieldUser = this.$store.state.users.idField;
+          const {User} = this.$FeathersVuex;
+          const user = new User({
+            [idFieldUser]: this.user[idFieldUser],
+          });
+          await user.remove();
+          this.showSuccess(`${this.$t('profile.successRemoveUser')}!`);
+          setTimeout(() => {
+//            this.$router.push(this.$i18n.path(this.config.homePath));
+            this.logout();
+          }, 1000);
+        } catch (error) {
+          if (isLog) debug('user.remove.error:', error);
+          this.loadingRemove = false;
+          this.error = error;
+          this.showError(error.message);
+        }
+      },
+
       ...mapMutations('auth', {
         clearError: 'clearAuthenticateError'
       }),
@@ -131,7 +247,7 @@
         showSuccess: 'SHOW_SUCCESS',
         showError: 'SHOW_ERROR',
       }),
-      ...mapActions('auth', ['authenticate'])
+      ...mapActions(['logout'])
     }
 
   };

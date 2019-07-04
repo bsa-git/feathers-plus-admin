@@ -30,8 +30,8 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     _id: {type: 'ID'},
-    teamId: {type: 'ID', faker: {fk: 'teams:random'}},
-    userId: {type: 'ID', faker: {fk: 'users:random'}},
+    teamId: {type: 'ID', faker: {fk: 'teams:next'}},
+    userId: {type: 'ID', faker: {fk: 'users:next'}},
     //-------------------------
     // !end
   },

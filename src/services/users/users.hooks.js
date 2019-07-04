@@ -11,7 +11,6 @@ const usersPopulate = require('./users.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');
-// const {authCheck} = require('../../hooks/auth');
 //---------------
 // !end
 

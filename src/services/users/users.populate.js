@@ -18,6 +18,7 @@ const queries = {
     query: {
       fullName: {},
       role: {},
+      profile: {},
       teams: {},
     }
   },
@@ -28,6 +29,10 @@ const queries = {
       },
       role: {
         users: {},
+      },
+      profile: {
+        addressFull: {},
+        user: {},
       },
       teams: {
         members: {},
@@ -102,6 +107,7 @@ const twoLevelsFields = {
     lastName: 1,
     avatar: 1,
     roleId: 1,
+    profileId: 1,
     googleId: 1,
     githubId: 1,
     googleAccessToken: 1,
@@ -118,6 +124,31 @@ const twoLevelsFields = {
       name: 1,
       description: 1,
       users: {},
+    },
+    profile: {
+      _args: {},
+      id: 1,
+      _id: 1,
+      personalPhone: 1,
+      personalWebSite: 1,
+      addressSuite: 1,
+      addressStreet: 1,
+      addressCity: 1,
+      addressState: 1,
+      addressStateAbbr: 1,
+      addressCountry: 1,
+      addressCountryCode: 1,
+      addressZipCode: 1,
+      addressLatitude: 1,
+      addressLongitude: 1,
+      jobCompanyName: 1,
+      jobTitle: 1,
+      jobType: 1,
+      jobPhone: 1,
+      jobWebSite: 1,
+      jobEmail: 1,
+      addressFull: {},
+      user: {},
     },
     teams: {
       _args: {},

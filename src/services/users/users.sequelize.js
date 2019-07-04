@@ -40,6 +40,10 @@ let moduleExports = merge({},
     roleId: {
       type: DataTypes.INTEGER
     },
+    profileId: {
+      type: DataTypes.INTEGER,
+      unique: true
+    },
     googleId: {
       type: DataTypes.TEXT
     },

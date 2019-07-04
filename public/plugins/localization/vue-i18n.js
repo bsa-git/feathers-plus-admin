@@ -6,7 +6,7 @@ Vue.use(VueI18n);
 
 export default (context) => {
   const app = context.app;
-  const config = context.store.state.config
+  const config = context.store.state.config;
   // Set i18n instance on app
   // This way we can use it in middleware and pages asyncData/fetch
   app.i18n = new VueI18n({

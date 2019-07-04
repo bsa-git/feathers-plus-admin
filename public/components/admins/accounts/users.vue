@@ -66,26 +66,33 @@
           const teams = [];
           user.teams.forEach(team => {
             teams.push({
-              id: `team.name_${team.id}`,
+              id: `Team.name_${team.id}`,
               name: `${team.name}`,
             })
           });
           if (isLog) debug('teams:', teams);
           // Get user
           let item = {
-            id: `user.fullName_${userId}`,
+            id: `User.fullName_${userId}`,
             name: `${user.fullName} :`,
             children: [
-              {id: `user.id_${userId}`, name: `id : ${userId}`},
+              {id: `User.id_${userId}`, name: `id : ${userId}`},
               {
-                id: `user.role_${userId}`,
-                name: `Role :`,
-                children: user.role ? [
-                  {id: `role.name_${user.role.id}`, name: `${user.role.name}`},
+                id: `User.profile_${userId}`,
+                name: `Profile :`,
+                children: user.profile ? [
+                  {id: `UserProfile.id_${user.profile.id}`, name: `id : ${user.profile.id}`},
                 ] : []
               },
               {
-                id: `user.teams_${userId}`,
+                id: `User.role_${userId}`,
+                name: `Role :`,
+                children: user.role ? [
+                  {id: `Role.name_${user.role.id}`, name: `${user.role.name}`},
+                ] : []
+              },
+              {
+                id: `User.teams_${userId}`,
                 name: `Teams(${teams.length ? teams.length : 'Not'}) :`,
                 children: teams
               }

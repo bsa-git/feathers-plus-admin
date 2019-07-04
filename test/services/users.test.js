@@ -2,7 +2,7 @@ const assert = require('assert');
 const {readJsonFileSync, appRoot} = require('../../src/plugins/lib/index');
 const app = require(`${appRoot}/src/app`);
 const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
-const debug = require('debug')('app:users.service.test');
+const debug = require('debug')('app:users.test');
 
 const isDebug = false;
 const isLog = false;
@@ -61,6 +61,22 @@ describe('<<< Test \'users\' service >>>', () => {
       const fake = fakes['users'][0];
       assert.strictEqual(ex.code, 409, 'unexpected error.code');
       assert.strictEqual(ex.message, `email: ${fake.email} already exists.`);
+      assert.strictEqual(ex.name, 'Conflict');
+    }
+  });
+
+  it('Error on unique profileId', async function () {
+    try {
+      const fake = fakes['users'][0];
+      const users = app.service('users');
+      await users.create({ email: 'test@test.com', password: 'test', firstName: 'Lora', lastName: 'Lind', profileId: fake.profileId });
+      assert(false, 'email unexpectedly succeeded');
+    } catch (ex) {
+      if(isDebug)debug('Error on unique profileId for \'users\' service:', ex);
+      const fake = fakes['users'][0];
+      // assert.ok(true);
+      assert.strictEqual(ex.code, 409, 'unexpected error.code');
+      assert.strictEqual(ex.message, `profileId: ObjectId('${fake.profileId}') already exists.`);
       assert.strictEqual(ex.name, 'Conflict');
     }
   });
