@@ -107,12 +107,15 @@
           }
         });
       },
+      ...mapGetters({
+        config: 'getConfig',
+      }),
       ...mapState({
         locale: state => state.config.locale
       }),
     },
     methods: {
-      async itemClick(type) {
+      itemClick(type) {
         console.log('item.click:', type);
         switch (type) {
           case 'en':
@@ -123,8 +126,11 @@
             this.$router.push(path);
             break;
           case 'logout':
-            await this.logout();
             this.showSuccess(`${this.$t('login.successLogout')}!`);
+            setTimeout(() => {
+              this.logout();
+              this.$router.push(this.$i18n.path(this.config.homePath));
+            }, 1000);
             break;
           default:
         }

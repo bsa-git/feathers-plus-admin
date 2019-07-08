@@ -56,35 +56,35 @@
                       :label="$t('login.email')"
                     ></v-text-field>
                   </v-flex>
-                  <!--<v-flex xs12 sm6>-->
-                  <!--<v-text-field-->
-                  <!--append-icon="lock"-->
-                  <!--v-validate="'required|min:3'"-->
-                  <!--:error-messages="errors.collect('password')"-->
-                  <!--data-vv-name="password"-->
-                  <!--v-model="model.password"-->
-                  <!--:label="$t('login.password')"-->
-                  <!--type="password"-->
-                  <!--ref="confirmation"-->
-                  <!--&gt;</v-text-field>-->
-                  <!--</v-flex>-->
-                  <!--<v-flex xs12 sm6>-->
-                  <!--<v-text-field-->
-                  <!--append-icon="lock"-->
-                  <!--v-validate="'required|confirmed:confirmation'"-->
-                  <!--:error-messages="errors.collect('passwordConfirmation')"-->
-                  <!--data-vv-name="passwordConfirmation"-->
-                  <!--v-model="model.passwordConfirmation"-->
-                  <!--:label="$t('signup.passwordConfirmation')"-->
-                  <!--type="password"-->
-                  <!--&gt;</v-text-field>-->
-                  <!--</v-flex>-->
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      append-icon="lock"
+                      v-validate="'min:3'"
+                      :error-messages="errors.collect('password')"
+                      data-vv-name="password"
+                      v-model="model.password"
+                      :label="$t('login.password')"
+                      type="password"
+                      ref="confirmation"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                      append-icon="lock"
+                      v-validate="'required|confirmed:confirmation'"
+                      :error-messages="errors.collect('passwordConfirmation')"
+                      data-vv-name="passwordConfirmation"
+                      v-model="model.passwordConfirmation"
+                      :label="$t('signup.passwordConfirmation')"
+                      type="password"
+                    ></v-text-field>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn block color="primary" type="submit" :loading="loadingSubmit" >
+              <v-btn block color="primary" type="submit" :loading="loadingSubmit">
                 {{ $t('profile.save') }}
               </v-btn>
               <v-btn block @click="confirmDialog = true" :loading="loadingRemove" color="error">
@@ -102,6 +102,7 @@
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import ConfirmDialog from '~/components/layout/ConfirmDialog';
+
   const debug = require('debug')('app:page.user-profile');
 
   const isLog = true;
@@ -175,19 +176,15 @@
           }
         }
       },
-      logout() {
-        if (this.user) {
-          this.logout();
-          this.loadingLogout = true;
-          this.showSuccess(`${this.$t('login.successLogout')}!`);
-          setTimeout(() => {
-            this.$router.push(this.$i18n.path(this.config.homePath));
-          }, 1000);
-        }
+//      clearAll() {
+//        this.$validator.reset();
+//        this.dismissError();
+//      },
+      isChangeEmail() {
+        return (this.model.email !== this.user.email);
       },
-      clearAll() {
-        this.$validator.reset();
-        this.dismissError();
+      isChangePassword() {
+        return !!this.model.password;
       },
       dismissError() {
         this.error = undefined;
@@ -198,17 +195,20 @@
         try {
           const idFieldUser = this.$store.state.users.idField;
           const {User} = this.$FeathersVuex;
-          if (!data.avatar) {
-            const avatar = new this.$Avatar(data.email);
-            data.avatar = await avatar.getImage();
-          }
-          const user = new User({
+          let userData = {
             [idFieldUser]: this.user[idFieldUser],
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            avatar: data.avatar,
-          });
+          };
+          if (this.isChangeEmail()) {
+            const avatar = new this.$Avatar(data.email);
+            userData.avatar = await avatar.getImage();
+          }
+          if (this.isChangePassword()) {
+            userData.password = data.password;
+          }
+          const user = new User(userData);
           return await user.save();
         } catch (error) {
           if (isLog) debug('user.save.error:', error);
@@ -229,8 +229,8 @@
           await user.remove();
           this.showSuccess(`${this.$t('profile.successRemoveUser')}!`);
           setTimeout(() => {
-//            this.$router.push(this.$i18n.path(this.config.homePath));
             this.logout();
+            this.$router.push(this.$i18n.path(this.config.homePath));
           }, 1000);
         } catch (error) {
           if (isLog) debug('user.remove.error:', error);

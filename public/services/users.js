@@ -1,7 +1,7 @@
 const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
-import util from '~/plugins/lib/util';
+import Service from '~/plugins/lib/service-client.class';
 import normalize from '~/services/hooks/normalize';
 import log from '~/services/hooks/log';
 
@@ -33,7 +33,7 @@ const servicePlugin = service(servicePath, {
           let profile = Models.UserProfile.getFromStore(this.profileId);
           if(profile){
             const id = profile[idFieldProfile];
-            profile = loPick(profile, util.serviceKeys('userProfiles'));
+            profile = loPick(profile, Service.serviceFields('userProfiles'));
             profile.id = id;
           }else {
             profile = null;
@@ -50,7 +50,7 @@ const servicePlugin = service(servicePath, {
           let role = Models.Role.getFromStore(this.roleId);
           if (role) {
             const id = role[idFieldRole];
-            role = loPick(role, util.serviceKeys('roles'));
+            role = loPick(role, Service.serviceFields('roles'));
             role.id = id;
             role.isAdmin = store.getters.isAdmin;
           } else {
@@ -70,7 +70,7 @@ const servicePlugin = service(servicePath, {
         let teamsForUser = Models.Team.findInStore({query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}}).data;
         teamsForUser = teamsForUser.map(team => {
           const id = team[idFieldTeam];
-          team = loPick(team, util.serviceKeys('teams'));
+          team = loPick(team, Service.serviceFields('teams'));
           team.id = id;
           return team;
         });

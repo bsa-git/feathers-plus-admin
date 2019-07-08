@@ -1,15 +1,57 @@
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import normalize from '~/services/hooks/normalize';
-import util from '~/plugins/lib/util';
+import Service from '~/plugins/lib/service-client.class';
 
 const debug = require('debug')('app:service.user-profiles');
-
 // const isDebug = true;
 const isLog = true;
 
-const {service} = feathersVuex(feathersClient, {idField: '_id'});
+/**
+ * Get profile icon
+ * @param key
+ * @return {string}
+ */
+const getProfileIcon = function(key){
+  let icon = '';
+  switch (key) {
+  case 'jobEmail':
+    icon = 'alternate_email';
+    break;
+  case 'personalPhone':
+  case 'jobPhone':
+    icon = 'phone';
+    break;
+  case 'personalWebSite':
+  case 'jobWebSite':
+    icon = 'language';
+    break;
+  case 'addressLatitude':
+  case 'addressLongitude':
+    icon = 'place';
+    break;
+  case 'addressSuite':
+  case 'addressStreet':
+  case 'addressCity':
+  case 'addressState':
+  case 'addressStateAbbr':
+  case 'addressCountry':
+  case 'addressCountryCode':
+  case 'addressZipCode':
+    icon = 'email';
+    break;
+  case 'jobCompanyName':
+  case 'jobTitle':
+  case 'jobType':
+    icon = 'business_center';
+    break;
+  default:
+    icon = 'perm_identity';
+  }
+  return icon;
+};
 
+const {service} = feathersVuex(feathersClient, {idField: '_id'});
 const servicePath = 'user-profiles';
 const servicePlugin = service(servicePath, {
   instanceDefaults(data, {store, Model}) {
@@ -33,7 +75,7 @@ const servicePlugin = service(servicePath, {
       if (isLog) debug('profileList.profile:', profile);
       if (!profile) return list;
       // const idFieldProfile = 'id' in profile ? 'id' : '_id';
-      profile = loPick(profile, util.serviceKeys('userProfiles'));
+      profile = loPick(profile, Service.serviceFields('userProfiles'));
       loToPairs(profile).forEach(row => {
         let key = row[0];
         let val = row[1];
@@ -48,7 +90,7 @@ const servicePlugin = service(servicePath, {
           list.push({header: 'Job'});
         }
         // Add key/val/icon
-        let icon = util.getProfileIcon(key);
+        let icon = getProfileIcon(key);
         if (key.startsWith('personal')) key = key.replace('personal', '');
         if (key.startsWith('address')) key = key.replace('address', '');
         if (key.startsWith('job')) key = key.replace('job', '');

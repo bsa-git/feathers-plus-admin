@@ -1,6 +1,6 @@
 
 const loPick = require('lodash/pick');
-import util from '~/plugins/lib/util';
+import Service from '~/plugins/lib/service-client.class';
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const debug = require('debug')('app:normalize.hook');
 
@@ -30,20 +30,19 @@ export default function (options = {}) {
 
       switch (context.path) {
       case 'users':
-        Object.assign(_records, loPick(records, util.serviceKeys('users')));
+        Object.assign(_records, loPick(records, Service.serviceFields('users')));
         break;
       case 'user-profiles':
-        Object.assign(_records, loPick(records, util.serviceKeys('userProfiles')));
+        Object.assign(_records, loPick(records, Service.serviceFields('userProfiles')));
         break;
       case 'roles':
-        Object.assign(_records, loPick(records, util.serviceKeys('roles')));
-        // records = loPick(records, ['name', 'description']);
+        Object.assign(_records, loPick(records, Service.serviceFields('roles')));
         break;
       case 'teams':
-        Object.assign(_records, loPick(records, util.serviceKeys('teams')));
+        Object.assign(_records, loPick(records, Service.serviceFields('teams')));
         break;
       case 'user-teams':
-        Object.assign(_records, loPick(records, util.serviceKeys('userTeams')));
+        Object.assign(_records, loPick(records, Service.serviceFields('userTeams')));
         break;
       default:
         Object.assign(_records, records);

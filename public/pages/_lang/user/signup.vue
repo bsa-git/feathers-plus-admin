@@ -168,10 +168,10 @@
       },
       btnClick() {
         if (this.user) {
-          this.logout();
           this.loadingLogout = true;
           this.showSuccess(`${this.$t('login.successLogout')}!`);
           setTimeout(() => {
+            this.logout();
             this.$router.push(this.$i18n.path(this.config.homePath));
           }, 1000);
         } else {

@@ -45,57 +45,42 @@ const actions = {
     }
   },
 
-  async logout({commit, dispatch, getters}) {
-    if(isDebug) debug('<<logout>>Start logout');
+  // async logout({commit, dispatch}) {
+  //   if(isDebug) debug('<<logout>>Start logout');
+  //   // logout
+  //   await dispatch('auth/logout');
+  //   this.$util.removeAccessToken();
+  //   // clearAll
+  //   commit('users/clearAll');
+  //   commit('roles/clearAll');
+  //   commit('teams/clearAll');
+  //   commit('user-teams/clearAll');
+  //   commit('user-profiles/clearAll');
+  // },
+
+  async logout(store) {
+    if(isDebug) debug('<<logout>> Start logout');
+    const service = new this.$Service(store);
     // logout
-    await dispatch('auth/logout');
+    await service.logout();
     this.$util.removeAccessToken();
-    // clearAll
-    commit('users/clearAll');
-    commit('roles/clearAll');
-    commit('teams/clearAll');
-    commit('user-teams/clearAll');
-    // Go to homePath
-    const config = getters.getConfig;
-    this.$redirect(config.homePath);
+    service.clearAll();
   },
 
-  async authenticate({dispatch, getters}, credentials = null) {
-    let response;
-    if(isDebug) debug('<<authenticate>>Start authenticate');
+  async authenticate(store, credentials = null) {
+    if(isDebug) debug('<<authenticate>> Start authenticate');
+    const service = new this.$Service(store);
     // authenticate
-    if (credentials) {
-      response = await dispatch('auth/authenticate', credentials);
-    } else {
-      response = await dispatch('auth/authenticate');
-    }
-    // Get users data only for admins
+    let response = await service.authenticate(credentials);
     if (response && response.accessToken) {
-      const isAuth = getters.isAuth;
-      const isAdmin = getters.isAdmin;
-      if(isDebug) debug(`<<authenticate>>Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${getters.getMyRole}`);
-      // return response;
-      if(!isAdmin) return response;
-      // findUserTeams
-      let userTeams = await dispatch('user-teams/find', {query: {$sort: {teamId: 1, userId: 1}}});
-      userTeams = userTeams.data || userTeams;
-      if (isLog) debug('<<authenticate>>userTeams from server:', userTeams);
-      // findRoles
-      let roles = await dispatch('roles/find', {query: {$sort: {name: 1}}});
-      roles = roles.data || roles;
-      if (isLog) debug('<<authenticate>>Roles from server:', roles);
-      // findTeams
-      let teams = await dispatch('teams/find', {query: {$sort: {name: 1}}});
-      teams = teams.data || teams;
-      if (isLog) debug('<<authenticate>>Teams from server:', teams);
-      // findUsers
-      let users = await dispatch('users/find', {query: {$sort: {lastName: 1}}});
-      users = users.data || users;
-      if (isLog) debug('<<authenticate>>Users from server:', users);
-      // findUserProfiles
-      let userProfiles = await dispatch('user-profiles/find', {query: {$sort: {}}});
-      userProfiles = userProfiles.data || userProfiles;
-      if (isLog) debug('<<authenticate>>userProfiles from server:', userProfiles);
+      const isAuth = store.getters.isAuth;
+      const isAdmin = store.getters.isAdmin;
+      if(isAdmin){
+        await service.findAllForAdmin();
+      }else {
+        await service.findAllForUser();
+      }
+      if(isDebug) debug(`<<authenticate>> Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${store.getters.getMyRole}`);
     }
     return response;
   }

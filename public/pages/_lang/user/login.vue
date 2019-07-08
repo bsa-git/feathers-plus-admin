@@ -122,6 +122,10 @@
         } else {
           const loginResponse = await this.login(this.model.email, this.model.password);
           if (loginResponse && loginResponse.accessToken) {
+            if (!this.model.avatar) {
+              const avatar = new this.$Avatar(this.model.email);
+              this.model.avatar = await avatar.getImage();
+            }
             if (isLog) debug('loginResponse:', loginResponse);
             this.showSuccess(`${this.$t('login.success')}!`);
             this.loadingSubmit = true;
@@ -133,10 +137,10 @@
       },
       btnClick() {
         if (this.user) {
-          this.logout();
           this.loadingLogout = true;
           this.showSuccess(`${this.$t('login.successLogout')}!`);
           setTimeout(() => {
+            this.logout();
             this.$router.push(this.$i18n.path(this.config.homePath));
           }, 1000);
         } else {
