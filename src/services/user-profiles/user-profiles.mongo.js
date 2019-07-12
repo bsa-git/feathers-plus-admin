@@ -15,10 +15,12 @@ let moduleExports = merge({},
         bsonType: "objectId"
       },
       personalPhone: {
+        format: "phone",
         faker: "phone.phoneNumberFormat",
         bsonType: "string"
       },
       personalWebSite: {
+        format: "uri",
         faker: "internet.url",
         bsonType: "string"
       },
@@ -51,14 +53,17 @@ let moduleExports = merge({},
         bsonType: "string"
       },
       addressZipCode: {
+        format: "zip_code",
         faker: "address.zipCode",
         bsonType: "string"
       },
       addressLatitude: {
+        format: "lat",
         faker: "address.latitude",
         bsonType: "string"
       },
       addressLongitude: {
+        format: "long",
         faker: "address.longitude",
         bsonType: "string"
       },
@@ -75,10 +80,12 @@ let moduleExports = merge({},
         bsonType: "string"
       },
       jobPhone: {
+        format: "phone",
         faker: "phone.phoneNumberFormat",
         bsonType: "string"
       },
       jobWebSite: {
+        format: "uri",
         faker: "internet.url",
         bsonType: "string"
       },

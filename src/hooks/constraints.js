@@ -3,7 +3,7 @@
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
-const {inspector, AuthServer} = require('../plugins');
+const {inspector, AuthServer, getHookContext} = require('../plugins');
 const debug = require('debug')('app:constraints.all.hook');
 
 const isDebug = false;
@@ -34,6 +34,7 @@ module.exports = function (isTest = false) {
      * Show debug info
      */
     const showDebugInfo = () => {
+      if(isLog) inspector('constraints.all.hook.context', getHookContext(context));
       if (isDebug) debug(`Provider: ${context.params.provider ? context.params.provider : 'Not'}; ${context.type} app.service('${context.path}').${context.method}()`);
       if (isLog) inspector('constraints.all.hook.records:', records);
     };
@@ -267,7 +268,13 @@ module.exports = function (isTest = false) {
             }
           });
         } else {
-          let profileId = context.id;
+          let profileId;
+          if(records){
+            const idField = 'id' in records ? 'id' : '_id';
+            profileId = records[idField];
+          }else {
+            profileId = context.id;
+          }
           let servicePath = 'users';
           const findResults = await findItems(servicePath, {profileId: profileId});
           if(Array.isArray(findResults) && findResults.length){

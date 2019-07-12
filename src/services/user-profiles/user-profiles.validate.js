@@ -4,7 +4,11 @@
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash.merge');
 const ajv = require('ajv');
-// !code: imports // !end
+// !code: imports
+//---------------
+const {getRegex} = require('../../plugins/lib');
+//---------------
+// !end
 // !code: init // !end
 
 // !<DEFAULT> code: set_id_type
@@ -29,10 +33,12 @@ let base = merge({},
       },
       personalPhone: {
         type: "string",
+        format: "phone",
         faker: "phone.phoneNumberFormat"
       },
       personalWebSite: {
         type: "string",
+        format: "uri",
         faker: "internet.url"
       },
       addressSuite: {
@@ -65,14 +71,17 @@ let base = merge({},
       },
       addressZipCode: {
         type: "string",
+        format: "zip_code",
         faker: "address.zipCode"
       },
       addressLatitude: {
         type: "string",
+        format: "lat",
         faker: "address.latitude"
       },
       addressLongitude: {
         type: "string",
+        format: "long",
         faker: "address.longitude"
       },
       jobCompanyName: {
@@ -89,10 +98,12 @@ let base = merge({},
       },
       jobPhone: {
         type: "string",
+        format: "phone",
         faker: "phone.phoneNumberFormat"
       },
       jobWebSite: {
         type: "string",
+        format: "uri",
         faker: "internet.url"
       },
       jobEmail: {
@@ -127,20 +138,29 @@ delete patch.required;
 // !code: all_change // !end
 
 let validateCreate = options => {
-  // !<DEFAULT> code: func_create
-  return validateSchema(create, ajv, options);
+  // !code: func_create
+  //-------------------
+  const _ajv = addAjvFormats(options);
+  return validateSchema(create, _ajv);
+  //-------------------
   // !end
 };
 
 let validateUpdate = options => {
-  // !<DEFAULT> code: func_update
-  return validateSchema(update, ajv, options);
+  // !code: func_update
+  //-------------------
+  const _ajv = addAjvFormats(options);
+  return validateSchema(update, _ajv);
+  //-------------------
   // !end
 };
 
 let validatePatch = options => {
-  // !<DEFAULT> code: func_patch
-  return validateSchema(patch, ajv, options);
+  // !code: func_patch
+  //-------------------
+  const _ajv = addAjvFormats(options);
+  return validateSchema(patch, _ajv);
+  //-------------------
   // !end
 };
 
@@ -153,7 +173,26 @@ let quickValidate = (method, data, options) => {
     return err;
   }
 };
-// !code: validate_change // !end
+// !code: validate_change
+//-----------------------
+/**
+ * Add ajv formats
+ * @param options
+ * @return {ajv | ajv.Ajv}
+ */
+const addAjvFormats = (options) => {
+  let _options = { allErrors: true};
+  Object.assign(_options, options);
+  const _ajv = new ajv(_options);
+  // Add formats
+  _ajv.addFormat('phone', getRegex('phone'));
+  _ajv.addFormat('zip_code', getRegex('zip_code'));
+  _ajv.addFormat('lat', getRegex('lat'));
+  _ajv.addFormat('long', getRegex('long'));
+  return _ajv;
+};
+//-----------------------
+// !end
 
 let moduleExports = {
   create,

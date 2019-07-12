@@ -4,7 +4,7 @@ const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.unit.test');
 
-const isDebug = true;
+const isDebug = false;
 const isLog = false;
 
 // Get generated fake data

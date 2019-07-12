@@ -36,7 +36,7 @@
     "generate:nuxt-static": "cross-env DEPLOY_ENV=OPEN_SERVER nuxt generate",
     "generate:all": "feathers-plus generate all",
     "generate:service": "feathers-plus generate service",
-    "generate:fakes": "feathers-plus generate fakes",
+    "generate:fakes": "feathers-plus generate fakes && node src/plugins/test-helpers/fake-update",
     "generate:auth": "feathers-plus generate authentication",
     "generate:graphql": "feathers-plus generate graphql",
     "generate:hook": "feathers-plus generate hook",

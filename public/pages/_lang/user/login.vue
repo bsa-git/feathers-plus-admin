@@ -123,8 +123,7 @@
           const loginResponse = await this.login(this.model.email, this.model.password);
           if (loginResponse && loginResponse.accessToken) {
             if (!this.model.avatar) {
-              const avatar = new this.$Avatar(this.model.email);
-              this.model.avatar = await avatar.getImage();
+              this.model.avatar = this.user.avatar;
             }
             if (isLog) debug('loginResponse:', loginResponse);
             this.showSuccess(`${this.$t('login.success')}!`);
@@ -164,15 +163,8 @@
         } catch (error) {
           if (isLog) debug('authenticate.error:', error);
           this.loadingSubmit = false;
-          // Convert the error to a plain object and add a message.
-          let type = error.className ? error.className : 'error';
-          error = Object.assign({}, error);
-          error.message = (type === 'not-authenticated')
-            ? `${this.$t('login.notAuthenticated')}.`
-            : `${this.$t('login.errAuthenticated')}.`;
           this.error = error;
           this.showError(error.message);
-          console.error('error.type:', type, '; error.message:', error.message);
         }
       },
       ...mapMutations('auth', {

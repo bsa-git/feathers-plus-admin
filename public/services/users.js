@@ -33,7 +33,7 @@ const servicePlugin = service(servicePath, {
           let profile = Models.UserProfile.getFromStore(this.profileId);
           if(profile){
             const id = profile[idFieldProfile];
-            profile = loPick(profile, Service.serviceFields('userProfiles'));
+            profile = loPick(profile, Service.serviceFields('userProfiles'), ['fullAddress']);
             profile.id = id;
           }else {
             profile = null;

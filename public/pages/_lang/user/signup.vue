@@ -210,13 +210,7 @@
         } catch (error) {
           if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
-          let type = error.className ? error.className : 'error';
-          error = Object.assign({}, error);
-          error.message = (type === 'conflict')
-            ? `${this.$t('signup.conflictEmail')}.`
-            : `${this.$t('signup.errSignup')}.`;
           this.error = error;
-          console.error('error.type:', type, '; error.message:', error.message);
           this.showError(error.message);
         }
       },
@@ -226,14 +220,8 @@
         } catch (error) {
           if (isLog) debug('authenticate.error:', error);
           this.loadingSubmit = false;
-          let type = error.className ? error.className : 'error';
-          error = Object.assign({}, error);
-          error.message = (type === 'not-authenticated')
-            ? `${this.$t('login.notAuthenticated')}`
-            : `${this.$t('login.errAuthenticated')}`;
           this.error = error;
           this.showError(error.message);
-          console.error('error.className:', type, '; error.message:', error.message);
         }
       },
       ...mapMutations('auth', {

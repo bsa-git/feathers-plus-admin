@@ -1,6 +1,6 @@
-const {join} = require('path');
-const {readJsonFileSync, inspector} = require('../lib');
-const config = require('../../../config/default.json');
+// const {join} = require('path');
+const {readJsonFileSync, inspector, appRoot} = require('../lib');
+const config = require(`${appRoot}/config/default.json`);
 const chalk = require('chalk');
 
 const isDebug = false;
@@ -11,10 +11,10 @@ let env = (config.tests || {}).environmentsAllowingSeedData || [];
 let ifDbChangesAllowed = env.includes(process.env.NODE_ENV);
 
 // Get generated fake data
-let fakeData = readJsonFileSync(join(__dirname, '../../../seeds/fake-data.json')) || {};
+let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 // Get generated services
-let services = (readJsonFileSync(join(__dirname, '../../../feathers-gen-specs.json')) || {}).services;
+let services = (readJsonFileSync(`${appRoot}/feathers-gen-specs.json`) || {}).services;
 
 module.exports = async function (app, aServiceName, aAddFakeData = true) {
   if (!ifDbChangesAllowed) return;

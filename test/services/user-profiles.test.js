@@ -23,7 +23,7 @@ describe('<<< \'userProfiles\' service >>>', () => {
       results.forEach((result, index) => {
         let fake = fakes['userProfiles'][index];
         if (isLog) debug('seedService.result:', result);
-        if (isLog) debug('roles.fake:', fake);
+        if (isLog) debug('userProfiles.fake:', fake);
         delete result.createdAt;
         delete result.updatedAt;
         delete result['__v'];
