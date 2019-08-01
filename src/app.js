@@ -1,6 +1,11 @@
 
 // Configure Feathers app. (Can be re-generated.)
-// !code: preface // !end
+// !code: preface
+//---------------
+const dotenv = require('dotenv');// Loads environment variables from .env file.
+dotenv.load(); // Load environment variables
+//---------------
+// !end
 const path = require('path');
 const compress = require('compression');
 const cors = require('cors');
@@ -26,14 +31,14 @@ const authentication = require('./authentication');
 const mongoose = require('./mongoose');
 // !code: imports
 //-----------------
-const dotenv = require('dotenv');// Loads environment variables from .env file.
+// const dotenv = require('dotenv');// Loads environment variables from .env file.
 const nuxt = require('./middleware/nuxt');// Loads nuxt middleware
 const useragent = require('express-useragent');// Loads useragent middleware
 //-----------------
 // !end
 // !code: init
 //-----------------
-dotenv.load(); // Load environment variables
+// dotenv.load(); // Load environment variables
 //-----------------
 // !end
 

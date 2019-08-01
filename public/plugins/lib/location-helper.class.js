@@ -60,7 +60,7 @@ export default class LocationHelper{
     }
     return this;
   }
-  serialize(traditional) {
+  serialize(traditional = true) {
     if ( traditional ) {
       let result = [] , params = this.getParams();
       for (let name in params ) {

@@ -55,6 +55,38 @@ let moduleExports = merge({},
         },
         bsonType: "objectId"
       },
+      isVerified: {
+        bsonType: "boolean"
+      },
+      verifyToken: {
+        bsonType: "string"
+      },
+      verifyShortToken: {
+        bsonType: "string"
+      },
+      verifyExpires: {
+        format: "date-time",
+        bsonType: "string"
+      },
+      verifyChanges: {
+        bsonType: "object",
+        additionalProperties: false,
+        properties: {
+          _id: {
+            bsonType: "objectId"
+          }
+        }
+      },
+      resetToken: {
+        bsonType: "string"
+      },
+      resetShortToken: {
+        bsonType: "string"
+      },
+      resetExpires: {
+        format: "date-time",
+        bsonType: "string"
+      },
       googleId: {
         chance: "natural",
         bsonType: "string"

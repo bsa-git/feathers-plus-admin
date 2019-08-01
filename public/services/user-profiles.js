@@ -126,7 +126,8 @@ const servicePlugin = service(servicePath, {
     });
     return {
       get fullAddress() {
-        const fullAddress = `${this.addressStreet} ${this.addressSuite}, ${this.addressCity}, ${this.addressStateAbbr} ${this.addressZipCode}, ${this.addressCountry}`;
+        const isFullAddress = !!this.addressCountry;
+        const fullAddress = isFullAddress? `${this.addressStreet} ${this.addressSuite}, ${this.addressCity}, ${this.addressStateAbbr} ${this.addressZipCode}, ${this.addressCountry}` : '';
         if(isLog)debug('fullAddress:', fullAddress);
         return fullAddress;
       },

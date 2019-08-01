@@ -165,6 +165,16 @@ const getAccessToken = function () {
 };
 
 /**
+ * setAccessToken
+ * @param token
+ */
+const setAccessToken = function (token) {
+  if (process.client) {
+    cookies.set('feathers-jwt', token);
+  }
+};
+
+/**
  * isAccessToken
  * @returns {boolean}
  */
@@ -317,6 +327,7 @@ export default {
   isTrue,
   getRegex,
   getAccessToken,
+  setAccessToken,
   isAccessToken,
   removeAccessToken,
   verifyJWT,

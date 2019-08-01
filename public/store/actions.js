@@ -45,26 +45,19 @@ const actions = {
     }
   },
 
-  // async logout({commit, dispatch}) {
-  //   if(isDebug) debug('<<logout>>Start logout');
-  //   // logout
-  //   await dispatch('auth/logout');
-  //   this.$util.removeAccessToken();
-  //   // clearAll
-  //   commit('users/clearAll');
-  //   commit('roles/clearAll');
-  //   commit('teams/clearAll');
-  //   commit('user-teams/clearAll');
-  //   commit('user-profiles/clearAll');
-  // },
-
   async logout(store) {
     if(isDebug) debug('<<logout>> Start logout');
     const service = new this.$Service(store);
     // logout
     await service.logout();
-    this.$util.removeAccessToken();
+    // Remove access token
+    if(this.$util.isAccessToken){
+      this.$util.removeAccessToken();
+    }
     service.clearAll();
+    const isAuth = store.getters.isAuth;
+    const myRole = store.getters.getMyRole? store.getters.getMyRole : 'No';
+    if(isDebug) debug(`<<logout>> Logout completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${myRole}`);
   },
 
   async authenticate(store, credentials = null) {
@@ -75,12 +68,16 @@ const actions = {
     if (response && response.accessToken) {
       const isAuth = store.getters.isAuth;
       const isAdmin = store.getters.isAdmin;
+      // Set access token
+      if(!this.$util.isAccessToken){
+        this.$util.setAccessToken(response.accessToken);
+      }
       if(isAdmin){
         await service.findAllForAdmin();
       }else {
         await service.findAllForUser();
       }
-      if(isDebug) debug(`<<authenticate>> Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${store.getters.getMyRole}`);
+      if(isDebug) debug(`<<authenticate>> Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${store.getters.getMyRole? store.getters.getMyRole : 'No'}`);
     }
     return response;
   }

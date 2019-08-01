@@ -37,6 +37,16 @@
           <v-flex xs12 sm6>
             <v-text-field
               :counter="15"
+              v-validate="{ regex: $util.getRegex('zip_code')}"
+              :error-messages="errors.collect('addressZipCode')"
+              data-vv-name="addressZipCode"
+              v-model="model.addressZipCode"
+              :label="$t('profile.addressZipCode')"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs12 sm6>
+            <v-text-field
+              :counter="15"
               v-validate="'max:15'"
               :error-messages="errors.collect('addressState')"
               data-vv-name="addressState"
@@ -72,16 +82,6 @@
               data-vv-name="addressCountryCode"
               v-model="model.addressCountryCode"
               :label="$t('profile.addressCountryCode')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="{ regex: $util.getRegex('zip_code')}"
-              :error-messages="errors.collect('addressZipCode')"
-              data-vv-name="addressZipCode"
-              v-model="model.addressZipCode"
-              :label="$t('profile.addressZipCode')"
             ></v-text-field>
           </v-flex>
           <v-flex xs12 sm6>
@@ -125,7 +125,7 @@
 
   const debug = require('debug')('app:comp.user-profile-address');
 
-  const isLog = true;
+  const isLog = false;
 
   export default {
     layout: 'user',

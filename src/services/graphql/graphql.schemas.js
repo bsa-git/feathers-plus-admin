@@ -61,6 +61,14 @@ type User {
   avatar: String
   roleId: ID
   profileId: ID
+  isVerified: Boolean
+  verifyToken: String
+  verifyShortToken: String
+  verifyExpires: String
+  verifyChanges: JSON
+  resetToken: String
+  resetShortToken: String
+  resetExpires: String
   googleId: String
   githubId: String
   googleAccessToken: String

@@ -15,7 +15,7 @@ export default async function (context) {
     const {$t, store, redirect, route} = context;
     // Create auth
     const auth = new AuthClient(store);
-    if(isDebug) debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${auth.isAuth}; <<myRole>>: ${auth.getMyRole}`);
+    if(isDebug) debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${auth.isAuth}; <<myRole>>: ${auth.getMyRole? auth.getMyRole : 'No'}`);
     if(isLog) debug('<<user>>:', auth.user);
     // Check auth access for route.path
     if (!auth.isAccess(route.path)) {

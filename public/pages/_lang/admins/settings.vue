@@ -97,6 +97,13 @@
 
             <v-list-tile avatar>
               <v-list-tile-content>
+                <v-list-tile-title>IS_VERIFY_SIGNUP</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.isVerifySignup }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
                 <v-list-tile-title>ROLES</v-list-tile-title>
                 <v-list-tile-sub-title v-html>{{ config.roles }}</v-list-tile-sub-title>
               </v-list-tile-content>

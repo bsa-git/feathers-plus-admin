@@ -15,7 +15,9 @@
   },
   "common": {
     "agree": "Yes",
-    "disagree": "No"
+    "disagree": "No",
+    "enter": "Enter",
+    "close": "Close"
   },
   "app_menu": {
     "apps": "Apps",
@@ -174,6 +176,7 @@
     "success": "Success registration",
     "successSignupAndLogin": "Success registration and login",
     "conflictEmail": "This email already exists.",
+    "": "",
     "errSignup": "An error prevented signup"
   },
   "profile": {
@@ -186,7 +189,7 @@
     "remove": "Remove",
     "removeAccount": "Remove Account",
     "titleDialog": "Remove Account",
-    "textDialog": "This user will be removed from the server database as well as from the client store",
+    "textDialog": "You can delete your account, but keep in mind this action is irreversible",
     "changePassword": "Change Password",
     "next": "Next",
     "prev": "Prev",
@@ -285,5 +288,23 @@
     "searchQuery": "Search Query",
     "enterGraphLQuery": "Enter the GraphL query string",
     "responseToRequest": "Response to the request"
+  },
+  "authManagement": {
+    "titleVerifySignUp": "Verification Sign up",
+    "descriptionVerifySignUp": "Verification user's email...",
+    "successfulUserVerification": "Successful user's email verification",
+    "signUpVerification": "You need to be sign up verification when a new user is created. We will send verification instructions to your email address.",
+    "resendVerification": "We will send verification instructions to your email address.",
+    "signUpVerificationEmail": "To finish the user's email verification, go to ",
+    "titleDialog": "Resend verify user's email",
+    "textDialog": "User's email is not yet verified! Want to re-verify?",
+    "hintSingUpEmail": "The availability of a custom email will be verified",
+    "hintLoginEmail": "For successful logging, email must be verified",
+    "hintEnterSecurityCode": "Enter security code sent to your email",
+    "verificationCode": "Verification code",
+    "errorUserVerification": "Error user's email verification",
+    "msgForErrorUserNotFind": "User not found. Perhaps you have already passed the verification of the user's email when creating an account.",
+    "msgForErrorInvalidToken": "Invalid token. Get for a new one. (authManagement)",
+    "msgForErrorEmailNotYetVerified": "User's email is not yet verified."
   }
 }

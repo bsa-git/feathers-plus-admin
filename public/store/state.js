@@ -52,6 +52,7 @@ export default () => ({
     //--- DATABASE ---//
     mongodb: process.env.MONGODB.trim(),
     //--- AUTH ---//
+    isVerifySignup: util.isTrue(process.env.IS_VERIFY_SIGNUP),
     roles: authRoles(process.env.ROLES),
     publicPaths: authPaths(process.env.PUBLIC_PATHS),
     adminPaths: authPaths(process.env.ADMIN_PATHS),
@@ -80,6 +81,7 @@ export default () => ({
     show: false,
     text: 'Test success!',
     color: 'purple',
+    timeout: 6000
   },
   theme: {
     primary: 'indigo',

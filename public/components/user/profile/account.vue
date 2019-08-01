@@ -94,7 +94,7 @@
 
   const debug = require('debug')('app:page.user-profile');
 
-  const isLog = true;
+  const isLog = false;
 
   export default {
     layout: 'user',

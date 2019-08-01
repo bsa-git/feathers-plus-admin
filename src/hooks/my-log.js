@@ -15,7 +15,7 @@ const isLog = false;
  * @param context
  * @return {String}
  */
-const getProvider = (context) => context.params.provider ? context.params.provider : '';
+const getProvider = (context) => context.params.provider ? context.params.provider : 'Not';
 
 // To see more detailed messages, uncomment the following line:
 // logger.level = 'debug';
@@ -23,14 +23,16 @@ const getProvider = (context) => context.params.provider ? context.params.provid
 module.exports = function () {
   return context => {
     // Debug info
-    if(isDebug) debug(`Provider: ${getProvider(context) ? getProvider(context) : 'Not'}; ${context.type} app.service('${context.path}').${context.method}()`);
-    // Log context
-    const logContext = getHookContext(context);
-    if (isLog) inspector('Hook Context:', logContext);
-
+    if(isDebug) debug(`Provider: ${getProvider(context)}; ${context.type} app.service('${context.path}').${context.method}()`);
     if (context.error) {
       console.error(chalk.red(`context.error.message: ${context.error.message}`));
+      delete context.error.app;
+      delete context.error.hook;
       inspector('Error Context:', context.error);
+    }else {
+      // Log context
+      const logContext = getHookContext(context);
+      if (isLog) inspector('Hook Context:', logContext);
     }
   };
 };

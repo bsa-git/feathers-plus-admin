@@ -176,7 +176,7 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
 
 const getHookContext = function (context) {
   let target = {};
-  let {path, method, type, params, id, data, result, dispatch, statusCode, error, grapql} = context;
+  let {path, method, type, params, id, data, result, dispatch, statusCode, grapql} = context;
 
   if (path) target.path = path;
   if (method) target.method = method;
@@ -187,7 +187,7 @@ const getHookContext = function (context) {
   if (result) target.result = result;
   if (dispatch) target.dispatch = dispatch;
   if (statusCode) target.statusCode = statusCode;
-  if (error) target.error = error;
+  // if (error) target.error = error;
   if (grapql) target.grapql = grapql;
   return target;
 };
@@ -205,6 +205,31 @@ const getGraphQLContext = function (context) {
   return target;
 };
 
+/**
+ * Returns new object with values cloned from the original object. Some objects
+ * (like Sequelize or MongoDB model instances) contain circular references
+ * and cause TypeError when trying to JSON.stringify() them. They may contain
+ * custom toJSON() or toObject() method which allows to serialize them safely.
+ * Object.assign() does not clone these methods, so the purpose of this method
+ * is to use result of custom toJSON() or toObject() (if accessible)
+ * for Object.assign(), but only in case of serialization failure.
+ *
+ * @param {Object?} obj - Object to clone
+ * @returns {Object} Cloned object
+ */
+const cloneObject = function (obj) {
+  let obj1 = obj;
+  if (typeof obj.toJSON === 'function' || typeof obj.toObject === 'function') {
+    try {
+      JSON.stringify(Object.assign({}, obj1));
+    } catch (e) {
+      debug('Object is not serializable');
+      obj1 = obj1.toJSON ? obj1.toJSON() : obj1.toObject();
+    }
+  }
+  return Object.assign({}, obj1);
+};
+
 module.exports = {
   appRoot,
   delayTime,
@@ -216,5 +241,6 @@ module.exports = {
   qlParams,
   stringify,
   getHookContext,
-  getGraphQLContext
+  getGraphQLContext,
+  cloneObject
 };

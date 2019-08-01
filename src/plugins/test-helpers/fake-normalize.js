@@ -49,6 +49,20 @@ const usersUpdate = () => {
   fakeDataUserProfiles.forEach((profile, index) => {
     fakeDataUsers[index]['profileId'] = profile[idFieldUserProfile];
   });
+
+  Object.assign(fakeDataUsers, fakeDataUsers.map(user => {
+    const nowDate = new Date(0);// Date.now()
+    user.isVerified = true;
+    user.verifyToken = '';
+    user.verifyShortToken = '';
+    user.verifyExpires = nowDate.toJSON();
+    user.verifyChanges = {};
+    user.resetToken = '';
+    user.resetShortToken = '';
+    user.resetExpires = nowDate.toJSON();
+    return user;
+  }));
+
   if(isLog) inspector('fake-service.usersUpdate.fakeDataUsers:', fakeDataUsers);
   if(isDebug) console.log(chalk.yellow('Users Update: OK'));
 };

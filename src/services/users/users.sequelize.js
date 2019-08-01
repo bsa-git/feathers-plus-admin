@@ -44,6 +44,30 @@ let moduleExports = merge({},
       type: DataTypes.INTEGER,
       unique: true
     },
+    isVerified: {
+      type: DataTypes.BOOLEAN
+    },
+    verifyToken: {
+      type: DataTypes.TEXT
+    },
+    verifyShortToken: {
+      type: DataTypes.TEXT
+    },
+    verifyExpires: {
+      type: DataTypes.DATE
+    },
+    verifyChanges: {
+      type: DataTypes.JSONB
+    },
+    resetToken: {
+      type: DataTypes.TEXT
+    },
+    resetShortToken: {
+      type: DataTypes.TEXT
+    },
+    resetExpires: {
+      type: DataTypes.DATE
+    },
     googleId: {
       type: DataTypes.TEXT
     },

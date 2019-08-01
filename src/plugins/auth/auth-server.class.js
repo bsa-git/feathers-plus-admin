@@ -1,9 +1,39 @@
-const {inspector, readJsonFileSync, stripSpecific, getHookContext, appRoot} = require('../lib');
+const {inspector, readJsonFileSync, stripSpecific, getHookContext, isTrue, appRoot} = require('../lib');
 const {authenticate} = require('@feathersjs/authentication').hooks;
+var crypto = require('crypto');
 const debug = require('debug')('app:plugins.auth-server.class');
 
 const isLog = false;
 const isDebug = false;
+
+/**
+ * Random bytes
+ * @param len
+ * @return {Promise}
+ * @private
+ */
+const randomBytes = (len) => {
+  return new Promise(function (resolve, reject) {
+    crypto.randomBytes(len, function (err, buf) {
+      return err ? reject(err) : resolve(buf.toString('hex'));
+    });
+  });
+};
+
+/**
+ * Random digits
+ * @param len
+ * @return {string}
+ * @private
+ */
+const randomDigits = (len) => {
+  let str = '';
+  while (str.length < len) {
+    str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
+  }
+  return str.substr(0, len);
+};
+
 
 class AuthServer {
   /**
@@ -79,7 +109,7 @@ class AuthServer {
       const service = services[this.context.path];
       const testService = testServices[this.context.path];
       const isRequiresAuth = service['requiresAuth'];
-      const isAuthForMethod = testService[this.context.method] !== 'noauth';
+      const isAuthForMethod = testService? testService[this.context.method] !== 'noauth' : false;
       return isRequiresAuth && isAuthForMethod;
     } else {
       if(this.context.path === 'graphql'){
@@ -175,6 +205,42 @@ class AuthServer {
     // Determine if environment allows test
     let env = (config.tests || {}).environmentsAllowingSeedData || [];
     return env.includes(process.env.NODE_ENV);
+  }
+
+  static getAuthConfig() {
+    return {
+      isVerifySignup: isTrue(process.env.IS_VERIFY_SIGNUP)
+    };
+  }
+
+  /**
+   * Get long token
+   * @param len
+   * @return {Promise}
+   */
+  static getLongToken(len) {
+    return randomBytes(len);
+  }
+
+  /**
+   * Get short token
+   * @param len
+   * @param ifDigits
+   * @return {*}
+   */
+  static getShortToken(len, ifDigits) {
+    if (ifDigits) {
+      return Promise.resolve(randomDigits(len));
+    }
+
+    return randomBytes(Math.floor(len / 2) + 1).then(function (str) {
+      str = str.substr(0, len);
+      if (str.match(/^[0-9]+$/)) {
+        // tests will fail on all digits
+        str = 'q' + str.substr(1); // shhhh, secret.
+      }
+      return str;
+    });
   }
 }
 

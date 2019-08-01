@@ -9,6 +9,7 @@
         :show="snackBar.show"
         :text="snackBar.text"
         :color="snackBar.color"
+        :timeout="snackBar.timeout"
         v-on:onShow="modelSnackBar"
       ></app-snack-bar>
     </v-content>

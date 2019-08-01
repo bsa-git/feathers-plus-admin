@@ -230,13 +230,13 @@ module.exports = function (isTest = false) {
             if (record.roleId) await validateRelationship('roles', record.roleId);
             if (context.method === 'create' && !record.roleId) {
               const roleId = await getRoleId('isGuest');
-              if(roleId) record.roleId = roleId;
+              if(roleId) record.roleId = roleId.toString();
             }
             if (context.method === 'create' && !record.profileId) {
               const newItem = await createItem('user-profiles');
               if(newItem){
                 idField = 'id' in newItem ? 'id' : '_id';
-                record.profileId = newItem[idField];
+                record.profileId = newItem[idField].toString();
               }
             }
           });
@@ -244,13 +244,13 @@ module.exports = function (isTest = false) {
           if (records.roleId) await validateRelationship('roles', records.roleId);
           if (context.method === 'create' && !records.roleId) {
             const roleId = await getRoleId('isGuest');
-            if(roleId) records.roleId = roleId;
+            if(roleId) records.roleId = roleId.toString();
           }
           if (context.method === 'create' && !records.profileId) {
             const newItem = await createItem('user-profiles');
             if(newItem){
               idField = 'id' in newItem ? 'id' : '_id';
-              records.profileId = newItem[idField];
+              records.profileId = newItem[idField].toString();
             }
           }
         }
@@ -287,9 +287,8 @@ module.exports = function (isTest = false) {
         if (Array.isArray(records)) {
           records.forEach(async record => {
             const idFieldUser = 'id' in record ? 'id' : '_id';
-            const userId = record[idFieldUser];
-            const profileId = record.profileId;
-
+            const userId = record[idFieldUser].toString();
+            const profileId = record.profileId.toString();
             // Remove items for 'user-teams' service
             let servicePath = 'user-teams';
             let removed = await removeItems(servicePath, {userId: userId});
@@ -302,8 +301,8 @@ module.exports = function (isTest = false) {
           });
         } else {
           const idFieldUser = 'id' in records ? 'id' : '_id';
-          const userId = records[idFieldUser];
-          const profileId = records.profileId;
+          const userId = records[idFieldUser].toString();
+          const profileId = records.profileId.toString();
 
           // Remove items for 'user-teams' service
           let servicePath = 'user-teams';
@@ -324,14 +323,14 @@ module.exports = function (isTest = false) {
         if (Array.isArray(records)) {
           records.forEach(async record => {
             const idFieldTeam = 'id' in record ? 'id' : '_id';
-            const teamId = record[idFieldTeam];
+            const teamId = record[idFieldTeam].toString();
             let servicePath = 'user-teams';
             const removed = await removeItems(servicePath, {teamId: teamId});
             if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
           });
         } else {
           const idFieldTeam = 'id' in records ? 'id' : '_id';
-          const teamId = records[idFieldTeam];
+          const teamId = records[idFieldTeam].toString();
           let servicePath = 'user-teams';
           const removed = await removeItems(servicePath, {teamId: teamId});
           if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
@@ -342,22 +341,22 @@ module.exports = function (isTest = false) {
         if (Array.isArray(records)) {
           records.forEach(async record => {
             const idFieldRole = 'id' in record ? 'id' : '_id';
-            const roleId = record[idFieldRole];
+            const roleId = record[idFieldRole].toString();
             let servicePath = 'users';
             const guestId = await getRoleId('isGuest');
             if(guestId) {
-              const data = {roleId: guestId};
+              const data = {roleId: guestId.toString()};
               const updated = await patchItems(servicePath, data, {roleId: roleId});
               if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the ${servicePath} service`);
             }
           });
         } else {
           const idFieldRole = 'id' in records ? 'id' : '_id';
-          const roleId = records[idFieldRole];
+          const roleId = records[idFieldRole].toString();
           let servicePath = 'users';
           const guestId = await getRoleId('isGuest');
           if(guestId) {
-            const data = {roleId: guestId};
+            const data = {roleId: guestId.toString()};
             const updated = await patchItems(servicePath, data, {roleId: roleId});
             if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the ${servicePath} service`);
           }

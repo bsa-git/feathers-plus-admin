@@ -1,5 +1,6 @@
 
 import cookies from 'browser-cookies';
+import typeOf from '~/plugins/lib/type-of';
 const debug = require('debug')('app:store.mutations');
 
 const isLog = false;
@@ -39,20 +40,36 @@ const mutations = {
     state.snackbar =  Object.assign(state.snackbar, snackbar);
   },
 
-  SHOW_SUCCESS (state, text) {
-    state.snackbar =  {show: true, color: 'success', text};
+  SHOW_SUCCESS (state, value) {
+    if(typeOf.isString(value)){
+      state.snackbar =  {show: true, color: 'success', text: value};
+    }else {
+      state.snackbar =  {show: true, color: 'success', text: value.text, timeout: value.timeout};
+    }
   },
 
-  SHOW_INFO (state, text) {
-    state.snackbar =  {show: true, color: 'info', text};
+  SHOW_INFO (state, value) {
+    if(typeOf.isString(value)){
+      state.snackbar =  {show: true, color: 'info', text: value};
+    }else {
+      state.snackbar =  {show: true, color: 'info', text: value.text, timeout: value.timeout};
+    }
   },
 
-  SHOW_WARNING (state, text) {
-    state.snackbar =  {show: true, color: 'warning', text};
+  SHOW_WARNING (state, value) {
+    if(typeOf.isString(value)){
+      state.snackbar =  {show: true, color: 'warning', text: value};
+    }else {
+      state.snackbar =  {show: true, color: 'warning', text: value.text, timeout: value.timeout};
+    }
   },
 
-  SHOW_ERROR (state, text) {
-    state.snackbar =  {show: true, color: 'error', text};
+  SHOW_ERROR (state, value) {
+    if(typeOf.isString(value)){
+      state.snackbar =  {show: true, color: 'error', text: value};
+    }else {
+      state.snackbar =  {show: true, color: 'error', text: value.text, timeout: value.timeout};
+    }
   },
 };
 

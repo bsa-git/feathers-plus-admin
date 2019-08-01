@@ -1,15 +1,6 @@
 
 /* eslint no-console: 0 */
 
-module.exports = {
-  isArray,
-  isBoolean,
-  isFunction,
-  isNullsy,
-  isObject,
-  isString
-};
-
 function isArray (array) {
   return Array.isArray(array);
 }
@@ -22,7 +13,7 @@ function isFunction (func) {
   return typeof func === 'function';
 }
 
-function isNullsy (obj) {
+function isNull (obj) {
   return obj === null || obj === undefined;
 }
 
@@ -33,3 +24,12 @@ function isObject (obj) {
 function isString (str) {
   return typeof str === 'string';
 }
+
+module.exports = {
+  isArray,
+  isBoolean,
+  isFunction,
+  isNull,
+  isObject,
+  isString
+};

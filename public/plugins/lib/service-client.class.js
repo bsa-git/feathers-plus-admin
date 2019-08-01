@@ -42,14 +42,14 @@ class ServiceClient {
    * @return {Promise.<*>}
    */
   async authenticate(credentials = null){
-    let results;
+    let result;
     if(credentials){
-      results = await this.dispatch('auth/authenticate', credentials);
+      result = await this.dispatch('auth/authenticate', credentials);
     }else {
-      results = await this.dispatch('auth/authenticate');
+      result = await this.dispatch('auth/authenticate');
     }
-    if(isDebug)debug('authenticate: OK', 'results:', results);
-    return results;
+    if(isDebug)debug('authenticate: OK', 'result:', result);
+    return result;
   }
 
   /**

@@ -83,7 +83,7 @@
 
   const debug = require('debug')('app:comp.user-profile-address');
 
-  const isLog = true;
+  const isLog = false;
 
   export default {
     layout: 'user',

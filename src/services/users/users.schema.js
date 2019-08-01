@@ -49,6 +49,16 @@ let schema = {
     avatar: {type: 'string', faker: 'internet.avatar'},
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
     profileId: {type: 'ID', faker: {fk: 'userProfiles:next'}},
+    //----------------------------------------------
+    isVerified: { type: 'boolean' },
+    verifyToken: { type: 'string' },
+    verifyShortToken: { type: 'string' },
+    verifyExpires: { type: 'string', format: 'date-time'}, // or a long integer
+    verifyChanges: { type: 'object'}, // an object (key-value map), e.g. { field: "value" }
+    resetToken: { type: 'string' },
+    resetShortToken: { type: 'string' },
+    resetExpires: { type: 'string', format: 'date-time'}, // or a long integer
+    //----------------------------------------------
     googleId: {type: 'string', chance: 'natural'},
     githubId: {type: 'string', chance: 'natural'},
     googleAccessToken: {type: 'string', chance: 'guid'},

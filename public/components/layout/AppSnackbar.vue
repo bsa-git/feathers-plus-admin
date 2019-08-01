@@ -1,6 +1,6 @@
 <template>
   <v-snackbar
-    :timeout="6000"
+    :timeout="timeout"
     bottom
     right
     :color="color"
@@ -18,7 +18,8 @@ export default {
   props: {
     show: Boolean,
     text: String,
-    color: String
+    color: String,
+    timeout: Number
   },
   computed: {
     compShow: {

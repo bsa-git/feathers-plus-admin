@@ -71,6 +71,32 @@ let base = merge({},
           fk: "userProfiles:next"
         }
       },
+      isVerified: {
+        type: "boolean"
+      },
+      verifyToken: {
+        type: "string"
+      },
+      verifyShortToken: {
+        type: "string"
+      },
+      verifyExpires: {
+        type: "string",
+        format: "date-time"
+      },
+      verifyChanges: {
+        type: "object"
+      },
+      resetToken: {
+        type: "string"
+      },
+      resetShortToken: {
+        type: "string"
+      },
+      resetExpires: {
+        type: "string",
+        format: "date-time"
+      },
       googleId: {
         type: "string",
         chance: "natural"

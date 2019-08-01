@@ -11,6 +11,9 @@ const usersPopulate = require('./users.populate');
 // !code: imports
 //---------------
 const loConcat = require('lodash/concat');
+const {AuthServer} = require('../../plugins/auth');
+const verifyHooks = require('feathers-authentication-management').hooks;
+const accountNotifier = require('../auth-management/notifier');
 //---------------
 // !end
 
@@ -21,7 +24,15 @@ const { iff } = commonHooks;
 const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./users.validate');
 // !end
 
-// !code: init // !end
+// !code: init
+//------------
+const hookToEmailYourVerification = (context) => {
+  accountNotifier(context.app).notifier('resendVerifySignup', context.result);
+};
+const isVerifySignup = AuthServer.getAuthConfig().isVerifySignup;
+const isTest = AuthServer.isTest();
+//------------
+// !end
 
 let moduleExports = {
   before: {
@@ -74,9 +85,27 @@ let moduleExports = {
 // !code: exports
 //---------------
 // Add hooks
-moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create);
-moduleExports.before.update = loConcat([accountsProfileData(), validateUpdate()], moduleExports.before.update);
-moduleExports.before.patch = loConcat([accountsProfileData(), validatePatch()], moduleExports.before.patch);
+//---- BEFORE ---
+moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create, iff(!isTest && isVerifySignup, verifyHooks.addVerification()));
+moduleExports.before.update = [commonHooks.disallow('external')];
+moduleExports.before.patch = iff(
+  commonHooks.isProvider('external'),
+  commonHooks.preventChanges(true,
+    [
+      'isVerified',
+      'verifyToken',
+      'verifyShortToken',
+      'verifyExpires',
+      'verifyChanges',
+      'resetToken',
+      'resetShortToken',
+      'resetExpires'
+    ]),
+  hashPassword(),
+  authenticate('jwt')
+);
+//---- AFTER ---
+moduleExports.after.create = iff(!isTest && isVerifySignup, hookToEmailYourVerification, verifyHooks.removeVerification());
 //---------------
 // !end
 module.exports = moduleExports;

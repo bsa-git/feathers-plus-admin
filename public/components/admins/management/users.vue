@@ -61,15 +61,15 @@
                 {{ item.header }}
               </v-subheader>
 
-              <v-divider
-                v-else-if="item.divider"
-                :key="index"
-                :inset="item.inset"
-              ></v-divider>
+              <!--<v-divider-->
+                <!--v-else-if="item.divider"-->
+                <!--:key="index"-->
+                <!--:inset="item.inset"-->
+              <!--&gt;</v-divider>-->
 
               <v-list-tile
                 v-else
-                :key="item.name"
+                :key="`${item.name}-${index}`"
                 avatar
                 @click=""
               >
@@ -297,6 +297,7 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import ConfirmDialog from '~/components/layout/ConfirmDialog';
+  import typeOf from '~/plugins/lib/type-of';
   const debug = require('debug')('app:comp.admins-management-users');
 
   const isLog = false;
@@ -476,7 +477,8 @@
     methods: {
       isYouSelf(userId) {
         const idField = this.$store.state.users.idField;
-        return userId === this.user[idField];
+        const myUserId = this.user? this.user[idField] : '';
+        return userId.toString() === myUserId.toString();
       },
 
       clickEditItem(item) {

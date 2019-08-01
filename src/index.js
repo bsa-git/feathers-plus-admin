@@ -34,7 +34,7 @@ server.on('listening', async () => {
       logger.error(err);
       process.exit(1);
     }
-    logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
+    logger.info('Nuxt:Build:Done - OK! Feathers application started on http://%s:%d', app.get('host'), port);
   });
   //--------------------
   // !end
