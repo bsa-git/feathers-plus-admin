@@ -212,9 +212,9 @@
       },
 
       async save(data) {
+        const idFieldUserProfile = this.$store.state['user-profiles'].idField;
+        const {UserProfile} = this.$FeathersVuex;
         try {
-          const idFieldUserProfile = this.$store.state['user-profiles'].idField;
-          const {UserProfile} = this.$FeathersVuex;
           let profileData = {
             [idFieldUserProfile]: this.user.profile.id,
             addressSuite: data.addressSuite,
@@ -235,6 +235,8 @@
           this.loadingSubmit = false;
           this.error = error;
           this.showError(error.message);
+          // Recover user profile data
+          await UserProfile.get(this.user.profile.id);
         }
       },
       ...mapMutations({

@@ -407,10 +407,10 @@
       },
 
       async save(data) {
+        const idField = this.$store.state.roles.idField;
+        const {Role} = this.$FeathersVuex;
         try {
           let role;
-          const idField = this.$store.state.roles.idField;
-          const {Role} = this.$FeathersVuex;
           if (this.isNewItem) {
             role = new Role({
               name: data.roleName,
@@ -429,6 +429,10 @@
           if (isLog) debug('role.save.error:', error);
           this.loadingSubmit = false;
           this.showError(error.message);
+          // Recover role data
+          if (!this.isNewItem) {
+            await Role.get(data.id);
+          }
         }
       },
 

@@ -148,13 +148,12 @@
         } else {
           this.loadingSubmit = true;
           if (isLog) debug('onSubmit.formData:', this.model);
-          const profileResponse = await this.save(this.model);
-          if (profileResponse) {
-            if (isLog) debug('onSubmit.profileResponse:', profileResponse);
+          const saveResponse = await this.save(this.model);
+          if (saveResponse) {
+            if (isLog) debug('onSubmit.saveResponse:', saveResponse);
             this.showSuccess(`${this.$t('profile.successSaveUser')}!`);
             setTimeout(() => {
               this.loadingSubmit = false;
-//              this.$router.push(this.$i18n.path(this.config.homePath));
             }, 1000);
           }
         }
@@ -171,9 +170,9 @@
       },
 
       async save(data) {
+        const idFieldUser = this.$store.state.users.idField;
+        const {User} = this.$FeathersVuex;
         try {
-          const idFieldUser = this.$store.state.users.idField;
-          const {User} = this.$FeathersVuex;
           let userData = {
             [idFieldUser]: this.user[idFieldUser],
             firstName: data.firstName,
@@ -194,6 +193,8 @@
           this.loadingSubmit = false;
           this.error = error;
           this.showError(error.message);
+          // Recover user data
+          await User.get(this.user[idFieldUser]);
         }
       },
 

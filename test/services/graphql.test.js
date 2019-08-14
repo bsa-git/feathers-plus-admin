@@ -8,7 +8,7 @@ const debug = require('debug')('app:graphql.test');
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 const isLog = false;
-const isSeed = true;
+const isSeed = false;
 let graphql;
 
 const port = app.get('port') || 3030;
@@ -44,6 +44,10 @@ describe('<<< Test \'graphql\' service >>>', () => {
             delete result.createdAt;
             delete result.updatedAt;
             delete result['__v'];
+
+            if(isLog) inspector('Save fake data to "roles" service.result:', result);
+            if(isLog) inspector('Save fake data to "roles" service.fake', fake);
+
             assert.deepEqual(result, fake);
           });
         } else {

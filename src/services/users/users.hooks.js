@@ -26,6 +26,8 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 
 // !code: init
 //------------
+// const { preventChanges, discard, disallow, isProvider } = commonHooks;
+const {preventChanges,  discard, disallow, isProvider } = commonHooks;
 const hookToEmailYourVerification = (context) => {
   accountNotifier(context.app).notifier('resendVerifySignup', context.result);
 };
@@ -87,25 +89,36 @@ let moduleExports = {
 // Add hooks
 //---- BEFORE ---
 moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create, iff(!isTest && isVerifySignup, verifyHooks.addVerification()));
-moduleExports.before.update = [commonHooks.disallow('external')];
-moduleExports.before.patch = iff(
-  commonHooks.isProvider('external'),
-  commonHooks.preventChanges(true,
-    [
-      'isVerified',
-      'verifyToken',
-      'verifyShortToken',
-      'verifyExpires',
-      'verifyChanges',
-      'resetToken',
-      'resetShortToken',
-      'resetExpires'
-    ]),
-  hashPassword(),
-  authenticate('jwt')
-);
+moduleExports.before.update = loConcat(iff(!isTest, disallow('external')), [validateUpdate()], moduleExports.before.update);
+moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
+  'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires'
+)), [validatePatch()], moduleExports.before.patch);
+
 //---- AFTER ---
-moduleExports.after.create = iff(!isTest && isVerifySignup, hookToEmailYourVerification, verifyHooks.removeVerification());
+moduleExports.after.all = loConcat(iff(!isTest && isProvider('external'), discard(
+  'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires',
+  'googleId',
+  'githubId',
+  'googleAccessToken',
+  'googleRefreshToken',
+  'githubAccessToken',
+  'githubRefreshToken'
+)), moduleExports.after.all);
+moduleExports.after.create = loConcat(iff(!isTest && isVerifySignup, hookToEmailYourVerification, verifyHooks.removeVerification()), moduleExports.after.create);
 //---------------
 // !end
 module.exports = moduleExports;

@@ -46,21 +46,21 @@ describe('<<< Test /hooks/normalize.unit.test.js >>>', () => {
     // Test hook for contextBefore
     contextBefore.method = 'create';
     normalize()(contextBefore);
-    assert.deepEqual(contextBefore.data, {});
+    assert.deepStrictEqual(contextBefore.data, {});
 
     // Test hook for contextAfter
     contextAfter.method = 'create';
     normalize()(contextAfter);
-    assert.deepEqual(contextAfter.result, {});
+    assert.deepStrictEqual(contextAfter.result, {});
 
     // Test hook for contextAfterMultiple
     contextAfterMultiple.method = 'create';
     normalize()(contextAfterMultiple);
-    assert.deepEqual(contextAfterMultiple.result, []);
+    assert.deepStrictEqual(contextAfterMultiple.result, []);
 
     // Test hook for contextAfterPaginated
     contextAfterPaginated.method = 'create';
     normalize()(contextAfterPaginated);
-    assert.deepEqual(contextAfterPaginated.result.data, []);
+    assert.deepStrictEqual(contextAfterPaginated.result.data, []);
   });
 });

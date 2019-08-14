@@ -305,6 +305,8 @@
     "errorUserVerification": "Error user's email verification",
     "msgForErrorUserNotFind": "User not found. Perhaps you have already passed the verification of the user's email when creating an account.",
     "msgForErrorInvalidToken": "Invalid token. Get for a new one. (authManagement)",
-    "msgForErrorEmailNotYetVerified": "User's email is not yet verified."
+    "msgForErrorEmailNotYetVerified": "User's email is not yet verified.",
+    "mailResendVerifySignUp": "To finish the email verification, follow this link  \"{tokenLink}\" or enter verification code \"{shortToken}\" in the form field",
+    "mailVerifySignUp": "Thanks for verifying your email"
   }
 }

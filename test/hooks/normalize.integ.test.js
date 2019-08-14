@@ -45,7 +45,7 @@ describe('<<< Test /hooks/normalize.integ.test.js >>>', () => {
   it('Test hook for fake data', async () => {
     params.provider = undefined;
     const result = await service.create(params.user, params);
-    assert.deepEqual(params.user, result);
+    assert.deepStrictEqual(params.user, result);
 
   });
 });

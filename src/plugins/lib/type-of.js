@@ -25,11 +25,16 @@ function isString (str) {
   return typeof str === 'string';
 }
 
+function isNumber (val) {
+  return typeof val === 'number';
+}
+
 module.exports = {
   isArray,
   isBoolean,
   isFunction,
   isNull,
   isObject,
-  isString
+  isString,
+  isNumber
 };

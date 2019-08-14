@@ -60,13 +60,6 @@
               >
                 {{ item.header }}
               </v-subheader>
-
-              <!--<v-divider-->
-                <!--v-else-if="item.divider"-->
-                <!--:key="index"-->
-                <!--:inset="item.inset"-->
-              <!--&gt;</v-divider>-->
-
               <v-list-tile
                 v-else
                 :key="`${item.name}-${index}`"
@@ -297,7 +290,6 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import ConfirmDialog from '~/components/layout/ConfirmDialog';
-  import typeOf from '~/plugins/lib/type-of';
   const debug = require('debug')('app:comp.admins-management-users');
 
   const isLog = false;
@@ -543,10 +535,10 @@
       },
 
       async save(data) {
+        const idField = this.$store.state.users.idField;
+        const {User} = this.$FeathersVuex;
         try {
           let user;
-          const idField = this.$store.state.users.idField;
-          const {User} = this.$FeathersVuex;
           if (this.isNewItem) {
             if (!data.avatar) {
               const avatar = new this.$Avatar(data.email);
@@ -580,6 +572,10 @@
           if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
           this.showError(error.message);
+          // Recover user data
+          if (!this.isNewItem) {
+            await User.get(data.id);
+          }
         }
       },
 

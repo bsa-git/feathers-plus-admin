@@ -7,6 +7,5 @@ module.exports = function readJsonFileSync(path) {
   if (Array.isArray(path)) {
     path = join(...path);
   }
-
   return !doesFileExist(path) ? null :  jsonFile.readFileSync(path, { throw: false });
 };

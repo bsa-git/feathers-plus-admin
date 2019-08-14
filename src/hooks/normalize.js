@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
-const {inspector, cloneObject, isString, isObject} = require('../plugins/lib');
+const {inspector, isString, isObject, isNumber, isNull} = require('../plugins/lib');
 const debug = require('debug')('app:normalize.all.hook');
 
 const isLog = false;
@@ -17,11 +17,12 @@ const baseNormalize = (records) => {
   if (Array.isArray(records)) {
     let _records = [];
     records.forEach(record => {
-      _records.push(cloneObject(record));
+      const cloneObject = JSON.parse(JSON.stringify(record));
+      _records.push(cloneObject);
     });
     return _records;
   } else {
-    return cloneObject(records);
+    return JSON.parse(JSON.stringify(records));
   }
 };
 
@@ -30,21 +31,67 @@ const baseNormalize = (records) => {
  * @param record
  * @return {*}
  */
-const userNormalize = (record) => {
-  // Normalize -> verifyExpires/resetExpires
-  if(record.verifyExpires === null){
-    record.verifyExpires = 0;
-  }else {
+const userNormalize = (type, record) => {
+  let date;
+  //==== BEFORE ===//
+  if(type === 'before'){
+    // Normalize -> verifyExpires Date
+    if(isNull(record.verifyExpires)){
+      date = new Date(0);
+      record.verifyExpires = date.toJSON();
+    }
+    if(isNumber(record.verifyExpires)){
+      date = new Date(record.verifyExpires);
+      record.verifyExpires = date.toJSON();
+    }
+    if(isObject(record.verifyExpires)){
+      record.verifyExpires = record.verifyExpires.toJSON();
+    }
+    // Normalize -> resetExpires  Date
+    if(isNull(record.resetExpires)){
+      date = new Date(0);
+      record.resetExpires = date.toJSON();
+    }
+    if(isNumber(record.resetExpires)){
+      date = new Date(record.resetExpires);
+      record.resetExpires = date.toJSON();
+    }
+    if(isObject(record.resetExpires)){
+      record.resetExpires = record.resetExpires.toJSON();
+    }
+    // Normalize -> verifyToken
+    if(isNull(record.verifyToken)){
+      record.verifyToken = '';
+    }
+    // Normalize -> verifyShortToken
+    if(isNull(record.verifyShortToken)){
+      record.verifyShortToken = '';
+    }
+    // Normalize -> resetToken
+    if(isNull(record.resetToken)){
+      record.resetToken = '';
+    }
+    // Normalize -> resetShortToken
+    if(isNull(record.resetShortToken)){
+      record.resetShortToken = '';
+    }
+  }
+  //==== AFTER ===//
+  if(type === 'after'){
+    // Normalize -> verifyExpires  Date
+    if(isNull(record.verifyExpires)){
+      record.verifyExpires = 0;
+    }
     if(isObject(record.verifyExpires)){
       record.verifyExpires = Date.parse(record.verifyExpires.toJSON());
     }
     if(isString(record.verifyExpires)){
       record.verifyExpires = Date.parse(record.verifyExpires);
     }
-  }
-  if(record.resetExpires === null){
-    record.resetExpires = 0;
-  }else {
+    // Normalize -> resetExpires  Date
+    if(isNull(record.resetExpires)){
+      record.resetExpires = 0;
+    }
     if(isObject(record.resetExpires)){
       record.resetExpires = Date.parse(record.resetExpires.toJSON());
     }
@@ -76,17 +123,21 @@ module.exports = function (options = {}) {
     if (records) {
       if (isDebug) debug(`${context.type} app.service('${context.path}').${context.method}()`);
       if (isLog) inspector('Before normalize query:', records);
-      records = baseNormalize(records);
-      switch (`${context.type}.${context.path}`) {
-      case 'after.users':
+      //==== AFTER ===//
+      if(context.type === 'after'){
+        records = baseNormalize(records);
+      }
+      //==== BEFORE/AFTER ===//
+      switch (context.path) {
+      case 'users':
         if (Array.isArray(records)) {
           let _records = [];
           records.forEach(record => {
-            _records.push(userNormalize(record));
+            _records.push(userNormalize(context.type, record));
           });
           records = _records;
         } else {
-          records = userNormalize(records);
+          records = userNormalize(context.type, records);
         }
         break;
       default:

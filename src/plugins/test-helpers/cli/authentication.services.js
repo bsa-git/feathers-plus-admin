@@ -10,6 +10,12 @@ const loginLocal = require('../../auth/login-local');
 // const loginJwt = require('../../auth/login-jwt');
 const makeClient = require('../../auth/make-client');
 
+const {inspector} = require('../../lib');
+const debug = require('debug')('app:authentication.services.test');
+//
+const isDebug = false;
+const isLog = false;
+
 const loginPassword = 'orprotroiyotrtouuikj';
 const loginEmail = 'hdsjkhsdkhfhfd@hgfjffghfgh.com';
 
@@ -55,6 +61,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
       strats: ['local'],
       overriddenAuth,
     }));
+    if(isLog) inspector('authentication.services.genSpecs:', genSpecs);
   }
 
   // Check we can run this test.
@@ -132,6 +139,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
       });
 
       const genServices = genSpecs.services;
+      // if(isLog) inspector('authentication.services.genServices:', genServices);
+
       Object.keys(genServices).forEach(name => {
 
         describe(`Service ${name}.`, () => {
@@ -139,6 +148,10 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
           const isAuthEntity = genService.isAuthEntity;
           const authByMethod = genSpecs._authByMethod[name];
           const ourSeedData = seedData[name];
+
+          // if(isLog) inspector('authentication.services.authByMethod:', authByMethod);
+          // if(isLog) inspector('authentication.services.ourSeedData:', ourSeedData);
+
 
           if (!ourSeedData || !ourSeedData.length) {
             // eslint-disable-next-line no-console
@@ -157,6 +170,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
               ifFail = false;
             }
 
+            if(isDebug) debug(`method: ${method}; displayCode: ${displayCode(ifFail, authThisMethod)}`);
+
             it(`${method} ${displayCode(ifFail, authThisMethod)}.`, async () => {
               const service = appClient.service(genService.path);
               let prop;
@@ -166,8 +181,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
               switch (method) {
               case 'create':
                 await app.service(genService.path).remove(null);
-
                 result = await runMethod(ifFail, () => service.create(ourSeedData));
+                if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) {
                   assert.equal(resultLen(result), ourSeedData.length, 'Unexpected result length.');
                 } else {
@@ -176,11 +191,13 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 break;
               case 'find':
                 result = await runMethod(ifFail, () => service.find());
+                if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) assert.equal(resultLen(result), ourSeedData.length, 'Unexpected result length.');
                 break;
               case 'get':
                 rec = ourSeedData[0];
                 result = await runMethod(ifFail, () => service.get(rec[ourSeedId]));
+                if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
                 if (!ifFail) assert.equal(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
                 break;
@@ -190,6 +207,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 // result = await runMethod(ifFail, () => service.patch(rec[ourSeedId], { [prop]: ourSeedData[1][prop] }));
                 //!!!!!!!!!!!!!!!! Update ourSeedData[1][prop] to rec[prop]
                 result = await runMethod(ifFail, () => service.patch(rec[ourSeedId], { [prop]: rec[prop] }));
+                if(isLog) inspector('authentication.services.result:', result);
                 //!!!!!!!!!!!!!!!!
                 if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
                 break;
@@ -198,11 +216,13 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 rec1 = Object.assign({}, rec);
                 rec1[ourSeedId] = rec[ourSeedId];
                 result = await runMethod(ifFail, () => service.update(rec[ourSeedId], rec1));
+                if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
                 break;
               case 'remove':
                 rec = ourSeedData[isAuthEntity ? 1 : 0];
                 result = await runMethod(ifFail, () => service.remove(rec[ourSeedId]));
+                if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
                 if (!ifFail) assert.deepEqual(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
                 break;

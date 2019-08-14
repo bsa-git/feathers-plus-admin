@@ -318,6 +318,31 @@ const getHookContext = function (context) {
   return target;
 };
 
+/**
+ * Returns new object with values cloned from the original object. Some objects
+ * (like Sequelize or MongoDB model instances) contain circular references
+ * and cause TypeError when trying to JSON.stringify() them. They may contain
+ * custom toJSON() or toObject() method which allows to serialize them safely.
+ * Object.assign() does not clone these methods, so the purpose of this method
+ * is to use result of custom toJSON() or toObject() (if accessible)
+ * for Object.assign(), but only in case of serialization failure.
+ *
+ * @param {Object?} obj - Object to clone
+ * @returns {Object} Cloned object
+ */
+const cloneObject = function (obj) {
+  let obj1 = obj;
+  if (typeof obj.toJSON === 'function' || typeof obj.toObject === 'function') {
+    try {
+      JSON.stringify(Object.assign({}, obj1));
+    } catch (e) {
+      debug('Object is not serializable');
+      obj1 = obj1.toJSON ? obj1.toJSON() : obj1.toObject();
+    }
+  }
+  return Object.assign({}, obj1);
+};
+
 export default {
   toggleFullScreen,
   delayTime,
@@ -336,4 +361,5 @@ export default {
   qlParams,
   stringify,
   getHookContext,
+  cloneObject
 };

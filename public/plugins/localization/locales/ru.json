@@ -303,6 +303,8 @@
     "hintEnterSecurityCode": "Введите секретный код, переданный на ваш емайл",
     "verificationCode": "Код проверки",
     "msgForErrorInvalidToken": "Неверный токен. Повторите проверку еще раз. (authManagement)",
-    "msgForErrorEmailNotYetVerified": "Пользовательский емайл еще не проверен."
+    "msgForErrorEmailNotYetVerified": "Пользовательский емайл еще не проверен.",
+    "mailResendVerifySignUp": "Чтобы закончить проверку, перейдите по ссылке  \"{tokenLink}\" или введите код проверки \"{shortToken}\" в соответсвующее поле формы",
+    "mailVerifySignUp": "Спасибо за подтверждение вашей электронной почты"
   }
 }

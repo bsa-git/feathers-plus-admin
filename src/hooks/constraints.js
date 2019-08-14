@@ -292,12 +292,12 @@ module.exports = function (isTest = false) {
             // Remove items for 'user-teams' service
             let servicePath = 'user-teams';
             let removed = await removeItems(servicePath, {userId: userId});
-            if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+            if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
 
             // Remove item for 'user-profiles' service
             servicePath = 'user-profiles';
             removed = await removeItem(servicePath, {[idFieldUser]: profileId});
-            if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the ${servicePath} service`);
+            if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the "${servicePath}" service`);
           });
         } else {
           const idFieldUser = 'id' in records ? 'id' : '_id';
@@ -307,15 +307,12 @@ module.exports = function (isTest = false) {
           // Remove items for 'user-teams' service
           let servicePath = 'user-teams';
           let removed = await removeItems(servicePath, {userId: userId});
-          if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+          if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
 
           // Remove item for 'user-profiles' service
           servicePath = 'user-profiles';
           removed = await removeItem(servicePath, profileId);
-          if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the ${servicePath} service`);
-
-          // removed = await removeItems(servicePath, {[idFieldUser]: profileId});
-          // if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+          if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the "${servicePath}" service`);
         }
         break;
       case 'after.teams.remove':
@@ -326,14 +323,14 @@ module.exports = function (isTest = false) {
             const teamId = record[idFieldTeam].toString();
             let servicePath = 'user-teams';
             const removed = await removeItems(servicePath, {teamId: teamId});
-            if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+            if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
           });
         } else {
           const idFieldTeam = 'id' in records ? 'id' : '_id';
           const teamId = records[idFieldTeam].toString();
           let servicePath = 'user-teams';
           const removed = await removeItems(servicePath, {teamId: teamId});
-          if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the ${servicePath} service`);
+          if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
         }
         break;
       case 'after.roles.remove':
@@ -347,7 +344,7 @@ module.exports = function (isTest = false) {
             if(guestId) {
               const data = {roleId: guestId.toString()};
               const updated = await patchItems(servicePath, data, {roleId: roleId});
-              if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the ${servicePath} service`);
+              if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the "${servicePath}" service`);
             }
           });
         } else {
@@ -358,7 +355,7 @@ module.exports = function (isTest = false) {
           if(guestId) {
             const data = {roleId: guestId.toString()};
             const updated = await patchItems(servicePath, data, {roleId: roleId});
-            if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the ${servicePath} service`);
+            if (isDebug) debug(`after.roles.remove: (${updated.length}) records have been updated from the "${servicePath}" service`);
           }
         }
         break;

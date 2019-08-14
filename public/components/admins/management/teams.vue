@@ -403,10 +403,10 @@
       },
 
       async save(data) {
+        const idField = this.$store.state.teams.idField;
+        const {Team} = this.$FeathersVuex;
         try {
           let team;
-          const idField = this.$store.state.teams.idField;
-          const {Team} = this.$FeathersVuex;
           if (this.isNewItem) {
             team = new Team({
               name: data.teamName,
@@ -424,6 +424,10 @@
           if (isLog) debug('team.save.error:', error);
           this.loadingSubmit = false;
           this.showError(error.message);
+          // Recover team data
+          if (!this.isNewItem) {
+            await Team.get(data.id);
+          }
         }
       },
 

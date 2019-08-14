@@ -1,9 +1,10 @@
 
 const {inspector} = require('../../plugins/lib');
-var errors = require('@feathersjs/errors');
+const errors = require('@feathersjs/errors');
+const {detectLang, getLangMessages} = require('../../plugins/lib/lang-helpers');
 const debug = require('debug')('app:service.authManagement.notifier');
-const isLog = true;
-const isDebug = true;
+const isLog = false;
+const isDebug = false;
 
 module.exports = function(app) {
 
@@ -37,25 +38,38 @@ module.exports = function(app) {
 
   return {
     notifier: async function(type, user) {// notifier: function(type, user, notifierOptions
-      let tokenLink;
-      let email;
+      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, langMsgs, langMsg;
+      fullName = `${user.firstName} ${user.lastName}`;
+
       switch (type) {
       case 'resendVerifySignup': //sending the user the verification email
-        tokenLink = getLink('verify', user.verifyToken);
+
+        if(isLog) inspector('auth-management.notifier.user:', user);
+        verifyToken = user.verifyToken;
+        verifyShortToken = user.verifyShortToken;
+
+        tokenLink = getLink('verify', verifyToken);
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailResendVerifySignUp'].replace('{tokenLink}', tokenLink).replace('{shortToken}', verifyShortToken);
         email = {
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Verify SignUp',
-          html: `To finish the email verification, follow this link  "${tokenLink}" or enter verification code ${user.verifyShortToken} in the form field`
+          html: langMsg
         };
         return await sendEmail(email);
       case 'verifySignup': // confirming verification
-        // tokenLink = getLink('verify', user.verifyToken);
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailVerifySignUp'];
         email = {
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Confirm SignUp',
-          html: 'Thanks for verifying your email'
+          html: langMsg
         };
         return await sendEmail(email);
       case 'sendResetPwd':
