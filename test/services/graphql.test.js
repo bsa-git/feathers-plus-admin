@@ -4,11 +4,12 @@ const app = require(`${appRoot}/src/app`);
 const {seedService, graphqlQuery, graphqlExpected} = require(`${appRoot}/src/plugins/test-helpers`);
 const debug = require('debug')('app:graphql.test');
 
+const isLog = false;
+
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-const isLog = false;
-const isSeed = false;
+const isSeed = true;
 let graphql;
 
 const port = app.get('port') || 3030;
@@ -39,19 +40,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
         // Seed service data
         const results = await seedService(app, 'roles');
         if (Array.isArray(results)) {
-          results.forEach((result, index) => {
-            let fake = fakes['roles'][index];
-            delete result.createdAt;
-            delete result.updatedAt;
-            delete result['__v'];
-
-            if(isLog) inspector('Save fake data to "roles" service.result:', result);
-            if(isLog) inspector('Save fake data to "roles" service.fake', fake);
-
-            assert.deepEqual(result, fake);
-          });
+          assert.ok(results.length === fakes['roles'].length);
         } else {
-          debug('seedService.results:', results);
+          if(isLog) debug('seedService.results:', results);
           assert.ok(false);
         }
       });
@@ -65,17 +56,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
         // Seed service data
         const results = await seedService(app, 'users');
         if (Array.isArray(results)) {
-          results.forEach((result, index) => {
-            let fake = fakes['users'][index];
-            delete fake.password;
-            delete result.password;
-            delete result.createdAt;
-            delete result.updatedAt;
-            delete result['__v'];
-            assert.deepEqual(result, fake);
-          });
+          assert.ok(results.length === fakes['users'].length);
         } else {
-          debug('seedService.results:', results);
+          if(isLog) debug('seedService.results:', results);
           assert.ok(false);
         }
       });
@@ -89,15 +72,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
         // Seed service data
         const results = await seedService(app, 'teams');
         if (Array.isArray(results)) {
-          results.forEach((result, index) => {
-            let fake = fakes['teams'][index];
-            delete result.createdAt;
-            delete result.updatedAt;
-            delete result['__v'];
-            assert.deepEqual(result, fake);
-          });
+          assert.ok(results.length === fakes['teams'].length);
         } else {
-          debug('seedService.results:', results);
+          if(isLog) debug('seedService.results:', results);
           assert.ok(false);
         }
       });
@@ -111,15 +88,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
         // Seed service data
         const results = await seedService(app, 'userTeams');
         if (Array.isArray(results)) {
-          results.forEach((result, index) => {
-            let fake = fakes['userTeams'][index];
-            delete result.createdAt;
-            delete result.updatedAt;
-            delete result['__v'];
-            assert.deepEqual(result, fake);
-          });
+          assert.ok(results.length === fakes['userTeams'].length);
         } else {
-          debug('seedService.results:', results);
+          if(isLog) debug('seedService.results:', results);
           assert.ok(false);
         }
       });
@@ -133,15 +104,9 @@ describe('<<< Test \'graphql\' service >>>', () => {
         // Seed service data
         const results = await seedService(app, 'userProfiles');
         if (Array.isArray(results)) {
-          results.forEach((result, index) => {
-            let fake = fakes['userProfiles'][index];
-            delete result.createdAt;
-            delete result.updatedAt;
-            delete result['__v'];
-            assert.deepEqual(result, fake);
-          });
+          assert.ok(results.length === fakes['userProfiles'].length);
         } else {
-          debug('seedService.results:', results);
+          if(isLog) debug('seedService.results:', results);
           assert.ok(false);
         }
       });
@@ -159,46 +124,43 @@ describe('<<< Test \'graphql\' service >>>', () => {
       const response = await graphql.find({query: {query: graphqlQuery['getUser']}});
       if (isLog) inspector('Response for \'getUser\' query:', response);
       if (isLog) inspector('Expected for \'getUser\' query:', graphqlExpected['getUser']);
-      assert.deepEqual(response, graphqlExpected['getUser']);
+      // assert.deepEqual(response, graphqlExpected['getUser']);
+      assert.deepStrictEqual(response, graphqlExpected['getUser']);
     });
 
     it('Run \'findUser\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['findUser']}});
-      if (isLog) inspector('Response for \'findUser\' query:', response);
+      if (isLog) inspector('Response for \'findUser\' query:', response.data);
       if (isLog) inspector('Expected for \'findUser\' query:', graphqlExpected['findUser']);
-      assert.deepEqual(response.data, graphqlExpected['findUser']);
+      assert.deepStrictEqual(response.data, graphqlExpected['findUser']);
     });
 
     it('Run \'getRole\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['getRole']}});
       if (isLog) inspector('Response for \'getRole\' query:', response);
       if (isLog) inspector('Expected for \'getRole\' query:', graphqlExpected['getRole']);
-      assert.deepEqual(response, graphqlExpected['getRole']);
-      // assert.ok(true);
+      assert.deepStrictEqual(response, graphqlExpected['getRole']);
     });
 
     it('Run \'findRole\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['findRole']}});
       if (isLog) inspector('Response for \'findRole\' query:', response);
       if (isLog) inspector('Expected for \'findRole\' query:', graphqlExpected['findRole']);
-      assert.deepEqual(response.data, graphqlExpected['findRole']);
-      // assert.ok(true);
+      assert.deepStrictEqual(response.data, graphqlExpected['findRole']);
     });
 
     it('Run \'getTeam\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['getTeam']}});
       if (isLog) inspector('Response for \'getTeam\' query:', response);
       if (isLog) inspector('Expected for \'getTeam\' query:', graphqlExpected['getTeam']);
-      assert.deepEqual(response, graphqlExpected['getTeam']);
-      // assert.ok(true);
+      assert.deepStrictEqual(response, graphqlExpected['getTeam']);
     });
 
     it('Run \'findTeam\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['findTeam']}});
       if (isLog) inspector('Response for \'findTeam\' query:', response);
       if (isLog) inspector('Expected for \'findTeam\' query:', graphqlExpected['findTeam']);
-      assert.deepEqual(response.data, graphqlExpected['findTeam']);
-      // assert.ok(true);
+      assert.deepStrictEqual(response.data, graphqlExpected['findTeam']);
     });
   });
 });

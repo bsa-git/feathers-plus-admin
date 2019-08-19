@@ -67,7 +67,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   // Check we can run this test.
   describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
     it('Check this test may not seed data', () => {
-      assert.equal(cannotRunTest, '', cannotRunTest);
+      assert.strictEqual(cannotRunTest, '', cannotRunTest);
     });
 
     if (!cannotRunTest) {
@@ -184,7 +184,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 result = await runMethod(ifFail, () => service.create(ourSeedData));
                 if(isLog) inspector('authentication.services.result:', result);
                 if (!ifFail) {
-                  assert.equal(resultLen(result), ourSeedData.length, 'Unexpected result length.');
+                  assert.strictEqual(resultLen(result), ourSeedData.length, 'Unexpected result length.');
                 } else {
                   assert(true);
                 }
@@ -192,14 +192,14 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
               case 'find':
                 result = await runMethod(ifFail, () => service.find());
                 if(isLog) inspector('authentication.services.result:', result);
-                if (!ifFail) assert.equal(resultLen(result), ourSeedData.length, 'Unexpected result length.');
+                if (!ifFail) assert.strictEqual(resultLen(result), ourSeedData.length, 'Unexpected result length.');
                 break;
               case 'get':
                 rec = ourSeedData[0];
                 result = await runMethod(ifFail, () => service.get(rec[ourSeedId]));
                 if(isLog) inspector('authentication.services.result:', result);
-                if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
-                if (!ifFail) assert.equal(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
+                if (!ifFail) assert.strictEqual(resultLen(result), 1, 'Unexpected result length.');
+                if (!ifFail) assert.strictEqual(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
                 break;
               case 'patch':
                 rec = ourSeedData[0];
@@ -209,7 +209,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 result = await runMethod(ifFail, () => service.patch(rec[ourSeedId], { [prop]: rec[prop] }));
                 if(isLog) inspector('authentication.services.result:', result);
                 //!!!!!!!!!!!!!!!!
-                if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
+                if (!ifFail) assert.strictEqual(resultLen(result), 1, 'Unexpected result length.');
                 break;
               case 'update':
                 rec = ourSeedData[0];
@@ -217,14 +217,14 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
                 rec1[ourSeedId] = rec[ourSeedId];
                 result = await runMethod(ifFail, () => service.update(rec[ourSeedId], rec1));
                 if(isLog) inspector('authentication.services.result:', result);
-                if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
+                if (!ifFail) assert.strictEqual(resultLen(result), 1, 'Unexpected result length.');
                 break;
               case 'remove':
                 rec = ourSeedData[isAuthEntity ? 1 : 0];
                 result = await runMethod(ifFail, () => service.remove(rec[ourSeedId]));
                 if(isLog) inspector('authentication.services.result:', result);
-                if (!ifFail) assert.equal(resultLen(result), 1, 'Unexpected result length.');
-                if (!ifFail) assert.deepEqual(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
+                if (!ifFail) assert.strictEqual(resultLen(result), 1, 'Unexpected result length.');
+                if (!ifFail) assert.deepStrictEqual(result[ourSeedId], rec[ourSeedId], 'Unexpected record id');
                 break;
               }
             });

@@ -46,7 +46,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   // Check we can run this test.
   describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
     it('Check this test may not seed data', () => {
-      assert.equal(cannotRunTest, '', cannotRunTest);
+      // assert.equal(cannotRunTest, '', cannotRunTest);
+      assert.strictEqual(cannotRunTest, '', cannotRunTest);
     });
 
     if (!cannotRunTest) {
@@ -119,7 +120,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
           const result = await usersClient.find({ query: { email: loginEmail }});
           const rec = result.data[0] || result;
 
-          assert.equal(rec.email, loginEmail, 'wrong email');
+          assert.strictEqual(rec.email, loginEmail, 'wrong email');
         });
 
         it(`Can make jwt authenticated call on ${usersPath} service`, async function () {
@@ -130,13 +131,13 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
 
           assert(typeof jwt1 === 'string', 'jwt not a string');
           assert(jwt1.length > 100, 'jwt too short');
-          assert.notEqual(jwt1, jwt, 'new token unexpectedly same as authentication token.');
+          assert.notStrictEqual(jwt1, jwt, 'new token unexpectedly same as authentication token.');
 
           const usersClient = appClient.service(usersPath);
           const result = await usersClient.find({ query: { email: loginEmail }});
           const rec = result.data[0] || result;
 
-          assert.equal(rec.email, loginEmail, 'wrong email');
+          assert.strictEqual(rec.email, loginEmail, 'wrong email');
         });
 
         it('throws on no authentication, incorrect email or password', async function () {

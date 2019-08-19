@@ -92,7 +92,6 @@ let getUser = {
     profile: {
       personalPhone: userProfileFakeData.personalPhone,
       personalWebSite: userProfileFakeData.personalWebSite,
-      addressFull: `${userProfileFakeData.addressStreet} ${userProfileFakeData.addressSuite}, ${userProfileFakeData.addressCity}, ${userProfileFakeData.addressStateAbbr} ${userProfileFakeData.addressZipCode}, ${userProfileFakeData.addressCountry}`,
       jobCompanyName: userProfileFakeData.jobCompanyName,
     },
     role: rolesForUser[0],
@@ -108,7 +107,6 @@ let findUser = [{
     profile: {
       personalPhone: userProfileFakeData.personalPhone,
       personalWebSite: userProfileFakeData.personalWebSite,
-      addressFull: `${userProfileFakeData.addressStreet} ${userProfileFakeData.addressSuite}, ${userProfileFakeData.addressCity}, ${userProfileFakeData.addressStateAbbr} ${userProfileFakeData.addressZipCode}, ${userProfileFakeData.addressCountry}`,
       jobCompanyName: userProfileFakeData.jobCompanyName,
     },
     role: rolesForUser[0],

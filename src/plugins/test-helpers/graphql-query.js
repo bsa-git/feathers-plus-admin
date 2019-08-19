@@ -20,7 +20,6 @@ const getUser = `{
     profile{
       personalPhone
       personalWebSite
-      addressFull
       jobCompanyName
     }
     role{
@@ -42,7 +41,6 @@ const findUser = `{
     profile{
       personalPhone
       personalWebSite
-      addressFull
       jobCompanyName
     }
     role{

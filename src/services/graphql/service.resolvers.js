@@ -1,11 +1,10 @@
-
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
 // !code: imports
 const {inspector, getGraphQLContext} = require('../../plugins/lib');
 const debug = require('debug')('app:service.graphql.resolvers');
 
-// const isDebug = true;
+const isDebug = false;
 const isLog = false;
 // !end
 // !code: init // !end
@@ -30,131 +29,153 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // users: [User!]
       users:
-        // !<DEFAULT> code: resolver-Role-users
+      // !<DEFAULT> code: resolver-Role-users
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { roleId: parent._id, $sort: undefined }, paginate: false
+            query: {roleId: parent._id, $sort: {}}, paginate: false
           });
           return users.find(feathersParams).then(extractAllItems);
         },
-        // !end
+      // !end
     },
 
     Team: {
 
       // members: [User!]
       members:
-        // !code: resolver-Team-members
-        async (parent, args, content, ast) => {
-          // Get content.cache.User.userTeams
+      // !code: resolver-Team-members
+        (parent, args, content, ast) => {
+          let feathersParams;
+          // Set content.cache.Team.userIdsForTeam
           if (!(content.cache.Team && content.cache.Team.userIdsForTeam)) {
+            feathersParams = convertArgs(args, content, ast, {
+              query: {
+                teamId: parent._id.toString(),
+                $sort: {userId: 1}
+              }, paginate: false
+            });
+            if (isDebug) debug('Team.members.feathersParams:', feathersParams);
             content.cache.Team = content.cache.Team || {};
-            const userIdsForTeam = await userTeams.find({query: {teamId: parent._id.toString(),  $sort: {userId: 1}}}).then(extractAllItems);
-            content.cache.Team.userIdsForTeam = userIdsForTeam.map(userTeam => userTeam.userId.toString());
-            if(isLog) inspector('content.cache.Team.userIdsForTeam', content.cache.Team.userIdsForTeam);
+            content.cache.Team.userIdsForTeam = userTeams.find(feathersParams).then(items => {
+              return extractAllItems(items).map(item => item.userId.toString());
+            });
           }
-          // Set query for user
-          const feathersParams = convertArgs(args, content, ast, {
-            query: {_id: {$in: content.cache.Team.userIdsForTeam}, $sort: undefined}, paginate: false
-          });
-          if(isLog) inspector('Team.members.feathersParams', feathersParams);
-          const usersForTeam = await users.find(feathersParams).then(extractAllItems);
-          if(isLog) inspector('Team.members.usersForTeam', usersForTeam);
-          return usersForTeam;
+          return Promise.resolve(content.cache.Team.userIdsForTeam)
+            .then(userIdsForTeam => {
+              if (isLog) inspector('Team.members.userIdsForTeam', userIdsForTeam);
+              feathersParams = convertArgs(args, content, ast, {
+                query: {_id: {$in: userIdsForTeam}, $sort: {}}, paginate: false
+              });
+              if (isDebug) debug('Team.members.feathersParams:', feathersParams);
+              return users.find(feathersParams);
+            })
+            .then(items => {
+              const usersForTeam = extractAllItems(items);
+              if (isLog) inspector('Team.members.usersForTeam', usersForTeam);
+              return usersForTeam;
+            });
         },
-        // !end
+      // !end
     },
 
     UserProfile: {
 
       // addressFull: String!
       addressFull:
-        // !code: resolver-UserProfile-addressFull-non
+      // !code: resolver-UserProfile-addressFull-non
         (parent, args, content, ast) => {
           // ex. 438 Dark Spurt Apt. 420, San Francisco, CA 94528, USA
           return `${parent.addressStreet} ${parent.addressSuite}, ${parent.addressCity}, ${parent.addressStateAbbr} ${parent.addressZipCode}, ${parent.addressCountry}`;
         },
-        // !end
+      // !end
 
       // user: User!
       user:
-        // !<DEFAULT> code: resolver-UserProfile-user
+      // !<DEFAULT> code: resolver-UserProfile-user
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { profileId: parent._id }, paginate: false
+            query: {profileId: parent._id}, paginate: false
           });
           return users.find(feathersParams).then(extractFirstItem);
         },
-        // !end
+      // !end
     },
 
-    UserTeam: {
-    },
+    UserTeam: {},
 
     User: {
 
       // fullName: String!
       fullName:
-        // !code: resolver-User-fullName-non
+      // !code: resolver-User-fullName-non
         (parent, args, content, ast) => {
           return `${parent.firstName} ${parent.lastName}`;
         },
-        // !end
+      // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
       role:
-        // !<DEFAULT> code: resolver-User-role
+      // !<DEFAULT> code: resolver-User-role
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: parent.roleId }, paginate: false
+            query: {_id: parent.roleId}, paginate: false
           });
           return roles.find(feathersParams).then(extractFirstItem);
         },
-        // !end
+      // !end
 
       // profile(query: JSON, params: JSON, key: JSON): UserProfile
       profile:
-        // !<DEFAULT> code: resolver-User-profile
+      // !<DEFAULT> code: resolver-User-profile
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: { _id: parent.profileId }, paginate: false
+            query: {_id: parent.profileId}, paginate: false
           });
           return userProfiles.find(feathersParams).then(extractFirstItem);
         },
-        // !end
+      // !end
 
       // teams: [Team!]
       teams:
-        // !code: resolver-User-teams
-        async (parent, args, content, ast) => {
-
-          // if(isLog) inspector('User.teams.parent', parent);
-          if(isLog) inspector('User.teams.args', args);
-          // if(isLog) inspector('User.teams.content', getGraphQLContext(content));
-
-          const feathersParams = convertArgs(args, content, ast, {
-            query: {$sort: undefined}, paginate: false
-          });
-          if(isLog) inspector('User.teams.feathersParams', feathersParams);
-          // Get content.cache.User.teams
+      // !code: resolver-User-teams
+        (parent, args, content, ast) => {
+        let feathersParams;
+          // Set content.cache.User.teams
           if (!(content.cache.User && content.cache.User.teams)) {
+            feathersParams = convertArgs(args, content, ast, {
+              query: {}, paginate: false
+            });
+            if (isDebug) debug('User.teams.feathersParams:', feathersParams);
             content.cache.User = content.cache.User || {};
-            content.cache.User.teams = await teams.find(feathersParams).then(extractAllItems);
+            content.cache.User.teams = teams.find(feathersParams).then(extractAllItems);
           }
-          if(isLog) inspector('content.cache.User.teams', content.cache.User.teams);
-          // Get content.cache.User.teamIdsForUser
-          if (!(content.cache.User && content.cache.User.teamIdsForUser)) {
-            content.cache.User = content.cache.User || {};
-            const teamIdsForUser = await userTeams.find({query: {userId: parent._id.toString(), $sort: {teamId: 1}}}).then(extractAllItems);
-            content.cache.User.teamIdsForUser = teamIdsForUser.map(userTeam => userTeam.teamId.toString());
-            if(isLog) inspector('content.cache.User.teamIdsForUser', content.cache.User.teamIdsForUser);
+          // Set content.cache.User.teamIdsForUser
+          if (!content.cache.User.teamIdsForUser) {
+            feathersParams = convertArgs(args, content, ast, {
+              query: {
+                userId: parent._id.toString(),
+                $sort: {teamId: 1}
+              }, paginate: false
+            });
+            if (isDebug) debug('User.teams.feathersParams:', feathersParams);
+            content.cache.User.teamIdsForUser = userTeams.find(feathersParams).then(items => {
+              return extractAllItems(items).map(item => item.teamId.toString());
+            });
           }
-          // Get teams for user
-          const teamsForUser = content.cache.User.teams.filter(team => content.cache.User.teamIdsForUser.indexOf(team._id.toString()) >= 0);
-          if(isLog) inspector('User.teams.teamsForUser', teamsForUser);
-          return teamsForUser;
+          return Promise.all([
+            Promise.resolve(content.cache.User.teams),
+            Promise.resolve(content.cache.User.teamIdsForUser)
+          ]).then(function (values) {
+            const _allTeams = values[0];
+            const _teamIdsForUser = values[1];
+            if (isLog) inspector('User.teams.allTeams', _allTeams);
+            if (isLog) inspector('User.teams.teamIdsForUser', _teamIdsForUser);
+            const teamsForUser = _allTeams.filter(team => _teamIdsForUser.indexOf(team._id.toString()) >= 0);
+            if (isLog) inspector('User.teams.teamsForUser', teamsForUser);
+            return teamsForUser;
+          });
         },
-        // !end
+      // !end
     },
 
     // !code: resolver_field_more // !end
@@ -170,7 +191,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findRole(query: JSON, params: JSON): [Role!]
       findRole(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {name: 1}}});
         return roles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -184,7 +205,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findTeam(query: JSON, params: JSON): [Team!]
       findTeam(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {name: 1}}});
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -198,7 +219,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUserProfile(query: JSON, params: JSON): [UserProfile!]
       findUserProfile(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {_id: 1}}});
         return userProfiles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -212,7 +233,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUserTeam(query: JSON, params: JSON): [UserTeam!]
       findUserTeam(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   teamId: 1,   userId: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {teamId: 1, userId: 1}}});
         return userTeams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -226,7 +247,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUser(query: JSON, params: JSON): [User!]
       findUser(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   lastName: 1,   firstName: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {lastName: 1, firstName: 1}}});
         return users.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
