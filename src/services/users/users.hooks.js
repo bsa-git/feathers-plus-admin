@@ -28,11 +28,27 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 //------------
 // const { preventChanges, discard, disallow, isProvider } = commonHooks;
 const {preventChanges,  discard, disallow, isProvider } = commonHooks;
-const hookToEmailYourVerification = (context) => {
-  accountNotifier(context.app).notifier('resendVerifySignup', context.result);
+const hookToEmailYourVerification = async (context) => {
+  await accountNotifier(context.app).notifier('resendVerifySignup', context.result);
 };
 const isVerifySignup = AuthServer.getAuthConfig().isVerifySignup;
 const isTest = AuthServer.isTest();
+const discardFields = iff(!isTest && isProvider('external'), discard(
+  // 'isVerified',
+  'verifyToken',
+  'verifyShortToken',
+  'verifyExpires',
+  'verifyChanges',
+  'resetToken',
+  'resetShortToken',
+  'resetExpires',
+  'googleId',
+  'githubId',
+  'googleAccessToken',
+  'googleRefreshToken',
+  'githubAccessToken',
+  'githubRefreshToken'
+));
 //------------
 // !end
 
@@ -102,23 +118,13 @@ moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), pre
 )), [validatePatch()], moduleExports.before.patch);
 
 //---- AFTER ---
-moduleExports.after.all = loConcat(iff(!isTest && isProvider('external'), discard(
-  'isVerified',
-  'verifyToken',
-  'verifyShortToken',
-  'verifyExpires',
-  'verifyChanges',
-  'resetToken',
-  'resetShortToken',
-  'resetExpires',
-  'googleId',
-  'githubId',
-  'googleAccessToken',
-  'googleRefreshToken',
-  'githubAccessToken',
-  'githubRefreshToken'
-)), moduleExports.after.all);
 moduleExports.after.create = loConcat(iff(!isTest && isVerifySignup, hookToEmailYourVerification, verifyHooks.removeVerification()), moduleExports.after.create);
+moduleExports.after.find = loConcat(discardFields, moduleExports.after.find);
+moduleExports.after.get = loConcat(discardFields, moduleExports.after.get);
+moduleExports.after.update = loConcat(discardFields, moduleExports.after.update);
+moduleExports.after.patch = loConcat(discardFields, moduleExports.after.patch);
+moduleExports.after.remove = loConcat(discardFields, moduleExports.after.remove);
+
 //---------------
 // !end
 module.exports = moduleExports;

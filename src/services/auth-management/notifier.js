@@ -38,7 +38,7 @@ module.exports = function(app) {
 
   return {
     notifier: async function(type, user) {// notifier: function(type, user, notifierOptions
-      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, langMsgs, langMsg;
+      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, resetToken, resetShortToken, langMsgs, langMsg;
       fullName = `${user.firstName} ${user.lastName}`;
 
       switch (type) {
@@ -73,12 +73,33 @@ module.exports = function(app) {
         };
         return await sendEmail(email);
       case 'sendResetPwd':
-        tokenLink = getLink('reset', user.resetToken);
-        email = {};
+        if(isLog) inspector('auth-management.notifier.user:', user);
+        resetToken = user.resetToken;
+        resetShortToken = user.resetShortToken;
+
+        tokenLink = getLink('reset', resetToken);
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailSendResetPwd'].replace('{tokenLink}', tokenLink).replace('{shortToken}', resetShortToken);
+        email = {
+          from: process.env.FROM_EMAIL,
+          to: user.email,
+          subject: 'Password reset',
+          html: langMsg
+        };
         return await sendEmail(email);
       case 'resetPwd':
-        tokenLink = getLink('reset', user.resetToken);
-        email = {};
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailResetPwd'];
+        email = {
+          from: process.env.FROM_EMAIL,
+          to: user.email,
+          subject: 'Confirm Password reset',
+          html: langMsg
+        };
         return await sendEmail(email);
       case 'passwordChange':
         email = {};

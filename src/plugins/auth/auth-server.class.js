@@ -207,6 +207,10 @@ class AuthServer {
     return env.includes(process.env.NODE_ENV);
   }
 
+  /**
+   * Get auth config
+   * @return {Object}
+   */
   static getAuthConfig() {
     return {
       isVerifySignup: isTrue(process.env.IS_VERIFY_SIGNUP)

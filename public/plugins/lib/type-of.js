@@ -14,6 +14,14 @@ function isFunction (func) {
 }
 
 function isNull (obj) {
+  return obj === null;
+}
+
+function isUndefined (obj) {
+  return obj === undefined;
+}
+
+function isNullOrUndefined (obj) {
   return obj === null || obj === undefined;
 }
 
@@ -29,12 +37,19 @@ function isNumber (val) {
   return typeof val === 'number';
 }
 
+function isSymbol (val) {
+  return typeof val === 'symbol';
+}
+
 export default {
   isArray,
   isBoolean,
   isFunction,
   isNull,
+  isUndefined,
+  isNullOrUndefined,
   isObject,
   isString,
-  isNumber
+  isNumber,
+  isSymbol
 };

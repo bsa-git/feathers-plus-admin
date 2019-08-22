@@ -291,22 +291,29 @@
   },
   "authManagement": {
     "titleVerifySignUp": "Verification Sign up",
+    "titleResetPwd": "Reset Pwd",
     "descriptionVerifySignUp": "Verification user's email...",
     "successfulUserVerification": "Successful user's email verification",
     "signUpVerification": "You need to be sign up verification when a new user is created. We will send verification instructions to your email address.",
-    "resendVerification": "We will send verification instructions to your email address.",
+    "resendVerification": "We will send verification instructions to your email.",
+    "sendResetPwdVerification": "We will send instructions to password reset to your email.",
     "signUpVerificationEmail": "To finish the user's email verification, go to ",
     "titleDialog": "Resend verify user's email",
     "textDialog": "User's email is not yet verified! Want to re-verify?",
     "hintSingUpEmail": "The availability of a custom email will be verified",
     "hintLoginEmail": "For successful logging, email must be verified",
     "hintEnterSecurityCode": "Enter security code sent to your email",
+    "hintResetPwd": "Enter your email to give instructions",
     "verificationCode": "Verification code",
+    "yourEmail": "Your email",
+    "forgotYourPassword": "Forgot your password",
     "errorUserVerification": "Error user's email verification",
     "msgForErrorUserNotFind": "User not found. Perhaps you have already passed the verification of the user's email when creating an account.",
     "msgForErrorInvalidToken": "Invalid token. Get for a new one. (authManagement)",
     "msgForErrorEmailNotYetVerified": "User's email is not yet verified.",
     "mailResendVerifySignUp": "To finish the email verification, follow this link  \"{tokenLink}\" or enter verification code \"{shortToken}\" in the form field",
-    "mailVerifySignUp": "Thanks for verifying your email"
+    "mailVerifySignUp": "Thanks for verifying your email",
+    "mailSendResetPwd": "To finish the password reset, follow this link  \"{tokenLink}\"",
+    "mailResetPwd": "Successful password reset for a forgotten password"
   }
 }

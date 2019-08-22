@@ -31,22 +31,6 @@ describe('<<< Test \'graphql\' service >>>', () => {
 
   describe('--- Save fake data to services ---', function () {
     if (isSeed) {
-      it('registered the \'roles\' service', () => {
-        const service = app.service('roles');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'roles\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'roles');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['roles'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
       it('registered the \'users\' service', () => {
         const service = app.service('users');
         assert.ok(service, 'Registered the service');
@@ -57,6 +41,22 @@ describe('<<< Test \'graphql\' service >>>', () => {
         const results = await seedService(app, 'users');
         if (Array.isArray(results)) {
           assert.ok(results.length === fakes['users'].length);
+        } else {
+          if(isLog) debug('seedService.results:', results);
+          assert.ok(false);
+        }
+      });
+
+      it('registered the \'roles\' service', () => {
+        const service = app.service('roles');
+        assert.ok(service, 'Registered the service');
+      });
+
+      it('Save fake data to \'roles\' service', async () => {
+        // Seed service data
+        const results = await seedService(app, 'roles');
+        if (Array.isArray(results)) {
+          assert.ok(results.length === fakes['roles'].length);
         } else {
           if(isLog) debug('seedService.results:', results);
           assert.ok(false);

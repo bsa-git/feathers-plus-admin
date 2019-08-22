@@ -27,6 +27,16 @@
                   :hint="hintInput"
                   persistent-hint
                 ></v-text-field>
+                <v-text-field
+                  v-else-if="validateType === 'email'"
+                  v-validate="'email'"
+                  :error-messages="errors.collect('inputValue')"
+                  data-vv-name="inputValue"
+                  v-model="model.inputValue"
+                  :label="labelInput"
+                  :hint="hintInput"
+                  persistent-hint
+                ></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>

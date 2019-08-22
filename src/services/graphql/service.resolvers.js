@@ -1,3 +1,4 @@
+
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
 // !code: imports
@@ -29,21 +30,21 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // users: [User!]
       users:
-      // !<DEFAULT> code: resolver-Role-users
+        // !<DEFAULT> code: resolver-Role-users
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: {roleId: parent._id, $sort: {}}, paginate: false
+            query: { roleId: parent._id, $sort: undefined }, paginate: false
           });
           return users.find(feathersParams).then(extractAllItems);
         },
-      // !end
+        // !end
     },
 
     Team: {
 
       // members: [User!]
       members:
-      // !code: resolver-Team-members
+        // !code: resolver-Team-members
         (parent, args, content, ast) => {
           let feathersParams;
           // Set content.cache.Team.userIdsForTeam
@@ -75,69 +76,70 @@ let moduleExports = function serviceResolvers(app, options) {
               return usersForTeam;
             });
         },
-      // !end
+        // !end
     },
 
     UserProfile: {
 
       // addressFull: String!
       addressFull:
-      // !code: resolver-UserProfile-addressFull-non
+        // !code: resolver-UserProfile-addressFull-non
         (parent, args, content, ast) => {
           // ex. 438 Dark Spurt Apt. 420, San Francisco, CA 94528, USA
           return `${parent.addressStreet} ${parent.addressSuite}, ${parent.addressCity}, ${parent.addressStateAbbr} ${parent.addressZipCode}, ${parent.addressCountry}`;
         },
-      // !end
+        // !end
 
       // user: User!
       user:
-      // !<DEFAULT> code: resolver-UserProfile-user
+        // !<DEFAULT> code: resolver-UserProfile-user
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: {profileId: parent._id}, paginate: false
+            query: { profileId: parent._id }, paginate: false
           });
           return users.find(feathersParams).then(extractFirstItem);
         },
-      // !end
+        // !end
     },
 
-    UserTeam: {},
+    UserTeam: {
+    },
 
     User: {
 
       // fullName: String!
       fullName:
-      // !code: resolver-User-fullName-non
+        // !code: resolver-User-fullName-non
         (parent, args, content, ast) => {
           return `${parent.firstName} ${parent.lastName}`;
         },
-      // !end
+        // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
       role:
-      // !<DEFAULT> code: resolver-User-role
+        // !<DEFAULT> code: resolver-User-role
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: {_id: parent.roleId}, paginate: false
+            query: { _id: parent.roleId }, paginate: false
           });
           return roles.find(feathersParams).then(extractFirstItem);
         },
-      // !end
+        // !end
 
       // profile(query: JSON, params: JSON, key: JSON): UserProfile
       profile:
-      // !<DEFAULT> code: resolver-User-profile
+        // !<DEFAULT> code: resolver-User-profile
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
-            query: {_id: parent.profileId}, paginate: false
+            query: { _id: parent.profileId }, paginate: false
           });
           return userProfiles.find(feathersParams).then(extractFirstItem);
         },
-      // !end
+        // !end
 
       // teams: [Team!]
       teams:
-      // !code: resolver-User-teams
+        // !code: resolver-User-teams
         (parent, args, content, ast) => {
         let feathersParams;
           // Set content.cache.User.teams
@@ -175,7 +177,7 @@ let moduleExports = function serviceResolvers(app, options) {
             return teamsForUser;
           });
         },
-      // !end
+        // !end
     },
 
     // !code: resolver_field_more // !end
@@ -191,7 +193,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findRole(query: JSON, params: JSON): [Role!]
       findRole(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {name: 1}}});
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return roles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -205,7 +207,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findTeam(query: JSON, params: JSON): [Team!]
       findTeam(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {name: 1}}});
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -219,7 +221,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUserProfile(query: JSON, params: JSON): [UserProfile!]
       findUserProfile(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {_id: 1}}});
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return userProfiles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -233,7 +235,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUserTeam(query: JSON, params: JSON): [UserTeam!]
       findUserTeam(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {teamId: 1, userId: 1}}});
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   teamId: 1,   userId: 1 } } });
         return userTeams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -247,7 +249,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findUser(query: JSON, params: JSON): [User!]
       findUser(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, {query: {$sort: {lastName: 1, firstName: 1}}});
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   lastName: 1,   firstName: 1 } } });
         return users.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end

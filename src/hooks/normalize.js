@@ -48,7 +48,7 @@ const userNormalize = (type, record) => {
       record.verifyExpires = record.verifyExpires.toJSON();
     }
     if(isString(record.verifyExpires)){
-      date = new Date(Date.parse(record.verifyExpires));
+      date = new Date(record.verifyExpires);
       record.verifyExpires = date.toJSON();
     }
 
@@ -65,7 +65,7 @@ const userNormalize = (type, record) => {
       record.resetExpires = record.resetExpires.toJSON();
     }
     if(isString(record.resetExpires)){
-      date = new Date(Date.parse(record.resetExpires));
+      date = new Date(record.resetExpires);
       record.resetExpires = date.toJSON();
     }
     //--- Normalize -> verifyToken ---
@@ -87,7 +87,7 @@ const userNormalize = (type, record) => {
   }
   //==== AFTER ===//
   if(type === 'after'){
-    // Normalize -> verifyExpires  Date
+    //--- Normalize -> verifyExpires  Date ---
     if(isNull(record.verifyExpires)){
       record.verifyExpires = 0;
     }
@@ -97,7 +97,7 @@ const userNormalize = (type, record) => {
     if(isString(record.verifyExpires)){
       record.verifyExpires = Date.parse(record.verifyExpires);
     }
-    // Normalize -> resetExpires  Date
+    //--- Normalize -> resetExpires  Date ---
     if(isNull(record.resetExpires)){
       record.resetExpires = 0;
     }

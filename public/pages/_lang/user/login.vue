@@ -1,21 +1,31 @@
 <template>
   <v-container fluid>
-    <input-dialog
-      :input-dialog="inputDialog"
+    <input-code-dialog
+      :input-dialog="inputCodeDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
       :label-input="$t('authManagement.verificationCode')"
       :hint-input="$t('authManagement.hintEnterSecurityCode')"
       :validate-type="'numeric'"
       :run-action="verifySignupShort"
-      v-on:onCloseInputDialog="inputDialog = false"
+      v-on:onCloseInputDialog="inputCodeDialog = false"
       v-on:onInput="setVerifyCode"
-    ></input-dialog>
+    ></input-code-dialog>
+    <input-email-dialog
+      :input-dialog="inputEmailDialog"
+      :title-dialog="$t('authManagement.titleResetPwd')"
+      :label-input="$t('authManagement.yourEmail')"
+      :hint-input="$t('authManagement.hintResetPwd')"
+      :validate-type="'email'"
+      :run-action="sendResetPwd"
+      v-on:onCloseInputDialog="inputEmailDialog = false"
+      v-on:onInput="setUserEmail"
+    ></input-email-dialog>
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('authManagement.titleDialog')"
       :text-dialog="$t('authManagement.textDialog')"
       :run-action="resendVerifySignup"
-      v-on:onCloseDialog="openInputDialog"
+      v-on:onCloseDialog="openInputCodeDialog"
     ></confirm-dialog>
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6 lg4>
@@ -51,6 +61,7 @@
                 :label="$t('login.password')"
                 type="password"
               ></v-text-field>
+              <v-icon>security</v-icon> <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
             </v-card-text>
             <v-card-actions>
               <v-btn href="/auth/google" icon :disabled="!!user">
@@ -82,7 +93,8 @@
   import Auth from '~/plugins/lib/auth-client.class';
   import fakeData from '~~/seeds/fake-data.json'
   import ConfirmDialog from '~/components/layout/ConfirmDialog';
-  import InputDialog from '~/components/layout/InputDialog';
+  import InputCodeDialog from '~/components/layout/InputDialog';
+  import InputEmailDialog from '~/components/layout/InputDialog';
 
   const debug = require('debug')('app:user.login');
   const isLog = true;
@@ -95,7 +107,8 @@
     },
     components: {
       ConfirmDialog,
-      InputDialog
+      InputCodeDialog,
+      InputEmailDialog
     },
     data() {
       return {
@@ -104,7 +117,8 @@
         loadingSubmit: false,
         loadingLogout: false,
         confirmDialog: false,
-        inputDialog: false,
+        inputCodeDialog: false,
+        inputEmailDialog: false,
         verifyCode: '',
         error: undefined,
         model: {
@@ -200,7 +214,7 @@
             debug('Resend verify Sign up - OK');
             this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
             // Open verifySignupShort input dialog
-            this.inputDialog = true;
+            this.inputCodeDialog = true;
           }
         } catch (error) {
           if (isLog) debug('resendVerifySignup.error:', error);
@@ -208,17 +222,17 @@
           this.showError({text: error.message, timeout: 10000});
         }
       },
-      openInputDialog(){
+      openInputCodeDialog(){
         // Close confirm dialog
         this.confirmDialog = false;
         // Open verifySignupShort input dialog
-        this.inputDialog = true;
+        this.inputCodeDialog = true;
       },
       async verifySignupShort(){
         try {
           if(isDebug) debug('<<verifySignupShort>> Start verifySignupShort');
           // Close input dialog
-          this.inputDialog = false;
+          this.inputCodeDialog = false;
           if(isDebug) debug('verifySignupShort.verifyCode:', this.verifyCode);
           const token = this.verifyCode;
           const user = await Auth.verifySignupShort(token, {email: this.model.email});
@@ -250,6 +264,34 @@
       },
       setVerifyCode(val){
         this.verifyCode = val;
+      },
+      async sendResetPwd() {
+        try {
+          if(isDebug) debug('<<sendResetPwd>> Start sendResetPwd');
+          // Close confirm dialog
+          this.inputEmailDialog = false;
+          const user = await Auth.sendResetPwd({email: this.model.email});
+          if (user) {
+            debug('Send Reset Pwd - OK');
+            this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
+            // Open verifySignupShort input dialog
+//            this.inputCodeDialog = true;
+            this.$router.push(this.$i18n.path(this.config.homePath));
+          }
+        } catch (error) {
+          if (isLog) debug('sendResetPwd.error:', error);
+          this.error = error;
+          this.showError({text: error.message, timeout: 10000});
+        }
+      },
+      openInputEmailDialog(){
+        // Close confirm dialog
+//        this.confirmDialog = false;
+        // Open verifySignupShort input dialog
+        this.inputEmailDialog = true;
+      },
+      setUserEmail(val){
+        this.model.email = val;
       },
       btnClick() {
         if (this.user) {
