@@ -18,7 +18,7 @@
   import Auth from '~/plugins/lib/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
   import AppPageHeader from '~/components/layout/AppPageHeader';
-  const debug = require('debug')('app:page.user-verify');
+  const debug = require('debug')('app:page.user-change');
 
   const isLog = false;
   const isDebug = false;
@@ -29,8 +29,8 @@
     },
     data() {
       return {
-        title: this.$t('authManagement.titleVerifySignUp'),
-        description: this.$t('authManagement.descriptionVerifySignUp'),
+        title: this.$t('authManagement.titleIdentityChange'),
+        description: this.$t('authManagement.descriptionIdentityChange'),
       }
     },
     head() {
@@ -43,14 +43,30 @@
     },
     created: async function () {
       try {
+//        const idFieldUser = this.$store.state.users.idField;
         const http = new Http();
         const token = http.getParams('token');
         if (isDebug) debug('action.token:', token);
-        const user = await Auth.verifySignupLong(token);
-        if (user.isVerified){
+        if (isDebug) debug('<<verifySignUpLong>> Start verifySignUpLong');
+        const changeUser = await Auth.verifySignupLong(token);
+        if (changeUser){
+          // Get new avatar
+//          const avatar = new this.$Avatar(changeUser.email);
+//          const avatarImage = await avatar.getImage();
+//          let userData = {
+//            [idFieldUser]: changeUser[idFieldUser],
+//            avatar: avatarImage
+//          };
+//          const user = new User(userData);
+//          await user.save();
+          if (isDebug) debug('verifySignUpLong.OK');
           this.showSuccess(this.$t('authManagement.successfulUserVerification'));
-          const encodeParam = Http.urlEncode(user.email);
-          this.$redirect(`/user/login?email=${encodeParam}`);
+          if(!this.isAuth){
+            const encodeParam = Http.urlEncode(changeUser.email);
+            this.$redirect(`/user/login?email=${encodeParam}`);
+          }else {
+            this.$redirect(this.config.homePath);
+          }
         } else {
           this.showError(this.$t('authManagement.errorUserVerification'));
           this.$redirect(this.config.homePath);
@@ -68,6 +84,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        isAuth: 'isAuth'
       }),
     },
     methods: {

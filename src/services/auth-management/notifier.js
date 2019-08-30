@@ -38,12 +38,11 @@ module.exports = function(app) {
 
   return {
     notifier: async function(type, user) {// notifier: function(type, user, notifierOptions
-      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, resetToken, resetShortToken, langMsgs, langMsg;
+      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, resetToken, langMsgs, langMsg;
       fullName = `${user.firstName} ${user.lastName}`;
 
       switch (type) {
       case 'resendVerifySignup': //sending the user the verification email
-
         if(isLog) inspector('auth-management.notifier.user:', user);
         verifyToken = user.verifyToken;
         verifyShortToken = user.verifyShortToken;
@@ -75,17 +74,17 @@ module.exports = function(app) {
       case 'sendResetPwd':
         if(isLog) inspector('auth-management.notifier.user:', user);
         resetToken = user.resetToken;
-        resetShortToken = user.resetShortToken;
+        // resetShortToken = user.resetShortToken;
 
-        tokenLink = getLink('reset', resetToken);
+        tokenLink = getLink('forgot', resetToken);
         // Detect lang message
         lang = await detectLang(fullName);
         langMsgs = getLangMessages(lang);
-        langMsg = langMsgs['authManagement']['mailSendResetPwd'].replace('{tokenLink}', tokenLink).replace('{shortToken}', resetShortToken);
+        langMsg = langMsgs['authManagement']['mailSendResetPwd'].replace('{tokenLink}', tokenLink);
         email = {
           from: process.env.FROM_EMAIL,
           to: user.email,
-          subject: 'Password reset',
+          subject: 'Password Reset',
           html: langMsg
         };
         return await sendEmail(email);
@@ -97,17 +96,40 @@ module.exports = function(app) {
         email = {
           from: process.env.FROM_EMAIL,
           to: user.email,
-          subject: 'Confirm Password reset',
+          subject: 'Confirm Password Reset',
           html: langMsg
         };
         return await sendEmail(email);
       case 'passwordChange':
-        email = {};
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailPasswordChange'];
+        email = {
+          from: process.env.FROM_EMAIL,
+          to: user.email,
+          subject: 'Confirm Password Change',
+          html: langMsg
+        };
         return await sendEmail(email);
       case 'identityChange':
-        tokenLink = getLink('verifyChanges', user.verifyToken);
-        email = {};
+        if(isLog) inspector('auth-management.notifier.user:', user);
+        verifyToken = user.verifyToken;
+        verifyShortToken = user.verifyShortToken;
+
+        tokenLink = getLink('change', verifyToken);
+        // Detect lang message
+        lang = await detectLang(fullName);
+        langMsgs = getLangMessages(lang);
+        langMsg = langMsgs['authManagement']['mailResendVerifySignUp'].replace('{tokenLink}', tokenLink).replace('{shortToken}', verifyShortToken);
+        email = {
+          from: process.env.FROM_EMAIL,
+          to: user.verifyChanges.email,
+          subject: 'Verify Changes',
+          html: langMsg
+        };
         return await sendEmail(email);
+
       default:
         break;
       }

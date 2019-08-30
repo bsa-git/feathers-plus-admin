@@ -61,7 +61,8 @@
                 :label="$t('login.password')"
                 type="password"
               ></v-text-field>
-              <v-icon>security</v-icon> <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
+              <v-icon>security</v-icon>
+              <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
             </v-card-text>
             <v-card-actions>
               <v-btn href="/auth/google" icon :disabled="!!user">
@@ -166,7 +167,7 @@
         this.model.password = userEmail ? '' : fakePassword;
       },
       async onSubmit() {
-        if(isDebug) debug('<<onSubmit>> Start onSubmit');
+        if (isDebug) debug('<<onSubmit>> Start onSubmit');
         this.dismissError();
         await this.$validator.validateAll();
         if (this.$validator.errors.any()) {
@@ -188,7 +189,7 @@
       },
       async login(email, password) {
         try {
-          if(isDebug) debug('<<login>> Start login');
+          if (isDebug) debug('<<login>> Start login');
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
           if (isLog) debug('authenticate.error:', error);
@@ -199,19 +200,19 @@
             this.showError({text: this.$t('authManagement.msgForErrorEmailNotYetVerified'), timeout: 10000});
             // Open resendVerifySignup confirm dialog
             this.confirmDialog = true;
-          }else {
+          } else {
             this.showError({text: error.message, timeout: 10000});
           }
         }
       },
       async resendVerifySignup() {
         try {
-          if(isDebug) debug('<<resendVerifySignup>> Start resendVerifySignup');
+          if (isDebug) debug('<<resendVerifySignUp>> Start ResendVerifySignUp');
           // Close confirm dialog
           this.confirmDialog = false;
           const user = await Auth.resendVerifySignup({email: this.model.email});
           if (user) {
-            debug('Resend verify Sign up - OK');
+            if (isDebug) debug('ResendVerifySignUp - OK');
             this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
             // Open verifySignupShort input dialog
             this.inputCodeDialog = true;
@@ -222,27 +223,27 @@
           this.showError({text: error.message, timeout: 10000});
         }
       },
-      openInputCodeDialog(){
+      openInputCodeDialog() {
         // Close confirm dialog
         this.confirmDialog = false;
         // Open verifySignupShort input dialog
         this.inputCodeDialog = true;
       },
-      async verifySignupShort(){
+      async verifySignupShort() {
         try {
-          if(isDebug) debug('<<verifySignupShort>> Start verifySignupShort');
+          if (isDebug) debug('<<verifySignUpShort>> Start verifySignUpShort');
           // Close input dialog
           this.inputCodeDialog = false;
-          if(isDebug) debug('verifySignupShort.verifyCode:', this.verifyCode);
+          if (isDebug) debug('verifySignupShort.verifyCode:', this.verifyCode);
           const token = this.verifyCode;
           const user = await Auth.verifySignupShort(token, {email: this.model.email});
-          if (user.isVerified){
+          if (user.isVerified) {
             this.showSuccess(this.$t('authManagement.successfulUserVerification'));
             const loginResponse = await this.login(this.model.email, this.model.password);
             if (loginResponse && loginResponse.accessToken) {
               if (isLog) debug('loginResponse:', loginResponse);
               setTimeout(() => {
-                this.showSuccess(`${this.$t('signup.successSignupAndLogin')}!`);
+                this.showSuccess(`${this.$t('signup.successSignUpAndLogin')}!`);
                 this.$router.push(this.$i18n.path(this.config.homePath));
               }, 1000);
             }
@@ -253,44 +254,49 @@
         } catch (error) {
           if (isLog) debug('verifySignupShort.error:', error);
           this.error = error;
-          if(error.message === 'User not found.'){
+          if (error.message === 'User not found.') {
             this.showError({text: this.$t('authManagement.msgForErrorUserNotFind'), timeout: 10000});
-          }else if(error.message.includes('Invalid token.')){
+          } else if (error.message.includes('Invalid token.')) {
             this.showError({text: this.$t('authManagement.msgForErrorInvalidToken'), timeout: 10000});
-          }else {
+          } else {
             this.showError({text: error.message, timeout: 10000});
           }
         }
       },
-      setVerifyCode(val){
+      setVerifyCode(val) {
         this.verifyCode = val;
       },
       async sendResetPwd() {
+
+        if (isDebug) debug('<<sendResetPwd>> Start sendResetPwd');
         try {
-          if(isDebug) debug('<<sendResetPwd>> Start sendResetPwd');
-          // Close confirm dialog
-          this.inputEmailDialog = false;
-          const user = await Auth.sendResetPwd({email: this.model.email});
-          if (user) {
-            debug('Send Reset Pwd - OK');
-            this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
-            // Open verifySignupShort input dialog
-//            this.inputCodeDialog = true;
-            this.$router.push(this.$i18n.path(this.config.homePath));
+          await Auth.checkUnique({email: this.model.email}, '');
+          this.showError({text: this.$t('authManagement.errorUnregisteredEmail'), timeout: 10000});
+        } catch (checkUniqueError) {
+          if (checkUniqueError.message === 'Values already taken.') {// This is OK!
+            try {
+              // Close confirm dialog
+              this.inputEmailDialog = false;
+              Auth.sendResetPwd({email: this.model.email});
+              // sendResetPwd running...
+              this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
+              this.$router.push(this.$i18n.path(this.config.homePath));
+            } catch (error) {
+              if (isLog) debug('sendResetPwd.error:', error);
+              this.error = error;
+              this.showError({text: error.message, timeout: 10000});
+            }
+          } else {// Unexpected error
+            if (isLog) debug('sendResetPwd.checkUniqueError:', checkUniqueError);
+            this.error = checkUniqueError;
+            this.showError({text: checkUniqueError.message, timeout: 10000});
           }
-        } catch (error) {
-          if (isLog) debug('sendResetPwd.error:', error);
-          this.error = error;
-          this.showError({text: error.message, timeout: 10000});
         }
       },
-      openInputEmailDialog(){
-        // Close confirm dialog
-//        this.confirmDialog = false;
-        // Open verifySignupShort input dialog
+      openInputEmailDialog() {
         this.inputEmailDialog = true;
       },
-      setUserEmail(val){
+      setUserEmail(val) {
         this.model.email = val;
       },
       btnClick() {

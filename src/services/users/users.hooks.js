@@ -28,8 +28,8 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 //------------
 // const { preventChanges, discard, disallow, isProvider } = commonHooks;
 const {preventChanges,  discard, disallow, isProvider } = commonHooks;
-const hookToEmailYourVerification = async (context) => {
-  await accountNotifier(context.app).notifier('resendVerifySignup', context.result);
+const hookToEmailYourVerification = (context) => {
+  accountNotifier(context.app).notifier('resendVerifySignup', context.result);
 };
 const isVerifySignup = AuthServer.getAuthConfig().isVerifySignup;
 const isTest = AuthServer.isTest();
@@ -61,13 +61,15 @@ let moduleExports = {
     //   update: hashPassword(), authenticate('jwt')
     //   patch : hashPassword(), authenticate('jwt')
     //   remove: authenticate('jwt')
-    // !<DEFAULT> code: before
+    // !code: before
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
     create: [ hashPassword() ],
-    update: [ hashPassword(), authenticate('jwt') ],
-    patch: [ hashPassword(), authenticate('jwt') ],
+    // update: [ hashPassword(), authenticate('jwt') ],
+    update: [authenticate('jwt') ],
+    // patch: [ hashPassword(), authenticate('jwt') ],
+    patch: [ authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
     // !end
   },
@@ -97,7 +99,7 @@ let moduleExports = {
     remove: []
     // !end
   },
-  // !code: moduleExports // !end
+  // !code: moduleExports  // !end
 };
 
 // !code: exports

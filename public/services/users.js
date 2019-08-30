@@ -1,4 +1,5 @@
 const loPick = require('lodash/pick');
+const commonHooks = require('feathers-hooks-common');
 import feathersVuex from 'feathers-vuex';
 import feathersClient from '~/plugins/lib/feathers-client';
 import Service from '~/plugins/lib/service-client.class';
@@ -90,7 +91,22 @@ feathersClient.service(servicePath)
       get: [],
       create: [normalize()],
       update: [normalize()],
-      patch: [normalize()],
+      patch: [normalize(), commonHooks.discard(
+        'isVerified',
+        'verifyToken',
+        'verifyShortToken',
+        'verifyExpires',
+        'verifyChanges',
+        'resetToken',
+        'resetShortToken',
+        'resetExpires',
+        'googleId',
+        'githubId',
+        'googleAccessToken',
+        'googleRefreshToken',
+        'githubAccessToken',
+        'githubRefreshToken'
+      )],
       remove: []
     },
     after: {

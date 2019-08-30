@@ -1,5 +1,15 @@
 <template>
   <v-container fluid>
+    <input-code-dialog
+      :input-dialog="inputCodeDialog"
+      :title-dialog="$t('authManagement.titleVerifySignUp')"
+      :label-input="$t('authManagement.verificationCode')"
+      :hint-input="$t('authManagement.hintEnterSecurityCode')"
+      :validate-type="'numeric'"
+      :run-action="verifySignupShort"
+      v-on:onCloseInputDialog="inputCodeDialog = false"
+      v-on:onInput="setVerifyCode"
+    ></input-code-dialog>
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('profile.titleDialog')"
@@ -30,7 +40,7 @@
               :label="$t('signup.lastName')"
             ></v-text-field>
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 sm6>
             <v-text-field
               append-icon="email"
               v-validate="'required|email'"
@@ -38,9 +48,12 @@
               data-vv-name="email"
               v-model="model.email"
               :label="$t('login.email')"
+              :disabled="!changeIdentity"
+              :hint="changeIdentity? $t('profile.hintIdentity'):''"
+              persistent-hint
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 v-if="changePassword">
+          <v-flex xs12 sm6>
             <v-text-field
               append-icon="lock"
               v-validate="'required|min:3'"
@@ -49,27 +62,49 @@
               v-model="model.password"
               :label="$t('login.password')"
               type="password"
-              ref="confirmation"
+              :disabled="!changeIdentity"
+              :hint="changeIdentity? $t('profile.hintPassword'):''"
+              persistent-hint
             ></v-text-field>
           </v-flex>
           <v-flex xs12 sm6 v-if="changePassword">
             <v-text-field
               append-icon="lock"
-              v-validate="'required|confirmed:confirmation'"
-              :error-messages="errors.collect('passwordConfirmation')"
-              data-vv-name="passwordConfirmation"
-              v-model="model.passwordConfirmation"
-              :label="$t('signup.passwordConfirmation')"
+              v-validate="'required|min:3'"
+              :error-messages="errors.collect('oldPassword')"
+              data-vv-name="oldPassword"
+              v-model="model.oldPassword"
+              :label="$t('profile.oldPassword')"
               type="password"
             ></v-text-field>
+          </v-flex>
+          <v-flex xs12 sm6 v-if="changePassword">
+            <v-text-field
+              append-icon="lock"
+              v-validate="'required|min:3'"
+              :error-messages="errors.collect('newPassword')"
+              data-vv-name="newPassword"
+              v-model="model.newPassword"
+              :label="$t('profile.newPassword')"
+              type="password"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs12 sm6>
+            <v-checkbox
+              v-model="changeIdentity"
+              :label="$t('profile.changeIdentity')"
+            ></v-checkbox>
+          </v-flex>
+          <v-flex xs12 sm6>
+            <v-checkbox
+              v-model="changePassword"
+              :label="$t('profile.changePassword')"
+            ></v-checkbox>
           </v-flex>
         </v-layout>
       </v-container>
       <v-card-actions>
-        <v-checkbox
-          v-model="changePassword"
-          :label="$t('profile.changePassword')"
-        ></v-checkbox>
+        <!--<v-divider></v-divider>-->
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">
           {{ $t('profile.save') }}
@@ -90,11 +125,14 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import Auth from '~/plugins/lib/auth-client.class';
   import ConfirmDialog from '~/components/layout/ConfirmDialog';
+  import InputCodeDialog from '~/components/layout/InputDialog';
 
   const debug = require('debug')('app:page.user-profile');
 
   const isLog = false;
+  const isDebug = true;
 
   export default {
     layout: 'user',
@@ -103,23 +141,28 @@
     },
     components: {
       ConfirmDialog,
+      InputCodeDialog
     },
     data() {
       return {
         title: this.$t('profile.title'),
         description: this.$t('profile.description'),
         confirmDialog: false,
+        inputCodeDialog: false,
         loadingSubmit: false,
         loadingRemove: false,
         error: undefined,
+        changeIdentity: false,
         changePassword: false,
+        verifyCode: '',
         model: {
           firstName: '',
           lastName: '',
           email: '',
           avatar: '',
           password: '',
-          passwordConfirmation: ''
+          oldPassword: '',
+          newPassword: ''
         },
       }
     },
@@ -148,46 +191,47 @@
         } else {
           this.loadingSubmit = true;
           if (isLog) debug('onSubmit.formData:', this.model);
-          const saveResponse = await this.save(this.model);
-          if (saveResponse) {
-            if (isLog) debug('onSubmit.saveResponse:', saveResponse);
-            this.showSuccess(`${this.$t('profile.successSaveUser')}!`);
-            setTimeout(() => {
-              this.loadingSubmit = false;
-            }, 1000);
+          if (this.isAnyChange()) {
+            const saveResponse = await this.save(this.model);
+            if (saveResponse) {
+              if (isLog) debug('onSubmit.saveResponse:', saveResponse);
+              if(!this.isChangeEmail()){
+                this.showSuccess(`${this.$t('profile.successSaveUser')}!`);
+              }
+              setTimeout(() => {
+                this.loadingSubmit = false;
+              }, 1000);
+            }
           }
         }
       },
-      isChangeEmail() {
-        return (this.model.email !== this.user.email);
-      },
-      isChangePassword() {
-        return !!this.model.password;
-      },
-      dismissError() {
-        this.error = undefined;
-        this.clearError()
-      },
-
       async save(data) {
+        let changeResult = null;
         const idFieldUser = this.$store.state.users.idField;
         const {User} = this.$FeathersVuex;
         try {
-          let userData = {
-            [idFieldUser]: this.user[idFieldUser],
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-          };
-          if (this.isChangeEmail()) {
-            const avatar = new this.$Avatar(data.email);
-            userData.avatar = await avatar.getImage();
-          }
           if (this.isChangePassword()) {
-            userData.password = data.password;
+            if (isDebug) debug('<<passwordChange>> Start passwordChange');
+            changeResult = await Auth.passwordChange(data.oldPassword, data.newPassword, {email: this.user.email});
+            if (isDebug) debug('passwordChange.OK');
           }
-          const user = new User(userData);
-          return await user.save();
+          if (this.isChangeUser()) {
+            let userData = {
+              [idFieldUser]: this.user[idFieldUser],
+              firstName: data.firstName,
+              lastName: data.lastName,
+            };
+            const user = new User(userData);
+            changeResult = await user.save();
+          }
+          if (this.isChangeEmail()) {
+            if (isDebug) debug('<<identityChange>> Start identityChange');
+            changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
+            this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
+            this.inputCodeDialog = true;
+            if (isDebug) debug('identityChange.OK');
+          }
+          return changeResult;
         } catch (error) {
           if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
@@ -197,7 +241,6 @@
           await User.get(this.user[idFieldUser]);
         }
       },
-
       async remove() {
         try {
           this.loadingRemove = true;
@@ -219,13 +262,71 @@
           this.showError(error.message);
         }
       },
-
+      isChangeUser() {
+        return (this.model.firstName !== this.user.firstName) || (this.model.lastName !== this.user.lastName);
+      },
+      isChangeEmail() {
+        return (this.model.email !== this.user.email);
+      },
+      isChangePassword() {
+        return !!this.model.oldPassword;
+      },
+      isAnyChange() {
+        return this.isChangeUser() || this.isChangeEmail() || this.isChangePassword();
+      },
+      dismissError() {
+        this.error = undefined;
+        this.clearError()
+      },
+      async verifySignupShort() {
+        try {
+          if (isDebug) debug('<<verifySignUpShort>> Start verifySignUpShort');
+          const idFieldUser = this.$store.state.users.idField;
+          const {User} = this.$FeathersVuex;
+          // Close input dialog
+          this.inputCodeDialog = false;
+          if (isDebug) debug('verifySignUpShort.verifyCode:', this.verifyCode);
+          const token = this.verifyCode;
+          const changeUser = await Auth.verifySignupShort(token, {email: this.user.email});
+          if (changeUser) {
+            if (isLog) debug('verifySignupShort.user:', changeUser);
+            if (isDebug) debug('verifySignUpShort.OK');
+            this.showSuccess(this.$t('authManagement.successfulUserVerification'));
+            // Get new avatar
+            const avatar = new this.$Avatar(this.model.email);
+            const avatarImage = await avatar.getImage();
+            let userData = {
+              [idFieldUser]: this.user[idFieldUser],
+              avatar: avatarImage
+            };
+            const user = new User(userData);
+            await user.save();
+          } else {
+            this.showError({text: this.$t('authManagement.errorUserVerification'), timeout: 10000});
+//            this.$redirect(this.config.homePath);
+          }
+        } catch (error) {
+          if (isLog) debug('verifySignupShort.error:', error);
+          this.error = error;
+          if (error.message === 'User not found.') {
+            this.showError({text: this.$t('authManagement.msgForErrorUserNotFind'), timeout: 10000});
+          } else if (error.message.includes('Invalid token.')) {
+            this.showError({text: this.$t('authManagement.msgForErrorInvalidToken'), timeout: 10000});
+          } else {
+            this.showError({text: error.message, timeout: 10000});
+          }
+        }
+      },
+      setVerifyCode(val) {
+        this.verifyCode = val;
+      },
       ...mapMutations('auth', {
         clearError: 'clearAuthenticateError'
       }),
       ...mapMutations({
         showSuccess: 'SHOW_SUCCESS',
         showError: 'SHOW_ERROR',
+        showWarning: 'SHOW_WARNING'
       }),
       ...mapActions(['logout'])
     }
