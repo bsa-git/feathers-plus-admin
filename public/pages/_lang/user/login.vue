@@ -275,12 +275,14 @@
         } catch (checkUniqueError) {
           if (checkUniqueError.message === 'Values already taken.') {// This is OK!
             try {
-              // Close confirm dialog
+              // Close input dialog
               this.inputEmailDialog = false;
               Auth.sendResetPwd({email: this.model.email});
               // sendResetPwd running...
-              this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
-              this.$router.push(this.$i18n.path(this.config.homePath));
+              setTimeout(() => {
+                this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
+                this.$router.push(this.$i18n.path(this.config.homePath));
+              }, 1000);
             } catch (error) {
               if (isLog) debug('sendResetPwd.error:', error);
               this.error = error;

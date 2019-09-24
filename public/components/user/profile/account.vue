@@ -93,18 +93,19 @@
             <v-checkbox
               v-model="changeIdentity"
               :label="$t('profile.changeIdentity')"
+              :disabled="changePassword"
             ></v-checkbox>
           </v-flex>
           <v-flex xs12 sm6>
             <v-checkbox
               v-model="changePassword"
               :label="$t('profile.changePassword')"
+              :disabled="changeIdentity"
             ></v-checkbox>
           </v-flex>
         </v-layout>
       </v-container>
       <v-card-actions>
-        <!--<v-divider></v-divider>-->
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">
           {{ $t('profile.save') }}
@@ -189,9 +190,9 @@
         if (this.$validator.errors.any()) {
           this.showError('Validation Error!');
         } else {
-          this.loadingSubmit = true;
-          if (isLog) debug('onSubmit.formData:', this.model);
           if (this.isAnyChange()) {
+            this.loadingSubmit = true;
+            if (isLog) debug('onSubmit.formData:', this.model);
             const saveResponse = await this.save(this.model);
             if (saveResponse) {
               if (isLog) debug('onSubmit.saveResponse:', saveResponse);
