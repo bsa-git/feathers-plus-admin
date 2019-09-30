@@ -43,6 +43,10 @@ const locales = (envLocales) => {
   return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
 };
 
+const externalAccounts = (envAccounts) => {
+  return util.stripSpecific(envAccounts, ';').split(';').map(item => item.trim());
+};
+
 export default () => ({
   config: {
     //--- LOCALES ---//
@@ -52,12 +56,13 @@ export default () => ({
     //--- DATABASE ---//
     mongodb: process.env.MONGODB.trim(),
     //--- AUTH ---//
-    isVerifySignup: util.isTrue(process.env.IS_VERIFY_SIGNUP),
+    isAuthMng: util.isTrue(process.env.IS_AUTH_MNG),
     roles: authRoles(process.env.ROLES),
     publicPaths: authPaths(process.env.PUBLIC_PATHS),
     adminPaths: authPaths(process.env.ADMIN_PATHS),
     publicServices: authServices(process.env.PUBLIC_SERVICES),
     adminServices: authServices(process.env.ADMIN_SERVICES),
+    externalAccounts: externalAccounts(process.env.EXTERNAL_ACCOUNTS),
     //--- SYSTEM ---//
     nodeEnv: process.env.NODE_ENV.trim(),
     debug: process.env.DEBUG.trim(),

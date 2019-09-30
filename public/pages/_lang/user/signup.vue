@@ -55,7 +55,7 @@
                       data-vv-name="email"
                       v-model="model.email"
                       :label="$t('login.email')"
-                      :hint="config.isVerifySignup? $t('authManagement.hintSingUpEmail') : ''"
+                      :hint="config.isAuthMng? $t('authManagement.hintSingUpEmail') : ''"
                       persistent-hint
                     ></v-text-field>
                   </v-flex>
@@ -173,7 +173,7 @@
           const signupResponse = await this.save(this.model);
           if (signupResponse) {
             if (isLog) debug('signupResponse:', signupResponse);
-            if(this.config.isVerifySignup){
+            if(this.config.isAuthMng){
               this.showWarning({text: `${this.$t('authManagement.signUpVerification')}`, timeout: 10000});
               setTimeout(() => {
                 this.loadingSubmit = false;

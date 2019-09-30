@@ -1,7 +1,11 @@
 
 const { Verifier } = require('@feathersjs/authentication-oauth2');
-const isArray = require('lodash/isArray');
-const debug = require('debug')('app:verifiers.verify');
+// const isArray = require('lodash/isArray');
+const {inspector} = require('../lib');
+const debug = require('debug')('app:plugins.auth.verifiers');
+
+const isLog = false;
+const isDebug = false;
 
 class Oauth2Verifier extends Verifier {
 
@@ -11,7 +15,8 @@ class Oauth2Verifier extends Verifier {
   }
 
   verify (req, accessToken, refreshToken, profile, done) {
-    debug('Checking credentials');
+    if(isDebug) debug('<<verifiers>> Start verifiers');
+    if(isDebug) debug('Checking credentials');
     const options = this.options;
     const query = {
       $or: [
@@ -39,36 +44,36 @@ class Oauth2Verifier extends Verifier {
     if (existing) {
       return this._updateEntity(existing, data)
         .then(entity => {
-          debug('existing.entity:', existing, '; data:', data);
+          if(isLog) inspector('plugins.auth.verifiers.existing.entity:', existing, '; data:', data);
           done(null, entity);
         })
         .catch(error => error ? done(error) : done(null, error));
     }
 
     // Find or create the user since they could have signed up via facebook.
-    debug('find.query:', query);
+    if(isDebug) inspector('plugins.auth.verifiers.find.query:', query);
     this.service
       .find({ query })
       .then(this._normalizeResult)
       .then(entity => {
         if(entity){
-          debug('find.entity.updateEntity:', entity, '; data:', data);
+          if(isLog) inspector('plugins.auth.verifiers.find.entity.updateEntity:', entity, '; data:', data);
           return this._updateEntity(entity, data);
         }else {
-          debug('no.find.entity.createEntity.data:', data);
+          if(isLog) inspector('plugins.auth.verifiers.no.find.entity.createEntity.data:', data);
           return this._createEntity(data);
         }
       })
       .then(entity => {
-        debug('update|create->entity:', entity);
+        if(isLog) inspector('plugins.auth.verifiers.update|create->entity:', entity);
         let id;
-        if(isArray(entity)){
+        if(Array.isArray(entity)){
           id = entity[0][this.service.id];
         }else {
           id = entity[this.service.id];
         }
         const payload = { [`${this.options.entity}Id`]: id };
-        debug('payload:', payload);
+        if(isDebug) debug('payload:', payload);
         done(null, entity, payload);
       })
       .catch(error => error ? done(error) : done(null, error));

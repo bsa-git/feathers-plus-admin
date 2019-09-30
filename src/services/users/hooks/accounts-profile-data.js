@@ -5,8 +5,8 @@ const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const {inspector} = require('../../../plugins/lib');
 const debug = require('debug')('app:accounts-profile-data.hook');
 
-const isLog = false;
-const isDebug = false;
+const isLog = true;
+const isDebug = true;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -36,7 +36,7 @@ module.exports = function (options = {}) {
       let newRecord = {};
       let _raw = {};
 
-      if (isLog) inspector('getProfileData.record:', record);
+      if (isLog) inspector('hook.accounts-profile-data.getProfileData.record:', record);
 
       // Google account
       if(record.google){
@@ -49,11 +49,14 @@ module.exports = function (options = {}) {
         }).value;
         newRecord.firstName = _raw.name.givenName;
         newRecord.lastName = _raw.name.familyName;
-        // newRecord.googleTokens = {accessToken: record.google.accessToken};
         newRecord.googleAccessToken = record.google.accessToken;
         if(record.google.refreshToken){
           newRecord.googleRefreshToken = record.google.refreshToken;
         }
+        newRecord.roleId = record.roleId;
+        newRecord.profileId = record.profileId;
+        newRecord.isVerified = true;
+        newRecord.avatar = _raw.image.url;
         return newRecord;
 
         // GitHub account
@@ -67,11 +70,14 @@ module.exports = function (options = {}) {
         if(names.length > 1){
           newRecord.lastName = names[1];
         }
-        // newRecord.githubTokens = {accessToken: record.github.accessToken};
         newRecord.githubAccessToken = record.github.accessToken;
         if(record.github.refreshToken){
           newRecord.githubRefreshToken = record.github.refreshToken;
         }
+        newRecord.roleId = record.roleId;
+        newRecord.profileId = record.profileId;
+        newRecord.isVerified = true;
+        newRecord.avatar = record.github.profile._json.avatar_url;
         return newRecord;
 
         // No accounts
@@ -87,11 +93,11 @@ module.exports = function (options = {}) {
       records.forEach(record => {
         newRecords.push(getProfileData(record));
       });
-      if (isLog && isAccount) inspector('newRecords:', newRecords);
+      if (isLog && isAccount) inspector('hook.accounts-profile-data.newRecords:', newRecords);
       replaceItems(context, newRecords);
     } else {
       const newRecord = getProfileData(records);
-      if (isLog && isAccount) inspector('newRecords:', newRecords);
+      if (isLog && isAccount) inspector('hook.accounts-profile-data.newRecord:', newRecord);
       replaceItems(context, newRecord);
     }
 

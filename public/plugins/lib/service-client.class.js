@@ -20,6 +20,7 @@ class ServiceClient {
     this.config = store.getters.getConfig;
     const {auth} = store.state;
     this.user = auth.user;
+    if(isDebug) debug('Created.OK');
   }
 
   /**

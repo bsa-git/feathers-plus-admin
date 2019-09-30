@@ -138,6 +138,9 @@
                       data-vv-name="email"
                       v-model="editedItem.email"
                       :label="$t('management.email')"
+                      :disabled="editedItem.isExternalAccount"
+                      :hint="editedItem.isExternalAccount? $t('accounts.emailForExternalAccounts') : ''"
+                      persistent-hint
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6>
@@ -392,7 +395,8 @@
       },
       ...mapGetters({
         user: 'getUser',
-        profileList: 'user-profiles/profileList'
+        profileList: 'user-profiles/profileList',
+        isUserExternalAccount: 'isUserExternalAccount'
       }),
       users() {
         const data = [];
@@ -409,6 +413,7 @@
             fullName: user.fullName,
             email: user.email,
             avatar: user.avatar,
+            isExternalAccount: this.isUserExternalAccount(user),
             profileId: user.profileId,
 //            profile: user.profile,
             teams: user.teams,

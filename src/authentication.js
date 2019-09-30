@@ -27,8 +27,8 @@ let moduleExports = function (app) {
   const config = app.get('authentication');
   // !code: func_init
   //-----------------
-  const isVerifySignup = AuthServer.getAuthConfig().isVerifySignup;
-  if(isDebug) debug('isVerifySignup:', isVerifySignup);
+  const isAuthMng = AuthServer.isAuthMng();
+  if(isDebug) debug('isAuthMng:', isAuthMng);
   //-----------------
   // !end
 
@@ -80,7 +80,7 @@ let moduleExports = function (app) {
         // Add data to payload
         auth.payloadExtension(),
         // Add isVerified for verify user`s email
-        iff(isVerifySignup, verifyHooks.isVerified())
+        iff(isAuthMng, verifyHooks.isVerified())
         // !end
       ],
       remove: [

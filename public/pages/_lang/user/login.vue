@@ -49,7 +49,7 @@
                 data-vv-name="email"
                 v-model="model.email"
                 :label="$t('login.email')"
-                :hint="config.isVerifySignup? $t('authManagement.hintLoginEmail') : ''"
+                :hint="config.isAuthMng? $t('authManagement.hintLoginEmail') : ''"
                 persistent-hint
               ></v-text-field>
               <v-text-field
@@ -200,6 +200,8 @@
             this.showError({text: this.$t('authManagement.msgForErrorEmailNotYetVerified'), timeout: 10000});
             // Open resendVerifySignup confirm dialog
             this.confirmDialog = true;
+          } else if (error.message === '\'user\' record in the database is missing a \'password\''){
+            this.showError({text: this.$t('login.errAuthenticatedMissingPassword'), timeout: 10000});
           } else {
             this.showError({text: error.message, timeout: 10000});
           }

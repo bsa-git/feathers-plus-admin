@@ -164,7 +164,8 @@
     "success": "Успешная аутентификация",
     "successLogout": "Успешный выход",
     "notAuthenticated": "Не корректный эл.адрес или пароль",
-    "errAuthenticated": "Неизвестная ошибка аутентификации"
+    "errAuthenticated": "Неизвестная ошибка аутентификации",
+    "errAuthenticatedMissingPassword": "Пользовательская запись в базе данных относится к внешнему аккаунту (пр. Google или Github)."
   },
   "signup": {
     "title": "Регистрация",
@@ -195,6 +196,7 @@
     "oldPassword": "Старый пароль",
     "newPassword": "Новый пароль",
     "hintPassword": "Пароль нужен чтобы изменить емайл",
+    "hintChangePassword": "Введите новый пароль",
     "next": "Следующий",
     "prev": "Предыдущий",
     "userAccount": "Аккаунт",
@@ -231,7 +233,8 @@
     "teams": "Команды",
     "firstName": "Имя",
     "lastName": "Фамилия",
-    "fullName": "Имя/Фамилия"
+    "fullName": "Имя/Фамилия",
+    "emailForExternalAccounts": "Этот email относится к внешнему аккаунту, например Google или Github"
   },
   "management": {
     "title": "Управление",

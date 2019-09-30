@@ -1,6 +1,6 @@
 const {inspector, readJsonFileSync, stripSpecific, getHookContext, isTrue, appRoot} = require('../lib');
 const {authenticate} = require('@feathersjs/authentication').hooks;
-var crypto = require('crypto');
+const crypto = require('crypto');
 const debug = require('debug')('app:plugins.auth-server.class');
 
 const isLog = false;
@@ -32,6 +32,14 @@ const randomDigits = (len) => {
     str += parseInt('0x' + crypto.randomBytes(4).toString('hex')).toString();
   }
   return str.substr(0, len);
+};
+
+/**
+ * Get external Accounts from config
+ * @param envAccounts
+ */
+const externalAccounts = (envAccounts) => {
+  return stripSpecific(envAccounts, ';').split(';').map(item => item.trim());
 };
 
 
@@ -98,26 +106,26 @@ class AuthServer {
    * @return {boolean}
    */
   isJwtAuthentication() {
-    if(this.isAuth()) return false;
+    if (this.isAuth()) return false;
     // Get generated services
     let services = (readJsonFileSync(`${appRoot}/feathers-gen-specs.json`) || {}).services;
     let testServices = (readJsonFileSync(`${appRoot}/config/default.json`) || {})['tests']['client']['overriddenAuth'];
     // inspector('isJwtAuthentication.testServices', testServices);
     const serviceNames = Object.keys(services);
     const isServiceName = serviceNames.indexOf(this.context.path) >= 0;
-    if(isServiceName){
+    if (isServiceName) {
       const service = services[this.context.path];
       const testService = testServices[this.context.path];
       const isRequiresAuth = service['requiresAuth'];
-      const isAuthForMethod = testService? testService[this.context.method] !== 'noauth' : false;
+      const isAuthForMethod = testService ? testService[this.context.method] !== 'noauth' : false;
       return isRequiresAuth && isAuthForMethod;
     } else {
-      if(this.context.path === 'graphql'){
-        const found = Object.entries(services).map(service => service[1]).find(function(value) {
+      if (this.context.path === 'graphql') {
+        const found = Object.entries(services).map(service => service[1]).find(function (value) {
           return value.graphql;
         });
         return !!found;
-      }else {
+      } else {
         return false;
       }
     }
@@ -151,9 +159,9 @@ class AuthServer {
     // --- DEBUG ---
     const myRole = await this.getRoleName();
     const msg1 = `<<AuthServer>>: Provider: ${this.provider ? this.provider : 'Not'}; ${this.context.type} app.service('${this.context.path}').${this.context.method}()`;
-    const msg2 = `; isAuth: ${this.isAuth() ? this.isAuth() : 'Not'}; MyRole: ${myRole? myRole : 'Not'};`;
+    const msg2 = `; isAuth: ${this.isAuth() ? this.isAuth() : 'Not'}; MyRole: ${myRole ? myRole : 'Not'};`;
     if (isDebug) debug(`${msg1}${this.provider ? msg2 : ''}`);
-    if(isLog) inspector('AuthServer._context:', getHookContext(this.context));
+    if (isLog) inspector('AuthServer._context:', getHookContext(this.context));
     if (isDebug) debug(`AuthServer.isAccess: ${!notAccess}`);
 
     return !notAccess;
@@ -211,10 +219,23 @@ class AuthServer {
    * Get auth config
    * @return {Object}
    */
-  static getAuthConfig() {
-    return {
-      isVerifySignup: isTrue(process.env.IS_VERIFY_SIGNUP)
-    };
+  static isAuthMng() {
+    return isTrue(process.env.IS_AUTH_MNG);
+  }
+
+  /**
+   * Is user external account
+   * @param user
+   * @return {boolean}
+   */
+  static isUserExternalAccount(user) {
+    let isAccount = false;
+    externalAccounts(process.env.EXTERNAL_ACCOUNTS).forEach(account => {
+      const accountId = `${account}Id`;
+      isAccount = (user && user[accountId]) ? !!user[accountId] : false;
+      if (isAccount) return;
+    });
+    return isAccount;
   }
 
   /**

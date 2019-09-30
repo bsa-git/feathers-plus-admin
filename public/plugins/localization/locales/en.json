@@ -165,7 +165,8 @@
     "success": "Success login",
     "successLogout": "Success logout",
     "notAuthenticated": "Incorrect email or password",
-    "errAuthenticated": "An error prevented login"
+    "errAuthenticated": "An error prevented login",
+    "errAuthenticatedMissingPassword": "The 'user' record in the database refers to an external account (etc. Google or Github)."
   },
   "signup": {
     "title": "Signup",
@@ -196,6 +197,7 @@
     "oldPassword": "Old password",
     "newPassword": "New password",
     "hintPassword": "Password needed to change email",
+    "hintChangePassword": "Enter new password",
     "next": "Next",
     "prev": "Prev",
     "userAccount": "Account",
@@ -232,7 +234,8 @@
     "teams": "Teams",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "fullName": "Full Name"
+    "fullName": "Full Name",
+    "emailForExternalAccounts": "This email is for an external account, for example Google or Github"
   },
   "management": {
     "title": "Management",

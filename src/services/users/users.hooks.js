@@ -31,7 +31,8 @@ const {preventChanges,  discard, disallow, isProvider } = commonHooks;
 const hookToEmailYourVerification = (context) => {
   accountNotifier(context.app).notifier('resendVerifySignup', context.result);
 };
-const isVerifySignup = AuthServer.getAuthConfig().isVerifySignup;
+const isExternalAccount = () => context => context.result?  AuthServer.isUserExternalAccount(context.result) : AuthServer.isUserExternalAccount(context.data);
+const isAuthMng = AuthServer.isAuthMng();
 const isTest = AuthServer.isTest();
 const discardFields = iff(!isTest && isProvider('external'), discard(
   // 'isVerified',
@@ -42,8 +43,8 @@ const discardFields = iff(!isTest && isProvider('external'), discard(
   'resetToken',
   'resetShortToken',
   'resetExpires',
-  'googleId',
-  'githubId',
+  // 'googleId',
+  // 'githubId',
   'googleAccessToken',
   'googleRefreshToken',
   'githubAccessToken',
@@ -62,6 +63,7 @@ let moduleExports = {
     //   patch : hashPassword(), authenticate('jwt')
     //   remove: authenticate('jwt')
     // !code: before
+    //--------------
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
@@ -71,6 +73,7 @@ let moduleExports = {
     // patch: [ hashPassword(), authenticate('jwt') ],
     patch: [ authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
+    //--------------
     // !end
   },
 
@@ -106,7 +109,7 @@ let moduleExports = {
 //---------------
 // Add hooks
 //---- BEFORE ---
-moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create, iff(!isTest && isVerifySignup, verifyHooks.addVerification()));
+moduleExports.before.create = loConcat([accountsProfileData(), validateCreate()], moduleExports.before.create, iff(!isTest && isAuthMng && !isExternalAccount(), verifyHooks.addVerification()));
 moduleExports.before.update = loConcat(iff(!isTest, disallow('external')), [validateUpdate()], moduleExports.before.update);
 moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), preventChanges(true,
   'isVerified',
@@ -116,11 +119,13 @@ moduleExports.before.patch = loConcat(iff(!isTest && isProvider('external'), pre
   'verifyChanges',
   'resetToken',
   'resetShortToken',
-  'resetExpires'
+  'resetExpires',
+  'googleId',
+  'githubId',
 )), [validatePatch()], moduleExports.before.patch);
 
 //---- AFTER ---
-moduleExports.after.create = loConcat(iff(!isTest && isVerifySignup, hookToEmailYourVerification, verifyHooks.removeVerification()), moduleExports.after.create);
+moduleExports.after.create = loConcat(iff(!isTest && isAuthMng && !isExternalAccount(), hookToEmailYourVerification, verifyHooks.removeVerification()), moduleExports.after.create);
 moduleExports.after.find = loConcat(discardFields, moduleExports.after.find);
 moduleExports.after.get = loConcat(discardFields, moduleExports.after.get);
 moduleExports.after.update = loConcat(discardFields, moduleExports.after.update);

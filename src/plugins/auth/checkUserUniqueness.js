@@ -5,7 +5,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* eslint-env node */
 
 const errors = require('@feathersjs/errors');
-const debug = require('debug')('app:checkUniqueness');
+const debug = require('debug')('app:plugins.auth.checkUniqueness');
 
 const isDebug = true;
 

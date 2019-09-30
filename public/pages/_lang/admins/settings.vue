@@ -97,8 +97,8 @@
 
             <v-list-tile avatar>
               <v-list-tile-content>
-                <v-list-tile-title>IS_VERIFY_SIGNUP</v-list-tile-title>
-                <v-list-tile-sub-title v-html>{{ config.isVerifySignup }}</v-list-tile-sub-title>
+                <v-list-tile-title>IS_AUTH_MNG</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.isAuthMng }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 

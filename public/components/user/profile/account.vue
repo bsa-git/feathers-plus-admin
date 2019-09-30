@@ -40,7 +40,7 @@
               :label="$t('signup.lastName')"
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 :sm6="config.isAuthMng && changeIdentity">
             <v-text-field
               append-icon="email"
               v-validate="'required|email'"
@@ -48,12 +48,12 @@
               data-vv-name="email"
               v-model="model.email"
               :label="$t('login.email')"
-              :disabled="!changeIdentity"
-              :hint="changeIdentity? $t('profile.hintIdentity'):''"
+              :disabled="isExternalAccount? true : config.isAuthMng? !changeIdentity : false"
+              :hint="isExternalAccount? $t('accounts.emailForExternalAccounts') : !config.isAuthMng? $t('profile.hintIdentity') : changeIdentity? $t('profile.hintIdentity') : ''"
               persistent-hint
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng && changeIdentity">
             <v-text-field
               append-icon="lock"
               v-validate="'required|min:3'"
@@ -67,7 +67,7 @@
               persistent-hint
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 v-if="changePassword">
+          <v-flex xs12 sm6 v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
             <v-text-field
               append-icon="lock"
               v-validate="'required|min:3'"
@@ -78,7 +78,7 @@
               type="password"
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6 v-if="changePassword">
+          <v-flex xs12 sm6 v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
             <v-text-field
               append-icon="lock"
               v-validate="'required|min:3'"
@@ -89,14 +89,14 @@
               type="password"
             ></v-text-field>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng">
             <v-checkbox
               v-model="changeIdentity"
               :label="$t('profile.changeIdentity')"
               :disabled="changePassword"
             ></v-checkbox>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng">
             <v-checkbox
               v-model="changePassword"
               :label="$t('profile.changePassword')"
@@ -174,10 +174,12 @@
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
       }
+      if(isDebug)debug('created.isExternalAccount:', this.isExternalAccount);
     },
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        isExternalAccount: 'isExternalAccount'
       }),
       ...mapState('auth', [
         'user'
@@ -208,28 +210,40 @@
       },
       async save(data) {
         let changeResult = null;
+        let userData = null;
         const idFieldUser = this.$store.state.users.idField;
         const {User} = this.$FeathersVuex;
         try {
-          if (this.isChangePassword()) {
-            if (isDebug) debug('<<passwordChange>> Start passwordChange');
-            changeResult = await Auth.passwordChange(data.oldPassword, data.newPassword, {email: this.user.email});
-            if (isDebug) debug('passwordChange.OK');
-          }
           if (this.isChangeUser()) {
-            let userData = {
+            if (isDebug) debug('<<userChange>> Start userChange');
+            userData = {
               [idFieldUser]: this.user[idFieldUser],
               firstName: data.firstName,
               lastName: data.lastName,
             };
             const user = new User(userData);
             changeResult = await user.save();
+            if (isDebug) debug('userChange.OK');
+          }
+          if(this.isChangePassword()){
+            if (isDebug) debug('<<passwordChange>> Start passwordChange');
+            changeResult = await Auth.passwordChange(data.oldPassword, data.newPassword, {email: this.user.email});
+            if (isDebug) debug('passwordChange.OK');
           }
           if (this.isChangeEmail()) {
             if (isDebug) debug('<<identityChange>> Start identityChange');
-            changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
-            this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
-            this.inputCodeDialog = true;
+            if(this.config.isAuthMng){
+              changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
+              this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
+              this.inputCodeDialog = true;
+            }else {
+              userData = {
+                [idFieldUser]: this.user[idFieldUser],
+                email: data.email
+              };
+              const user = new User(userData);
+              changeResult = await user.save();
+            }
             if (isDebug) debug('identityChange.OK');
           }
           return changeResult;
@@ -267,10 +281,11 @@
         return (this.model.firstName !== this.user.firstName) || (this.model.lastName !== this.user.lastName);
       },
       isChangeEmail() {
-        return (this.model.email !== this.user.email);
+        const changeEmail = this.model.email !== this.user.email;
+        return !this.config.isAuthMng? changeEmail : this.changeIdentity? changeEmail : false;
       },
       isChangePassword() {
-        return !!this.model.oldPassword;
+        return !this.config.isAuthMng? !!this.model.oldPassword : this.changePassword? !!this.model.oldPassword : false;
       },
       isAnyChange() {
         return this.isChangeUser() || this.isChangeEmail() || this.isChangePassword();

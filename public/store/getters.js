@@ -60,6 +60,26 @@ const getters = {
   getUser(state) {
     return state.auth.user;
   },
+
+  isExternalAccount(state){
+    let isAccount = false;
+    state.config.externalAccounts.forEach(account => {
+      const accountId = `${account}Id`;
+      isAccount = (state.auth.user && state.auth.user[accountId])? !!state.auth.user[accountId] : false;
+      if(isAccount) return;
+    });
+    return isAccount;
+  },
+
+  isUserExternalAccount: (state) => (user) => {
+    let isAccount = false;
+    state.config.externalAccounts.forEach(account => {
+      const accountId = `${account}Id`;
+      isAccount = (user && user[accountId])? !!user[accountId] : false;
+      if(isAccount) return;
+    });
+    return isAccount;
+  }
 };
 
 export default getters;
