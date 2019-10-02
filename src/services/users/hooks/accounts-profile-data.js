@@ -3,10 +3,10 @@
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const {inspector} = require('../../../plugins/lib');
-const debug = require('debug')('app:accounts-profile-data.hook');
+const debug = require('debug')('app:hook.accounts-profile-data');
 
-const isLog = true;
-const isDebug = true;
+const isLog = false;
+const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
@@ -34,7 +34,7 @@ module.exports = function (options = {}) {
      */
     const getProfileData = (record) => {
       let newRecord = {};
-      let _raw = {};
+      let profile;
 
       if (isLog) inspector('hook.accounts-profile-data.getProfileData.record:', record);
 
@@ -42,21 +42,23 @@ module.exports = function (options = {}) {
       if(record.google){
         if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}().`, 'Google account');
         isAccount = true;
-        _raw = JSON.parse(record.google.profile._raw);
+        profile = record.google.profile;
         newRecord.googleId = record.googleId;
-        newRecord.email = _raw.emails.find(email => {
+        newRecord.email = profile.emails.find(email => {
           return email.type === 'account';
         }).value;
-        newRecord.firstName = _raw.name.givenName;
-        newRecord.lastName = _raw.name.familyName;
+        newRecord.firstName = profile.name.givenName;
+        newRecord.lastName = profile.name.familyName;
+        newRecord.avatar = profile._json.image.url;
         newRecord.googleAccessToken = record.google.accessToken;
         if(record.google.refreshToken){
           newRecord.googleRefreshToken = record.google.refreshToken;
         }
-        newRecord.roleId = record.roleId;
-        newRecord.profileId = record.profileId;
-        newRecord.isVerified = true;
-        newRecord.avatar = _raw.image.url;
+        if(context.method === 'create'){
+          newRecord.roleId = record.roleId;
+          newRecord.profileId = record.profileId;
+          newRecord.isVerified = true;
+        }
         return newRecord;
 
         // GitHub account
@@ -64,20 +66,23 @@ module.exports = function (options = {}) {
         if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}(). `, 'Github account');
         isAccount = true;
         newRecord.githubId = record.githubId;
-        newRecord.email = record.github.profile.emails[0].value;
-        const names = record.github.profile.displayName.trim().split(' ');
+        profile = record.github.profile;
+        newRecord.email = profile._json.email;
+        const names = profile.displayName.trim().split(' ');
         newRecord.firstName = names[0];
         if(names.length > 1){
           newRecord.lastName = names[1];
         }
+        newRecord.avatar = profile._json.avatar_url;
         newRecord.githubAccessToken = record.github.accessToken;
         if(record.github.refreshToken){
           newRecord.githubRefreshToken = record.github.refreshToken;
         }
-        newRecord.roleId = record.roleId;
-        newRecord.profileId = record.profileId;
-        newRecord.isVerified = true;
-        newRecord.avatar = record.github.profile._json.avatar_url;
+        if(context.method === 'create'){
+          newRecord.roleId = record.roleId;
+          newRecord.profileId = record.profileId;
+          newRecord.isVerified = true;
+        }
         return newRecord;
 
         // No accounts

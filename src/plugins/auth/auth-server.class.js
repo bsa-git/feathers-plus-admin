@@ -1,5 +1,6 @@
 const {inspector, readJsonFileSync, stripSpecific, getHookContext, isTrue, appRoot} = require('../lib');
 const {authenticate} = require('@feathersjs/authentication').hooks;
+const {getItems} = require('feathers-hooks-common');
 const crypto = require('crypto');
 const debug = require('debug')('app:plugins.auth-server.class');
 
@@ -35,11 +36,12 @@ const randomDigits = (len) => {
 };
 
 /**
- * Get external Accounts from config
- * @param envAccounts
+ * Get items from env. config
+ * @param value
+ * return {Array}
  */
-const externalAccounts = (envAccounts) => {
-  return stripSpecific(envAccounts, ';').split(';').map(item => item.trim());
+const getEnvItems = (value) => {
+  return stripSpecific(value, ';').split(';').map(item => item.trim());
 };
 
 
@@ -216,8 +218,8 @@ class AuthServer {
   }
 
   /**
-   * Get auth config
-   * @return {Object}
+   * Is auth management from config
+   * @return {Boolean}
    */
   static isAuthMng() {
     return isTrue(process.env.IS_AUTH_MNG);
@@ -229,13 +231,28 @@ class AuthServer {
    * @return {boolean}
    */
   static isUserExternalAccount(user) {
-    let isAccount = false;
-    externalAccounts(process.env.EXTERNAL_ACCOUNTS).forEach(account => {
+    const _externalAccounts = getEnvItems(process.env.EXTERNAL_ACCOUNTS);
+    const found = _externalAccounts.find(function(account) {
       const accountId = `${account}Id`;
-      isAccount = (user && user[accountId]) ? !!user[accountId] : false;
-      if (isAccount) return;
+      return (user && user[accountId])? !!user[accountId] : false;
     });
-    return isAccount;
+    return !!found;
+  }
+
+  static isContextExternalAccount(context) {
+    let result = false;
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    let records = getItems(context);
+    if (Array.isArray(records)) {
+      result = records.find(function(record) {
+        return !AuthServer.isUserExternalAccount(record);
+      });
+
+    } else {
+      result = AuthServer.isUserExternalAccount(records);
+    }
+    return !!result;
   }
 
   /**

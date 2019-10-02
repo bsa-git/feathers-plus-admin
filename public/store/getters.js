@@ -62,23 +62,19 @@ const getters = {
   },
 
   isExternalAccount(state){
-    let isAccount = false;
-    state.config.externalAccounts.forEach(account => {
+    const found = state.config.externalAccounts.find(function(account) {
       const accountId = `${account}Id`;
-      isAccount = (state.auth.user && state.auth.user[accountId])? !!state.auth.user[accountId] : false;
-      if(isAccount) return;
+      return (state.auth.user && state.auth.user[accountId])? !!state.auth.user[accountId] : false;
     });
-    return isAccount;
+    return !!found;
   },
 
   isUserExternalAccount: (state) => (user) => {
-    let isAccount = false;
-    state.config.externalAccounts.forEach(account => {
+    const found = state.config.externalAccounts.find(function(account) {
       const accountId = `${account}Id`;
-      isAccount = (user && user[accountId])? !!user[accountId] : false;
-      if(isAccount) return;
+      return (user && user[accountId])? !!user[accountId] : false;
     });
-    return isAccount;
+    return !!found;
   }
 };
 
