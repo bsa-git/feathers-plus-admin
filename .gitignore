@@ -121,3 +121,4 @@ nuxt-dist/
 docs-dist/
 .env
 .env.prod
+.env.dev

@@ -104,6 +104,13 @@
 
             <v-list-tile avatar>
               <v-list-tile-content>
+                <v-list-tile-title>EXTERNAL_ACCOUNTS</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.externalAccounts }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
                 <v-list-tile-title>ROLES</v-list-tile-title>
                 <v-list-tile-sub-title v-html>{{ config.roles }}</v-list-tile-sub-title>
               </v-list-tile-content>

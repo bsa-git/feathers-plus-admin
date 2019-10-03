@@ -1,8 +1,9 @@
+
 // Hooks for service `users`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
-const {authenticate} = require('@feathersjs/authentication').hooks;
+const { authenticate } = require('@feathersjs/authentication').hooks;
 // eslint-disable-next-line no-unused-vars
-const {hashPassword, protect} = require('@feathersjs/authentication-local').hooks;
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 // eslint-disable-next-line no-unused-vars
 const accountsProfileData = require('./hooks/accounts-profile-data');
 // eslint-disable-next-line no-unused-vars
@@ -18,9 +19,9 @@ const accountNotifier = require('../auth-management/notifier');
 
 // !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
-const {iff} = commonHooks;
+const { iff } = commonHooks;
 // eslint-disable-next-line no-unused-vars
-const {create, update, patch, validateCreate, validateUpdate, validatePatch} = require('./users.validate');
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./users.validate');
 // !end
 
 // !code: init
@@ -101,7 +102,7 @@ let moduleExports = {
     // Your hooks should include:
     //   all   : protect('password') /* Must always be the last hook */
     // !<DEFAULT> code: after
-    all: [protect('password') /* Must always be the last hook */],
+    all: [ protect('password') /* Must always be the last hook */ ],
     find: [],
     get: [],
     create: [],
@@ -122,7 +123,7 @@ let moduleExports = {
     remove: []
     // !end
   },
-  // !code: moduleExports  // !end
+  // !code: moduleExports // !end
 };
 
 // !code: exports

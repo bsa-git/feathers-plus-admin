@@ -152,7 +152,7 @@ class HttpBox extends LocationHelper {
   /**
    * urlEncode
    * made js equivalent to phpencode()
-   * exx. var myOtherUrl = "http://example.com/index.html?url=" + urlEncode(myUrl);
+   * e.g. var myOtherUrl = "http://example.com/index.html?url=" + urlEncode(myUrl);
    *
    * @param str
    * @return {string}

@@ -31,16 +31,11 @@ const authentication = require('./authentication');
 const mongoose = require('./mongoose');
 // !code: imports
 //-----------------
-// const dotenv = require('dotenv');// Loads environment variables from .env file.
 const nuxt = require('./middleware/nuxt');// Loads nuxt middleware
 const useragent = require('express-useragent');// Loads useragent middleware
 //-----------------
 // !end
-// !code: init
-//-----------------
-// dotenv.load(); // Load environment variables
-//-----------------
-// !end
+// !code: init // !end
 
 const app = express(feathers());
 // !code: use_start // !end

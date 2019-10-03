@@ -29,7 +29,7 @@
     "test:debug": "cross-env NODE_ENV=test DEBUG=app:* npm run mocha:debug",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue,styl",
     "build": "nuxt build",
-    "start": "node src/",
+    "start": "cross-env NODE_ENV=production node src/",
     "start:seed": "cross-env NODE_ENV=test node src/ --seed",
     "start-mongod": "mongod -f config/db/mongod.config.yml",
     "generate:nuxt-github": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate",

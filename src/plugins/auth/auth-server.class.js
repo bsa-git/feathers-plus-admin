@@ -171,7 +171,7 @@ class AuthServer {
 
   /**
    * Get list services
-   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * e.g. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
    * @param envServices
    * @return {Object}
    */
@@ -190,7 +190,7 @@ class AuthServer {
 
   /**
    * Get roles
-   * exx. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
    * @param isRole
    * @return {Object}
    */

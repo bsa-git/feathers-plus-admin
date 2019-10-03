@@ -29,12 +29,15 @@ server.on('listening', async () => {
   // !end
   // !code: listening
   //--------------------
+  logger.info('Feathers application started on env="%s"', app.get('env'));
   process.on('nuxt:build:done', (err) => {
     if (err) {
       logger.error(err);
       process.exit(1);
     }
-    logger.info('Nuxt:Build:Done - OK! Feathers application started on http://%s:%d', app.get('host'), port);
+    logger.info('Nuxt:Build:Done - OK!');
+    logger.info('Feathers application started on "http://%s:%d"', app.get('host'), port);
+    logger.info('Feathers application started on env="%s"', app.get('env'));
   });
   //--------------------
   // !end

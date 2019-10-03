@@ -121,7 +121,7 @@ class AuthClient {
 
   /**
    * Get list services
-   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * e.g. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
    * @param envServices
    * @return {Object}
    */
@@ -151,7 +151,7 @@ class AuthClient {
 
   /**
    * Get public services for auth
-   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * e.g. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
    * @return Object
    */
   publicServices() {
@@ -160,7 +160,7 @@ class AuthClient {
 
   /**
    * Get admin services for auth
-   * exx. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
+   * e.g. { users: ['create'], roles: ['find', 'create', 'update', 'patch', 'remove'] }
    * @return Object
    */
   adminServices() {

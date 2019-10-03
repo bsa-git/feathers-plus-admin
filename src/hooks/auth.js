@@ -18,8 +18,8 @@ const authCheck = function (isTest = false) {
     const provider = context.params.provider ? context.params.provider : '';
     if(isTest || (!AuthServer.isTest() && provider)){
       if (isDebug) debug('authCheck: Start');
-      const auth = new AuthServer(context);
-      const isAccess = await auth.isAccess();
+      const authServer = new AuthServer(context);
+      const isAccess = await authServer.isAccess();
       if (!isAccess) {
         throw new errors.Forbidden(`Access to the service method "${context.path}.${context.method}" is denied. Not enough rights`);
       }

@@ -37,7 +37,7 @@ const getters = {
 
   /**
    * Get roles
-   * exx. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
    * @param state
    * @param isRole
    * @return {Object}
