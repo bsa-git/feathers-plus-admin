@@ -13,6 +13,10 @@ const makeClient = require('../../auth/make-client');
 const loginPassword = 'orprotroiyotrtouuikj';
 const loginEmail = 'hdsjkhsdkhfhfd@hgfjffghfgh.com';
 
+const debug = require('debug')('app:authentication.base.test');
+const isDebug = false;
+const isTest = true;
+
 module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   const delayAfterServerOnce = options.delayAfterServerOnce || 500;
   const delayAfterServerClose = options.delayAfterServerClose || 500;
@@ -20,9 +24,9 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   const timeoutForClosingingServerAndClient = options.timeoutForClosingingServerAndClient || 30000;
 
   const defaultJson = require(`${appRoot}/config/default.json`);
-
   const configClient = (defaultJson.tests || {}).client;
-  const port = configClient.port || 3030;
+  const port = !configClient.port? 3030 : (configClient.port === 'PORT')? 3030 : configClient.port;
+  if(isDebug) debug('port:', port);
   const ioOptions = configClient.ioOptions || {
     transports: ['websocket'],
     forceNew: true,
@@ -30,7 +34,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
     extraHeaders: {},
   };
   const primusOptions = configClient.primusOptions || { transformer: 'ws' };
-  const serverUrl = (configClient.restOptions || {}).url || 'http://localhost:3030';
+  const serverUrl =  !configClient.restOptions? 'http://localhost:3030' : (configClient.restOptions.url === 'BASE_URL')? 'http://localhost:3030' : configClient.restOptions.url;
+  if(isDebug) debug('serverUrl:', serverUrl);
   let genSpecs;
 
   // Check if we can seed data.
@@ -44,7 +49,13 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   }
 
   // Check we can run this test.
-  describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
+  describe(`<<< Test "${__filename.substring(__dirname.length + 1)}" >>>`, () => {
+
+    if(!isTest) {
+      debug(`<<< Test "${__filename.substring(__dirname.length + 1)}" - NOT >>>`);
+      return;
+    }
+
     it('Check this test may not seed data', () => {
       // assert.equal(cannotRunTest, '', cannotRunTest);
       assert.strictEqual(cannotRunTest, '', cannotRunTest);
@@ -66,13 +77,16 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
   function tests(seedData, { transports, usersName, usersPath }) {
     transports.forEach(transport => {
 
-      describe(`Test ${transport} transport`, function () {
+      describe(`<<< Test "${transport}" transport >>>`, function () {
         let app;
         let server;
         let appClient;
         let jwt;
 
         before(function (done) {
+
+          if(isDebug)debug('<-- BeforeTest - Start! -->');
+
           this.timeout(timeoutForStartingServerAndClient);
           localStorage.clear();
 
@@ -84,7 +98,6 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
           // Restarting app.*s is required if the last mocha test did REST calls on its server.
           delete require.cache[require.resolve(`${appRoot}/${genSpecs.app.src}/app`)];
           app = require(`${appRoot}/${genSpecs.app.src}/app`);
-
           server = app.listen(port);
           server.once('listening', () => {
             setTimeout(async () => {
@@ -92,7 +105,6 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
               await usersService.remove(null);
               const user = Object.assign({}, usersRecs[0], { email: loginEmail, password: loginPassword });
               await usersService.create(user);
-
               appClient = makeClient({ transport, serverUrl, ioOptions, primusOptions });
 
               done();

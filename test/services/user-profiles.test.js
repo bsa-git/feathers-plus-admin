@@ -5,11 +5,18 @@ const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
 const debug = require('debug')('app:user-profiles.test');
 
 const isLog = false;
+const isTest = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('<<< \'userProfiles\' service >>>', () => {
+describe('<<< services/user-profiles.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test services/user-profiles.test.js - NOT >>>');
+    return;
+  }
+
   it('registered the service', () => {
     const service = app.service('user-profiles');
 

@@ -3,8 +3,17 @@ const assert = require('assert');
 const loPick = require('lodash/pick');
 const {appRoot} = require('../../../../src/plugins/lib');
 const accountsProfileData = require(`${appRoot}/src/services/users/hooks/accounts-profile-data`);
+const debug = require('debug')('app:accounts-profile-data.unit.test');
+
+const isTest = true;
 
 describe('<<< Test users/hooks/accounts-profile-data.unit.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test users/hooks/accounts-profile-data.unit.test.js - NOT >>>');
+    return;
+  }
+
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

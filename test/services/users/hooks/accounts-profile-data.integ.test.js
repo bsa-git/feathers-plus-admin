@@ -4,6 +4,9 @@ const feathers = require('@feathersjs/feathers');
 const loPick = require('lodash/pick');
 const {readJsonFileSync, appRoot} = require('../../../../src/plugins/lib');
 const accountsProfileData = require(`${appRoot}/src/services/users/hooks/accounts-profile-data`);
+const debug = require('debug')('app:accounts-profile-data.integ.test');
+
+const isTest = true;
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
@@ -11,6 +14,12 @@ const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 const fakeDataUser = (fakeData['users'] || [])[0] || {email: 'test@example.com'};
 
 describe('<<< Test users/hooks/accounts-profile-data.integ.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test users/hooks/accounts-profile-data.integ.test.js - NOT >>>');
+    return;
+  }
+
   let app, params;
   // eslint-disable-next-line no-unused-vars
   let service;

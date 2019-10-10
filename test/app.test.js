@@ -3,6 +3,10 @@ const assert = require('assert');
 const rp = require('request-promise');
 const url = require('url');
 const app = require('../src/app');
+const debug = require('debug')('app:app.test');
+
+const isDebug = false;
+const isTest = true;
 
 const port = app.get('port') || 3030;
 const getUrl = pathname => url.format({
@@ -15,7 +19,13 @@ const getUrl = pathname => url.format({
 describe('<<< Feathers application tests >>>', () => {
   let server;
 
+  if(!isTest) {
+    debug('<<< Feathers application tests - NOT >>>');
+    return;
+  }
+
   before(function (done) {
+    if(isDebug) debug('before Start!');
     server = app.listen(port);
     server.once('listening', () => {
       setTimeout(() => done(), 500);
@@ -23,13 +33,14 @@ describe('<<< Feathers application tests >>>', () => {
   });
 
   after(function (done) {
+    if(isDebug) debug('after Start!');
     server.close();
     setTimeout(() => done(), 500);
   });
 
   it('starts and shows the index page', () => {
     return rp(getUrl()).then(body =>
-      assert.ok(body.indexOf('<html>') !== -1, 'response does not contain <html>')
+      assert.ok(body.indexOf('<html>') >= 0, 'response does not contain <html>')
     );
   });
 
@@ -42,7 +53,7 @@ describe('<<< Feathers application tests >>>', () => {
         }
       }).catch(res => {
         assert.strictEqual(res.statusCode, 404, 'unexpected statusCode');
-        assert.ok(res.error.indexOf('<html>') !== -1, 'error does not contain <html>');
+        assert.ok(res.error.indexOf('<html>') >= 0, 'error does not contain <html>');
       });
     });
 

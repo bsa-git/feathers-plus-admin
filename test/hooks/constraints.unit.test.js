@@ -6,12 +6,19 @@ const debug = require('debug')('app:constraints.unit.test');
 
 const isDebug = false;
 const isLog = false;
+const isTest = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 
 describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<< Test /hooks/constraints.unit.test.js - NOT >>');
+    return;
+  }
+
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

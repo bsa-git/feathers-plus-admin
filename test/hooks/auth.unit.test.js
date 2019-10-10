@@ -3,14 +3,19 @@ const {appRoot, inspector} = require('../../src/plugins/lib');
 const authHook = require(`${appRoot}/src/hooks/auth`);
 const {AuthServer} = require(`${appRoot}/src/plugins/auth`);
 const chalk = require('chalk');
-const debug = require('debug')('app:auth.unit.test');
-
 require(`${appRoot}/src/app`);
+const debug = require('debug')('app:auth.unit.test');
 
 const isLog = false;
 const isDebug = false;
+const isTest = true;
 
-describe('<< Test /hooks/auth.unit.test.js >>', () => {
+describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test /hooks/auth.unit.test.js - NOT >>>');
+    return;
+  }
 
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,

@@ -3,12 +3,21 @@ const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
 const normalize = require(`${appRoot}/src/hooks/normalize`);
+const debug = require('debug')('app:normalize.integ.test');
+
+const isTest = true;
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
 const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<< Test /hooks/normalize.integ.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test /hooks/normalize.integ.test.js - NOT >>>');
+    return;
+  }
+
   let app, params;
   // eslint-disable-next-line no-unused-vars
   let service;

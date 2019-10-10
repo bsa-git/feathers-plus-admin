@@ -32,30 +32,40 @@
       "overriddenAuth": {
         "users": {
           "create": "noauth",
+          "get": "auth",
+          "find": "auth",
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
         },
         "roles": {
           "create": "auth",
+          "get": "auth",
+          "find": "auth",
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
         },
         "teams": {
           "create": "auth",
+          "get": "auth",
+          "find": "auth",
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
         },
         "userTeams": {
           "create": "auth",
+          "get": "auth",
+          "find": "auth",
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
         },
         "userProfiles": {
           "create": "noauth",
+          "get": "auth",
+          "find": "auth",
           "update": "auth",
           "patch": "auth",
           "remove": "auth"

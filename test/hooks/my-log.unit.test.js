@@ -1,8 +1,17 @@
 
 const assert = require('assert');
 const myLog = require('../../src/hooks/my-log');
+const debug = require('debug')('app:my-log.unit.test');
 
-describe('Test /hooks/my-log.unit.test.js', () => {
+const isTest = true;
+
+describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test /hooks/my-log.unit.test.js - NOT >>>');
+    return;
+  }
+
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

@@ -79,7 +79,7 @@
     "graphql-resolvers-ast": "^1.4.0",
     "helmet": "^3.15.0",
     "lodash.merge": "^4.6.2",
-    "merge-graphql-schemas": "^1.5.8",
+    "merge-graphql-schemas": "1.5.8",
     "mongodb-core": "^3.1.9",
     "mongoose": "^5.4.1",
     "nodemailer-smtp-transport": "^2.7.4",

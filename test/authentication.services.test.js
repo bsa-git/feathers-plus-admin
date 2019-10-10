@@ -1,5 +1,4 @@
-const {appRoot} = require('../src/plugins/lib/index');
-const { authenticationServices } = require(`${appRoot}/src/plugins/test-helpers`);
+const {appRoot, authenticationServices} = require('../src/plugins');
 // const { join } = require('path');
 // const { authenticationServices } = require('@feathers-plus/test-utils');
 const config = require('../config/default.json');

@@ -5,16 +5,22 @@ const {seedService, graphqlQuery, graphqlExpected} = require(`${appRoot}/src/plu
 const debug = require('debug')('app:graphql.test');
 
 const isLog = false;
+const isTest = true;
+const isSeed = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-const isSeed = true;
 let graphql;
-
 const port = app.get('port') || 3030;
 
-describe('<<< Test \'graphql\' service >>>', () => {
+describe('<<< Test services/graphql.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test Test services/graphql.test.js - NOT >>>');
+    return;
+  }
+
   let server;
 
   before(function (done) {

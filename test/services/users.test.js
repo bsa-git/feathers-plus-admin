@@ -6,11 +6,18 @@ const debug = require('debug')('app:users.test');
 
 const isDebug = false;
 const isLog = false;
+const isTest = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('<<< Test \'users\' service >>>', () => {
+describe('<<< Test services/users.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test services/users.test.js - NOT >>>');
+    return;
+  }
+
   it('registered the service', () => {
     const service = app.service('users');
     assert.ok(service, 'Registered the service');

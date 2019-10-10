@@ -5,11 +5,18 @@ const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:user-teams.service.test');
 
 const isLog = false;
+const isTest = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
-describe('<<< Test \'userTeams\' service >>>', () => {
+describe('<<< Test services/user-teams.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test services/user-teams.test.js - NOT >>>');
+    return;
+  }
+
   it('registered the service', () => {
     const service = app.service('user-teams');
 

@@ -1,8 +1,17 @@
 const assert = require('assert');
 const {appRoot} = require('../../src/plugins/lib');
 const normalize = require(`${appRoot}/src/hooks/normalize`);
+const debug = require('debug')('app:normalize.unit.test');
+
+const isTest = true;
 
 describe('<<< Test /hooks/normalize.unit.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test /hooks/normalize.unit.test.js - NOT >>>');
+    return;
+  }
+
   // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars

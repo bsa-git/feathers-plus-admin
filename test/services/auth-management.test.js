@@ -1,7 +1,16 @@
 const assert = require('assert');
 const app = require('../../src/app');
+const debug = require('debug')('app:auth.unit.test');
 
-describe('\'authManagement\' service', () => {
+const isTest = true;
+
+describe('<<< Test /services/auth-management.test.js >>>', () => {
+
+  if(!isTest) {
+    debug('<<< Test /services/auth-management.test.js >>> - NOT >>>');
+    return;
+  }
+
   it('registered the service', () => {
     const service = app.service('auth-management');
 
