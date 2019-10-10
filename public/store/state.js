@@ -69,6 +69,8 @@ export default () => ({
     baseUrl: process.env.BASE_URL.trim(),
     homePath: process.env.HOME_PATH.trim(),
     //--- SECRETS ---//
+    gmail: process.env.GMAIL.trim(),
+    gmail_password: process.env.GMAIL_PASSWORD.trim(),
     githubId: process.env.GITHUB_ID.trim(),
     githubSecret: process.env.GITHUB_SECRET.trim(),
     googleId: process.env.GOOGLE_ID.trim(),

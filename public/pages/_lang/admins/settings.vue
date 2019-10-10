@@ -64,6 +64,20 @@
 
             <v-list-tile avatar>
               <v-list-tile-content>
+                <v-list-tile-title>GMAIL</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.gmail }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>GMAIL_PASSWORD</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.gmail_password }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
                 <v-list-tile-title>GITHUB_ID</v-list-tile-title>
                 <v-list-tile-sub-title v-html>{{ config.githubId }}</v-list-tile-sub-title>
               </v-list-tile-content>
