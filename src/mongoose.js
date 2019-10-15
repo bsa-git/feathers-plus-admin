@@ -1,5 +1,5 @@
 
-// mongoose.js - Mongoose adapter
+/* mongoose.js - Mongoose adapter*/
 const mongoose = require('mongoose');
 // !code: imports // !end
 // !code: init // !end
