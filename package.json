@@ -65,7 +65,6 @@
     "cookie-storage": "^3.2.0",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
-    "crypto": "^1.0.1",
     "debug": "^4.1.1",
     "detect-lang": "^1.2.0",
     "dotenv": "^6.2.0",
@@ -90,7 +89,7 @@
     "socket.io-client": "^2.2.0",
     "vee-validate": "^2.1.5",
     "vue-i18n": "^8.7.0",
-    "vuetify": "^1.5.6",
+    "vuetify": "^1.5.18",
     "winston": "^3.1.0"
   },
   "devDependencies": {

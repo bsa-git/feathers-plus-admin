@@ -139,15 +139,15 @@
 
             <v-list-tile avatar>
               <v-list-tile-content>
-                <v-list-tile-title>ADMIN_PATHS</v-list-tile-title>
-                <v-list-tile-sub-title v-html>{{ config.adminPaths }}</v-list-tile-sub-title>
+                <v-list-tile-title>PUBLIC_SERVICES</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.publicServices }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 
             <v-list-tile avatar>
               <v-list-tile-content>
-                <v-list-tile-title>PUBLIC_SERVICES</v-list-tile-title>
-                <v-list-tile-sub-title v-html>{{ config.publicServices }}</v-list-tile-sub-title>
+                <v-list-tile-title>ADMIN_PATHS</v-list-tile-title>
+                <v-list-tile-sub-title v-html>{{ config.adminPaths }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 
