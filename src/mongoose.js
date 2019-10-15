@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 module.exports = function (app) {
   mongoose.Promise = global.Promise;
-  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true })
+  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true, useUnifiedTopology: true })
     .then(({ connection }) => {
       // eslint-disable-next-line no-console
       console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`);
