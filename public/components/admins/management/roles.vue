@@ -1,60 +1,72 @@
 <template>
   <div>
     <!-- Confirm Dialog -->
-    <v-dialog v-model="confirmDialog" persistent max-width="320">
-      <v-card>
-        <v-card-title class="headline">{{ $t('management.confirm_delete_title') }}?</v-card-title>
-        <v-card-text>
-          {{ $t('management.confirm_delete_description') }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat @click="confirmDialog = false">{{ $t('management.disagree') }}</v-btn>
-          <v-btn color="primary" flat @click="deleteItem">{{ $t('management.agree') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!--<v-dialog v-model="confirmDialog" persistent max-width="320">-->
+    <!--<v-card>-->
+    <!--<v-card-title class="headline">{{ $t('management.confirm_delete_title') }}?</v-card-title>-->
+    <!--<v-card-text>-->
+    <!--{{ $t('management.confirm_delete_description') }}-->
+    <!--</v-card-text>-->
+    <!--<v-card-actions>-->
+    <!--<v-spacer></v-spacer>-->
+    <!--<v-btn @click="confirmDialog = false">{{ $t('management.disagree') }}</v-btn>-->
+    <!--<v-btn color="primary" @click="deleteItem">{{ $t('management.agree') }}</v-btn>-->
+    <!--</v-card-actions>-->
+    <!--</v-card>-->
+    <!--</v-dialog>-->
+
+    <!-- Confirm Dialog -->
+    <confirm-dialog
+      :confirm-dialog="confirmDialog"
+      :title-dialog="$t('management.confirm_delete_title')"
+      :text-dialog="$t('management.confirm_delete_description')"
+      :run-action="deleteItem"
+      v-on:onCloseDialog="confirmDialog = false"
+    ></confirm-dialog>
+
     <!-- Users for role dialog -->
     <v-dialog v-model="roleUsersDialog" scrollable max-width="400px">
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3">security</v-icon>
-          <span>{{ selItem.roleName }}</span>
-        </v-card-title>
-        <v-divider></v-divider>
+        <!-- Toolbar -->
+        <v-toolbar color="primary" dark>
+          <v-icon class="mr-3">mdi-security</v-icon>
+          <v-toolbar-title>{{ selItem.roleName }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon v-on:click="roleUsersDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <!-- Text content -->
         <v-card-text style="height: 300px;">
           <v-list three-line>
             <template v-for="(user, index) in selItem.users">
-              <v-list-tile
+              <v-list-item
                 :key="user.id"
-                avatar
-                @click=""
               >
-                <v-list-tile-avatar>
-                  <img :src="user.avatar">
-                </v-list-tile-avatar>
-
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="user.fullName"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="`<span class='font-italic'>Email:</span> ${user.email}`"></v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <!--<v-divider v-if="index < selItem.users.length - 1"></v-divider>-->
+                <v-list-item-avatar><img :src="user.avatar"></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-html="user.fullName"></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-html="`<span class='font-italic'>Email:</span> ${user.email}`"></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
             </template>
           </v-list>
         </v-card-text>
         <v-divider></v-divider>
+        <!-- Actions -->
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="roleUsersDialog = false">{{ $t('management.close') }}</v-btn>
+          <v-btn text class="mx-auto mb-3" color="primary" @click="roleUsersDialog = false">{{ $t('management.close')
+            }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <!-- Toolbar for table -->
-    <v-toolbar flat color="white">
+    <v-sheet class="d-flex align-baseline mb-5">
       <v-text-field
         v-model="search"
-        append-icon="search"
+        append-icon="fas fa-search"
         :label="$t('management.search')"
         single-line
         hide-details
@@ -62,119 +74,125 @@
       <v-spacer></v-spacer>
       <!-- Save Dialog -->
       <v-dialog v-model="dialog" max-width="620">
+        <!-- Activator -->
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on">{{ $t('management.new_item') }}</v-btn>
+          <v-btn text color="primary" v-on="on">{{ $t('management.new_item') }}</v-btn>
         </template>
-        <v-card class="elevation-1 pa-3">
+        <!-- Content Dialog -->
+        <v-card>
+          <!-- Toolbar -->
+          <v-card-title>
+            <v-spacer></v-spacer>
+            <v-btn icon v-on:click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <!-- Role Form -->
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
-              <div class="layout column align-center">
-                <!--<v-icon size="120">security</v-icon>-->
+              <div class="text-center">
                 <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
               </div>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12>
-                    <v-text-field
-                      :counter="60"
-                      v-validate="'required|max:60'"
-                      :error-messages="errors.collect('roleName')"
-                      data-vv-name="roleName"
-                      v-model="editedItem.roleName"
-                      :label="$t('management.roleName')"
-                      :hint="$t('management.matchEnvValue')"
-                      persistent-hint
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-textarea
-                      v-model="editedItem.description"
-                      :value="editedItem.description"
-                      :label="$t('management.formDescription')"
-                    ></v-textarea>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-autocomplete
-                      v-model="editedItem.userIds"
-                      :items="users"
-                      box
-                      chips
-                      :label="$t('management.selectUsers')"
-                      item-text="fullName"
-                      item-value="id"
-                      multiple
-                    >
-                      <template v-slot:selection="data">
-                        <v-chip
-                          :selected="data.selected"
-                          close
-                          class="chip--select-multi"
-                          @input="deleteItemFromSelection(data.item)"
-                        >
-                          <v-avatar>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    :counter="60"
+                    v-validate="'required|max:60'"
+                    :error-messages="errors.collect('roleName')"
+                    data-vv-name="roleName"
+                    v-model="editedItem.roleName"
+                    :label="$t('management.roleName')"
+                    :hint="$t('management.matchEnvValue')"
+                    persistent-hint
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    v-model="editedItem.description"
+                    :value="editedItem.description"
+                    :label="$t('management.formDescription')"
+                  ></v-textarea>
+                </v-col>
+                <v-col cols="12">
+                  <v-autocomplete
+                    v-model="editedItem.userIds"
+                    :items="users"
+                    filled
+                    chips
+                    :label="$t('management.selectUsers')"
+                    item-text="fullName"
+                    item-value="id"
+                    multiple
+                  >
+                    <template v-slot:selection="data">
+                      <v-chip
+                        :input-value="data.selected"
+                        close
+                        class="chip--select-multi"
+                        @input="deleteItemFromSelection(data.item)"
+                      >
+                        <v-avatar>
                           <img :src="data.item.avatar">
-                          </v-avatar>
-                          {{ data.item.fullName }}
-                        </v-chip>
-                      </template>
-                    </v-autocomplete>
-                  </v-flex>
-                </v-layout>
-              </v-container>
+                        </v-avatar>
+                        {{ data.item.fullName }}
+                      </v-chip>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+              </v-row>
             </v-card-text>
+            <!-- Actions -->
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn block color="primary" type="submit" :loading="loadingSubmit">
+              <v-btn color="primary" type="submit" :loading="loadingSubmit">
                 {{ $t('management.save') }}
               </v-btn>
-              <v-btn block @click="close">
+              <v-btn @click="close">
                 {{ $t('management.cancel') }}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
       </v-dialog>
-    </v-toolbar>
+    </v-sheet>
     <!-- Data Table -->
     <v-data-table
       :headers="headers"
       :items="roles"
       :search="search"
-      class="elevation-1"
     >
-      <template v-slot:items="props">
-        <td>{{ props.item.id }}</td>
-        <td>{{ props.item.roleName }}</td>
-        <td>{{ props.item.description }}</td>
-        <td>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" flat icon v-if="props.item.userNames === ''"><v-icon>code</v-icon></v-btn>
-              <v-btn v-on="on" flat icon v-else><v-icon @click="clickItem(props.item)">settings_ethernet</v-icon></v-btn>
-            </template>
-            <span>{{ props.item.userNames === '' ? '[ ]' : props.item.userNames}}</span>
-          </v-tooltip>
-        </td>
-        <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="clickEditItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="clickDeleteItem(props.item)"
-            :disabled="!isDelete(props.item.roleName)"
-          >
-            delete
-          </v-icon>
-        </td>
+      <!-- Field userNames -->
+      <template v-slot:item.userNames="{ item }">
+        <v-btn icon v-if="item.userNames" @click="clickItem(item)">
+          <v-badge color="red" overlap>
+            <template v-slot:badge>{{ item.userIds.length }}</template>
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-badge>
+        </v-btn>
+        <v-icon v-else>mdi-code-brackets</v-icon>
       </template>
+      <!-- Field Actions -->
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="clickEditItem(item)"
+          :title="$t('common.edit')"
+        >fas fa-pencil-alt
+        </v-icon>
+        <v-icon
+          small
+          @click="clickDeleteItem(item)"
+          :disabled="isYouSelf(item.id)"
+          :title="$t('common.remove')"
+        >fas fa-trash-alt
+        </v-icon>
+      </template>
+      <!-- No Data -->
       <template v-slot:no-data>
         <span color="primary" class="headline">{{ $t('management.noData') }}</span>
       </template>
+
       <template v-slot:no-results>
         <v-alert :value="true" color="error" icon="warning">
           {{ $t('management.searchNoResults') }}
@@ -186,6 +204,8 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
+  import ConfirmDialog from '~/components/layout/ConfirmDialog';
+
   const errors = require('@feathersjs/errors');
   const debug = require('debug')('app:comp.admins-management-roles');
 
@@ -196,6 +216,9 @@
     $_veeValidate: {
       validator: 'new'
     },
+    components: {
+      ConfirmDialog,
+    },
     data: () => ({
       search: '',
       dialog: false,
@@ -204,12 +227,12 @@
       loadingSubmit: false,
       error: undefined,
       headers: [
-        {
-          text: 'ID',
-          align: 'left',
-          value: 'id',
-          sortable: false,
-        },
+//        {
+//          text: 'ID',
+//          align: 'left',
+//          value: 'id',
+//          sortable: false,
+//        },
         {
           text: 'Role Name',
           align: 'left',
@@ -229,7 +252,7 @@
         },
         {
           text: 'Actions',
-          value: 'name',
+          value: 'actions',
           sortable: false
         }
       ],
@@ -316,38 +339,31 @@
       }
     },
     methods: {
-
       isDelete(roleName) {
         return !this.isEnvRole(roleName);
       },
-
-      isYouSelf(userId) {
-        const idField = this.$store.state.users.idField;
-        return userId === this.user[idField];
+      isYouSelf(roleId) {
+        const myRoleId = this.user? this.user['roleId'] : '';
+        return roleId === myRoleId;
       },
-
       clickEditItem(item) {
         this.editedIndex = this.roles.indexOf(item);
         const role = this.getRole(item.id);
         this.editedItem = Object.assign({}, role);
         this.dialog = true;
       },
-
       clickDeleteItem(item) {
         this.idItem = item.id;
         this.confirmDialog = true;
       },
-
       clickItem(item) {
         this.selItem = item;
         this.roleUsersDialog = true;
       },
-
       deleteItemFromSelection(item) {
         const index = this.editedItem.userIds.indexOf(item.id);
         if (index >= 0) this.editedItem.userIds.splice(index, 1)
       },
-
       close() {
         this.dialog = false;
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -355,11 +371,9 @@
         this.$validator.reset();
         this.dismissError();
       },
-
       dismissError() {
         this.error = undefined;
       },
-
       getRole(id) {
         const idFieldRole = this.$store.state.roles.idField;
         const {Role} = this.$FeathersVuex;
@@ -376,7 +390,6 @@
         if (isLog) debug('getRole.item:', item);
         return item
       },
-
       async onSubmit() {
         try {
           this.dismissError();
@@ -405,7 +418,6 @@
           if (isLog) debug('onSubmit.error:', error);
         }
       },
-
       async save(data) {
         const idField = this.$store.state.roles.idField;
         const {Role} = this.$FeathersVuex;
@@ -435,7 +447,6 @@
           }
         }
       },
-
       async updateUserIds(roleId, userIds = []) {
         try {
           if (isDebug) debug('updateUserIds.roleId:', roleId, 'userIds:', userIds);
@@ -484,7 +495,6 @@
           this.showError(error.message);
         }
       },
-
       async deleteItem() {
         try {
           this.confirmDialog = false;

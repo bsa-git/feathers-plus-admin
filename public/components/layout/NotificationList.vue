@@ -1,43 +1,32 @@
 <template>
-  <v-card class="elevation-0">
-    <v-toolbar card dense color="transparent">
-      <v-toolbar-title><h4>{{ $t('app_notification.notification') }}</h4></v-toolbar-title>
-    </v-toolbar>
-    <v-divider></v-divider>
-    <v-card-text class="pa-0">
-      <v-list two-line class="pa-0">
-        <template v-for="(item, index) in notes">
-          <v-subheader v-if="item.header" :key="item.header">{{ $t(`app_notification.${item.name}`) }}</v-subheader>
-          <v-divider v-else-if="item.divider" :key="index"></v-divider>
-          <v-list-tile avatar v-else :key="item.title" @click="handleClick">
-            <v-list-tile-avatar :color="item.color">
-              <v-icon dark>{{item.icon}}</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-sub-title>{{ $t(`app_notification.${item.name}`) }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action class="caption">
-              {{item.timeLabel}}
-            </v-list-tile-action>
-          </v-list-tile>
-        </template>
-      </v-list>
-      <v-divider></v-divider>
-      <v-btn block flat class="ma-0">{{ $t('app_notification.show_all') }}</v-btn>
-      <v-divider></v-divider>
-    </v-card-text>
-  </v-card>
+  <v-list>
+    <template v-for="(item, index) in notes">
+      <v-subheader v-if="item.header" :key="item.header">{{ $t(`app_notification.${item.name}`) }}</v-subheader>
+      <v-divider v-else-if="item.divider" :key="index"></v-divider>
+      <v-list-item v-else :key="item.title" @click="handleClick">
+        <v-list-item-avatar :color="item.color">
+          <v-icon dark>{{item.icon}}</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-subtitle>{{ $t(`app_notification.${item.name}`) }}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action-text>
+          {{item.timeLabel}}
+        </v-list-item-action-text>
+      </v-list-item>
+    </template>
+  </v-list>
 </template>
 
 <script>
-export default {
-  props: {
-    notes: Array
-  },
-  methods: {
-    handleClick: (e) => {
-      console.log(e);
-    }
-  },
-};
+  export default {
+    props: {
+      notes: Array
+    },
+    methods: {
+      handleClick: (e) => {
+        console.log(e);
+      }
+    },
+  };
 </script>

@@ -1,92 +1,92 @@
 <template>
-  <v-container fluid>
+  <div>
     <!-- Dialog for items -->
     <v-dialog v-model="dialog" scrollable max-width="570px">
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3">check_circle_outline</v-icon>
-          <span class="headline">{{`${modelName} ${itemName? ' - ' + itemName : ''}`}}</span>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text style="">
+        <!-- Toolbar -->
+        <v-toolbar color="primary" dark>
+          <v-icon class="mr-3">mdi-account-check</v-icon>
+          <v-toolbar-title>{{`${modelName} ${itemName ? ' - ' + itemName : ''}`}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon v-on:click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <!-- Text content -->
+        <v-card-text>
           <v-list three-line>
             <template v-for="(item, index) in selItems">
-              <v-list-tile
+              <v-list-item
                 :key="index"
                 @click=""
               >
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="item[0] + ' :'"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="item[1]"></v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
+                <v-list-item-content>
+                  <v-list-item-title v-html="item[0] + ' :'"></v-list-item-title>
+                  <v-list-item-subtitle v-html="item[1]"></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
             </template>
           </v-list>
         </v-card-text>
         <v-divider></v-divider>
+        <!-- Actions -->
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="dialog = false">{{ $t('management.close') }}</v-btn>
+          <v-btn text class="mx-auto mb-3" color="primary" @click="dialog = false">{{ $t('management.close') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- Expansion panels -->
+    <!-- Page Header -->
     <app-page-header
-      :app-menu="appMenu"
-      :home-path="config.homePath"
+      :page-title="description"
     ></app-page-header>
-    <v-flex xs10 offset-xs1>
-      <div class="text-xs-center">
-        <div class="exotic--light display-1 my-3">{{ description }}</div>
+    <div>
+      <!-- Bootons -->
+      <div class="d-flex justify-space-around mb-3">
+        <v-btn text color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
+        <v-btn text color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
       </div>
-      <div class="d-flex justify-between align-center mb-3">
-        <v-btn color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
-        <v-btn color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
-      </div>
-
-      <v-expansion-panel
+      <!-- Expansion panels -->
+      <v-expansion-panels
         v-model="panels"
-        expand
-        light
+        focusable
+        multiple
+        inset
       >
-        <v-expansion-panel-content
+        <v-expansion-panel
           v-for="(item,i) in items"
           :key="i"
         >
-          <template v-slot:header>
-            <div>
-              <v-icon>{{ item.icon }}</v-icon>
-              {{ item.name }}
+          <v-expansion-panel-header>
+            <div class="d-flex align-baseline">
+              <v-icon class="mr-3">{{ item.icon }}</v-icon>
+              <span>{{ item.name }}</span>
             </div>
-          </template>
-          <v-card>
-            <v-card-text class="grey lighten-3">
-              <admins-accounts-users
-                v-if="item.panel === 'users'"
-                :get-sel-object="getSelObject"
-                v-on:onOpenDialog="dialog = true"
-              ></admins-accounts-users>
-              <admins-accounts-roles
-                v-else-if="item.panel === 'roles'"
-                :get-sel-object="getSelObject"
-                v-on:onOpenDialog="dialog = true"
-              ></admins-accounts-roles>
-              <admins-accounts-teams
-                v-else-if="item.panel === 'teams'"
-                :get-sel-object="getSelObject"
-                v-on:onOpenDialog="dialog = true"
-              ></admins-accounts-teams>
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-flex>
-  </v-container>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <admins-accounts-users
+              v-if="item.panel === 'users'"
+              :get-sel-object="getSelObject"
+              v-on:onOpenDialog="dialog = true"
+            ></admins-accounts-users>
+            <admins-accounts-roles
+              v-else-if="item.panel === 'roles'"
+              :get-sel-object="getSelObject"
+              v-on:onOpenDialog="dialog = true"
+            ></admins-accounts-roles>
+            <admins-accounts-teams
+              v-else-if="item.panel === 'teams'"
+              :get-sel-object="getSelObject"
+              v-on:onOpenDialog="dialog = true"
+            ></admins-accounts-teams>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
+  </div>
 </template>
 
 <script>
   import {mapGetters} from 'vuex'
-  import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
   import AdminsAccountsUsers from '~/components/admins/accounts/users';
   import AdminsAccountsRoles from '~/components/admins/accounts/roles';
@@ -111,23 +111,22 @@
         modelName: '',
         itemName: '',
         selItems: [],
-        appMenu: appMenu,
         panels: [],
         items: [
           {
             panel: 'users',
             name: this.$t('accounts.users'),
-            icon: 'wc'
+            icon: 'mdi-account-multiple'
           },
           {
             panel: 'roles',
             name: this.$t('accounts.roles'),
-            icon: 'security'
+            icon: 'mdi-security'
           },
           {
             panel: 'teams',
             name: this.$t('accounts.teams'),
-            icon: 'group'
+            icon: 'mdi-account-group'
           },
         ]
       }
@@ -148,7 +147,7 @@
     methods: {
       // Open the panels
       allOpen() {
-        this.panels = this.items.map(item => true)
+        this.panels = this.items.map((item, i) => i)
       },
       // Reset the panels
       allClose() {
@@ -178,7 +177,7 @@
         //----------------------------------------
         const id = selItem.split('_')[1];
         let model = selItem.split('.')[0];
-        if(isDebug) debug('getSelObject.model:', model);
+        if (isDebug) debug('getSelObject.model:', model);
         this.modelName = model;
         const fieldName = this.getFieldName(model);
         model = this.$FeathersVuex[model];

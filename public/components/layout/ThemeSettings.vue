@@ -6,44 +6,41 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-container>
-      <v-layout column>
-        <v-flex>
-          <v-subheader class="px-1 my-2">
-            {{ $t('theme_settings.color_option') }}
-          </v-subheader>
-          <div class="color-option">
-            <v-layout wrap>
-              <label class="color-option--label flex xs6 pa-1" v-for="(option,index) in colorOptions" :key="index">
-                <input type="radio" name="color" v-bind:value="option.key" v-model="themeColor">
-                <span class="color-option--item bg">
-                  <span class="overlay">
-                    <span class="material-icons">check</span>
-                  </span>
-                  <span class="color-option--item--header sideNav" :class="option.value.sideNav"></span>
-                  <span class="color-option--item--header mainNav" :class="option.value.mainNav"></span>
-                  <span class="sideMenu" :class="option.value.sideMenu"></span>
-                </span>
-              </label>
-            </v-layout>
-          </div>
-          <div class="theme-options">
-            <v-subheader class="px-1 my-2">
-              {{ $t('theme_settings.sidebar_option') }}
-            </v-subheader>
-            <v-divider></v-divider>
-            <div class="my-3">
-              <v-btn-toggle v-model="sideBarOption">
-                <v-btn flat value="dark">
-                  {{ $t('theme_settings.dark') }}
-                </v-btn>
-                <v-btn flat value="light">
-                  {{ $t('theme_settings.light') }}
-                </v-btn>
-              </v-btn-toggle>
-            </div>
-          </div>
-        </v-flex>
-      </v-layout>
+      <v-subheader class="px-1 my-2">
+        {{ $t('theme_settings.color_option') }}
+      </v-subheader>
+      <v-row>
+        <v-col cols="6" class="color-option " v-for="(option,index) in colorOptions" :key="index">
+          <!-- Color box -->
+          <label class="color-option--label ">
+            <input type="radio" name="color" v-bind:value="option.key" v-model="themeColor">
+            <span class="color-option--item bg">
+              <span class="overlay">
+                <v-icon color="white">mdi-check</v-icon>
+              </span>
+              <span class="color-option--item--header sideNav" :class="option.value.sideNav"></span>
+              <span class="color-option--item--header mainNav" :class="option.value.mainNav"></span>
+              <span class="sideMenu" :class="option.value.sideMenu"></span>
+            </span>
+          </label>
+        </v-col>
+      </v-row>
+      <div class="theme-options">
+        <v-subheader class="px-1 my-2">
+          {{ $t('theme_settings.sidebar_option') }}
+        </v-subheader>
+        <v-divider></v-divider>
+        <div class="my-3">
+          <v-btn-toggle v-model="sideBarOption">
+            <v-btn value="dark">
+              {{ $t('theme_settings.dark') }}
+            </v-btn>
+            <v-btn value="light">
+              {{ $t('theme_settings.light') }}
+            </v-btn>
+          </v-btn-toggle>
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
@@ -76,9 +73,10 @@
     watch: {
       themeColor: {
         handler(val) {
-          const color = this.$colors[val].base;
+          const primaryColor = this.$colors[val].base;
           if (this.changedColor) {
-            this.$vuetify.theme.primary = color;
+            this.$vuetify.theme.themes.dark.primary = primaryColor;
+            this.$vuetify.theme.themes.light.primary = primaryColor;
             this.setThemePrimary(val);
           } else {
             this.changedColor = true;
@@ -91,13 +89,13 @@
       },
       sideBarOption: {
         handler(val) {
-          const dark = (val === 'dark');
+          const isDark = (val === 'dark');
           if (this.changedDark) {
-            this.$vuetify.dark = dark;
-            this.setThemeDark(dark);
+            this.$vuetify.theme.dark = isDark;
+            this.setThemeDark(isDark);
           } else {
             this.changedDark = true;
-            if (this.theme.dark !== dark) {
+            if (this.theme.dark !== isDark) {
               this.sideBarOption = this.theme.dark ? 'dark' : 'light';
             }
           }
@@ -105,10 +103,9 @@
         immediate: true
       }
     },
-
   };
 </script>
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
   .color-option
     &--label
       position: relative
@@ -119,33 +116,33 @@
         & + span
           position: relative
           & > .overlay
-            display: none;
+            display: none
             position: absolute
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, .3);
-            text-align: center;
-            line-height: 30px;
-            color: #fff;
+            top: 0
+            bottom: 0
+            right: 0
+            left: 0
+            width: 100%
+            height: 100%
+            background-color: rgba(0, 0, 0, .3)
+            text-align: center
+            line-height: 30px
+            color: #fff
         &:checked + span > .overlay
           display: block
       & .bg
         background-color: #f1f1f1
     &--item
-      overflow: hidden;
-      display: block;
-      box-shadow: 0 0 2px rgba(0, 0, 0, .1);
-      margin-bottom: 15px;
+      overflow: hidden
+      display: block
+      box-shadow: 0 0 2px rgba(0, 0, 0, .1)
+      border: 1px solid lightgray
       &--header
         height: 10px
       & > span
-        display: block;
-        float: left;
-        width: 50%;
-        height: 20px;
+        display: block
+        float: left
+        width: 50%
+        height: 20px
 </style>
 

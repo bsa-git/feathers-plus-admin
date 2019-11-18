@@ -2,6 +2,7 @@
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
 const loConcat = require('lodash/concat');
+const debug = require('debug')('app:plugin.index');
 
 const appMenu = require('./public/api/data/app-menu');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
@@ -68,7 +69,8 @@ module.exports = {
     //   '/ru/widgets/statistic',
     //   '/ru/widgets/widget-list',
     //   '/ru/dashboard'
-    // ]// getRoutePaths(appMenu);
+    // ]
+    // getRoutePaths(appMenu);
     routes: getRoutePaths ? getRoutePaths(appMenu) : []
   },
   /*
@@ -84,16 +86,15 @@ module.exports = {
     ],
     link: [
       {rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico'},
-      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'},
-      {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'}
+      // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'},
+      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900'},
+      // https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet
+      {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'},
+      // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Playball'}
     ],
     script: [
       // {src: '/static/js/polyfills/polyfill.min.js'}
-      // { src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=default,fetch,Object.entries' },
-      // https://polyfill.io/v3/polyfill.min.js?flags=always&features=default%2CObject.assign%2CObject.create%2CObject.defineProperties%2CObject.defineProperty%2CObject.entries%2CObject.freeze%2CObject.getOwnPropertyDescriptor%2CObject.getOwnPropertyNames%2CObject.getPrototypeOf%2CObject.is%2CObject.keys%2CObject.setPrototypeOf%2CObject.values
-      {src: 'https://polyfill.io/v3/polyfill.min.js?features=default'},
-      // { src: 'https://polyfill.io/v3/polyfill.min.js?features=default%2CObject.assign%2CObject.create%2CObject.defineProperties%2CObject.defineProperty%2CObject.entries%2CObject.freeze%2CObject.getOwnPropertyDescriptor%2CObject.getOwnPropertyNames%2CObject.getPrototypeOf%2CObject.is%2CObject.keys%2CObject.setPrototypeOf%2CObject.values' },
-
+      // {src: 'https://polyfill.io/v3/polyfill.min.js?features=default%2Ces6'}
     ],
   },
   router: {
@@ -110,19 +111,29 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '~/assets/style/vuetify.styl',
-    '~/assets/style/app.styl'
+    // '~/assets/style/vuetify.styl',
+    // '~/assets/style/app.styl'
+    // '~/assets/style/vuetify.sass',
+    // '~/assets/style/app.sass'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [/*'@/plugins/polyfills/polyfill.min',*/ '@/plugins/index'],
+  plugins: ['@/plugins/index'],
 
   /*
   ** Nuxt.js modules
   */
-  modules: [],
+  buildModules: ['@nuxtjs/vuetify'],
+
+  /*
+  ** Doc: https://github.com/nuxt-community/vuetify-module
+  */
+  vuetify: {
+    customVariables: ['~/assets/style/app.sass']
+  },
+
   /*
   ** Build configuration
   */

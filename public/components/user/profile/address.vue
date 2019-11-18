@@ -1,111 +1,110 @@
 <template>
   <v-container fluid>
     <v-form @submit.prevent="onSubmit">
-      <v-container grid-list-md>
-        <v-layout wrap>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="'max:15'"
-              :error-messages="errors.collect('addressSuite')"
-              data-vv-name="addressSuite"
-              v-model="model.addressSuite"
-              :label="$t('profile.addressSuite')"
-            ></v-text-field>
-          </v-flex>
-
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="25"
-              v-validate="'max:25'"
-              :error-messages="errors.collect('addressStreet')"
-              data-vv-name="addressStreet"
-              v-model="model.addressStreet"
-              :label="$t('profile.addressStreet')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="25"
-              v-validate="'max:25'"
-              :error-messages="errors.collect('addressCity')"
-              data-vv-name="addressCity"
-              v-model="model.addressCity"
-              :label="$t('profile.addressCity')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="{ regex: $util.getRegex('zip_code')}"
-              :error-messages="errors.collect('addressZipCode')"
-              data-vv-name="addressZipCode"
-              v-model="model.addressZipCode"
-              :label="$t('profile.addressZipCode')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="'max:15'"
-              :error-messages="errors.collect('addressState')"
-              data-vv-name="addressState"
-              v-model="model.addressState"
-              :label="$t('profile.addressState')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="5"
-              v-validate="'max:5'"
-              :error-messages="errors.collect('addressStateAbbr')"
-              data-vv-name="addressStateAbbr"
-              v-model="model.addressStateAbbr"
-              :label="$t('profile.addressStateAbbr')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="25"
-              v-validate="'max:25'"
-              :error-messages="errors.collect('addressCountry')"
-              data-vv-name="addressCountry"
-              v-model="model.addressCountry"
-              :label="$t('profile.addressCountry')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="5"
-              v-validate="'max:5'"
-              :error-messages="errors.collect('addressCountryCode')"
-              data-vv-name="addressCountryCode"
-              v-model="model.addressCountryCode"
-              :label="$t('profile.addressCountryCode')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="10"
-              v-validate="{ regex: $util.getRegex('lat')}"
-              :error-messages="errors.collect('addressLatitude')"
-              data-vv-name="addressLatitude"
-              v-model="model.addressLatitude"
-              :label="$t('profile.addressLatitude')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="10"
-              v-validate="{ regex: $util.getRegex('long')}"
-              :error-messages="errors.collect('addressLongitude')"
-              data-vv-name="addressLongitude"
-              v-model="model.addressLongitude"
-              :label="$t('profile.addressLongitude')"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <!--<v-container grid-list-md>-->
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="'max:15'"
+            :error-messages="errors.collect('addressSuite')"
+            data-vv-name="addressSuite"
+            v-model="model.addressSuite"
+            :label="$t('profile.addressSuite')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="25"
+            v-validate="'max:25'"
+            :error-messages="errors.collect('addressStreet')"
+            data-vv-name="addressStreet"
+            v-model="model.addressStreet"
+            :label="$t('profile.addressStreet')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="25"
+            v-validate="'max:25'"
+            :error-messages="errors.collect('addressCity')"
+            data-vv-name="addressCity"
+            v-model="model.addressCity"
+            :label="$t('profile.addressCity')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="{ regex: $util.getRegex('zip_code')}"
+            :error-messages="errors.collect('addressZipCode')"
+            data-vv-name="addressZipCode"
+            v-model="model.addressZipCode"
+            :label="$t('profile.addressZipCode')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="'max:15'"
+            :error-messages="errors.collect('addressState')"
+            data-vv-name="addressState"
+            v-model="model.addressState"
+            :label="$t('profile.addressState')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="5"
+            v-validate="'max:5'"
+            :error-messages="errors.collect('addressStateAbbr')"
+            data-vv-name="addressStateAbbr"
+            v-model="model.addressStateAbbr"
+            :label="$t('profile.addressStateAbbr')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="25"
+            v-validate="'max:25'"
+            :error-messages="errors.collect('addressCountry')"
+            data-vv-name="addressCountry"
+            v-model="model.addressCountry"
+            :label="$t('profile.addressCountry')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="5"
+            v-validate="'max:5'"
+            :error-messages="errors.collect('addressCountryCode')"
+            data-vv-name="addressCountryCode"
+            v-model="model.addressCountryCode"
+            :label="$t('profile.addressCountryCode')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="10"
+            v-validate="{ regex: $util.getRegex('lat')}"
+            :error-messages="errors.collect('addressLatitude')"
+            data-vv-name="addressLatitude"
+            v-model="model.addressLatitude"
+            :label="$t('profile.addressLatitude')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="10"
+            v-validate="{ regex: $util.getRegex('long')}"
+            :error-messages="errors.collect('addressLongitude')"
+            data-vv-name="addressLongitude"
+            v-model="model.addressLongitude"
+            :label="$t('profile.addressLongitude')"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">
@@ -132,8 +131,7 @@
     $_veeValidate: {
       validator: 'new'
     },
-    components: {
-    },
+    components: {},
     data() {
       return {
         loadingSubmit: false,

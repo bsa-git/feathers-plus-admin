@@ -1,26 +1,28 @@
 <template>
-  <v-layout align-center justify-center row>
+  <!-- mx-auto -->
+  <div class="d-flex mx-auto">
     <div class="mr-3 hidden-sm-and-down">
       <img src="/static/img/error/403.svg" alt="">
     </div>
-    <div class="error-box text-md-center">
-      <h1>403</h1>
-      <h2 class="my-3 headline ">{{ $t('error.sorry_access_denied') }}.</h2>
+    <div class="error-box text-center">
+      <h1 :class="`exotic--${theme.name}`">403</h1>
+      <h2 :class="`exotic--${theme.name} my-3 headline`">{{ $t('error.sorry_access_denied') }}.</h2>
       <div>
         <v-btn color="primary" @click="goHome">{{ $t('error.go_home') }}</v-btn>
       </div>
     </div>
-  </v-layout>
+  </div>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
+
   export default {
     layout: 'stand-alone',
     data() {
       return {
         title: `${this.$t('error.title')}: 403`,
-        description: this.$t('error.access_denied'),
-        homePath: this.$i18n.path(process.env.HOME_PATH)
+        description: this.$t('error.access_denied')
       }
     },
     head() {
@@ -32,21 +34,17 @@
         link: []
       }
     },
+    computed: {
+      ...mapGetters({
+        config: 'getConfig',
+        theme: 'getTheme',
+      })
+    },
     methods: {
       goHome() {
-        this.$router.push({path: this.homePath});
+        this.$router.push({path: this.$i18n.path(this.config.homePath)});
       }
     }
   };
 </script>
-
-<style lang="stylus" scoped>
-  .error-box h1 {
-    font-size: 150px;
-    line-height: 150px;
-    font-weight: 700;
-    color: #252932;
-    text-shadow: rgba(61, 61, 61, 0.3) 1px 1px, rgba(61, 61, 61, 0.2) 2px 2px, rgba(61, 61, 61, 0.3) 3px 3px;
-  }
-</style>
 

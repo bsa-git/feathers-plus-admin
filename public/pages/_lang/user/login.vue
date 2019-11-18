@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div class="main-content">
     <input-code-dialog
       :input-dialog="inputCodeDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
@@ -27,23 +27,24 @@
       :run-action="resendVerifySignup"
       v-on:onCloseDialog="openInputCodeDialog"
     ></confirm-dialog>
-    <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md6 lg4>
-        <v-card class="elevation-1 pa-3">
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card>
           <v-card-title>
+            <span class="headline">{{ $t('user_menu.login') }}</span>
             <v-spacer></v-spacer>
             <router-link :to="$i18n.path(config.homePath)" class="close-icon">
-              <v-icon>clear</v-icon>
+              <v-icon>mdi-close</v-icon>
             </router-link>
           </v-card-title>
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
-              <div class="layout column align-center">
+              <div class="text-center">
                 <v-avatar size="120" v-if="user && model.avatar"><img :src="model.avatar"></v-avatar>
-                <v-icon v-else size="120">fas fa-user-alt-slash</v-icon>
+                <v-icon v-else size="120">mdi-account-off</v-icon>
               </div>
               <v-text-field
-                append-icon="email"
+                append-icon="mdi-email"
                 v-validate="'required|email'"
                 :error-messages="errors.collect('email')"
                 data-vv-name="email"
@@ -53,7 +54,7 @@
                 persistent-hint
               ></v-text-field>
               <v-text-field
-                append-icon="lock"
+                append-icon="mdi-lock"
                 v-validate="'required|min:3'"
                 :error-messages="errors.collect('password')"
                 data-vv-name="password"
@@ -61,8 +62,10 @@
                 :label="$t('login.password')"
                 type="password"
               ></v-text-field>
-              <v-icon>security</v-icon>
-              <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
+              <div v-if="!user">
+                <v-icon>mdi-security</v-icon>
+                <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
+              </div>
             </v-card-text>
             <v-card-actions>
               <v-btn href="/auth/google" icon :disabled="!!user">
@@ -73,18 +76,18 @@
               </v-btn>
               <v-spacer></v-spacer>
               <!--  -->
-              <v-btn block color="primary" type="submit" :loading="loadingSubmit" :disabled="!!user">
+              <v-btn color="primary" type="submit" :loading="loadingSubmit" :disabled="!!user">
                 {{ $t('login.title') }}
               </v-btn>
-              <v-btn block @click="btnClick" :loading="loadingLogout">
+              <v-btn @click="btnClick" :loading="loadingLogout">
                 {{ !!user ? $t('login.logout') : $t('login.clear') }}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

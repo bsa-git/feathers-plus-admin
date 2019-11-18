@@ -40,6 +40,7 @@ const authRoles = (envRoles) => {
  * @return {Array}
  */
 const locales = (envLocales) => {
+  // return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
   return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
 };
 
@@ -92,6 +93,7 @@ export default () => ({
   },
   theme: {
     primary: 'indigo',
-    dark: false
+    dark: false,
+    name: 'light'
   }
 });

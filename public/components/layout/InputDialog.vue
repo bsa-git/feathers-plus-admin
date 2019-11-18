@@ -9,7 +9,7 @@
               <v-flex xs12>
                 <v-text-field
                   v-if="validateType === 'numeric'"
-                  v-validate="'numeric'"
+                  v-validate="'required|numeric'"
                   :error-messages="errors.collect('inputValue')"
                   data-vv-name="inputValue"
                   v-model="model.inputValue"
@@ -19,7 +19,7 @@
                 ></v-text-field>
                 <v-text-field
                   v-else-if="validateType === 'alpha_num'"
-                  v-validate="'alpha_num'"
+                  v-validate="'required|alpha_num'"
                   :error-messages="errors.collect('inputValue')"
                   data-vv-name="inputValue"
                   v-model="model.inputValue"
@@ -29,7 +29,7 @@
                 ></v-text-field>
                 <v-text-field
                   v-else-if="validateType === 'email'"
-                  v-validate="'email'"
+                  v-validate="'required|email'"
                   :error-messages="errors.collect('inputValue')"
                   data-vv-name="inputValue"
                   v-model="model.inputValue"
@@ -43,8 +43,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat type="submit" color="primary">{{ $t('common.enter') }}</v-btn>
-          <v-btn flat @click="$emit('onCloseInputDialog')">{{ $t('common.close') }}</v-btn>
+          <v-btn text type="submit" color="primary">{{ $t('common.enter') }}</v-btn>
+          <v-btn text @click="$emit('onCloseInputDialog')">{{ $t('common.close') }}</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>

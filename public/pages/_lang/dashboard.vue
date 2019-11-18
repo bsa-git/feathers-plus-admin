@@ -1,60 +1,62 @@
 <template>
-  <v-container fluid>
+  <div>
     <app-page-header
-      :app-menu="appMenu"
-      :home-path="homePath"
+      :page-title="description"
     ></app-page-header>
-    <v-layout>
-      <v-flex text-xs-center>
-        <div class="exotic--light display-1 my-3">{{ description }}</div>
-        <blockquote class="exotic--light exotic--font headline blockquote">
-          &#8220;First, solve the problem. Then, write the code.&#8221;
-          <footer>
-            <small>
-              <em>&mdash;John Johnson</em>
-            </small>
-          </footer>
-        </blockquote>
-      </v-flex>
-    </v-layout>
-    <v-layout >
-      <v-flex xs12 sm6 offset-sm3>
+    <blockquote :class="`exotic--${theme.name} exotic--font headline text-center`">
+      &#8220;First, solve the problem. Then, write the code.&#8221;
+      <footer>
+        <small>
+          <em>&mdash;John Johnson</em>
+        </small>
+      </footer>
+    </blockquote>
+    <v-row justify="center">
+      <v-col
+        v-for="n in 1"
+        :key="n"
+        :cols="12"
+        md="6"
+      >
         <v-data-table
           :headers="headers"
           :items="desserts"
+          :items-per-page="5"
           class="elevation-1"
-        >
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.name }}</td>
-            <td class="text-xs-right">{{ props.item.calories }}</td>
-            <td class="text-xs-right">{{ props.item.fat }}</td>
-            <td class="text-xs-right">{{ props.item.carbs }}</td>
-            <td class="text-xs-right">{{ props.item.protein }}</td>
-            <td class="text-xs-right">{{ props.item.iron }}</td>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
-  </v-container>
+        ></v-data-table>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
-  import appMenu from '~/api/data/app-menu';
+  import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/layout/AppPageHeader';
+  const debug = require('debug')('app:page.dashboard');
 
   export default {
-//    name: 'dashboard',
     components: {
       AppPageHeader
+    },
+    head() {
+      return {
+        title: this.title,
+        meta: [
+          {hid: 'description', name: 'description', content: this.description}
+        ],
+      }
+    },
+    created() {
+    },
+    computed: {
+      ...mapGetters({
+        theme: 'getTheme'
+      }),
     },
     data() {
       return {
         title: this.$t('dashboard.title'),
         description: this.$t('dashboard.description'),
-        appMenu: appMenu,
-        homePath: process.env.HOME_PATH,
-        myImage: '/static/img/nature/n1.jpeg',
-
         headers: [
           {
             text: 'Dessert (100g serving)',
@@ -62,11 +64,11 @@
             sortable: false,
             value: 'name'
           },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' }
+          {text: 'Calories', value: 'calories'},
+          {text: 'Fat (g)', value: 'fat'},
+          {text: 'Carbs (g)', value: 'carbs'},
+          {text: 'Protein (g)', value: 'protein'},
+          {text: 'Iron (%)', value: 'iron'}
         ],
         desserts: [
           {
@@ -162,13 +164,5 @@
         ]
       }
     },
-    head() {
-      return {
-        title: this.title,
-        meta: [
-          {hid: 'description', name: 'description', content: this.description}
-        ],
-      }
-    }
   }
 </script>

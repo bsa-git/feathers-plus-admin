@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
     <v-form @submit.prevent="onSubmit">
-      <v-container grid-list-md>
-        <v-layout wrap>
-          <v-flex xs12 sm12>
+      <!--<v-container grid-list-md>-->
+        <v-row>
+          <v-col cols="12">
             <v-text-field
               :counter="15"
               v-validate="{ regex: $util.getRegex('phone')}"
@@ -12,9 +12,8 @@
               v-model="model.personalPhone"
               :label="$t('profile.personalPhone')"
             ></v-text-field>
-          </v-flex>
-
-          <v-flex xs12 sm12>
+          </v-col>
+          <v-col cols="12">
             <v-text-field
               v-validate="'url'"
               :error-messages="errors.collect('personalWebSite')"
@@ -22,9 +21,9 @@
               v-model="model.personalWebSite"
               :label="$t('profile.personalWebSite')"
             ></v-text-field>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          </v-col>
+        </v-row>
+      <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">

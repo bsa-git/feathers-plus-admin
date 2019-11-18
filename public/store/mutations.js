@@ -29,9 +29,11 @@ const mutations = {
 
   SET_THEME_DARK(state, isDark) {
     state.theme.dark = isDark;
+    state.theme.name = isDark? 'dark' : 'light';
     const _isDark = isDark? '1':'0';
     if(process.client && cookies.get('theme_dark') !== _isDark){
       cookies.set('theme_dark', _isDark);
+      cookies.set('theme_name', state.theme.name);
     }
   },
 

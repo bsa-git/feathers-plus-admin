@@ -6,7 +6,7 @@
   {
     "title": "Dashboard",
     "group": "apps",
-    "icon": "dashboard",
+    "icon": "mdi-view-dashboard",
     "name": "dashboard",
     "alias": "dashboard",
     "to": "/dashboard"
@@ -14,7 +14,7 @@
   {
     "title": "Chat",
     "group": "apps",
-    "icon": "chat_bubble",
+    "icon": "mdi-chat",
     "target": "_blank",
     "name": "chat",
     "alias": "chat",
@@ -26,7 +26,7 @@
     "name": "mail",
     "alias": "inbox",
     "target": "_blank",
-    "icon": "email",
+    "icon": "mdi-email",
     "to": "/mail"
   },
   {
@@ -34,7 +34,7 @@
     "group": "apps",
     "name": "media",
     "alias": "media",
-    "icon": "perm_media",
+    "icon": "mdi-monitor-dashboard",
     "to": "/media"
   },
   {
@@ -42,28 +42,28 @@
     "group": "admins",
     "name": "admins",
     "alias": "admins",
-    "icon": "build",
+    "icon": "mdi-tools",
     "to": "/admins",
     "items": [
       {
         "name": "admins-accounts",
         "alias": "accounts",
         "title": "Accounts",
-        "icon": "people_outline",
+        "icon": "mdi-account-multiple",
         "to": "/admins/accounts"
       },
       {
         "name": "admins-management",
         "alias": "management",
         "title": "Management",
-        "icon": "group_add",
+        "icon": "mdi-account-edit",
         "to": "/admins/management"
       },
       {
         "name": "admins-settings",
         "alias": "settings",
         "title": "Settings",
-        "icon": "settings",
+        "icon": "mdi-settings",
         "to": "/admins/settings"
       }
     ]
@@ -73,7 +73,7 @@
     "group": "services",
     "name": "services",
     "alias": "services",
-    "icon": "account_circle",
+    "icon": "mdi-account-circle",
     "to": "/services",
     "items": [
       {
@@ -87,14 +87,14 @@
             "name": "services-graphql-find",
             "alias": "find",
             "title": "Find",
-            "icon": "youtube_searched_for",
+            "icon": "mdi-find-replace",
             "to": "/services/graphql/find"
           },
           {
             "name": "services-graphql-get",
             "alias": "get",
             "title": "Get",
-            "icon": "get_app",
+            "icon": "mdi-target-variant",
             "to": "/services/graphql/get"
           }
         ]
@@ -106,7 +106,7 @@
     "group": "widgets",
     "name": "widgets",
     "alias": "widgets",
-    "icon": "widgets",
+    "icon": "mdi-widgets",
     "disabled": false,
     "to": "/widgets",
     "items": [
@@ -145,7 +145,7 @@
     "group": "components",
     "name": "components",
     "alias": "general",
-    "icon": "tune",
+    "icon": "mdi-view-grid-plus-outline",
     "to": "/components",
     "items": [
       {
@@ -263,7 +263,7 @@
     "group": "pickers",
     "name": "pickers",
     "alias": "pickers",
-    "icon": "filter_vintage",
+    "icon": "mdi-calendar-multiple",
     "to": "/pickers",
     "items": [
       {
@@ -285,7 +285,7 @@
     "group": "layout",
     "name": "layout",
     "alias": "layout",
-    "icon": "view_compact",
+    "icon": "mdi-view-dashboard-variant",
     "to": "/layout",
     "items": [
       {
@@ -350,7 +350,7 @@
     "group": "forms",
     "name": "forms",
     "alias": "forms_controls",
-    "icon": "edit",
+    "icon": "mdi-view-compact-outline",
     "to": "/forms",
     "items": [
       {
@@ -404,7 +404,7 @@
     "group": "system",
     "name": "system",
     "alias": "pages",
-    "icon": "list",
+    "icon": "mdi-book-open-page-variant",
     "disabled": true,
     "to": "/system",
     "items": [

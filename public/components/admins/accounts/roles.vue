@@ -1,38 +1,33 @@
 <template>
-  <v-card
-    class="mx-auto"
-  >
-    <v-sheet class="pa-3">
+  <div>
+    <v-sheet class="pa-3" max-width="50%">
       <v-text-field
         v-model="search"
         :label="$t('management.search')"
         hide-details
         clearable
-        clear-icon="highlight_off"
-        append-icon="search"
+        clear-icon="mdi-close"
+        append-icon="fas fa-search"
       ></v-text-field>
     </v-sheet>
-    <v-card-text>
-      <v-treeview
-        :items="roles"
-        :search="search"
-        :active.sync="active"
-        :open.sync="open"
-        activatable
-        open-on-click
-        active-class="primary--text"
-        class="grey lighten-5"
-        transition
-      >
-        <template v-slot:prepend="{ item, active }">
-          <v-icon v-if="item.id.startsWith('user.fullName')">person</v-icon>
-          <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : 'teal darken-2'">
-            check_circle_outline
-          </v-icon>
-        </template>
-      </v-treeview>
-    </v-card-text>
-  </v-card>
+    <v-treeview
+      :items="roles"
+      :search="search"
+      :active.sync="active"
+      :open.sync="open"
+      activatable
+      open-on-click
+      active-class="primary--text"
+      transition
+    >
+      <template v-slot:prepend="{ item, active }">
+        <v-icon v-if="item.id.startsWith('user.fullName')">mdi-account</v-icon>
+        <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : ''">
+          mdi-check-circle
+        </v-icon>
+      </template>
+    </v-treeview>
+  </div>
 </template>
 
 <script>
@@ -40,7 +35,6 @@
 
   const debug = require('debug')('app:comp.admins-accounts-roles');
   const isLog = false;
-  //  const isDebug = true;
 
   export default {
     props: {

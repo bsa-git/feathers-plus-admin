@@ -7,8 +7,8 @@
     v-model="compShow"
   >
     {{ text }}
-    <v-btn dark flat @click.native="show = false" icon>
-      <v-icon>close</v-icon>
+    <v-btn dark @click.native="show = false" icon>
+      <v-icon>mdi-close</v-icon>
     </v-btn>
   </v-snackbar>
 </template>

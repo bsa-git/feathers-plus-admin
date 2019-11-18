@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
     <app-page-header
       :app-menu="appMenu"
       :home-path="config.homePath"
@@ -9,7 +9,7 @@
         <h1>Services/GraphQL/Index</h1>
       </div>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>

@@ -1,146 +1,104 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     color="primary"
-    fixed
     dark
     app
   >
     <!-- Toggle show NavLeft -->
-    <v-toolbar-title class="ml-0 pl-3">
-      <v-toolbar-side-icon @click.stop="onNavLeft"></v-toolbar-side-icon>
+    <v-toolbar-title
+      class="ml-0 pl-3"
+    >
+      <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
     </v-toolbar-title>
-    <!-- Search -->
+    <!-- Search web -->
     <v-text-field
       flat
       solo-inverted
-      prepend-icon="search"
+      hide-details
+      prepend-inner-icon="mdi-search-web"
       :label="$t('app_toolbar.search')"
       class="hidden-sm-and-down"
-    >
-    </v-text-field>
+    ></v-text-field>
+
     <v-spacer></v-spacer>
     <!-- Mail to -->
-    <v-btn :href="`mailto:${mailto}`">
+    <v-btn :href="`mailto:${config.email}`">
       {{ $t('app_toolbar.hire_me') }}
     </v-btn>
     <!-- Go to GitHub project -->
-    <v-btn icon :href="githubProject" target="_blank" title="GitHub">
+    <v-btn icon :href="config.githubProject" target="_blank" title="GitHub">
       <v-icon>fab fa-github</v-icon>
     </v-btn>
     <!-- FullScreen -->
     <v-btn icon @click="toggleFullScreen()" :title="$t('app_toolbar.full_size')">
-      <v-icon>fullscreen</v-icon>
+      <v-icon>mdi-fullscreen</v-icon>
     </v-btn>
-    <!-- Notifications -->
-    <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-      <v-btn icon flat slot="activator" :title="$t('app_toolbar.notifications')">
-        <v-badge color="red" overlap>
-          <span slot="badge">3</span>
-          <v-icon medium>notifications</v-icon>
-        </v-badge>
-      </v-btn>
-      <!-- Slot - notification -->
-      <slot name="notification"></slot>
+    <!-- App Notifications -->
+    <v-menu>
+      <!-- Activator -->
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" :title="$t('app_toolbar.notifications')">
+          <v-badge color="red" overlap>
+            <template v-slot:badge>3</template>
+            <v-icon>mdi-bell</v-icon>
+          </v-badge>
+        </v-btn>
+      </template>
+      <!-- Menu list -->
+      <notification-list
+        :notes="appNotifications"
+      ></notification-list>
     </v-menu>
     <!-- User menu -->
-    <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
-      <v-btn icon flat slot="activator">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-icon v-on="on" v-text="user? 'fas fa-user-check':'fas fa-user-alt-slash'"></v-icon>
-          </template>
-          <span>{{ user? user.fullName : $t('app_toolbar.not_authorized') }}</span>
-        </v-tooltip>
-      </v-btn>
-      <v-list class="pa-0" expand>
-        <template v-for="(item, i) in filterUserMenu">
-          <v-subheader v-if="item.header" :key="i">{{ $t(`user_menu.${item.name}`) }}</v-subheader>
-          <!--divider-->
-          <v-divider v-else-if="item.divider" :key="i"></v-divider>
-          <!--top level link-->
-          <v-list-tile v-else
-                       :to="item.to ? $i18n.path(item.to) : null" :href="item.href"
-                       ripple="ripple"
-                       :disabled="item.disabled || locale === item.click"
-                       :target="item.target"
-                       @click="item.click ? itemClick(item.click) : null"
-                       rel="noopener"
-                       :key="item.name"
-          >
-            <v-list-tile-action v-if="item.icon">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ $t(`user_menu.${item.name}`) }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-      </v-list>
+    <v-menu>
+      <!-- Activator -->
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon v-on="on" v-text="user? 'fas fa-user-check':'fas fa-user-alt-slash'"></v-icon>
+            </template>
+            <span>{{ user? user.fullName : $t('app_toolbar.not_authorized') }}</span>
+          </v-tooltip>
+        </v-btn>
+      </template>
+      <!-- Menu list -->
+      <user-menu-list
+        :user-menu="userMenu"
+      ></user-menu-list>
     </v-menu>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import userMenu from '~/api/data/user-menu.json';
+  import appNotifications from '~/api/data/app-notification.json';
+  import NotificationList from '~/components/layout/NotificationList';
+  import UserMenuList from '~/components/layout/UserMenuList';
 
   export default {
-    props: {
-      mailto: String,
-      githubProject: String,
-      user: Object,
-      userMenu: Array,
-      toggleFullScreen: Function
+    components: {
+      NotificationList,
+      UserMenuList
+    },
+    data: function () {
+      return {
+        toggleFullScreen: this.$util.toggleFullScreen,
+        appNotifications: appNotifications,
+        userMenu: userMenu
+      }
     },
     computed: {
-      filterUserMenu() {
-        return this.userMenu.filter(item => {
-          switch (item.name) {
-            case 'profile':
-            case 'logout':
-              return !!this.user;
-              break;
-            case 'signup':
-            case 'login':
-              return !this.user;
-              break;
-            default:
-              return true
-          }
-        });
-      },
       ...mapGetters({
         config: 'getConfig',
-      }),
-      ...mapState({
-        locale: state => state.config.locale
+        user: 'getUser'
       }),
     },
     methods: {
-      async itemClick(type) {
-        console.log('item.click:', type);
-        switch (type) {
-          case 'en':
-          case 'ru':
-            const path1 = '/' + type + this.$route.fullPath;
-            const path2 = '/' + type + this.$route.fullPath.replace(/^\/[^\/]+/, '');
-            const path = this.$i18n.fallbackLocale === this.locale ? path1 : path2;
-            this.$router.push(path);
-            break;
-          case 'logout':
-            await this.logout();
-            this.showSuccess(`${this.$t('login.successLogout')}!`);
-            this.$router.push(this.$i18n.path(this.config.homePath));
-            break;
-          default:
-        }
-      },
       onNavLeft() {
         this.$emit('onNavLeft')
       },
-      ...mapMutations({
-        showSuccess: 'SHOW_SUCCESS',
-        setLang: 'SET_LANG'
-      }),
-      ...mapActions(['logout'])
+
     }
   };
 </script>

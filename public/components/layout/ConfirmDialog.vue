@@ -7,8 +7,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="$emit('onCloseDialog')">{{ $t('common.disagree') }}</v-btn>
-        <v-btn color="primary" flat @click="runAction">{{ $t('common.agree') }}</v-btn>
+        <v-btn text @click="$emit('onCloseDialog')">{{ $t('common.disagree') }}</v-btn>
+        <v-btn text color="primary"  @click="runAction">{{ $t('common.agree') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

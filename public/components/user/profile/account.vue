@@ -18,9 +18,9 @@
       v-on:onCloseDialog="confirmDialog = false"
     ></confirm-dialog>
     <v-form @submit.prevent="onSubmit">
-      <v-container grid-list-md>
-        <v-layout wrap>
-          <v-flex xs12 sm6>
+      <!--<v-container grid-list-md>-->
+        <v-row>
+          <v-col cols="12" sm="6">
             <v-text-field
               :counter="15"
               v-validate="'required|max:20'"
@@ -29,8 +29,8 @@
               v-model="model.firstName"
               :label="$t('signup.firstName')"
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
+          </v-col>
+          <v-col cols="12" sm="6">
             <v-text-field
               :counter="20"
               v-validate="'required|max:20'"
@@ -39,10 +39,10 @@
               v-model="model.lastName"
               :label="$t('signup.lastName')"
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 :sm6="config.isAuthMng && changeIdentity">
+          </v-col>
+          <v-col cols="12" :sm="(config.isAuthMng && changeIdentity)? 6 : 12">
             <v-text-field
-              append-icon="email"
+              append-icon="mdi-email"
               v-validate="'required|email'"
               :error-messages="errors.collect('email')"
               data-vv-name="email"
@@ -52,10 +52,10 @@
               :hint="isExternalAccount? $t('accounts.emailForExternalAccounts') : !config.isAuthMng? $t('profile.hintIdentity') : changeIdentity? $t('profile.hintIdentity') : ''"
               persistent-hint
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng && changeIdentity">
+          </v-col>
+          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng && changeIdentity">
             <v-text-field
-              append-icon="lock"
+              append-icon="mdi-lock"
               v-validate="'required|min:3'"
               :error-messages="errors.collect('password')"
               data-vv-name="password"
@@ -66,10 +66,10 @@
               :hint="changeIdentity? $t('profile.hintPassword'):''"
               persistent-hint
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6 v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
+          </v-col>
+          <v-col cols="12" sm="6" v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
             <v-text-field
-              append-icon="lock"
+              append-icon="mdi-lock"
               v-validate="'required|min:3'"
               :error-messages="errors.collect('oldPassword')"
               data-vv-name="oldPassword"
@@ -77,10 +77,10 @@
               :label="$t('profile.oldPassword')"
               type="password"
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6 v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
+          </v-col>
+          <v-col cols="12" sm="6" v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
             <v-text-field
-              append-icon="lock"
+              append-icon="mdi-lock"
               v-validate="'required|min:3'"
               :error-messages="errors.collect('newPassword')"
               data-vv-name="newPassword"
@@ -88,23 +88,23 @@
               :label="$t('profile.newPassword')"
               type="password"
             ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng">
+          </v-col>
+          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng">
             <v-checkbox
               v-model="changeIdentity"
               :label="$t('profile.changeIdentity')"
               :disabled="changePassword"
             ></v-checkbox>
-          </v-flex>
-          <v-flex xs12 sm6 v-if="!isExternalAccount && config.isAuthMng">
+          </v-col>
+          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng">
             <v-checkbox
               v-model="changePassword"
               :label="$t('profile.changePassword')"
               :disabled="changeIdentity"
             ></v-checkbox>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          </v-col>
+        </v-row>
+      <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">

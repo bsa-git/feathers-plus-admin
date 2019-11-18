@@ -1,16 +1,39 @@
 <template>
   <v-content>
     <!-- Page Content -->
-    <div id="page-content">
+    <v-container id="page-content" fluid>
       <nuxt></nuxt>
-    </div>
-    <!-- App Footer -->
-    <slot name="footer"></slot>
+    </v-container>
+    <!-- Page Footer -->
+    <v-divider></v-divider>
+    <app-footer
+      :copyright="config.copyright"
+      :developer="config.logoTitle"
+      :site="config.website"
+    ></app-footer>
   </v-content>
 </template>
 
-<style lang="stylus" scoped>
-  // min-height=window.height - header.height - footer.height
+<script>
+  import {mapGetters} from 'vuex';
+  import AppFooter from '~/components/layout/AppFooter';
+
+  export default {
+    components: {
+      AppFooter,
+    },
+    data() {
+      return {};
+    },
+    computed: {
+      ...mapGetters({
+        config: 'getConfig',
+      })
+    }
+  }
+</script>
+
+<style lang="sass" scoped>
   #page-content
-    min-height: calc(100vh - 64px - 80px);
+    min-height: calc(100vh - 64px - 60px)
 </style>

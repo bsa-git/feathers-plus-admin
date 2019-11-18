@@ -1,49 +1,44 @@
 <template>
-  <v-container fluid>
+  <div>
+    <!-- Page Header -->
     <app-page-header
-      :app-menu="appMenu"
-      :home-path="config.homePath"
+      :page-title="description"
     ></app-page-header>
-    <v-flex xs10 offset-xs1>
-      <div class="text-xs-center">
-        <div class="exotic--light display-1 my-3">{{ description }}</div>
-      </div>
-      <div class="d-flex justify-between align-center mb-3">
-        <v-btn color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
-        <v-btn color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
-      </div>
-
+    <!-- Bootons -->
+    <div class="d-flex justify-space-around mb-3">
+      <v-btn text color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
+      <v-btn text color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
+    </div>
+    <!-- Expansion panels -->
+    <v-expansion-panels
+      v-model="panels"
+      focusable
+      multiple
+      inset
+    >
       <v-expansion-panel
-        v-model="panels"
-        expand
-        light
+        v-for="(item,i) in items"
+        :key="i"
       >
-        <v-expansion-panel-content
-          v-for="(item,i) in items"
-          :key="i"
-        >
-          <template v-slot:header>
-            <div>
-              <v-icon>{{ item.icon }}</v-icon>
-              {{ item.name }}
-            </div>
-          </template>
-          <v-card>
-            <v-card-text class="grey lighten-3">
-              <admins-management-users v-if="item.panel === 'users'"></admins-management-users>
-              <admins-management-roles v-else-if="item.panel === 'roles'"></admins-management-roles>
-              <admins-management-teams v-else-if="item.panel === 'teams'"></admins-management-teams>
-            </v-card-text>
-          </v-card>
+        <v-expansion-panel-header>
+          <div class="d-flex align-baseline">
+            <v-icon class="mr-3">{{ item.icon }}</v-icon>
+            <span>{{ item.name }}</span>
+          </div>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <admins-management-users v-if="item.panel === 'users'"></admins-management-users>
+          <admins-management-roles v-else-if="item.panel === 'roles'"></admins-management-roles>
+          <admins-management-teams v-else-if="item.panel === 'teams'"></admins-management-teams>
         </v-expansion-panel-content>
       </v-expansion-panel>
-    </v-flex>
-  </v-container>
+    </v-expansion-panels>
+
+  </div>
 </template>
 
 <script>
   import {mapGetters} from 'vuex'
-  import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
   import AdminsManagementUsers from '~/components/admins/management/users';
   import AdminsManagementRoles from '~/components/admins/management/roles';
@@ -60,23 +55,22 @@
       return {
         title: this.$t('management.title'),
         description: this.$t('management.description'),
-        appMenu: appMenu,
         panels: [],
         items: [
           {
             panel: 'users',
             name: this.$t('accounts.users'),
-            icon: 'wc'
+            icon: 'mdi-account-multiple'
           },
           {
             panel: 'roles',
             name: this.$t('accounts.roles'),
-            icon: 'security'
+            icon: 'mdi-security'
           },
           {
             panel: 'teams',
             name: this.$t('accounts.teams'),
-            icon: 'group'
+            icon: 'mdi-account-group'
           },
         ]
       }
@@ -99,7 +93,7 @@
     methods: {
       // Open the panels
       allOpen() {
-        this.panels = this.items.map(item => true)
+        this.panels = this.items.map((item, i) => i)
       },
       // Reset the panels
       allClose() {

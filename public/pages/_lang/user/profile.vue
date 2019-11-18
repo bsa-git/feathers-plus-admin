@@ -1,24 +1,22 @@
 <template>
-  <v-container fluid>
-    <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md6 lg4>
-        <v-card class="elevation-1 pa-3">
+  <div class="main-content">
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card>
           <v-card-title>
             <span class="headline">{{ currentTitle(step) }}</span>
             <v-spacer></v-spacer>
             <v-btn
               v-on:click="close"
-              flat
               icon
             >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                  <v-icon v-on="on">clear</v-icon>
+                  <v-icon v-on="on">mdi-close</v-icon>
                 </template>
                 <span>{{ $t('management.close') }}</span>
               </v-tooltip>
             </v-btn>
-
           </v-card-title>
           <v-card-title>
             <div class="layout column align-center">
@@ -59,10 +57,9 @@
               :disabled="step === 0"
               depressed
               @click="prev"
-              flat
               icon
             >
-              <v-icon large>keyboard_arrow_left</v-icon>
+              <v-icon large>mdi-menu-left</v-icon>
             </v-btn>
 
             <!--<v-spacer></v-spacer>-->
@@ -83,7 +80,7 @@
                 >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-icon v-on="on">panorama_fish_eye </v-icon>
+                      <v-icon v-on="on">mdi-panorama-fisheye</v-icon>
                     </template>
                     <span>{{ currentTitle(n-1) }}</span>
                   </v-tooltip>
@@ -95,16 +92,15 @@
               :disabled="step === steps - 1"
               depressed
               @click="next"
-              flat
               icon
             >
-              <v-icon large>keyboard_arrow_right</v-icon>
+              <v-icon large>mdi-menu-right</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

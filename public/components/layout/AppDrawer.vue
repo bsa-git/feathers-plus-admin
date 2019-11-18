@@ -1,9 +1,11 @@
 <template>
   <v-navigation-drawer
     :mini-variant.sync="mini"
-    :dark="$vuetify.dark"
+    :dark="$vuetify.theme.dark"
     v-model="compDrawer"
-    fixed
+    :width="320"
+    :fixed="false"
+    :clipped="false"
     app
   >
     <!-- Logo -->
@@ -16,8 +18,8 @@
         <span class="font-weight-black font-italic">{{ logoTitle }}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :to="$i18n.path(homePath)" :title="$t('app_menu.home')">
-        <v-icon>home</v-icon>
+      <v-btn icon :to="$i18n.path(homePath)" class="mr-3" :title="$t('app_menu.home')">
+        <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-toolbar>
     <v-list dense expand>
@@ -29,11 +31,11 @@
                       :prepend-icon="item.icon"
                       no-action="no-action"
         >
-          <v-list-tile slot="activator" ripple="ripple">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <v-list-item slot="activator" ripple="ripple">
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <template v-for="(subItem, i) in item.items">
             <!--sub group-->
             <v-list-group v-if="subItem.children"
@@ -41,39 +43,39 @@
                           :group="subItem.group"
                           sub-group="sub-group"
             >
-              <v-list-tile slot="activator" ripple="ripple">
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-for="(child, i) in subItem.children"
+              <v-list-item slot="activator" ripple="ripple">
+                <v-list-item-content>
+                  <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item v-for="(child, i) in subItem.children"
                            :key="child.name"
                            :to="$i18n.path(child.to)"
                            ripple="ripple"
               >
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ child.title }}</v-list-tile-title>
-                </v-list-tile-content>
-                <v-list-tile-action v-if="child.icon">
+                <v-list-item-content>
+                  <v-list-item-title>{{ child.title }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action v-if="child.icon">
                   <v-icon v-text="child.icon"></v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
+                </v-list-item-action>
+              </v-list-item>
             </v-list-group>
             <!--child item-->
-            <v-list-tile v-else
+            <v-list-item v-else
                          :key="subItem.name"
                          :to="$i18n.path(subItem.to)"
                          :disabled="subItem.disabled"
                          :target="subItem.target"
                          ripple="ripple"
             >
-              <v-list-tile-content>
-                <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action v-if="subItem.icon">
+              <v-list-item-content>
+                <v-list-item-title><span>{{ subItem.title }}</span></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action v-if="subItem.icon">
                 <v-icon v-text="subItem.icon"></v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
+              </v-list-item-action>
+            </v-list-item>
           </template>
         </v-list-group>
         <v-subheader v-else-if="item.header" :key="i">
@@ -81,7 +83,7 @@
         </v-subheader>
         <v-divider v-else-if="item.divider" :key="i"></v-divider>
         <!--top-level link-->
-        <v-list-tile v-else
+        <v-list-item v-else
                      :to="$i18n.path(item.to)"
                      ripple="ripple"
                      :disabled="item.disabled"
@@ -89,16 +91,16 @@
                      rel="noopener"
                      :key="item.name"
         >
-          <v-list-tile-action v-if="item.icon">
+          <v-list-item-action v-if="item.icon">
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-action v-if="item.subAction">
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action v-if="item.subAction">
             <v-icon class="success--text">{{ item.subAction }}</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
+          </v-list-item-action>
+        </v-list-item>
       </template>
     </v-list>
   </v-navigation-drawer>
@@ -185,7 +187,7 @@
 </script>
 
 
-<style lang="stylus">
+<style lang="sass">
 
   #appDrawer
     overflow: hidden

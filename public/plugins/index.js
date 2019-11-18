@@ -1,14 +1,13 @@
 
 // require('@babel/polyfill');
 import vueI18n from '~/plugins/localization/vue-i18n';
-import vuetify from '~/plugins/ui-framework/vuetify';
 import veeValidate from '~/plugins/validators/vee-validate';
 import syncStore from '~/plugins/lib/sync-store';
 import util from '~/plugins/lib/util';
 import HttpBox from '~/plugins/lib/http.client.class';
 import Avatar from '~/plugins/lib/avatar.class';
 import Service from '~/plugins/lib/service-client.class';
-import colors from 'vuetify/es5/util/colors';
+import colors from 'vuetify/lib/util/colors';
 const debug = require('debug')('app:plugin.index');
 
 export default async (context, inject) => {
@@ -23,7 +22,6 @@ export default async (context, inject) => {
 
   // Set Vue plugins
   vueI18n(context);
-  vuetify(context);
   veeValidate(context);
   // Check auth
   await context.store.dispatch('checkAuth');

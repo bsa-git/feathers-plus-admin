@@ -1,27 +1,35 @@
 <template>
   <div>
-    <!-- theme setting -->
-    <v-btn small fab dark falt fixed top="top" right="right" class="setting-fab" color="red" @click="openThemeSettings">
-      <v-icon>settings</v-icon>
+    <v-btn small fab dark fixed class="setting-fab" color="red" @click="openThemeSettings">
+      <v-icon>mdi-settings</v-icon>
     </v-btn>
     <v-navigation-drawer
-      class="setting-drawer"
       temporary
       right
       v-model="rightDrawer"
       hide-overlay
       fixed
-      :dark="$vuetify.dark"
+      :dark="$vuetify.theme.dark"
+      app
     >
-      <slot></slot>
+      <theme-settings
+        :color-options="colorOptions"
+      ></theme-settings>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
+  import themeColorOptions from '~/api/data/theme-color-options.json';
+  import ThemeSettings from '~/components/layout/ThemeSettings';
+
   export default {
+    components: {
+      ThemeSettings
+    },
     data: () => ({
       rightDrawer: false,
+      colorOptions: themeColorOptions,
     }),
     methods: {
       openThemeSettings () {
@@ -32,9 +40,9 @@
   };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
   .setting-fab
-    top:50%!important;
-    right:0;
-    border-radius:0
+    top: 50% !important
+    right: 0
+    border-radius: 0
 </style>

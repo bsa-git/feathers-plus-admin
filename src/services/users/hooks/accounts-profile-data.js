@@ -2,6 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
+const errors = require('@feathersjs/errors');
 const {inspector} = require('../../../plugins/lib');
 const debug = require('debug')('app:hook.accounts-profile-data');
 
@@ -44,9 +45,17 @@ module.exports = function (options = {}) {
         isAccount = true;
         profile = record.google.profile;
         newRecord.googleId = record.googleId;
-        newRecord.email = profile.emails.find(email => {
-          return email.type === 'account';
-        }).value;
+        let _email = profile.emails.find(email => {
+          return (email.type === 'account') || (email.type === 'ACCOUNT');
+        });
+        if(_email){
+          newRecord.email = _email.value;
+        }else {
+          throw new errors.BadRequest('Google account email address not found');
+        }
+        // newRecord.email = profile.emails.find(email => {
+        //   return email.type === 'account';
+        // }).value;
         newRecord.firstName = profile.name.givenName;
         newRecord.lastName = profile.name.familyName;
         newRecord.avatar = profile._json.image.url;

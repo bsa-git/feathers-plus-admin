@@ -1,59 +1,61 @@
 <template>
-  <v-container fluid>
-    <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md6 lg4>
-        <v-card class="elevation-1 pa-3">
+  <div class="main-content">
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card>
           <v-card-title>
+            <span class="headline">{{ $t('authManagement.titleNewPwd') }}</span>
             <v-spacer></v-spacer>
             <router-link :to="$i18n.path(config.homePath)" class="close-icon">
-              <v-icon>clear</v-icon>
+              <v-icon>mdi-close</v-icon>
             </router-link>
           </v-card-title>
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
-              <div class="headline align-center">{{ $t('authManagement.titleNewPwd') }}</div>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12>
-                    <v-text-field
-                      append-icon="lock"
-                      v-validate="'required|min:3'"
-                      :error-messages="errors.collect('password')"
-                      data-vv-name="password"
-                      v-model="model.password"
-                      :label="$t('login.password')"
-                      type="password"
-                      ref="confirmation"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field
-                      append-icon="lock"
-                      v-validate="'required|confirmed:confirmation'"
-                      :error-messages="errors.collect('passwordConfirmation')"
-                      data-vv-name="passwordConfirmation"
-                      v-model="model.passwordConfirmation"
-                      :label="$t('signup.passwordConfirmation')"
-                      type="password"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-container>
+              <!--<div class="headline text-center">{{ $t('authManagement.titleNewPwd') }}</div>-->
+              <div class="text-center">
+                <v-icon size="120">mdi-shield-refresh</v-icon>
+              </div>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    append-icon="mdi-lock"
+                    v-validate="'required|min:3'"
+                    :error-messages="errors.collect('password')"
+                    data-vv-name="password"
+                    v-model="model.password"
+                    :label="$t('login.password')"
+                    type="password"
+                    ref="confirmation"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    append-icon="mdi-lock"
+                    v-validate="'required|confirmed:confirmation'"
+                    :error-messages="errors.collect('passwordConfirmation')"
+                    data-vv-name="passwordConfirmation"
+                    v-model="model.passwordConfirmation"
+                    :label="$t('signup.passwordConfirmation')"
+                    type="password"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn block color="primary" type="submit" :loading="loadingSubmit">
+              <v-btn color="primary" type="submit" :loading="loadingSubmit">
                 {{ $t('profile.save') }}
               </v-btn>
-              <v-btn block @click="onClear">
+              <v-btn @click="onClear">
                 {{ $t('login.clear') }}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

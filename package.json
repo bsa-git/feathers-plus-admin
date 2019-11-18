@@ -18,7 +18,7 @@
     "test": "test/"
   },
   "engines": {
-    "node": "^9.11.1",
+    "node": ">= 8.0.0",
     "npm": ">= 6.4.1"
   },
   "scripts": {
@@ -27,11 +27,11 @@
     "mocha:debug": "mocha test-debug/ --recursive --exit --timeout 10000",
     "test:all": "npm run eslint && cross-env NODE_ENV=test npm run mocha",
     "test:debug": "cross-env NODE_ENV=test DEBUG=app:* npm run mocha:debug",
-    "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue,styl",
+    "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue,sass",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node src/",
     "start:seed": "cross-env NODE_ENV=test node src/ --seed",
-    "start-mongod": "mongod -f config/db/mongod.config.yml",
+    "start-mongod": "mongod -f mongod.config.yml",
     "generate:nuxt-github": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate",
     "generate:nuxt-static": "cross-env DEPLOY_ENV=OPEN_SERVER nuxt generate",
     "generate:all": "feathers-plus generate all",
@@ -82,14 +82,14 @@
     "mongodb-core": "^3.1.9",
     "mongoose": "^5.4.1",
     "nodemailer-smtp-transport": "^2.7.4",
-    "nuxt": "^2.7.1",
+    "@nuxtjs/vuetify": "^1.9.0",
+    "nuxt": "^2.10.0",
     "passport-github": "^1.1.0",
     "passport-google-oauth20": "^1.0.0",
     "serve-favicon": "^2.5.0",
     "socket.io-client": "^2.2.0",
     "vee-validate": "^2.1.5",
     "vue-i18n": "^8.7.0",
-    "vuetify": "^1.5.18",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -99,8 +99,6 @@
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "request-promise": "^4.2.2"
   }
 }

@@ -1,23 +1,19 @@
 <template>
-  <v-container fluid>
-    <v-layout align-center justify-center row>
-      <div class="text-md-center">
-        <div class="exotic--light display-1 mt-5">{{ description }}</div>
-        <v-progress-circular class="mt-5"
-          :size="80"
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-      </div>
-    </v-layout>
-  </v-container>
+  <div class="text-center">
+    <app-page-title :page-title="description"></app-page-title>
+    <v-progress-circular class="mt-5"
+                         :size="80"
+                         color="primary"
+                         indeterminate
+    ></v-progress-circular>
+  </div>
 </template>
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
+  import AppPageTitle from '~/components/layout/AppPageTitle';
   import Auth from '~/plugins/lib/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
-  import AppPageHeader from '~/components/layout/AppPageHeader';
   const debug = require('debug')('app:page.user-change');
 
   const isLog = false;
@@ -25,7 +21,7 @@
 
   export default {
     components: {
-      AppPageHeader
+      AppPageTitle
     },
     data() {
       return {

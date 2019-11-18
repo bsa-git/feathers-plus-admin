@@ -15,7 +15,7 @@ class AuthClient {
     this.store = store;
     this.menu = appMenu;
     this.config = store.getters.getConfig;
-    this.locales = this.config.locales.filter(locale => locale !== this.config.fallbackLocale);
+    this.locales = this.config.locales;//this.config.locales.filter(locale => locale !== this.config.fallbackLocale);
     this.envPublicPaths = this.config.publicPaths;
     this.envAdminPaths = this.config.adminPaths;
     this.envPublicServices = this.config.publicServices;

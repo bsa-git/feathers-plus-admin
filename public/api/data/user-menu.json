@@ -21,25 +21,25 @@
     "name": "user"
   },
   {
-    "icon": "account_circle",
+    "icon": "mdi-account-circle",
     "to": "/user/profile",
     "title": "Profile",
     "name": "profile"
   },
   {
-    "icon": "person_add",
+    "icon": "mdi-account-plus",
     "to": "/user/signup",
     "title": "Signup",
     "name": "signup"
   },
   {
-    "icon": "input",
+    "icon": "mdi-login",
     "to": "/user/login",
     "title": "Login",
     "name": "login"
   },
   {
-    "icon": "fullscreen_exit",
+    "icon": "mdi-logout",
     "title": "Logout",
     "name": "logout",
     "click": "logout"

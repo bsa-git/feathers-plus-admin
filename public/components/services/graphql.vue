@@ -1,13 +1,18 @@
 <template>
   <div>
     <!-- Response dialog -->
-    <v-dialog v-model="responseDialog" scrollable max-width="550px">
+    <v-dialog v-model="responseDialog" scrollable max-width="550px" >
       <v-card>
-        <v-card-title>
-          <v-icon class="mr-3">search</v-icon>
-          <span>{{ $t('graphql.responseToRequest') }}</span>
-        </v-card-title>
-        <v-divider></v-divider>
+        <!-- Toolbar -->
+        <v-toolbar color="primary" dark>
+          <v-icon class="mr-3">mdi-search-web</v-icon>
+          <v-toolbar-title>{{ $t('graphql.responseToRequest') }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon v-on:click="responseDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <!-- Text Content -->
         <v-card-text style="">
           <v-textarea
             outline
@@ -16,38 +21,36 @@
             :value="textResponse"
           ></v-textarea>
         </v-card-text>
-        <v-divider></v-divider>
+        <!-- Actions -->
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="responseDialog = false">{{ $t('management.close') }}</v-btn>
+          <v-btn text class="mx-auto mb-3" color="primary" @click="responseDialog = false">{{ $t('management.close') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <!-- Select Query -->
-    <v-container fluid>
+    <div>
       <app-page-header
-        :app-menu="appMenu"
-        :home-path="config.homePath"
+        :page-title="description"
       ></app-page-header>
-      <v-layout row>
-        <v-flex xs8 offset-xs2>
-          <div class="text-xs-center">
-            <div class="exotic--light display-1 my-3">{{ description }}</div>
-          </div>
-          <div>
+      <v-row justify="center">
+        <v-col cols="12" sm="8">
+          <v-card
+            :loading="isLoading"
+          >
             <v-toolbar
               color="primary"
               dark
               tabs
             >
-              <v-toolbar-side-icon></v-toolbar-side-icon>
+              <v-app-bar-nav-icon></v-app-bar-nav-icon>
               <v-toolbar-title>{{ selTitle }}</v-toolbar-title>
 
               <v-spacer></v-spacer>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn icon v-on:click="request">
-                    <v-icon v-on="on">search</v-icon>
+                    <v-icon v-on="on">mdi-search-web</v-icon>
                   </v-btn>
                 </template>
                 <span>{{ selTooltip }}</span>
@@ -55,7 +58,7 @@
               <template v-slot:extension>
                 <v-tabs
                   v-model="selTab"
-                  color="primary"
+                  dark
                   grow
                   show-arrows
                   v-on:change="changeTab"
@@ -77,6 +80,7 @@
                 :key="`item-${index + 1}`"
               >
                 <v-textarea
+                  class="pa-5"
                   clearable
                   counter="512"
                   outline
@@ -91,16 +95,15 @@
                 ></v-textarea>
               </v-tab-item>
             </v-tabs-items>
-          </div>
-        </v-flex>
-      </v-layout>
-    </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
   import feathersClient from '~/plugins/lib/feathers-client';
 
@@ -124,9 +127,9 @@
         title: this.$t('graphql.title'),
         description: this.$t('graphql.description'),
         responseDialog: false,
-        appMenu: appMenu,
         textResponse: '',
         selTab: null,
+        isLoading: false
       }
     },
     head() {
@@ -145,14 +148,13 @@
       }),
     },
     methods: {
-
       changeTab: function (index) {
         if (isDebug) debug('changeTab.index:', index);
       },
-
       request: async function () {
         try {
           // GraphQL
+          this.isLoading = true;
           const graphql = feathersClient.service('/graphql');
           const strQuery = this.items[this.selTab].value.trim();
           const response = await graphql.find({query: {query: strQuery}});
@@ -160,6 +162,7 @@
           const strResponse = JSON.stringify(response, null, '  ');
           this.textResponse = strResponse;
           this.responseDialog = true;
+          this.isLoading = false;
         } catch (ex) {
           if (isLog) debug('graphql.find.error:', ex);
           const msgError = ex.errors.length? ex.errors[0].message : ex.message;

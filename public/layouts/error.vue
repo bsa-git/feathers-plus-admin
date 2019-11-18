@@ -1,46 +1,38 @@
 <template>
-  <v-container>
-    <v-layout row wrap>
-      <v-flex xs10 offset-xs1>
-        <v-card class="error-box text-xs-center" hover raised>
-          <br/>
-          <br/>
+  <v-container fluid>
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <v-card class="error-box text-center pt-5">
           <!-- Card Media -->
           <img src="/static/img/error/error.png" alt="Error">
           <!-- Card Content -->
           <v-card-text>
-            <h1>{{ statusCode }}</h1>
-            <div class="headline">{{ title }}</div>
+            <h1 :class="`exotic--${theme.name}`">{{ statusCode }}</h1>
+            <div :class="`exotic--${theme.name} my-3 headline`">{{ title }}</div>
             <div class="body-2">{{ description }}</div>
           </v-card-text>
           <v-divider></v-divider>
           <!-- Card Actions -->
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              round
-              color="primary"
-              :to="homePath"
-              class="white--text"
-            >
-              {{ $t('error.go_home') }}
-              <v-icon right dark>home</v-icon>
-            </v-btn>
+            <v-btn color="primary" @click="goHome">{{ $t('error.go_home') }}</v-btn>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
   import isNumber from 'lodash/isNumber';
 
   export default {
+    layout: 'default',
     props: ['error'],
     data() {
       return {
-        homePath: this.$i18n.path(process.env.HOME_PATH)
+//        homePath: this.$i18n.path(process.env.HOME_PATH)
       }
     },
     head() {
@@ -66,18 +58,15 @@
       statusCode: function () {
         return isNumber(this.error.statusCode) ? this.error.statusCode : '';
       },
+      ...mapGetters({
+        config: 'getConfig',
+        theme: 'getTheme',
+      })
+    },
+    methods: {
+      goHome() {
+        this.$router.push({path: this.$i18n.path(this.config.homePath)});
+      }
     }
   }
 </script>
-
-<style lang="stylus" scoped>
-  .error-box img
-    height: 20vh
-  .error-box h1 {
-    font-size: 150px;
-    line-height: 150px;
-    font-weight: 700;
-    color: #252932;
-    text-shadow: rgba(61, 61, 61, 0.3) 1px 1px, rgba(61, 61, 61, 0.2) 2px 2px, rgba(61, 61, 61, 0.3) 3px 3px;
-  }
-</style>

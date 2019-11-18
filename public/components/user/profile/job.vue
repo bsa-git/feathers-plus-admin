@@ -1,69 +1,68 @@
 <template>
   <v-container fluid>
     <v-form @submit.prevent="onSubmit">
-      <v-container grid-list-md>
-        <v-layout wrap>
-          <v-flex xs12 sm12>
-            <v-text-field
-              :counter="20"
-              v-validate="'max:20'"
-              :error-messages="errors.collect('jobCompanyName')"
-              data-vv-name="jobCompanyName"
-              v-model="model.jobCompanyName"
-              :label="$t('profile.jobCompanyName')"
-            ></v-text-field>
-          </v-flex>
-
-          <v-flex xs12 sm12>
-            <v-text-field
-              :counter="35"
-              v-validate="'max:35'"
-              :error-messages="errors.collect('jobTitle')"
-              data-vv-name="jobTitle"
-              v-model="model.jobTitle"
-              :label="$t('profile.jobTitle')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="'max:15'"
-              :error-messages="errors.collect('jobType')"
-              data-vv-name="jobType"
-              v-model="model.jobType"
-              :label="$t('profile.jobType')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-text-field
-              :counter="15"
-              v-validate="{ regex: $util.getRegex('phone')}"
-              :error-messages="errors.collect('jobPhone')"
-              data-vv-name="jobPhone"
-              v-model="model.jobPhone"
-              :label="$t('profile.jobPhone')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm12>
-            <v-text-field
-              v-validate="'email'"
-              :error-messages="errors.collect('jobEmail')"
-              data-vv-name="jobEmail"
-              v-model="model.jobEmail"
-              :label="$t('profile.jobEmail')"
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs12 sm12>
-            <v-text-field
-              v-validate="'url'"
-              :error-messages="errors.collect('jobWebSite')"
-              data-vv-name="jobWebSite"
-              v-model="model.jobWebSite"
-              :label="$t('profile.jobWebSite')"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <!--<v-container grid-list-md>-->
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="20"
+            v-validate="'max:20'"
+            :error-messages="errors.collect('jobCompanyName')"
+            data-vv-name="jobCompanyName"
+            v-model="model.jobCompanyName"
+            :label="$t('profile.jobCompanyName')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="35"
+            v-validate="'max:35'"
+            :error-messages="errors.collect('jobTitle')"
+            data-vv-name="jobTitle"
+            v-model="model.jobTitle"
+            :label="$t('profile.jobTitle')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="'max:15'"
+            :error-messages="errors.collect('jobType')"
+            data-vv-name="jobType"
+            v-model="model.jobType"
+            :label="$t('profile.jobType')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="{ regex: $util.getRegex('phone')}"
+            :error-messages="errors.collect('jobPhone')"
+            data-vv-name="jobPhone"
+            v-model="model.jobPhone"
+            :label="$t('profile.jobPhone')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-validate="'email'"
+            :error-messages="errors.collect('jobEmail')"
+            data-vv-name="jobEmail"
+            v-model="model.jobEmail"
+            :label="$t('profile.jobEmail')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-validate="'url'"
+            :error-messages="errors.collect('jobWebSite')"
+            data-vv-name="jobWebSite"
+            v-model="model.jobWebSite"
+            :label="$t('profile.jobWebSite')"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">
@@ -90,8 +89,7 @@
     $_veeValidate: {
       validator: 'new'
     },
-    components: {
-    },
+    components: {},
     data() {
       return {
         loadingSubmit: false,

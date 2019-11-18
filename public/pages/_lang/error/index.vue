@@ -1,15 +1,15 @@
 <template>
-  <v-container fluid>
+  <div>
     <app-page-header
       :app-menu="appMenu"
       :home-path="homePath"
     ></app-page-header>
     <v-layout align-center justify-center row>
       <div class="text-md-center">
-        <h1><h1>System/Index</h1></h1>
+        <h1>Error/Index</h1>
       </div>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>

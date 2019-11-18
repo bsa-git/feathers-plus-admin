@@ -2,19 +2,9 @@
   <v-app id="app-admin">
     <!-- Top toolbar -->
     <app-toolbar
-      :mailto="config.email"
-      :github-project="config.githubProject"
-      :user="user"
-      :user-menu="userMenu"
-      :toggle-full-screen="toggleFullScreen"
       v-on:onNavLeft="navLeft = !navLeft"
-    >
-      <notification-list
-        slot="notification"
-        :notes="toolbarNotes"
-      ></notification-list>
-    </app-toolbar>
-    <!-- Left toolbar -->
+    ></app-toolbar>
+    <!-- Left Drawer -->
     <app-drawer
       :isAvatar="config.isAvatar"
       :logo-image="config.isAvatar? devAvatar():config.logoImage"
@@ -26,23 +16,11 @@
       v-on:onNavLeft="modelNavLeft"
     ></app-drawer>
     <!-- Page content -->
-    <app-page-content>
-      <app-footer
-        slot="footer"
-        class="app--footer"
-        :copyright="config.copyright"
-        :developer="config.logoTitle"
-        :site="config.website"
-      ></app-footer>
-    </app-page-content>
+    <app-page-content></app-page-content>
     <!-- Go to top -->
     <app-fab></app-fab>
     <!-- Config theme colors -->
-    <app-theme-settings>
-      <theme-settings
-        :color-options="colorOptions"
-      ></theme-settings>
-    </app-theme-settings>
+    <app-theme-settings></app-theme-settings>
     <!-- Snackbar -->
     <app-snack-bar
       :show="snackBar.show"
@@ -55,48 +33,34 @@
 </template>
 
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import {mapGetters} from 'vuex';
   import appMenu from '~/api/data/app-menu.json';
-  import userMenu from '~/api/data/user-menu.json';
-  import notes from '~/api/data/app-notification.json';
-  import themeColorOptions from '~/api/data/theme-color-options.json';
   import AppToolbar from '~/components/layout/AppToolbar';
-  import NotificationList from '~/components/layout/NotificationList';
   import AppDrawer from '~/components/layout/AppDrawer';
   import AppPageContent from '~/components/layout/AppPageContent';
   import AppPageHeader from '~/components/layout/AppPageHeader';
-  import AppFooter from '~/components/layout/AppFooter';
   import AppFab from '~/components/layout/AppFab';
   import AppThemeSettings from '~/components/layout/AppThemeSettings';
-  import ThemeSettings from '~/components/layout/ThemeSettings';
   import AppSnackBar from '~/components/layout/AppSnackbar';
 
   export default {
     components: {
       AppDrawer,
       AppToolbar,
-      NotificationList,
       AppPageContent,
       AppPageHeader,
-      AppFooter,
       AppFab,
       AppThemeSettings,
-      ThemeSettings,
-      AppSnackBar
+      AppSnackBar,
     },
     data: function () {
       return {
         navLeft: true,
         appMenu,
-        userMenu,
-        colorOptions: themeColorOptions,
-        toolbarNotes: notes,
-        toggleFullScreen: this.$util.toggleFullScreen
       }
     },
     created() {
-      const color = this.$colors[this.theme.primary].base;
-      this.$vuetify.theme.primary = color;
+      this.$util.initVuetify(this, this.theme);
     },
     methods: {
       modelNavLeft: function (newValue) {
@@ -109,18 +73,14 @@
         const avatar = new this.$Avatar(this.config.email);
         return avatar.imageUrl();
       },
-      ...mapActions(['checkAuth'])
     },
     computed: {
-
       ...mapGetters({
         config: 'getConfig',
-        snackBar: 'getSnackBar'
+        snackBar: 'getSnackBar',
+        theme: 'getTheme',
+        user: 'getUser'
       }),
-      ...mapState('auth', [
-        'user'
-      ]),
-      ...mapState(['theme'])
     }
   }
 </script>

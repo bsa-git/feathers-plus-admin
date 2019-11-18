@@ -17,19 +17,19 @@ const getProfileIcon = function (key) {
   let icon = '';
   switch (key) {
   case 'jobEmail':
-    icon = 'alternate_email';
+    icon = 'mdi-email-outline';
     break;
   case 'personalPhone':
   case 'jobPhone':
-    icon = 'phone';
+    icon = 'mdi-contact-phone';
     break;
   case 'personalWebSite':
   case 'jobWebSite':
-    icon = 'language';
+    icon = 'mdi-web';
     break;
   case 'addressLatitude':
   case 'addressLongitude':
-    icon = 'place';
+    icon = 'mdi-earth';
     break;
   case 'addressSuite':
   case 'addressStreet':
@@ -39,12 +39,12 @@ const getProfileIcon = function (key) {
   case 'addressCountry':
   case 'addressCountryCode':
   case 'addressZipCode':
-    icon = 'email';
+    icon = 'mdi-email';
     break;
   case 'jobCompanyName':
   case 'jobTitle':
   case 'jobType':
-    icon = 'business_center';
+    icon = 'mdi-briefcase-account';
     break;
   default:
     icon = 'perm_identity';
