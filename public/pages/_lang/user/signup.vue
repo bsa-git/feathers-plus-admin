@@ -184,7 +184,7 @@
               const loginResponse = await this.login(this.model.email, this.model.password);
               if (loginResponse && loginResponse.accessToken) {
                 if (isLog) debug('loginResponse:', loginResponse);
-                this.showSuccess(`${this.$t('signup.successSignupAndLogin')}!`);
+                this.showSuccess(`${this.$t('signup.successSignUpAndLogin')}!`);
                 setTimeout(() => {
                   this.$router.push(this.$i18n.path(this.config.homePath));
                 }, 1000);
@@ -240,7 +240,7 @@
             if (loginResponse && loginResponse.accessToken) {
               if (isLog) debug('loginResponse:', loginResponse);
               setTimeout(() => {
-                this.showSuccess(`${this.$t('signup.successSignupAndLogin')}!`);
+                this.showSuccess(`${this.$t('signup.successSignUpAndLogin')}!`);
                 this.$router.push(this.$i18n.path(this.config.homePath));
               }, 1000);
             }

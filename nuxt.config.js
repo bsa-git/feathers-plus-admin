@@ -2,7 +2,6 @@
 const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
 const loConcat = require('lodash/concat');
-const debug = require('debug')('app:plugin.index');
 
 const appMenu = require('./public/api/data/app-menu');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';

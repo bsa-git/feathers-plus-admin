@@ -210,7 +210,7 @@
     "lastName": "Фамилия",
     "passwordConfirmation": "Подтвердите пароль",
     "success": "Успешная регистрация",
-    "successSignupAndLogin": "Успешная регистрация и аутентификация",
+    "successSignUpAndLogin": "Успешная регистрация и аутентификация",
     "conflictEmail": "Такой email уже существует",
     "errSignup": "Неизвестная ошибка регистрации"
   },

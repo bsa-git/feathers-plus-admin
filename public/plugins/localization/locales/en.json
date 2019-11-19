@@ -211,7 +211,7 @@
     "lastName": "Last Name",
     "passwordConfirmation": "Confirm the password",
     "success": "Success registration",
-    "successSignupAndLogin": "Success registration and login",
+    "successSignUpAndLogin": "Success registration and login",
     "conflictEmail": "This email already exists.",
     "errSignup": "An error prevented signup"
   },
