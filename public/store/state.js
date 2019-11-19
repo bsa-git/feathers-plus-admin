@@ -24,6 +24,7 @@ const authPaths = (envPaths) => {
 
 /**
  * Get auth roles
+ * e.g. [{isAdmin: 'Administrator'}, {isGuest: 'Guest'}, {isSuperRole: 'superRole'}]
  * @param envRoles
  * @return {Array}
  */
@@ -35,12 +36,25 @@ const authRoles = (envRoles) => {
 };
 
 /**
+ * Get base roles
+ * e.g. [{isAdmin: 'Administrator'}, {isGuest: 'Guest'}]
+ * @param envBaseRoles
+ * @return {Array}
+ */
+const baseRoles = (envBaseRoles) => {
+  const _baseRoles = util.stripSpecific(envBaseRoles, ';').split(';').map(item => item.trim());
+  return authRoles(process.env.ROLES).filter(role => {
+    const key = Object.keys(role)[0];
+    return _baseRoles.indexOf(key) >= 0;
+  });
+};
+
+/**
  * Get locales
  * @param envLocales
  * @return {Array}
  */
 const locales = (envLocales) => {
-  // return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
   return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
 };
 
@@ -59,6 +73,7 @@ export default () => ({
     //--- AUTH ---//
     isAuthMng: util.isTrue(process.env.IS_AUTH_MNG),
     roles: authRoles(process.env.ROLES),
+    baseRoles: baseRoles(process.env.BASE_ROLES),
     publicPaths: authPaths(process.env.PUBLIC_PATHS),
     adminPaths: authPaths(process.env.ADMIN_PATHS),
     publicServices: authServices(process.env.PUBLIC_SERVICES),

@@ -1,21 +1,6 @@
 <template>
   <div>
     <!-- Confirm Dialog -->
-    <!--<v-dialog v-model="confirmDialog" persistent max-width="320">-->
-    <!--<v-card>-->
-    <!--<v-card-title class="headline">{{ $t('management.confirm_delete_title') }}?</v-card-title>-->
-    <!--<v-card-text>-->
-    <!--{{ $t('management.confirm_delete_description') }}-->
-    <!--</v-card-text>-->
-    <!--<v-card-actions>-->
-    <!--<v-spacer></v-spacer>-->
-    <!--<v-btn @click="confirmDialog = false">{{ $t('management.disagree') }}</v-btn>-->
-    <!--<v-btn color="primary" @click="deleteItem">{{ $t('management.agree') }}</v-btn>-->
-    <!--</v-card-actions>-->
-    <!--</v-card>-->
-    <!--</v-dialog>-->
-
-    <!-- Confirm Dialog -->
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('management.confirm_delete_title')"

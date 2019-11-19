@@ -37,7 +37,7 @@ const getters = {
 
   /**
    * Get roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param state
    * @param isRole
    * @return {Object}
@@ -47,13 +47,33 @@ const getters = {
     state.config.roles.forEach(role => {
       Object.assign(_roles, role);
     });
-    // return _roles;
     return isRole ? _roles[isRole] : _roles;
+  },
+
+  /**
+   * Get base roles
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * @param state
+   * @param isBaseRole
+   * @return {Object}
+   */
+  getBaseRoles: (state) => (isBaseRole = '') => {
+    const _roles = {};
+    state.config.baseRoles.forEach(role => {
+      Object.assign(_roles, role);
+    });
+    return isBaseRole ? _roles[isBaseRole] : _roles;
   },
 
   isEnvRole: (state, getters) => (roleName = '') => {
     const names = Object.values(getters.getRoles());
-    const result = (names.indexOf(roleName) !== -1);
+    const result = (names.indexOf(roleName) >= 0);
+    return result;
+  },
+
+  isBaseRole: (state, getters) => (roleName = '') => {
+    const names = Object.values(getters.getBaseRoles());
+    const result = (names.indexOf(roleName) >= 0);
     return result;
   },
 

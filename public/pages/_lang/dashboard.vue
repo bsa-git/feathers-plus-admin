@@ -47,10 +47,12 @@
       }
     },
     created() {
+//      debug('getBaseRoles:', this.baseRoles())
     },
     computed: {
       ...mapGetters({
-        theme: 'getTheme'
+        theme: 'getTheme',
+        baseRoles: 'getBaseRoles'
       }),
     },
     data() {
