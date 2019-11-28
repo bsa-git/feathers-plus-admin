@@ -34,7 +34,7 @@ Object.entries(colors).forEach((item) => {
     obj = obj || window;
     let running = false;
     let func = function () {
-      if (running) { return }
+      if (running) { return; }
       running = true;
       requestAnimationFrame(function () {
         obj.dispatchEvent(new CustomEvent(name));
@@ -80,7 +80,7 @@ export default {
     yAxis: [Object, Array],
     series: [Object, Array],
     axisPointer: Object,        
-    dataset: { type: [Object, Array], default () { return {} } }, // option.dataSet
+    dataset: { type: [Object, Array], default () { return {}; } }, // option.dataSet
     colors: Array, // echarts.option.color
     backgroundColor: [Object, String],
     toolbox: { type: [Object, Array] },
