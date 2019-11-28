@@ -1,4 +1,4 @@
-const {inspector, readJsonFileSync, stripSpecific, getHookContext, isTrue, appRoot} = require('../lib');
+const {inspector, readJsonFileSync, stripSpecific, getHookContext, appRoot} = require('../lib');
 const {authenticate} = require('@feathersjs/authentication').hooks;
 const {getItems} = require('feathers-hooks-common');
 const crypto = require('crypto');
@@ -190,9 +190,9 @@ class AuthServer {
 
   /**
    * Get roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param isRole
-   * @return {Object}
+   * @return {Object||String}
    */
   static getRoles(isRole = '') {
     const _roles = {};
@@ -207,6 +207,51 @@ class AuthServer {
   }
 
   /**
+   * Get base roles
+   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * @param isBaseRole
+   * @return {Object||String}
+   */
+  static getBaseRoles(isBaseRole = '') {
+    const _roles = {};
+    const _baseRoles = stripSpecific(process.env.BASE_ROLES, ';').split(';').map(item => item.trim());
+    const _envRoles = stripSpecific(process.env.ROLES, ';').split(';').map(role => {
+      const items = role.trim().split(':').map(item => item.trim());
+      return {[items[0]]: items[1]};
+    });
+    const filterRoles = _envRoles.filter(role => {
+      const key = Object.keys(role)[0];
+      return _baseRoles.indexOf(key) >= 0;
+    });
+    filterRoles.forEach(role => {
+      Object.assign(_roles, role);
+    });
+    return isBaseRole ? _roles[isBaseRole] : _roles;
+  }
+
+  /**
+   * Is env role
+   * @param roleName
+   * @return {boolean}
+   */
+  static isEnvRole(roleName = '') {
+    const names = Object.values(AuthServer.getRoles());
+    const result = (names.indexOf(roleName) >= 0);
+    return result;
+  }
+
+  /**
+   * Is base role
+   * @param roleName
+   * @return {boolean}
+   */
+  static isBaseRole(roleName = '') {
+    const names = Object.values(AuthServer.getBaseRoles());
+    const result = (names.indexOf(roleName) >= 0);
+    return result;
+  }
+
+  /**
    * Determine if environment allows test
    * @return {boolean}
    */
@@ -218,23 +263,15 @@ class AuthServer {
   }
 
   /**
-   * Is auth management from config
-   * @return {Boolean}
-   */
-  static isAuthMng() {
-    return isTrue(process.env.IS_AUTH_MNG);
-  }
-
-  /**
    * Is user external account
    * @param user
    * @return {boolean}
    */
   static isUserExternalAccount(user) {
     const _externalAccounts = getEnvItems(process.env.EXTERNAL_ACCOUNTS);
-    const found = _externalAccounts.find(function(account) {
+    const found = _externalAccounts.find(function (account) {
       const accountId = `${account}Id`;
-      return (user && user[accountId])? !!user[accountId] : false;
+      return (user && user[accountId]) ? !!user[accountId] : false;
     });
     return !!found;
   }
@@ -245,7 +282,7 @@ class AuthServer {
     // getItems always returns an array to simplify your processing.
     let records = getItems(context);
     if (Array.isArray(records)) {
-      result = records.find(function(record) {
+      result = records.find(function (record) {
         return !AuthServer.isUserExternalAccount(record);
       });
 

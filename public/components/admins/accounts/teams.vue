@@ -23,7 +23,7 @@
       <template v-slot:prepend="{ item, active }">
         <v-icon v-if="item.id.startsWith('member.fullName')">mdi-account</v-icon>
         <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : ''">
-          mdi-check-circle
+          mdi-check
         </v-icon>
       </template>
     </v-treeview>

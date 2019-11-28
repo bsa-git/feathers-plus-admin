@@ -35,6 +35,7 @@
 <script>
   import {mapGetters} from 'vuex';
   import appMenu from '~/api/data/app-menu.json';
+  import syncStore from '~/plugins/lib/sync-store';
   import AppToolbar from '~/components/layout/AppToolbar';
   import AppDrawer from '~/components/layout/AppDrawer';
   import AppPageContent from '~/components/layout/AppPageContent';
@@ -60,7 +61,7 @@
       }
     },
     created() {
-      this.$util.initVuetify(this, this.theme);
+      syncStore.initVuetify(this);
     },
     methods: {
       modelNavLeft: function (newValue) {

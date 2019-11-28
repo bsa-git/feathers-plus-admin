@@ -1,4 +1,4 @@
-
+//--- User messages notifier ---//
 const {inspector} = require('../../plugins/lib');
 const errors = require('@feathersjs/errors');
 const {detectLang, getLangMessages} = require('../../plugins/lib/lang-helpers');
@@ -129,7 +129,6 @@ module.exports = function(app) {
           html: langMsg
         };
         return await sendEmail(email);
-
       default:
         break;
       }

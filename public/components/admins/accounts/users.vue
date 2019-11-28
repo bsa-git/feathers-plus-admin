@@ -24,7 +24,7 @@
         <v-icon v-if="item.id.startsWith('user.role')">mdi-security</v-icon>
         <v-icon v-else-if="item.id.startsWith('user.teams')">mdi-account-group</v-icon>
         <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : ''">
-          mdi-check-circle
+          mdi-check
         </v-icon>
       </template>
     </v-treeview>

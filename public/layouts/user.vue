@@ -25,6 +25,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
+  import syncStore from '~/plugins/lib/sync-store';
   import AppSnackBar from '~/components/layout/AppSnackbar';
 
   export default {
@@ -38,7 +39,7 @@
     },
     created() {
       this.primaryColor = this.$colors[this.theme.primary].base;
-      this.$util.initVuetify(this, this.theme);
+      syncStore.initVuetify(this);
     },
     computed: {
       ...mapGetters({

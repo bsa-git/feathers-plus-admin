@@ -22,6 +22,13 @@ const getters = {
     return !!state.auth.accessToken;
   },
 
+  isYouAuth: (state) => (userId) => {
+    const idField = state.users.idField;
+    const user = state.auth.user;
+    const myUserId = user ? user[idField] : '';
+    return userId === myUserId;
+  },
+
   isAdmin(state, getters) {
     return getters.isMyRole('isAdmin');
   },

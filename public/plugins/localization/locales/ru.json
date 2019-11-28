@@ -69,9 +69,9 @@
     "settings": "Конфигурирование",
     "actions": "Действия",
     "graphql": "GraphQL",
-    "request": "Request",
-    "find": "Найти",
-    "get": "Получить",
+    "request": "Запрос",
+    "graphql_find": "Найти",
+    "graphql_get": "Получить",
     "create": "Создать",
     "read": "Читать",
     "update": "Обновить",
@@ -304,14 +304,17 @@
     "confirm_delete_description": "Этот элемент будет удален из базы данных сервера, а также из клиентского хранилища",
     "matchEnvValue": "Должна сответствовать значению в файле .env",
     "success": "Операция выполнена успешно",
-    "errSave": "Ошибка не позволила сохранить данные",
-    "errDelete": "Ошибка не позволила удалить данные",
-    "errDeleteYourself": "Вы не можете удалить самого себя",
-    "errForbidden": "Доступ к методу сервиса запрещен. Недостаточно прав",
     "noData": "Данные отсутствуют",
     "searchNoResults": "Ваш поиск не дал результатов",
+    "errSave": "Ошибка. Не возможно сохранить данные",
+    "errDelete": "Ошибка. Не возможно удалить данные",
+    "errDeleteYourself": "Вы не можете удалить самого себя",
+    "errForbidden": "Доступ к методу сервиса запрещен. Недостаточно прав",
     "errRoleNameNotExistInEnv": "Такое название роли не существует в файле .env",
-    "errGuestRoleNotExist": "Роль гостя не существует в базе данных"
+    "errGuestRoleNotExist": "Роль гостя не существует в базе данных",
+    "errNotPossibleRemoveBaseRoles": "Не возможно удалить базовые роли",
+    "errNotPossibleRemoveRoleFromOneself ": "Не возможно удалить роль у самого себя",
+    "errNotPossibleRemoveGuestRole ": "Не возможно удалить роль гостя"
   },
   "settings": {
     "title": "Настройки",
@@ -331,6 +334,14 @@
     "searchQuery": "Поисковый Запрос",
     "enterGraphLQuery": "Введите GraphL строку запроса",
     "responseToRequest": "Ответ на запрос"
+  },
+  "graphql_find": {
+    "title": "GraphQL",
+    "description": "Найти данные для GraphQL"
+  },
+  "graphql_get": {
+    "title": "GraphQL",
+    "description": "Получить данные для GraphQL"
   },
   "authManagement": {
     "titleVerifySignUp": "Верификация регистрации пользователя",

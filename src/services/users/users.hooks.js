@@ -28,11 +28,10 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 //------------
 const {preventChanges, discard, disallow, isProvider} = commonHooks;
 
-const isAuthMng = AuthServer.isAuthMng();
 const isTest = AuthServer.isTest();
 
 const hookAddVerification = (context) => {
-  if(!isTest && isAuthMng && !AuthServer.isContextExternalAccount(context)){
+  if(!isTest && !AuthServer.isContextExternalAccount(context)){
     return verifyHooks.addVerification()(context);
   }else {
     return context;
@@ -40,7 +39,7 @@ const hookAddVerification = (context) => {
 };
 
 const hookToEmailYourVerification = (context) => {
-  if(!isTest && isAuthMng && !AuthServer.isContextExternalAccount(context)){
+  if(!isTest && !AuthServer.isContextExternalAccount(context)){
     return accountNotifier(context.app).notifier('resendVerifySignup', context.result);
   }else {
     return context;
@@ -48,7 +47,7 @@ const hookToEmailYourVerification = (context) => {
 };
 
 const hookRemoveVerification = (context) => {
-  if(!isTest && isAuthMng && !AuthServer.isContextExternalAccount(context)){
+  if(!isTest && !AuthServer.isContextExternalAccount(context)){
     return verifyHooks.removeVerification()(context);
   }else {
     return context;

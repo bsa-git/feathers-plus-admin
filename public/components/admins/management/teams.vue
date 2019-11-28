@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Confirm Dialog -->
+    <!--=== Confirm Dialog ===-->
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('management.confirm_delete_title')"
@@ -8,7 +8,8 @@
       :run-action="deleteItem"
       v-on:onCloseDialog="confirmDialog = false"
     ></confirm-dialog>
-    <!-- Users for team dialog -->
+
+    <!--=== Users for team dialog ===-->
     <v-dialog v-model="teamUsersDialog" scrollable max-width="400px">
       <v-card>
         <!-- Toolbar -->
@@ -47,7 +48,99 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- Toolbar for table -->
+
+    <!--=== Save Dialog ===-->
+    <v-dialog v-model="teamSaveDialog" max-width="620">
+      <v-card>
+        <!-- Toolbar -->
+        <v-toolbar color="primary" dark>
+          <v-icon v-if="isNewItem" class="mr-3">fas fa-plus-square</v-icon>
+          <v-icon v-else class="mr-3">fas fa-edit</v-icon>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon v-on:click="teamSaveDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <!-- Team Form -->
+        <v-form @submit.prevent="onSubmit">
+          <v-card-text>
+            <div class="text-center">
+              <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
+            </div>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  :counter="60"
+                  v-validate="'required|max:60'"
+                  :error-messages="errors.collect('teamName')"
+                  data-vv-name="teamName"
+                  v-model="editedItem.teamName"
+                  :label="$t('management.teamName')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="editedItem.description"
+                  :value="editedItem.description"
+                  :label="$t('management.formDescription')"
+                ></v-textarea>
+              </v-col>
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="editedItem.userIds"
+                  :items="users"
+                  filled
+                  chips
+                  :label="$t('management.selectUsers')"
+                  item-text="fullName"
+                  item-value="id"
+                  multiple
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      v-bind="data.attrs"
+                      :input-value="data.selected"
+                      close
+                      @click="data.select"
+                      @click:close="deleteItemFromSelection(data.item)"
+                    >
+                      <v-avatar left>
+                        <v-img :src="data.item.avatar"></v-img>
+                      </v-avatar>
+                      {{ data.item.fullName }}
+                    </v-chip>
+                  </template>
+                  <template v-slot:item="data">
+                    <template>
+                      <v-list-item-avatar>
+                        <img :src="data.item.avatar">
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title v-html="data.item.fullName"></v-list-item-title>
+                        <v-list-item-subtitle v-html="data.item.roleName"></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <!-- Actions -->
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" type="submit" :loading="loadingSubmit">
+              {{ $t('management.save') }}
+            </v-btn>
+            <v-btn @click="closeTeamDialog">
+              {{ $t('management.cancel') }}
+            </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
+    <!--=== TopBar for table ===-->
     <v-sheet class="d-flex align-baseline mb-5">
       <v-text-field
         v-model="search"
@@ -57,88 +150,17 @@
         hide-details
       ></v-text-field>
       <v-spacer></v-spacer>
-      <!-- Save Dialog -->
-      <v-dialog v-model="dialog" max-width="620">
-        <!-- Activator -->
-        <template v-slot:activator="{ on }">
-          <v-btn text color="primary" v-on="on">{{ $t('management.new_item') }}</v-btn>
-        </template>
-        <!-- Content Dialog -->
-        <v-card>
-          <!-- Team Form -->
-          <v-form @submit.prevent="onSubmit">
-            <v-card-text>
-              <div class="text-center">
-                <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
-              </div>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    :counter="60"
-                    v-validate="'required|max:60'"
-                    :error-messages="errors.collect('teamName')"
-                    data-vv-name="teamName"
-                    v-model="editedItem.teamName"
-                    :label="$t('management.teamName')"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="editedItem.description"
-                    :value="editedItem.description"
-                    :label="$t('management.formDescription')"
-                  ></v-textarea>
-                </v-col>
-                <v-col cols="12">
-                  <v-autocomplete
-                    v-model="editedItem.userIds"
-                    :items="users"
-                    filled
-                    chips
-                    :label="$t('management.selectUsers')"
-                    item-text="fullName"
-                    item-value="id"
-                    multiple
-                  >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        :input-value="data.selected"
-                        close
-                        class="chip--select-multi"
-                        @input="deleteItemFromSelection(data.item)"
-                      >
-                        <v-avatar>
-                          <img :src="data.item.avatar">
-                        </v-avatar>
-                        {{ data.item.fullName }}
-                      </v-chip>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
-            </v-card-text>
-            <!-- Actions -->
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" type="submit" :loading="loadingSubmit">
-                {{ $t('management.save') }}
-              </v-btn>
-              <v-btn @click="close">
-                {{ $t('management.cancel') }}
-              </v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card>
-      </v-dialog>
+      <!-- Activator open save dialog  -->
+      <v-btn text color="primary" @click="clickNewItem">{{ $t('management.new_item') }}</v-btn>
     </v-sheet>
-    <!-- Data Table -->
+
+    <!--=== Data Table ===-->
     <v-data-table
       :headers="headers"
       :items="teams"
       :search="search"
       class="elevation-1"
     >
-
       <!-- Field userNames -->
       <template v-slot:item.userNames="{ item }">
         <v-btn icon v-if="item.userNames" @click="clickItem(item)">
@@ -198,8 +220,8 @@
     },
     data: () => ({
       search: '',
-      dialog: false,
       confirmDialog: false,
+      teamSaveDialog: false,
       teamUsersDialog: false,
       loadingSubmit: false,
       error: undefined,
@@ -306,7 +328,7 @@
     },
 
     watch: {
-      dialog(val) {
+      teamSaveDialog(val) {
         if (val) {
           this.$validator.reset();
           this.dismissError();
@@ -322,7 +344,12 @@
         this.editedIndex = this.teams.indexOf(item);
         const team = this.getTeam(item.id);
         this.editedItem = Object.assign({}, team);
-        this.dialog = true;
+        this.teamSaveDialog = true;
+      },
+      clickNewItem() {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+        this.teamSaveDialog = true;
       },
       clickDeleteItem(item) {
         this.idItem = item.id;
@@ -336,8 +363,8 @@
         const index = this.editedItem.userIds.indexOf(item.id);
         if (index >= 0) this.editedItem.userIds.splice(index, 1)
       },
-      close() {
-        this.dialog = false;
+      closeTeamDialog() {
+        this.teamSaveDialog = false;
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
         this.$validator.reset();
@@ -381,7 +408,7 @@
               this.showSuccess(`${this.$t('management.success')}!`);
               setTimeout(() => {
                 this.loadingSubmit = false;
-                this.close();
+                this.closeTeamDialog();
               }, 1000);
             }
           }

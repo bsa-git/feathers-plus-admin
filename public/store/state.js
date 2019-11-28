@@ -71,7 +71,6 @@ export default () => ({
     //--- DATABASE ---//
     mongodb: process.env.MONGODB.trim(),
     //--- AUTH ---//
-    isAuthMng: util.isTrue(process.env.IS_AUTH_MNG),
     roles: authRoles(process.env.ROLES),
     baseRoles: baseRoles(process.env.BASE_ROLES),
     publicPaths: authPaths(process.env.PUBLIC_PATHS),

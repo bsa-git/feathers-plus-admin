@@ -9,28 +9,23 @@ const GithubStrategy = require('passport-github');
 
 // !code: imports
 //---------------
-const {verifiers, AuthServer} = require('./plugins/auth');
+const {verifiers} = require('./plugins/auth');
 const auth = require('./hooks/auth');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const commonHooks = require('feathers-hooks-common');
-const debug = require('debug')('app:authentication');
+// const commonHooks = require('feathers-hooks-common');
+// const debug = require('debug')('app:authentication');
 //---------------
 // !end
 // !code: init
 //------------
-const isDebug = false;
-const { iff } = commonHooks;
+// const isDebug = false;
+// const { iff } = commonHooks;
 //------------
 // !end
 
 let moduleExports = function (app) {
   const config = app.get('authentication');
-  // !code: func_init
-  //-----------------
-  const isAuthMng = AuthServer.isAuthMng();
-  if(isDebug) debug('isAuthMng:', isAuthMng);
-  //-----------------
-  // !end
+  // !code: func_init // !end
 
   // Set up authentication with the secret
   app.configure(authentication(config));
@@ -80,7 +75,7 @@ let moduleExports = function (app) {
         // Add data to payload
         auth.payloadExtension(),
         // Add isVerified for verify user`s email
-        iff(isAuthMng, verifyHooks.isVerified())
+        verifyHooks.isVerified()
         // !end
       ],
       remove: [

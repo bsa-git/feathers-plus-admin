@@ -14,7 +14,7 @@ const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
 
-  if(!isTest) {
+  if (!isTest) {
     debug('<< Test /hooks/constraints.unit.test.js - NOT >>');
     return;
   }
@@ -204,6 +204,56 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
     }
   });
 
+  it('Error when removing a base record from \'roles\' service', async () => {
+
+    const recAdmin = fakes['roles'].find(function (role) {
+      return (role.name === AuthServer.getRoles('isAdmin'));
+    });
+
+    const recGuest = fakes['roles'].find(function (role) {
+      return (role.name !== AuthServer.getRoles('isGuest'));
+    });
+
+    // const rec = fakes['roles'][0];
+    const idFieldRole = 'id' in recAdmin ? 'id' : '_id';
+    const roleAdminId = recAdmin[idFieldRole];
+    const roleGuestId = recGuest[idFieldRole];
+
+    try {
+      contextBefore.path = 'roles';
+      contextBefore.method = 'remove';
+      contextBefore.app = app;
+      contextBefore.service = app.service('roles');
+      contextBefore.data = {
+        [idFieldRole]: roleAdminId
+      };
+      await constraints(true)(contextBefore);
+      assert.ok(false, 'Protection did not work to remove the data from service');
+    } catch (ex) {
+      if (isDebug) debug('Error when removing a Admin base record from \'roles\' service', ex);
+      assert.strictEqual(ex.code, 400, 'unexpected error.code');
+      assert.strictEqual(ex.message, 'Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
+      assert.strictEqual(ex.name, 'BadRequest', 'unexpected error.name');
+    }
+
+    try {
+      contextBefore.path = 'roles';
+      contextBefore.method = 'remove';
+      contextBefore.app = app;
+      contextBefore.service = app.service('roles');
+      contextBefore.data = {
+        [idFieldRole]: roleGuestId
+      };
+      await constraints(true)(contextBefore);
+      assert.ok(false, 'Protection did not work to remove the data from service');
+    } catch (ex) {
+      if (isDebug) debug('Error when removing a Guest base record from \'roles\' service', ex);
+      assert.strictEqual(ex.code, 400, 'unexpected error.code');
+      assert.strictEqual(ex.message, 'Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
+      assert.strictEqual(ex.name, 'BadRequest', 'unexpected error.name');
+    }
+  });
+
   it('Set contextBefore.roleId while creating record for \'users\' service', async () => {
     const service = app.service('users');
     contextBefore.path = 'users';
@@ -244,11 +294,11 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
     const userId = rec[idFieldUser];
     const userTeams = app.service('user-teams');
     const findUserTeamsBefore = await userTeams.find({query: {userId: userId}});
-    if(isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsBefore:', findUserTeamsBefore.data);
+    if (isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsBefore:', findUserTeamsBefore.data);
     const profileId = rec.profileId;
     const userProfiles = app.service('user-profiles');
     const findUserProfilesBefore = await userProfiles.find({query: {[idFieldUser]: profileId}});
-    if(isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesBefore:', findUserProfilesBefore.data);
+    if (isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesBefore:', findUserProfilesBefore.data);
 
     contextAfter.path = 'users';
     contextAfter.method = 'remove';
@@ -260,9 +310,9 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
     };
     await constraints(true)(contextAfter);
     const findUserTeamsAfter = await userTeams.find({query: {userId: userId}});
-    if(isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsAfter:', findUserTeamsAfter.data);
+    if (isLog) inspector('Data integrity for \'user-teams\' service, when removing a record from \'users\' service.findUserTeamsAfter:', findUserTeamsAfter.data);
     const findUserProfilesAfter = await userProfiles.find({query: {[idFieldUser]: profileId}});
-    if(isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesAfter:', findUserProfilesAfter.data);
+    if (isLog) inspector('Data integrity for \'user-profiles\' service, when removing a record from \'users\' service.findUserProfilesAfter:', findUserProfilesAfter.data);
     assert.ok((findUserTeamsBefore.data.length > findUserTeamsAfter.data.length) &&
       (findUserProfilesBefore.data.length > findUserProfilesAfter.data.length), 'Protection did not work to removing the data from service');
   });
@@ -278,10 +328,10 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
     fakes['teams'].forEach(async team => {
       const _teamId = team[idFieldTeam];
       const _findResultsBefore = await userTeams.find({query: {teamId: _teamId}});
-      if(!teamId && _findResultsBefore.data.length) {
+      if (!teamId && _findResultsBefore.data.length) {
         teamId = _teamId;
         findResultsBefore = _findResultsBefore;
-        if(isLog && _findResultsBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findResultsBefore:', _findResultsBefore.data);
+        if (isLog && _findResultsBefore.data.length) inspector('Data integrity when removing a record from \'teams\' service.findResultsBefore:', _findResultsBefore.data);
 
         contextAfter.path = 'teams';
         contextAfter.method = 'remove';
@@ -293,7 +343,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
 
         await constraints(true)(contextAfter);
         const findResultsAfter = await userTeams.find({query: {teamId: teamId}});
-        if(isLog) inspector('Data integrity when removing a record from \'teams\' service.findResultsAfter:', findResultsAfter.data);
+        if (isLog) inspector('Data integrity when removing a record from \'teams\' service.findResultsAfter:', findResultsAfter.data);
         assert.ok(findResultsBefore.data.length > findResultsAfter.data.length, 'Protection did not work to removing the data from service');
       }
     });
@@ -301,16 +351,17 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
 
   it('Data integrity when removing a record from \'roles\' service', async () => {
 
-    const rec = fakes['roles'].find(function(role) {
-      return role.name === AuthServer.getRoles('isAdmin');
+    const rec = fakes['roles'].find(function (role) {
+      return (role.name !== AuthServer.getRoles('isAdmin')) && (role.name !== AuthServer.getRoles('isGuest'));
     });
 
     // const rec = fakes['roles'][0];
     const idFieldRole = 'id' in rec ? 'id' : '_id';
     const roleId = rec[idFieldRole];
     const users = app.service('users');
-    const findResultsBefore = await users.find({query: {roleId: roleId}});
-    if(isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsBefore:', findResultsBefore.data);
+    let findResultsBefore = await users.find({query: {roleId: roleId}});
+    findResultsBefore = findResultsBefore.data;
+    if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsBefore:', findResultsBefore);
 
     contextAfter.path = 'roles';
     contextAfter.method = 'remove';
@@ -320,9 +371,10 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
       [idFieldRole]: roleId
     };
     await constraints(true)(contextAfter);
-    const findResultsAfter = await users.find({query: {roleId: roleId}});
-    if(isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsAfter:', findResultsAfter.data);
-    assert.ok(findResultsBefore.data.length > findResultsAfter.data.length, 'Protection did not work to removing the data from service');
+    let findResultsAfter = await users.find({query: {roleId: roleId}});
+    findResultsAfter = findResultsAfter.data;
+    if (isLog) inspector('Data integrity when removing a record from \'roles\' service.findResultsAfter:', findResultsAfter);
+    assert.ok(findResultsBefore.length > findResultsAfter.length, 'Protection did not work to removing the data from service');
   });
 
 

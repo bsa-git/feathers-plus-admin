@@ -70,8 +70,8 @@
     "actions": "Actions",
     "graphql": "GraphQL",
     "request": "Request",
-    "find": "Find",
-    "get": "Get",
+    "graphql_find": "Find",
+    "graphql_get": "Get",
     "create": "Create",
     "read": "Read",
     "update": "Update",
@@ -305,14 +305,17 @@
     "confirm_delete_description": "This item will be removed from the server database as well as from the client store",
     "matchEnvValue": "Must match the value in the .env file",
     "success": "Operation successful",
+    "noData": "No data available",
+    "searchNoResults": "Your search found no results",
     "errSave": "An error prevented save of data",
     "errDelete": "An error prevented delete of data",
     "errDeleteYourself": "You can not delete yourself",
     "errForbidden": "Access to the service method is denied. Not enough rights",
-    "noData": "No data available",
-    "searchNoResults": "Your search found no results",
     "errRoleNameNotExistInEnv": "Role name does not exist in .env",
-    "errGuestRoleNotExist": "The guest role does not exist in data base"
+    "errGuestRoleNotExist": "The guest role does not exist in data base",
+    "errNotPossibleRemoveBaseRoles": "It is not possible to remove base roles",
+    "errNotPossibleRemoveRoleFromOneself": "It is not possible to remove a role from oneself",
+    "errNotPossibleRemoveGuestRole ": "It is not possible to remove a guest role"
   },
   "settings": {
     "title": "Settings",
@@ -332,6 +335,14 @@
     "searchQuery": "Search Query",
     "enterGraphLQuery": "Enter the GraphL query string",
     "responseToRequest": "Response to the request"
+  },
+  "graphql_find": {
+    "title": "GraphQL",
+    "description": "Find data for GraphQL"
+  },
+  "graphql_get": {
+    "title": "GraphQL",
+    "description": "Get data for GraphQL"
   },
   "authManagement": {
     "titleVerifySignUp": "Verification Sign up",

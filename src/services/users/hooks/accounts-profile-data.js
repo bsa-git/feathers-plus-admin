@@ -46,7 +46,8 @@ module.exports = function (options = {}) {
         profile = record.google.profile;
         newRecord.googleId = record.googleId;
         let _email = profile.emails.find(email => {
-          return (email.type === 'account') || (email.type === 'ACCOUNT');
+          const type = email.type? email.type.toLowerCase() : '';
+          return (type === 'account');
         });
         if(_email){
           newRecord.email = _email.value;
@@ -66,6 +67,9 @@ module.exports = function (options = {}) {
         if(context.method === 'create'){
           newRecord.roleId = record.roleId;
           newRecord.profileId = record.profileId;
+          newRecord.isVerified = true;
+        }
+        if(context.method === 'patch'){
           newRecord.isVerified = true;
         }
         return newRecord;
@@ -90,6 +94,9 @@ module.exports = function (options = {}) {
         if(context.method === 'create'){
           newRecord.roleId = record.roleId;
           newRecord.profileId = record.profileId;
+          newRecord.isVerified = true;
+        }
+        if(context.method === 'patch'){
           newRecord.isVerified = true;
         }
         return newRecord;

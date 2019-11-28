@@ -10,15 +10,11 @@
 
 <script>
   import {mapGetters} from 'vuex';
+  import syncStore from '~/plugins/lib/sync-store';
 
   export default {
     created() {
-      this.$util.initVuetify(this, this.theme);
-    },
-    computed: {
-      ...mapGetters({
-        theme: 'getTheme',
-      })
-    },
+      syncStore.initVuetify(this);
+    }
   }
 </script>

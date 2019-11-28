@@ -46,8 +46,25 @@ const setLocale = (ct) => {
   }
 };
 
+/**
+ * Init vuetify
+ * @param ctVue {Object}
+ */
+const initVuetify = function (ctVue) {
+  const theme = ctVue.$store.state.theme;
+  // Set theme dark
+  ctVue.$vuetify.theme.dark = theme.dark;
+  // Set theme primary
+  const primaryColor = ctVue.$colors[theme.primary].base;
+  ctVue.$vuetify.theme.themes.dark.primary = primaryColor;
+  ctVue.$vuetify.theme.themes.light.primary = primaryColor;
+  // Set vuetify lang
+  ctVue.$vuetify.lang.t = (key, ...params) => ctVue.$t(key, params);
+};
+
 export default {
   setThemePrimary,
   setThemeDark,
-  setLocale
+  setLocale,
+  initVuetify
 };

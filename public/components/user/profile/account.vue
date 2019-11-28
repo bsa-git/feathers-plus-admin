@@ -19,91 +19,91 @@
     ></confirm-dialog>
     <v-form @submit.prevent="onSubmit">
       <!--<v-container grid-list-md>-->
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              :counter="15"
-              v-validate="'required|max:20'"
-              :error-messages="errors.collect('firstName')"
-              data-vv-name="firstName"
-              v-model="model.firstName"
-              :label="$t('signup.firstName')"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              :counter="20"
-              v-validate="'required|max:20'"
-              :error-messages="errors.collect('lastName')"
-              data-vv-name="lastName"
-              v-model="model.lastName"
-              :label="$t('signup.lastName')"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" :sm="(config.isAuthMng && changeIdentity)? 6 : 12">
-            <v-text-field
-              append-icon="mdi-email"
-              v-validate="'required|email'"
-              :error-messages="errors.collect('email')"
-              data-vv-name="email"
-              v-model="model.email"
-              :label="$t('login.email')"
-              :disabled="isExternalAccount? true : config.isAuthMng? !changeIdentity : false"
-              :hint="isExternalAccount? $t('accounts.emailForExternalAccounts') : !config.isAuthMng? $t('profile.hintIdentity') : changeIdentity? $t('profile.hintIdentity') : ''"
-              persistent-hint
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng && changeIdentity">
-            <v-text-field
-              append-icon="mdi-lock"
-              v-validate="'required|min:3'"
-              :error-messages="errors.collect('password')"
-              data-vv-name="password"
-              v-model="model.password"
-              :label="$t('login.password')"
-              type="password"
-              :disabled="!changeIdentity"
-              :hint="changeIdentity? $t('profile.hintPassword'):''"
-              persistent-hint
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
-            <v-text-field
-              append-icon="mdi-lock"
-              v-validate="'required|min:3'"
-              :error-messages="errors.collect('oldPassword')"
-              data-vv-name="oldPassword"
-              v-model="model.oldPassword"
-              :label="$t('profile.oldPassword')"
-              type="password"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" v-if="!isExternalAccount && (!config.isAuthMng || changePassword)">
-            <v-text-field
-              append-icon="mdi-lock"
-              v-validate="'required|min:3'"
-              :error-messages="errors.collect('newPassword')"
-              data-vv-name="newPassword"
-              v-model="model.newPassword"
-              :label="$t('profile.newPassword')"
-              type="password"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng">
-            <v-checkbox
-              v-model="changeIdentity"
-              :label="$t('profile.changeIdentity')"
-              :disabled="changePassword"
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="12" sm="6" v-if="!isExternalAccount && config.isAuthMng">
-            <v-checkbox
-              v-model="changePassword"
-              :label="$t('profile.changePassword')"
-              :disabled="changeIdentity"
-            ></v-checkbox>
-          </v-col>
-        </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="15"
+            v-validate="'required|max:20'"
+            :error-messages="errors.collect('firstName')"
+            data-vv-name="firstName"
+            v-model="model.firstName"
+            :label="$t('signup.firstName')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            :counter="20"
+            v-validate="'required|max:20'"
+            :error-messages="errors.collect('lastName')"
+            data-vv-name="lastName"
+            v-model="model.lastName"
+            :label="$t('signup.lastName')"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" :sm="changeIdentity? 6 : 12">
+          <v-text-field
+            append-icon="mdi-email"
+            v-validate="'required|email'"
+            :error-messages="errors.collect('email')"
+            data-vv-name="email"
+            v-model="model.email"
+            :label="$t('login.email')"
+            :disabled="isExternalAccount? true : !changeIdentity"
+            :hint="isExternalAccount? $t('accounts.emailForExternalAccounts') : changeIdentity? $t('profile.hintIdentity') : ''"
+            persistent-hint
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" v-if="!isExternalAccount && changeIdentity">
+          <v-text-field
+            append-icon="mdi-lock"
+            v-validate="'required|min:3'"
+            :error-messages="errors.collect('password')"
+            data-vv-name="password"
+            v-model="model.password"
+            :label="$t('login.password')"
+            type="password"
+            :disabled="!changeIdentity"
+            :hint="changeIdentity? $t('profile.hintPassword'):''"
+            persistent-hint
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" v-if="!isExternalAccount && changePassword">
+          <v-text-field
+            append-icon="mdi-lock"
+            v-validate="'required|min:3'"
+            :error-messages="errors.collect('oldPassword')"
+            data-vv-name="oldPassword"
+            v-model="model.oldPassword"
+            :label="$t('profile.oldPassword')"
+            type="password"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" v-if="!isExternalAccount && changePassword">
+          <v-text-field
+            append-icon="mdi-lock"
+            v-validate="'required|min:3'"
+            :error-messages="errors.collect('newPassword')"
+            data-vv-name="newPassword"
+            v-model="model.newPassword"
+            :label="$t('profile.newPassword')"
+            type="password"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" v-if="!isExternalAccount">
+          <v-checkbox
+            v-model="changeIdentity"
+            :label="$t('profile.changeIdentity')"
+            :disabled="changePassword"
+          ></v-checkbox>
+        </v-col>
+        <v-col cols="12" sm="6" v-if="!isExternalAccount">
+          <v-checkbox
+            v-model="changePassword"
+            :label="$t('profile.changePassword')"
+            :disabled="changeIdentity"
+          ></v-checkbox>
+        </v-col>
+      </v-row>
       <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -174,7 +174,7 @@
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
       }
-      if(isDebug)debug('created.isExternalAccount:', this.isExternalAccount);
+      if (isDebug) debug('created.isExternalAccount:', this.isExternalAccount);
     },
     computed: {
       ...mapGetters({
@@ -198,7 +198,7 @@
             const saveResponse = await this.save(this.model);
             if (saveResponse) {
               if (isLog) debug('onSubmit.saveResponse:', saveResponse);
-              if(!this.isChangeEmail()){
+              if (!this.isChangeEmail()) {
                 this.showSuccess(`${this.$t('profile.successSaveUser')}!`);
               }
               setTimeout(() => {
@@ -225,25 +225,16 @@
             changeResult = await user.save();
             if (isDebug) debug('userChange.OK');
           }
-          if(this.isChangePassword()){
+          if (this.isChangePassword()) {
             if (isDebug) debug('<<passwordChange>> Start passwordChange');
             changeResult = await Auth.passwordChange(data.oldPassword, data.newPassword, {email: this.user.email});
             if (isDebug) debug('passwordChange.OK');
           }
           if (this.isChangeEmail()) {
             if (isDebug) debug('<<identityChange>> Start identityChange');
-            if(this.config.isAuthMng){
-              changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
-              this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
-              this.inputCodeDialog = true;
-            }else {
-              userData = {
-                [idFieldUser]: this.user[idFieldUser],
-                email: data.email
-              };
-              const user = new User(userData);
-              changeResult = await user.save();
-            }
+            changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
+            this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
+            this.inputCodeDialog = true;
             if (isDebug) debug('identityChange.OK');
           }
           return changeResult;
@@ -282,10 +273,10 @@
       },
       isChangeEmail() {
         const changeEmail = this.model.email !== this.user.email;
-        return !this.config.isAuthMng? changeEmail : this.changeIdentity? changeEmail : false;
+        return this.changeIdentity ? changeEmail : false;
       },
       isChangePassword() {
-        return !this.config.isAuthMng? !!this.model.oldPassword : this.changePassword? !!this.model.oldPassword : false;
+        return this.changePassword ? !!this.model.oldPassword : false;
       },
       isAnyChange() {
         return this.isChangeUser() || this.isChangeEmail() || this.isChangePassword();

@@ -23,26 +23,36 @@ const actions = {
   },
 
   async checkAuth({dispatch}) {
+    if(isDebug) debug('<<checkAuth>>Start checkAuth');
+    let result = false;
     if (this.$util.isAccessToken()) {
       try {
-        if(isDebug) debug('<<checkAuth>>Start checkAuth');
         // let response = await dispatch('auth/authenticate');
         let response = await dispatch('authenticate');
-        const result = (!!response && !!response.accessToken);
+        result = (!!response && !!response.accessToken);
         if (isLog && result) debug('<<checkAuth>>Response accessToken:', response);
-        return result;
       } catch (error) {
         if (error.message.includes('Could not find stored JWT')) {
           this.$util.removeAccessToken();
-          return false;
+          if(isDebug) debug('<<checkAuth>>Error.message:', error.message);
+          result = false;
+        } else if(error.message.includes('No record found for id')) {
+          this.$util.removeAccessToken();
+          if(isDebug) debug('<<checkAuth>>Error.message:', error.message);
+          result = false;
         } else {
-          console.error(error);
+          result = false;
+          // console.error(error);
+          if(isDebug) debug('<<checkAuth>>Error.message:', error.message);
+          if(isDebug) debug('<<checkAuth>>Error:', result);
           throw error;
         }
       }
     } else {
-      return false;
+      result = false;
     }
+    if(isDebug) debug('<<checkAuth>>Result:', result);
+    return result;
   },
 
   async logout(store) {

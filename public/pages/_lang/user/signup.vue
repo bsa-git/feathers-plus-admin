@@ -1,5 +1,6 @@
 <template>
   <div class="main-content">
+
     <input-dialog
       :input-dialog="inputDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
@@ -13,14 +14,16 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card>
+          <!-- Form title -->
           <v-card-title>
-            <!--<v-icon>mdi-account-plus</v-icon>-->
+            <v-icon class="mr-3">mdi-account-plus</v-icon>
             <span class="headline">{{ $t('user_menu.signup') }}</span>
             <v-spacer></v-spacer>
             <router-link :to="$i18n.path(config.homePath)" class="close-icon">
               <v-icon>mdi-close</v-icon>
             </router-link>
           </v-card-title>
+          <!-- Form content -->
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
               <div class="text-center">
@@ -56,7 +59,7 @@
                     data-vv-name="email"
                     v-model="model.email"
                     :label="$t('login.email')"
-                    :hint="config.isAuthMng? $t('authManagement.hintSingUpEmail') : ''"
+                    :hint="$t('authManagement.hintSingUpEmail')"
                     persistent-hint
                   ></v-text-field>
                 </v-col>
@@ -85,6 +88,7 @@
                 </v-col>
               </v-row>
             </v-card-text>
+            <!-- Form actions -->
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" type="submit" :loading="loadingSubmit" :disabled="!!user">
@@ -174,22 +178,11 @@
           const signupResponse = await this.save(this.model);
           if (signupResponse) {
             if (isLog) debug('signupResponse:', signupResponse);
-            if (this.config.isAuthMng) {
-              this.showWarning({text: `${this.$t('authManagement.signUpVerification')}`, timeout: 10000});
-              setTimeout(() => {
-                this.loadingSubmit = false;
-                this.inputDialog = true;
-              }, 1000);
-            } else {
-              const loginResponse = await this.login(this.model.email, this.model.password);
-              if (loginResponse && loginResponse.accessToken) {
-                if (isLog) debug('loginResponse:', loginResponse);
-                this.showSuccess(`${this.$t('signup.successSignUpAndLogin')}!`);
-                setTimeout(() => {
-                  this.$router.push(this.$i18n.path(this.config.homePath));
-                }, 1000);
-              }
-            }
+            this.showWarning({text: `${this.$t('authManagement.signUpVerification')}`, timeout: 10000});
+            setTimeout(() => {
+              this.loadingSubmit = false;
+              this.inputDialog = true;
+            }, 1000);
           }
         }
       },

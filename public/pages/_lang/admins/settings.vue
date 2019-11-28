@@ -109,13 +109,6 @@
 
             <v-list-item >
               <v-list-item-content>
-                <v-list-item-title>IS_AUTH_MNG</v-list-item-title>
-                <v-list-item-subtitle v-html>{{ config.isAuthMng }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item >
-              <v-list-item-content>
                 <v-list-item-title>EXTERNAL_ACCOUNTS</v-list-item-title>
                 <v-list-item-subtitle v-html>{{ config.externalAccounts }}</v-list-item-subtitle>
               </v-list-item-content>

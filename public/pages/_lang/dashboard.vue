@@ -3,6 +3,47 @@
     <app-page-header
       :page-title="description"
     ></app-page-header>
+    <v-row justify="center">
+      <!-- mini statistic start -->
+      <v-col cols="12" sm="6" lg="3">
+        <mini-statistic
+          icon="fab fa-facebook-f"
+          title="100+"
+          sub-title="Likes"
+          color="indigo"
+        >
+        </mini-statistic>
+      </v-col>
+      <v-col cols="12" sm="6" lg="3">
+        <mini-statistic
+          icon="fab fa-google"
+          title="150+"
+          sub-title="Connections"
+          color="red"
+        >
+        </mini-statistic>
+      </v-col>
+      <v-col cols="12" sm="6" lg="3">
+        <mini-statistic
+          icon="fab fa-twitter"
+          title="200+"
+          sub-title="Followers"
+          color="light-blue"
+        >
+        </mini-statistic>
+      </v-col>
+      <v-col cols="12" sm="6" lg="3">
+        <mini-statistic
+          icon="fab fa-instagram"
+          title="50+"
+          sub-title="Shots"
+          color="purple"
+        >
+        </mini-statistic>
+      </v-col>
+      <!-- mini statistic  end -->
+    </v-row>
+    <!--
     <blockquote :class="`exotic--${theme.name} exotic--font headline text-center`">
       &#8220;First, solve the problem. Then, write the code.&#8221;
       <footer>
@@ -26,17 +67,21 @@
         ></v-data-table>
       </v-col>
     </v-row>
+    -->
   </div>
 </template>
 
 <script>
   import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/layout/AppPageHeader';
+  import MiniStatistic from '~/components/widgets/statistic/MiniStatistic';
+
   const debug = require('debug')('app:page.dashboard');
 
   export default {
     components: {
-      AppPageHeader
+      AppPageHeader,
+      MiniStatistic
     },
     head() {
       return {

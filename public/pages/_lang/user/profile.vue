@@ -3,7 +3,9 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card>
+          <!-- Form title -->
           <v-card-title>
+            <v-icon class="mr-3">mdi-account-circle</v-icon>
             <span class="headline">{{ currentTitle(step) }}</span>
             <v-spacer></v-spacer>
             <v-btn
@@ -18,6 +20,7 @@
               </v-tooltip>
             </v-btn>
           </v-card-title>
+          <!-- User avatar -->
           <v-card-title>
             <div class="layout column align-center">
               <v-avatar size="120"><img :src="model.avatar"></v-avatar>

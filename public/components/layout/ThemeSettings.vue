@@ -62,6 +62,34 @@
       };
     },
     methods: {
+      themeColorHandler(val) {
+        const optColor = this.colorOptions.find(option => option.key === val);
+        let subColor = optColor.value[this.sideBarOption];
+        subColor = subColor.replace('-', '');
+        const primaryColor = this.$colors[val][subColor];
+        if (this.changedColor) {
+          this.$vuetify.theme.themes.dark.primary = primaryColor;
+          this.$vuetify.theme.themes.light.primary = primaryColor;
+          this.setThemePrimary(val);
+        } else {
+          this.changedColor = true;
+          if (this.theme.primary !== val) {
+            this.themeColor = this.theme.primary;
+          }
+        }
+      },
+      sideBarOptionHandler(val){
+        const isDark = (val === 'dark');
+        if (this.changedDark) {
+          this.$vuetify.theme.dark = isDark;
+          this.setThemeDark(isDark);
+        } else {
+          this.changedDark = true;
+          if (this.theme.dark !== isDark) {
+            this.sideBarOption = this.theme.dark ? 'dark' : 'light';
+          }
+        }
+      },
       ...mapMutations({
         setThemePrimary: 'SET_THEME_PRIMARY',
         setThemeDark: 'SET_THEME_DARK'
@@ -73,32 +101,14 @@
     watch: {
       themeColor: {
         handler(val) {
-          const primaryColor = this.$colors[val].base;
-          if (this.changedColor) {
-            this.$vuetify.theme.themes.dark.primary = primaryColor;
-            this.$vuetify.theme.themes.light.primary = primaryColor;
-            this.setThemePrimary(val);
-          } else {
-            this.changedColor = true;
-            if (this.theme.primary !== val) {
-              this.themeColor = this.theme.primary;
-            }
-          }
+          this.themeColorHandler(val);
         },
         immediate: true
       },
       sideBarOption: {
         handler(val) {
-          const isDark = (val === 'dark');
-          if (this.changedDark) {
-            this.$vuetify.theme.dark = isDark;
-            this.setThemeDark(isDark);
-          } else {
-            this.changedDark = true;
-            if (this.theme.dark !== isDark) {
-              this.sideBarOption = this.theme.dark ? 'dark' : 'light';
-            }
-          }
+          this.sideBarOptionHandler(val);
+          this.themeColorHandler(this.themeColor);
         },
         immediate: true
       }

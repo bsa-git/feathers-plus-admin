@@ -49,13 +49,14 @@ module.exports = function (isTest = false) {
      */
     const validateUnique = async (query = {}, id = null) => {
       let valid = true;
-      const results = await context.service.find({query: query});
-      if (isLog) inspector(`validateUnique(query=${JSON.stringify(query)}).results:`, results.data);
+      let results = await context.service.find({query: query});
+      results = results.data;
+      if (isLog) inspector(`validateUnique(query=${JSON.stringify(query)}).results:`, results);
       if (context.method === 'create') {
-        valid = results.data.length === 0;
+        valid = results.length === 0;
       } else {
-        if (results.data.length !== 0) {
-          const rec = results.data[0];
+        if (results.length !== 0) {
+          const rec = results[0];
           idField = 'id' in rec ? 'id' : '_id';
           valid = rec[idField] === id;
         } else {
@@ -92,16 +93,16 @@ module.exports = function (isTest = false) {
      * @param id
      * @return {Promise.<*>}
      */
-    // const getItem = async (path = '', id = null) => {
-    //   const service = context.app.service(path);
-    //   if (service) {
-    //     const getResult = await service.get(id);
-    //     if (isLog) inspector(`getItem(path='${path}', id='${id}').getResult:`, getResult);
-    //     return getResult;
-    //   } else {
-    //     throw new errors.BadRequest(`There is no service for the path - '${path}'`);
-    //   }
-    // };
+    const getItem = async (path = '', id = null) => {
+      const service = context.app.service(path);
+      if (service) {
+        const getResult = await service.get(id);
+        if (isLog) inspector(`getItem(path='${path}', id='${id}').getResult:`, getResult);
+        return getResult;
+      } else {
+        throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+      }
+    };
 
     /**
      * Find items
@@ -112,9 +113,10 @@ module.exports = function (isTest = false) {
     const findItems = async (path = '', query = {}) => {
       const service = context.app.service(path);
       if (service) {
-        const findResults = await service.find({query: query});
-        if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults.data);
-        return findResults.data;
+        let findResults = await service.find({query: query});
+        findResults = findResults.data;
+        if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(query)}).findResults:`, findResults);
+        return findResults;
       } else {
         throw new errors.BadRequest(`There is no service for the path - '${path}'`);
       }
@@ -198,15 +200,20 @@ module.exports = function (isTest = false) {
       let roleId = '';
       const roles = context.app.service('roles');
       const roleName = AuthServer.getRoles(isRole);
-      const findResults = await roles.find({query: {name: roleName}});
-      if(findResults.data.length){
-        idField = 'id' in findResults.data[0] ? 'id' : '_id';
-        roleId = findResults.data[0][idField];
+      let findResults = await roles.find({query: {name: roleName}});
+      findResults = findResults.data;
+      if(findResults.length){
+        idField = 'id' in findResults[0] ? 'id' : '_id';
+        roleId = findResults[0][idField];
       }
       return roleId;
     };
 
     if (isCheck) {
+
+      // Create auth object
+      // let auth = new AuthServer(context);
+
       switch (`${context.type}.${context.path}.${context.method}`) {
       case 'before.user-teams.create':
         showDebugInfo();
@@ -279,6 +286,33 @@ module.exports = function (isTest = false) {
           const findResults = await findItems(servicePath, {profileId: profileId});
           if(Array.isArray(findResults) && findResults.length){
             throw new errors.BadRequest('Error deleting item from \'user-profiles\' service. You can not delete an item if it is referenced by other services.');
+          }
+        }
+        break;
+      case 'before.roles.remove':
+        showDebugInfo();
+        if (Array.isArray(records)) {
+          records.forEach(async record => {
+            const idField = 'id' in record ? 'id' : '_id';
+            const roleId = record[idField];
+            let servicePath = 'roles';
+            const getResult = await getItem(servicePath, roleId);
+            if(getResult && AuthServer.isBaseRole(getResult.name)){
+              throw new errors.BadRequest('Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
+            }
+          });
+        } else {
+          let roleId;
+          if(records){
+            const idField = 'id' in records ? 'id' : '_id';
+            roleId = records[idField];
+          }else {
+            roleId = context.id;
+          }
+          let servicePath = 'roles';
+          const getResult = await getItem(servicePath, roleId);
+          if(getResult && AuthServer.isBaseRole(getResult.name)){
+            throw new errors.BadRequest('Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
           }
         }
         break;

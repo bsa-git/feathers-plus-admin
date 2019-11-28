@@ -39,7 +39,7 @@ const rolesUpdate = () => {
     fakeDataRoles[index]['name'] = role;
   });
   if(isLog) inspector('fake-service.rolesUpdate.fakeDataRoles:', fakeDataRoles);
-  if(isDebug) console.log(chalk.yellow('Roles Update: OK'));
+  if(isDebug) console.log(chalk.yellow('Roles Update: Ok'));
 };
 
 const usersUpdate = () => {
@@ -64,7 +64,7 @@ const usersUpdate = () => {
   }));
 
   if(isLog) inspector('fake-service.usersUpdate.fakeDataUsers:', fakeDataUsers);
-  if(isDebug) console.log(chalk.yellow('Users Update: OK'));
+  if(isDebug) console.log(chalk.yellow('Users Update: Ok'));
 };
 
 const userTeamsUpdate = () => {
@@ -73,7 +73,7 @@ const userTeamsUpdate = () => {
   });
   fakeDataUserTeams[0]['userId'] = fakeDataUsers[0][idFieldUser];
   if(isLog) inspector('fake-service.userTeamsUpdate.fakeDataUserTeams:', fakeDataUserTeams);
-  if(isDebug) console.log(chalk.yellow('UserTeams Update: OK'));
+  if(isDebug) console.log(chalk.yellow('UserTeams Update: Ok'));
 };
 
 const fakeDataUpdate = () => {

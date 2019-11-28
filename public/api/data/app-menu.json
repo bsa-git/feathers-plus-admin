@@ -42,7 +42,7 @@
     "group": "admins",
     "name": "admins",
     "alias": "admins",
-    "icon": "mdi-tools",
+    "icon": "mdi-brightness-auto",
     "to": "/admins",
     "items": [
       {
@@ -85,14 +85,14 @@
         "children": [
           {
             "name": "services-graphql-find",
-            "alias": "find",
+            "alias": "graphql_find",
             "title": "Find",
             "icon": "mdi-find-replace",
             "to": "/services/graphql/find"
           },
           {
             "name": "services-graphql-get",
-            "alias": "get",
+            "alias": "graphql_get",
             "title": "Get",
             "icon": "mdi-target-variant",
             "to": "/services/graphql/get"

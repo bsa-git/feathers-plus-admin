@@ -1,35 +1,42 @@
 <template>
   <div>
+    <!-- Page Header -->
     <app-page-header
-      :app-menu="appMenu"
-      :home-path="config.homePath"
+      :page-title="description"
     ></app-page-header>
-    <v-layout align-center justify-center row>
-      <div class="text-md-center">
-        <h1>Services/GraphQL/Index</h1>
-      </div>
-    </v-layout>
+    <!-- Nodal Menu Item -->
+    <nodal-menu-item
+      nodalName="services"
+      page-name="services-graphql"
+      :app-menu="appMenu"
+    ></nodal-menu-item>
   </div>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import appMenu from '~/api/data/app-menu';
   import AppPageHeader from '~/components/layout/AppPageHeader';
+  import NodalMenuItem from '~/components/menu/NodalMenuItem';
+  import appMenu from '~/api/data/app-menu';
 
   export default {
     components: {
-      AppPageHeader
+      AppPageHeader,
+      NodalMenuItem
     },
     data() {
       return {
-        appMenu: appMenu,
+        title: this.$t('app_menu.graphql'),
+        description: this.$t('graphql.description'),
+        appMenu
       }
     },
-    computed: {
-      ...mapGetters({
-        config: 'getConfig',
-      }),
+    head() {
+      return {
+        title: this.title,
+        meta: [
+          {hid: 'description', name: 'description', content: this.description}
+        ],
+      }
     },
   }
 </script>

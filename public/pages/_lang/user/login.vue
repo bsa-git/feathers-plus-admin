@@ -1,5 +1,7 @@
 <template>
   <div class="main-content">
+
+    <!--=== Input code dialog ===-->
     <input-code-dialog
       :input-dialog="inputCodeDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
@@ -10,6 +12,8 @@
       v-on:onCloseInputDialog="inputCodeDialog = false"
       v-on:onInput="setVerifyCode"
     ></input-code-dialog>
+
+    <!--=== Input email dialog ===-->
     <input-email-dialog
       :input-dialog="inputEmailDialog"
       :title-dialog="$t('authManagement.titleResetPwd')"
@@ -20,6 +24,8 @@
       v-on:onCloseInputDialog="inputEmailDialog = false"
       v-on:onInput="setUserEmail"
     ></input-email-dialog>
+
+    <!--=== Confirm dialog ===-->
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('authManagement.titleDialog')"
@@ -27,21 +33,26 @@
       :run-action="resendVerifySignup"
       v-on:onCloseDialog="openInputCodeDialog"
     ></confirm-dialog>
+
+    <!--=== Login form ===-->
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card>
+          <!-- Form title -->
           <v-card-title>
+            <v-icon class="mr-3">mdi-login</v-icon>
             <span class="headline">{{ $t('user_menu.login') }}</span>
             <v-spacer></v-spacer>
             <router-link :to="$i18n.path(config.homePath)" class="close-icon">
               <v-icon>mdi-close</v-icon>
             </router-link>
           </v-card-title>
+          <!-- Form content -->
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
               <div class="text-center">
                 <v-avatar size="120" v-if="user && model.avatar"><img :src="model.avatar"></v-avatar>
-                <v-icon v-else size="120">mdi-account-off</v-icon>
+                <v-icon v-else size="120">fas fa-user-slash</v-icon>
               </div>
               <v-text-field
                 append-icon="mdi-email"
@@ -50,7 +61,7 @@
                 data-vv-name="email"
                 v-model="model.email"
                 :label="$t('login.email')"
-                :hint="config.isAuthMng? $t('authManagement.hintLoginEmail') : ''"
+                :hint="$t('authManagement.hintLoginEmail')"
                 persistent-hint
               ></v-text-field>
               <v-text-field
@@ -67,6 +78,7 @@
                 <a href="#" @click="openInputEmailDialog">{{ $t('authManagement.forgotYourPassword') }}</a>
               </div>
             </v-card-text>
+            <!-- Form actions -->
             <v-card-actions>
               <v-btn href="/auth/google" icon :disabled="!!user">
                 <v-icon color="red">fab fa-google fa-lg</v-icon>
@@ -75,7 +87,6 @@
                 <v-icon color="light-blue">fab fa-github fa-lg</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
-              <!--  -->
               <v-btn color="primary" type="submit" :loading="loadingSubmit" :disabled="!!user">
                 {{ $t('login.title') }}
               </v-btn>

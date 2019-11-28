@@ -343,23 +343,6 @@ const cloneObject = function (obj) {
   return Object.assign({}, obj1);
 };
 
-/**
- * Init vuetify
- *
- * @param self
- * @param theme
- */
-const initVuetify = function (self, theme) {
-  // Set theme dark
-  self.$vuetify.theme.dark = theme.dark;
-  // Set theme primary
-  const primaryColor = self.$colors[theme.primary].base;
-  self.$vuetify.theme.themes.dark.primary = primaryColor;
-  self.$vuetify.theme.themes.light.primary = primaryColor;
-  // Set vuetify lang
-  self.$vuetify.lang.t = (key, ...params) => self.$t(key, params);
-};
-
 export default {
   toggleFullScreen,
   delayTime,
@@ -378,6 +361,5 @@ export default {
   qlParams,
   stringify,
   getHookContext,
-  cloneObject,
-  initVuetify
+  cloneObject
 };

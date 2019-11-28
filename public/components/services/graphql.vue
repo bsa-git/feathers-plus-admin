@@ -30,9 +30,6 @@
 
     <!-- Select Query -->
     <div>
-      <app-page-header
-        :page-title="description"
-      ></app-page-header>
       <v-row justify="center">
         <v-col cols="12" sm="8">
           <v-card
@@ -104,7 +101,6 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import AppPageHeader from '~/components/layout/AppPageHeader';
   import feathersClient from '~/plugins/lib/feathers-client';
 
   const debug = require('debug')('app:page.services-graphql-find');
@@ -114,7 +110,6 @@
 
   export default {
     components: {
-      AppPageHeader
     },
     props: {
       tabs: Array,
@@ -131,21 +126,6 @@
         selTab: null,
         isLoading: false
       }
-    },
-    head() {
-      return {
-        title: this.title,
-        meta: [
-          {hid: 'description', name: 'description', content: this.description}
-        ],
-      }
-    },
-    created: function () {
-    },
-    computed: {
-      ...mapGetters({
-        config: 'getConfig',
-      }),
     },
     methods: {
       changeTab: function (index) {

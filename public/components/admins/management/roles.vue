@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Confirm Dialog -->
+    <!--=== Confirm Dialog ===-->
     <confirm-dialog
       :confirm-dialog="confirmDialog"
       :title-dialog="$t('management.confirm_delete_title')"
@@ -9,7 +9,7 @@
       v-on:onCloseDialog="confirmDialog = false"
     ></confirm-dialog>
 
-    <!-- Users for role dialog -->
+    <!--=== Users for role dialog ===-->
     <v-dialog v-model="roleUsersDialog" scrollable max-width="400px">
       <v-card>
         <!-- Toolbar -->
@@ -47,8 +47,103 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- Toolbar for table -->
+
+    <!--=== Role Save Dialog ===-->
+    <v-dialog v-model="roleSaveDialog" max-width="620">
+      <v-card>
+        <!-- Toolbar -->
+        <v-toolbar color="primary" dark>
+          <v-icon v-if="isNewItem" class="mr-3">fas fa-plus-square</v-icon>
+          <v-icon v-else class="mr-3">fas fa-edit</v-icon>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon v-on:click="roleSaveDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <!-- Role Form -->
+        <v-form @submit.prevent="onSubmit">
+          <v-card-text>
+            <div class="text-center">
+              <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
+            </div>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  :counter="60"
+                  v-validate="'required|max:60'"
+                  :error-messages="errors.collect('roleName')"
+                  data-vv-name="roleName"
+                  v-model="editedItem.roleName"
+                  :label="$t('management.roleName')"
+                  :hint="$t('management.matchEnvValue')"
+                  persistent-hint
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="editedItem.description"
+                  :value="editedItem.description"
+                  :label="$t('management.formDescription')"
+                ></v-textarea>
+              </v-col>
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="editedItem.userIds"
+                  :items="users"
+                  filled
+                  chips
+                  :label="$t('management.selectUsers')"
+                  item-text="fullName"
+                  item-value="id"
+                  multiple
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      v-bind="data.attrs"
+                      :input-value="data.selected"
+                      close
+                      @click="data.select"
+                      @click:close="deleteItemFromSelection(data.item)"
+                    >
+                      <v-avatar left>
+                        <v-img :src="data.item.avatar"></v-img>
+                      </v-avatar>
+                      {{ data.item.fullName }}
+                    </v-chip>
+                  </template>
+                  <template v-slot:item="data">
+                    <template>
+                      <v-list-item-avatar>
+                        <img :src="data.item.avatar">
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title v-html="data.item.fullName"></v-list-item-title>
+                        <v-list-item-subtitle v-html="data.item.roleName"></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <!-- Actions -->
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" type="submit" :loading="loadingSubmit">
+              {{ $t('management.save') }}
+            </v-btn>
+            <v-btn @click="closeRoleDialog">
+              {{ $t('management.cancel') }}
+            </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
+    <!--=== TopBar for table ===-->
     <v-sheet class="d-flex align-baseline mb-5">
+      <!-- Table search -->
       <v-text-field
         v-model="search"
         append-icon="fas fa-search"
@@ -57,90 +152,11 @@
         hide-details
       ></v-text-field>
       <v-spacer></v-spacer>
-      <!-- Save Dialog -->
-      <v-dialog v-model="dialog" max-width="620">
-        <!-- Activator -->
-        <template v-slot:activator="{ on }">
-          <v-btn text color="primary" v-on="on">{{ $t('management.new_item') }}</v-btn>
-        </template>
-        <!-- Content Dialog -->
-        <v-card>
-          <!-- Toolbar -->
-          <v-card-title>
-            <v-spacer></v-spacer>
-            <v-btn icon v-on:click="dialog = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-card-title>
-          <!-- Role Form -->
-          <v-form @submit.prevent="onSubmit">
-            <v-card-text>
-              <div class="text-center">
-                <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
-              </div>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    :counter="60"
-                    v-validate="'required|max:60'"
-                    :error-messages="errors.collect('roleName')"
-                    data-vv-name="roleName"
-                    v-model="editedItem.roleName"
-                    :label="$t('management.roleName')"
-                    :hint="$t('management.matchEnvValue')"
-                    persistent-hint
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="editedItem.description"
-                    :value="editedItem.description"
-                    :label="$t('management.formDescription')"
-                  ></v-textarea>
-                </v-col>
-                <v-col cols="12">
-                  <v-autocomplete
-                    v-model="editedItem.userIds"
-                    :items="users"
-                    filled
-                    chips
-                    :label="$t('management.selectUsers')"
-                    item-text="fullName"
-                    item-value="id"
-                    multiple
-                  >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        :input-value="data.selected"
-                        close
-                        class="chip--select-multi"
-                        @input="deleteItemFromSelection(data.item)"
-                      >
-                        <v-avatar>
-                          <img :src="data.item.avatar">
-                        </v-avatar>
-                        {{ data.item.fullName }}
-                      </v-chip>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
-            </v-card-text>
-            <!-- Actions -->
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" type="submit" :loading="loadingSubmit">
-                {{ $t('management.save') }}
-              </v-btn>
-              <v-btn @click="close">
-                {{ $t('management.cancel') }}
-              </v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card>
-      </v-dialog>
+      <!-- Activator open save dialog  -->
+      <v-btn text color="primary" @click="clickNewItem">{{ $t('management.new_item') }}</v-btn>
     </v-sheet>
-    <!-- Data Table -->
+
+    <!--=== Data Table ===-->
     <v-data-table
       :headers="headers"
       :items="roles"
@@ -168,7 +184,6 @@
         <v-icon
           small
           @click="clickDeleteItem(item)"
-          :disabled="isYouSelf(item.id)"
           :title="$t('common.remove')"
         >fas fa-trash-alt
         </v-icon>
@@ -195,7 +210,7 @@
   const debug = require('debug')('app:comp.admins-management-roles');
 
   const isLog = false;
-  const isDebug = false;
+  const isDebug = true;
 
   export default {
     $_veeValidate: {
@@ -206,8 +221,8 @@
     },
     data: () => ({
       search: '',
-      dialog: false,
       confirmDialog: false,
+      roleSaveDialog: false,
       roleUsersDialog: false,
       loadingSubmit: false,
       error: undefined,
@@ -260,17 +275,19 @@
     created: function () {
     },
     computed: {
+      ...mapGetters({
+        user: 'getUser',
+        getRoles: 'getRoles',
+        isEnvRole: 'isEnvRole',
+        isBaseRole: 'isBaseRole',
+        isYouAuth: 'isYouAuth'
+      }),
       formTitle() {
         return this.editedIndex === -1 ? this.$t('management.new_item') : this.$t('management.edit_item')
       },
       isNewItem() {
         return this.editedIndex === -1
       },
-      ...mapGetters({
-        user: 'getUser',
-        getRoles: 'getRoles',
-        isEnvRole: 'isEnvRole'
-      }),
       users() {
         const data = [];
         const idFieldUser = this.$store.state.users.idField;
@@ -316,7 +333,7 @@
     },
 
     watch: {
-      dialog(val) {
+      roleSaveDialog(val) {
         if (val) {
           this.$validator.reset();
           this.dismissError();
@@ -325,32 +342,38 @@
     },
     methods: {
       isDelete(roleName) {
-        return !this.isEnvRole(roleName);
-      },
-      isYouSelf(roleId) {
-        const myRoleId = this.user? this.user['roleId'] : '';
-        return roleId === myRoleId;
+        return !this.isBaseRole(roleName);
       },
       clickEditItem(item) {
         this.editedIndex = this.roles.indexOf(item);
         const role = this.getRole(item.id);
         this.editedItem = Object.assign({}, role);
-        this.dialog = true;
+        this.roleSaveDialog = true;
+      },
+      clickNewItem() {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+        this.roleSaveDialog = true;
+      },
+      deleteItemFromSelection (item) {
+        const index = this.editedItem.userIds.indexOf(item.id);
+        if (index >= 0) this.editedItem.userIds.splice(index, 1)
       },
       clickDeleteItem(item) {
-        this.idItem = item.id;
-        this.confirmDialog = true;
+        // Check can I delete role
+        if (this.isDelete(item.roleName)) {
+          this.idItem = item.id;
+          this.confirmDialog = true;
+        } else {
+          this.showError(this.$t('management.errNotPossibleRemoveBaseRoles'));
+        }
       },
       clickItem(item) {
         this.selItem = item;
         this.roleUsersDialog = true;
       },
-      deleteItemFromSelection(item) {
-        const index = this.editedItem.userIds.indexOf(item.id);
-        if (index >= 0) this.editedItem.userIds.splice(index, 1)
-      },
-      close() {
-        this.dialog = false;
+      closeRoleDialog() {
+        this.roleSaveDialog = false;
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
         this.$validator.reset();
@@ -395,7 +418,7 @@
               this.showSuccess(`${this.$t('management.success')}!`);
               setTimeout(() => {
                 this.loadingSubmit = false;
-                this.close();
+                this.closeRoleDialog();
               }, 1000);
             }
           }
@@ -404,6 +427,8 @@
         }
       },
       async save(data) {
+        const idFieldUser = this.$store.state.users.idField;
+        const userId = this.user[idFieldUser];
         const idField = this.$store.state.roles.idField;
         const {Role} = this.$FeathersVuex;
         try {
@@ -414,7 +439,9 @@
               description: data.description
             });
           } else {
-            if (!this.isEnvRole(data.roleName)) throw new errors.Conflict(this.$t('management.errRoleNameNotExistInEnv'));
+            // Error: role name not exist in env
+            if (!this.isEnvRole(data.roleName))
+              throw new errors.Conflict(this.$t('management.errRoleNameNotExistInEnv'));
             role = new Role({
               [idField]: data.id,
               name: data.roleName,
@@ -444,8 +471,8 @@
           const guestName = this.getRoles('isGuest');
           const roles = Role.findInStore({query: {name: guestName}}).data;
           const guestId = roles.length ? roles[0][idFieldRole] : '';
-          const role = Role.getFromStore(roleId);
           if (!guestId) throw new errors.NotFound(this.$t('management.errGuestRoleNotExist'));
+          const role = Role.getFromStore(roleId);
           // Users excluded from the role
           let users = User.findInStore({query: {roleId: roleId}}).data;
           users.forEach(async user => {
@@ -454,7 +481,9 @@
             if (isUserId) {
               omitUserIds.push(userId);
             } else {
-              if (roleId !== guestId && !this.isYouSelf(userId)) {
+              // Warning: not possible remove role from oneself
+              // Warning: It is not possible to remove a guest role
+              if (roleId !== guestId && !this.isYouAuth(userId)) {
                 newUser = new User({[idFieldUser]: userId, roleId: guestId});
                 saveResponse = await newUser.save();
                 updatedUserIds.removed.push(saveResponse);
@@ -467,7 +496,7 @@
           users = User.findInStore({query: {[idFieldUser]: {$in: filterUserIds}}}).data;
           users.forEach(async user => {
             const userId = user[idFieldUser];
-            if (!this.isYouSelf(userId) && this.isEnvRole(role.name)) {
+            if (!this.isYouAuth(userId) && this.isEnvRole(role.name)) {
               newUser = new User({[idFieldUser]: userId, roleId: roleId});
               saveResponse = await newUser.save();
               updatedUserIds.added.push(saveResponse);
