@@ -13,8 +13,8 @@
 <script>
   import {mapGetters} from 'vuex';
   import appMenu from '~/api/data/app-menu';
-  import AppBreadcrumbs from '~/components/layout/AppBreadcrumbs';
-  import AppPageTitle from '~/components/layout/AppPageTitle';
+  import AppBreadcrumbs from '~/components/layout/Breadcrumbs';
+  import AppPageTitle from '~/components/layout/PageTitle';
 
   export default {
     components: {

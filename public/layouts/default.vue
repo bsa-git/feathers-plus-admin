@@ -5,7 +5,7 @@
       v-on:onNavLeft="navLeft = !navLeft"
     ></app-toolbar>
     <!-- Left Drawer -->
-    <app-drawer
+    <app-left-drawer
       :isAvatar="config.isAvatar"
       :logo-image="config.isAvatar? devAvatar():config.logoImage"
       :logo-title="config.logoTitle"
@@ -14,13 +14,13 @@
       :user="user"
       :drawer="navLeft"
       v-on:onNavLeft="modelNavLeft"
-    ></app-drawer>
+    ></app-left-drawer>
     <!-- Page content -->
     <app-page-content></app-page-content>
     <!-- Go to top -->
     <app-fab></app-fab>
-    <!-- Config theme colors -->
-    <app-theme-settings></app-theme-settings>
+    <!-- Right Drawer -->
+    <app-right-drawer></app-right-drawer>
     <!-- Snackbar -->
     <app-snack-bar
       :show="snackBar.show"
@@ -36,22 +36,22 @@
   import {mapGetters} from 'vuex';
   import appMenu from '~/api/data/app-menu.json';
   import syncStore from '~/plugins/lib/sync-store';
-  import AppToolbar from '~/components/layout/AppToolbar';
-  import AppDrawer from '~/components/layout/AppDrawer';
-  import AppPageContent from '~/components/layout/AppPageContent';
-  import AppPageHeader from '~/components/layout/AppPageHeader';
-  import AppFab from '~/components/layout/AppFab';
-  import AppThemeSettings from '~/components/layout/AppThemeSettings';
-  import AppSnackBar from '~/components/layout/AppSnackbar';
+  import AppToolbar from '~/components/app/layout/AppToolbar';
+  import AppLeftDrawer from '~/components/app/layout/AppLeftDrawer';
+  import AppPageContent from '~/components/app/layout/AppPageContent';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import AppFab from '~/components/layout/Fab';
+  import AppRightDrawer from '~/components/app/layout/AppRightDrawer';
+  import AppSnackBar from '~/components/layout/Snackbar';
 
   export default {
     components: {
-      AppDrawer,
+      AppLeftDrawer,
       AppToolbar,
       AppPageContent,
       AppPageHeader,
       AppFab,
-      AppThemeSettings,
+      AppRightDrawer,
       AppSnackBar,
     },
     data: function () {

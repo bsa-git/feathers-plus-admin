@@ -1,15 +1,18 @@
 <template>
   <div>
-    <!-- Page Header -->
+    <!--=== Page Header ===-->
     <app-page-header
       :page-title="description"
     ></app-page-header>
-    <!-- Bootons -->
-    <div class="d-flex justify-space-around mb-3">
-      <v-btn text color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
-      <v-btn text color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
-    </div>
-    <!-- Expansion panels -->
+    <!--=== Bootons ===-->
+    <panels-top-bar
+      :btn1-text="$t('accounts.allOpen')"
+      :btn2-text="$t('accounts.allClose')"
+      :click-btn1="allOpen"
+      :click-btn2="allClose"
+    ></panels-top-bar>
+
+    <!--=== Expansion panels ===-->
     <v-expansion-panels
       v-model="panels"
       focusable
@@ -39,14 +42,16 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import AppPageHeader from '~/components/layout/AppPageHeader';
-  import AdminsManagementUsers from '~/components/admins/management/users';
-  import AdminsManagementRoles from '~/components/admins/management/roles';
-  import AdminsManagementTeams from '~/components/admins/management/teams';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
+  import AdminsManagementUsers from '~/components/app/admins/management/users';
+  import AdminsManagementRoles from '~/components/app/admins/management/roles';
+  import AdminsManagementTeams from '~/components/app/admins/management/teams';
 
   export default {
     components: {
       AppPageHeader,
+      PanelsTopBar,
       AdminsManagementUsers,
       AdminsManagementRoles,
       AdminsManagementTeams

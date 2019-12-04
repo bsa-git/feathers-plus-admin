@@ -1,24 +1,24 @@
 <template>
   <v-container fluid>
     <input-code-dialog
-      :input-dialog="inputCodeDialog"
+      :dialog="inputCodeDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
       :label-input="$t('authManagement.verificationCode')"
       :hint-input="$t('authManagement.hintEnterSecurityCode')"
       :validate-type="'numeric'"
       :run-action="verifySignupShort"
+      :show-error="showError"
       v-on:onCloseInputDialog="inputCodeDialog = false"
       v-on:onInput="setVerifyCode"
     ></input-code-dialog>
     <confirm-dialog
-      :confirm-dialog="confirmDialog"
+      :dialog="confirmDialog"
       :title-dialog="$t('profile.titleDialog')"
       :text-dialog="$t('profile.textDialog')"
       :run-action="remove"
       v-on:onCloseDialog="confirmDialog = false"
     ></confirm-dialog>
     <v-form @submit.prevent="onSubmit">
-      <!--<v-container grid-list-md>-->
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -104,7 +104,6 @@
           ></v-checkbox>
         </v-col>
       </v-row>
-      <!--</v-container>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :loading="loadingSubmit">
@@ -127,8 +126,8 @@
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import Auth from '~/plugins/lib/auth-client.class';
-  import ConfirmDialog from '~/components/layout/ConfirmDialog';
-  import InputCodeDialog from '~/components/layout/InputDialog';
+  import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
+  import InputCodeDialog from '~/components/dialogs/InputDialog';
 
   const debug = require('debug')('app:page.user-profile');
 

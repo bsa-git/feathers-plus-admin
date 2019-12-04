@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import AppPageHeader from '~/components/layout/AppPageHeader';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import NodalMenuItem from '~/components/menu/NodalMenuItem';
   import appMenu from '~/api/data/app-menu';
 

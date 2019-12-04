@@ -25,7 +25,7 @@
 
 <script>
   import {mapGetters, mapMutations, mapActions} from 'vuex';
-  const debug = require('debug')('app:comp.UserMenuList');
+  const debug = require('debug')('app:comp.AppUserMenuList');
 
   export default {
     props: {

@@ -14,7 +14,7 @@
 
 <script>
   import appMenu from '~/api/data/app-menu';
-  import AppPageHeader from '~/components/layout/AppPageHeader';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
 
   export default {
     components: {

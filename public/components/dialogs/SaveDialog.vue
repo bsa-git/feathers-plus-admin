@@ -1,0 +1,73 @@
+<template>
+  <v-dialog v-model="showDialog" scrollable :max-width="maxWidth">
+    <v-card>
+      <!-- Toolbar -->
+      <v-toolbar color="primary" dark>
+        <v-icon v-if="isNewItem" class="mr-3">fas fa-plus-square</v-icon>
+        <v-icon v-else class="mr-3">fas fa-edit</v-icon>
+        <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="showDialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <!-- Text content -->
+      <v-form @submit.prevent="onSubmit">
+        <v-card-text>
+          <div class="text-center">
+            <slot name="save-header"></slot>
+            <h1 class="my-4 primary--text font-weight-light">{{ dialogTitle }}</h1>
+          </div>
+          <slot name="save-content"></slot>
+        </v-card-text>
+        <!-- Actions -->
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" type="submit" :loading="loadingSubmit">
+            {{ $t('management.save') }}
+          </v-btn>
+          <v-btn @click="closeDialog">
+            {{ $t('management.cancel') }}
+          </v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+export default {
+  props: {
+    dialog: Boolean,
+    onSubmit: Function,
+    closeDialog: Function,
+    loadingSubmit: Boolean,
+    dialogTitle: String,
+    isNewItem: Boolean,
+    actionSaveText: {
+      type: String,
+      default: 'Save'
+    },
+    actionCancelText: {
+      type: String,
+      default: 'Cancel'
+    },
+    maxWidth: {
+      type: Number,
+      default: 600
+    },
+  },
+  computed: {
+    showDialog: {
+      // Getter:
+      get: function () {
+        return this.dialog
+      },
+      // Setter:
+      set: function (newValue) {
+        this.closeDialog();
+      }
+    }
+  },
+};
+</script>

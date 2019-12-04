@@ -2,12 +2,13 @@
   <div class="main-content">
 
     <input-dialog
-      :input-dialog="inputDialog"
+      :dialog="inputDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
       :label-input="$t('authManagement.verificationCode')"
       :hint-input="$t('authManagement.hintEnterSecurityCode')"
       :validate-type="'numeric'"
       :run-action="verifySignupShort"
+      :show-error="showError"
       v-on:onCloseInputDialog="closeInputDialog"
       v-on:onInput="setVerifyCode"
     ></input-dialog>
@@ -108,7 +109,7 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import Auth from '~/plugins/lib/auth-client.class';
-  import InputDialog from '~/components/layout/InputDialog';
+  import InputDialog from '~/components/dialogs/InputDialog';
 
   const debug = require('debug')('app:page.user-signup');
 

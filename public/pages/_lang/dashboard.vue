@@ -73,7 +73,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import AppPageHeader from '~/components/layout/AppPageHeader';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import MiniStatistic from '~/components/widgets/statistic/MiniStatistic';
 
   const debug = require('debug')('app:page.dashboard');

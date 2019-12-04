@@ -1,6 +1,6 @@
 <template>
   <v-fab-transition>
-    <v-btn fab="fab" small dark="dark" fixed="fixed" bottom="bottom" right="right" color="red" v-scroll="onScroll" v-show="fab" @click="toTop">
+    <v-btn fab="fab" small fixed bottom right dark color="red" v-scroll="onScroll" v-show="fab" @click="toTop">
       <v-icon>mdi-chevron-up</v-icon>
     </v-btn>
   </v-fab-transition>

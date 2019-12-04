@@ -12,7 +12,6 @@
           </v-card-title>
           <v-form @submit.prevent="onSubmit">
             <v-card-text>
-              <!--<div class="headline text-center">{{ $t('authManagement.titleNewPwd') }}</div>-->
               <div class="text-center">
                 <v-icon size="120">mdi-shield-refresh</v-icon>
               </div>

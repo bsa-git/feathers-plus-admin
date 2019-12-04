@@ -12,20 +12,20 @@
       :dark="$vuetify.theme.dark"
       app
     >
-      <theme-settings
+      <app-theme-settings
         :color-options="colorOptions"
-      ></theme-settings>
+      ></app-theme-settings>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
   import themeColorOptions from '~/api/data/theme-color-options.json';
-  import ThemeSettings from '~/components/layout/ThemeSettings';
+  import AppThemeSettings from '~/components/app/layout/AppThemeSettings';
 
   export default {
     components: {
-      ThemeSettings
+      AppThemeSettings
     },
     data: () => ({
       rightDrawer: false,

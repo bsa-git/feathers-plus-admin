@@ -109,10 +109,10 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-  import AccountForm from '~/components/user/profile/account';
-  import PersonalForm from '~/components/user/profile/personal';
-  import AddressForm from '~/components/user/profile/address';
-  import JobForm from '~/components/user/profile/job';
+  import AccountForm from '~/components/app/user/profile/account';
+  import PersonalForm from '~/components/app/user/profile/personal';
+  import AddressForm from '~/components/app/user/profile/address';
+  import JobForm from '~/components/app/user/profile/job';
 
   const debug = require('debug')('app:page.user-profile');
 

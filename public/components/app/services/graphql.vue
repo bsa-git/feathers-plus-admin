@@ -1,34 +1,25 @@
 <template>
   <div>
-    <!-- Response dialog -->
-    <v-dialog v-model="responseDialog" scrollable max-width="550px" >
-      <v-card>
-        <!-- Toolbar -->
-        <v-toolbar color="primary" dark>
-          <v-icon class="mr-3">mdi-search-web</v-icon>
-          <v-toolbar-title>{{ $t('graphql.responseToRequest') }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on:click="responseDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- Text Content -->
-        <v-card-text style="">
-          <v-textarea
-            outline
-            auto-grow
-            name="text-response"
-            :value="textResponse"
-          ></v-textarea>
-        </v-card-text>
-        <!-- Actions -->
-        <v-card-actions>
-          <v-btn text class="mx-auto mb-3" color="primary" @click="responseDialog = false">{{ $t('management.close') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!--=== Response dialog ===-->
+    <view-dialog
+      :dialog="responseDialog"
+      :max-width="500"
+      header-icon="mdi-search-web"
+      :header-title="$t('graphql.responseToRequest')"
+      :action-text="$t('management.close')"
+      v-on:onClose="responseDialog = false"
+    >
+      <div slot="view-content">
+        <v-textarea
+          outline
+          auto-grow
+          name="text-response"
+          :value="textResponse"
+        ></v-textarea>
+      </div>
+    </view-dialog>
 
-    <!-- Select Query -->
+    <!--=== Select Query ===-->
     <div>
       <v-row justify="center">
         <v-col cols="12" sm="8">
@@ -102,6 +93,7 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import feathersClient from '~/plugins/lib/feathers-client';
+  import ViewDialog from '~/components/dialogs/ViewDialog';
 
   const debug = require('debug')('app:page.services-graphql-find');
 
@@ -110,6 +102,7 @@
 
   export default {
     components: {
+      ViewDialog
     },
     props: {
       tabs: Array,

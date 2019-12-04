@@ -63,23 +63,23 @@
         </v-btn>
       </template>
       <!-- Menu list -->
-      <user-menu-list
+      <app-user-menu-list
         :user-menu="userMenu"
-      ></user-menu-list>
+      ></app-user-menu-list>
     </v-menu>
   </v-app-bar>
 </template>
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import {mapGetters} from 'vuex';
   import userMenu from '~/api/data/user-menu.json';
   import appNotifications from '~/api/data/app-notification.json';
   import NotificationList from '~/components/layout/NotificationList';
-  import UserMenuList from '~/components/layout/UserMenuList';
+  import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
 
   export default {
     components: {
       NotificationList,
-      UserMenuList
+      AppUserMenuList
     },
     data: function () {
       return {

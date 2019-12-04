@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="confirmDialog" persistent max-width="320">
+  <v-dialog v-model="dialog" persistent max-width="320">
     <v-card>
       <v-card-title class="title">{{ titleDialog }}?</v-card-title>
       <v-card-text>
@@ -17,15 +17,10 @@
 <script>
 export default {
   props: {
-    confirmDialog: Boolean,
+    dialog: Boolean,
     runAction: Function,
     titleDialog: String,
     textDialog: String
-  },
-  data: () => ({
-  }),
-  methods: {
-
   }
 };
 </script>

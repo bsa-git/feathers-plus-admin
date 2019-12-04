@@ -3,31 +3,33 @@
 
     <!--=== Input code dialog ===-->
     <input-code-dialog
-      :input-dialog="inputCodeDialog"
+      :dialog="inputCodeDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
       :label-input="$t('authManagement.verificationCode')"
       :hint-input="$t('authManagement.hintEnterSecurityCode')"
       :validate-type="'numeric'"
       :run-action="verifySignupShort"
+      :show-error="showError"
       v-on:onCloseInputDialog="inputCodeDialog = false"
       v-on:onInput="setVerifyCode"
     ></input-code-dialog>
 
     <!--=== Input email dialog ===-->
     <input-email-dialog
-      :input-dialog="inputEmailDialog"
+      :dialog="inputEmailDialog"
       :title-dialog="$t('authManagement.titleResetPwd')"
       :label-input="$t('authManagement.yourEmail')"
       :hint-input="$t('authManagement.hintResetPwd')"
       :validate-type="'email'"
       :run-action="sendResetPwd"
+      :show-error="showError"
       v-on:onCloseInputDialog="inputEmailDialog = false"
       v-on:onInput="setUserEmail"
     ></input-email-dialog>
 
     <!--=== Confirm dialog ===-->
     <confirm-dialog
-      :confirm-dialog="confirmDialog"
+      :dialog="confirmDialog"
       :title-dialog="$t('authManagement.titleDialog')"
       :text-dialog="$t('authManagement.textDialog')"
       :run-action="resendVerifySignup"
@@ -107,9 +109,9 @@
   import Http from '~/plugins/lib/http.client.class';
   import Auth from '~/plugins/lib/auth-client.class';
   import fakeData from '~~/seeds/fake-data.json'
-  import ConfirmDialog from '~/components/layout/ConfirmDialog';
-  import InputCodeDialog from '~/components/layout/InputDialog';
-  import InputEmailDialog from '~/components/layout/InputDialog';
+  import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
+  import InputCodeDialog from '~/components/dialogs/InputDialog';
+  import InputEmailDialog from '~/components/dialogs/InputDialog';
 
   const debug = require('debug')('app:user.login');
   const isLog = true;

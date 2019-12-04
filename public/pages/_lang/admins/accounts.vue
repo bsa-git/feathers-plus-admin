@@ -1,51 +1,45 @@
 <template>
   <div>
-    <!-- Dialog for items -->
-    <v-dialog v-model="dialog" scrollable max-width="570px">
-      <v-card>
-        <!-- Toolbar -->
-        <v-toolbar color="primary" dark>
-          <v-icon class="mr-3">mdi-account-check</v-icon>
-          <v-toolbar-title>{{`${modelName} ${itemName ? ' - ' + itemName : ''}`}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on:click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- Text content -->
-        <v-card-text>
-          <v-list three-line>
-            <template v-for="(item, index) in selItems">
-              <v-list-item
-                :key="index"
-                @click=""
-              >
-                <v-list-item-content>
-                  <v-list-item-title v-html="item[0] + ' :'"></v-list-item-title>
-                  <v-list-item-subtitle v-html="item[1]"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-card-text>
-        <v-divider></v-divider>
-        <!-- Actions -->
-        <v-card-actions>
-          <v-btn text class="mx-auto mb-3" color="primary" @click="dialog = false">{{ $t('management.close') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- Page Header -->
+    <!--=== Dialog for items ===-->
+    <view-dialog
+      :dialog="dialog"
+      :max-width="570"
+      header-icon="mdi-account-check"
+      :header-title="$t('graphql.responseToRequest')"
+      :action-text="$t('management.close')"
+      v-on:onClose="dialog = false"
+    >
+      <div slot="view-content">
+        <v-list three-line>
+          <template v-for="(item, index) in selItems">
+            <v-list-item
+              :key="index"
+              @click=""
+            >
+              <v-list-item-content>
+                <v-list-item-title v-html="item[0] + ' :'"></v-list-item-title>
+                <v-list-item-subtitle v-html="item[1]"></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </div>
+    </view-dialog>
+
+    <!--=== Page Header ===-->
     <app-page-header
       :page-title="description"
     ></app-page-header>
     <div>
-      <!-- Bootons -->
-      <div class="d-flex justify-space-around mb-3">
-        <v-btn text color="primary" @click="allOpen">{{ $t('accounts.allOpen') }}</v-btn>
-        <v-btn text color="primary" @click="allClose">{{ $t('accounts.allClose') }}</v-btn>
-      </div>
-      <!-- Expansion panels -->
+      <!--=== Bootons ===-->
+      <panels-top-bar
+        :btn1-text="$t('accounts.allOpen')"
+        :btn2-text="$t('accounts.allClose')"
+        :click-btn1="allOpen"
+        :click-btn2="allClose"
+      ></panels-top-bar>
+
+      <!--=== Expansion panels ===-->
       <v-expansion-panels
         v-model="panels"
         focusable
@@ -87,10 +81,12 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import AppPageHeader from '~/components/layout/AppPageHeader';
-  import AdminsAccountsUsers from '~/components/admins/accounts/users';
-  import AdminsAccountsRoles from '~/components/admins/accounts/roles';
-  import AdminsAccountsTeams from '~/components/admins/accounts/teams';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import ViewDialog from '~/components/dialogs/ViewDialog';
+  import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
+  import AdminsAccountsUsers from '~/components/app/admins/accounts/users';
+  import AdminsAccountsRoles from '~/components/app/admins/accounts/roles';
+  import AdminsAccountsTeams from '~/components/app/admins/accounts/teams';
 
   const debug = require('debug')('app:page.admins-accounts');
 
@@ -99,6 +95,8 @@
   export default {
     components: {
       AppPageHeader,
+      ViewDialog,
+      PanelsTopBar,
       AdminsAccountsUsers,
       AdminsAccountsRoles,
       AdminsAccountsTeams

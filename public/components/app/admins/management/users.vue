@@ -2,7 +2,7 @@
   <div>
     <!--=== Confirm Dialog ===-->
     <confirm-dialog
-      :confirm-dialog="confirmDialog"
+      :dialog="confirmDialog"
       :title-dialog="$t('management.confirm_delete_title')"
       :text-dialog="$t('management.confirm_delete_description')"
       :run-action="deleteItem"
@@ -10,245 +10,202 @@
     ></confirm-dialog>
 
     <!--=== Teams for user dialog ===-->
-    <v-dialog v-model="userTeamsDialog" scrollable max-width="400px">
-      <v-card>
-        <!-- Toolbar -->
-        <v-toolbar color="primary" dark>
-          <v-icon class="mr-3">mdi-account-check</v-icon>
-          <v-toolbar-title>{{ `${selItem.firstName} ${selItem.lastName}` }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on:click="userTeamsDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- Text content -->
-        <v-card-text>
-          <v-list three-line>
-            <template v-for="(team, index) in selItem.teams">
-              <v-list-item
-                :key="team.id"
-              >
-                <v-list-item-avatar>
-                  <v-icon>mdi-account-group</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title v-html="team.name"></v-list-item-title>
-                  <v-list-item-subtitle v-html="team.description"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-card-text>
-        <v-divider></v-divider>
-        <!-- Actions -->
-        <v-card-actions>
-          <v-btn text class="mx-auto mb-3" color="primary" @click="userTeamsDialog = false">{{ $t('management.close') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <view-dialog
+      :dialog="userTeamsDialog"
+      header-icon="mdi-account-check"
+      :header-title="`${selItem.firstName} ${selItem.lastName}`"
+      :action-text="$t('management.close')"
+      v-on:onClose="userTeamsDialog = false"
+    >
+      <div slot="view-content">
+        <span v-if="!(selItem.teams && selItem.teams.length)">{{ $t('management.noData') }}</span>
+        <v-list three-line v-else>
+          <template v-for="(team, index) in selItem.teams">
+            <v-list-item
+              :key="team.id"
+            >
+              <v-list-item-avatar>
+                <v-icon>mdi-account-group</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-html="team.name"></v-list-item-title>
+                <v-list-item-subtitle v-html="team.description"></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </div>
+    </view-dialog>
 
     <!--=== Profile for user dialog ===-->
-    <v-dialog v-model="userProfileDialog" scrollable max-width="400px">
-      <v-card>
-        <!-- Toolbar -->
-        <v-toolbar color="primary" dark>
-          <v-icon class="mr-3">mdi-account-check</v-icon>
-          <v-toolbar-title>{{ `${selItem.firstName} ${selItem.lastName}` }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on:click="userProfileDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- Text content -->
-        <v-card-text>
-          <span v-if="!profileList(selItem.profileId).length">{{ $t('management.noData') }}</span>
-          <v-list two-line v-else>
-            <template v-for="(item, index) in profileList(selItem.profileId)">
-              <v-subheader
-                v-if="item.header"
-                :key="item.header"
-              >
-                {{ item.header }}
-              </v-subheader>
-              <v-list-item
-                v-else
-                :key="`${item.name}-${index}`"
-                @click=""
-              >
-                <v-list-item-avatar>
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title v-html="item.name"></v-list-item-title>
-                  <v-list-item-subtitle v-html="item.val"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-card-text>
-        <v-divider></v-divider>
-        <!-- Actions -->
-        <v-card-actions>
-          <v-btn class="mx-auto mb-3" color="primary" @click="userProfileDialog = false" text>{{ $t('management.close') }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <view-dialog
+      :dialog="userProfileDialog"
+      header-icon="mdi-account-check"
+      :header-title="`${selItem.firstName} ${selItem.lastName}`"
+      :action-text="$t('management.close')"
+      v-on:onClose="userProfileDialog = false"
+    >
+      <div slot="view-content">
+        <span v-if="!profileList(selItem.profileId).length">{{ $t('management.noData') }}</span>
+        <v-list two-line v-else>
+          <template v-for="(item, index) in profileList(selItem.profileId)">
+            <v-subheader
+              v-if="item.header"
+              :key="item.header"
+            >
+              {{ item.header }}
+            </v-subheader>
+            <v-list-item
+              v-else
+              :key="`${item.name}-${index}`"
+              @click=""
+            >
+              <v-list-item-avatar>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-html="item.name"></v-list-item-title>
+                <v-list-item-subtitle v-html="item.val"></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </div>
+    </view-dialog>
 
     <!--=== Save User Dialog ===-->
-    <v-dialog v-model="userSaveDialog" max-width="600">
-      <v-card>
-        <!-- Toolbar -->
-        <v-toolbar color="primary" dark>
-          <v-icon v-if="isNewItem" class="mr-3">fas fa-plus-square</v-icon>
-          <v-icon v-else class="mr-3">fas fa-edit</v-icon>
-          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon v-on:click="userSaveDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- User Form -->
-        <v-form @submit.prevent="onSubmit">
-          <v-card-text>
-            <div class="text-center">
-              <v-icon size="120" v-if="isNewItem">mdi-account-plus</v-icon>
-              <v-avatar size="120" v-else><img :src="editedItem.avatar"></v-avatar>
-              <h1 class="my-4 primary--text font-weight-light">{{ formTitle }}</h1>
-            </div>
-            <v-row>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  :counter="10"
-                  v-validate="'required|max:20'"
-                  :error-messages="errors.collect('firstName')"
-                  data-vv-name="firstName"
-                  v-model="editedItem.firstName"
-                  :label="$t('management.firstName')"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  :counter="20"
-                  v-validate="'required|max:20'"
-                  :error-messages="errors.collect('lastName')"
-                  data-vv-name="lastName"
-                  v-model="editedItem.lastName"
-                  :label="$t('management.lastName')"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  append-icon="mdi-email"
-                  v-validate="'required|email'"
-                  :error-messages="errors.collect('email')"
-                  data-vv-name="email"
-                  v-model="editedItem.email"
-                  :label="$t('management.email')"
-                  :disabled="editedItem.isExternalAccount"
-                  :hint="editedItem.isExternalAccount? $t('accounts.emailForExternalAccounts') : ''"
-                  persistent-hint
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-if="isNewItem"
-                  append-icon="mdi-lock"
-                  v-validate="'required|min:3'"
-                  :error-messages="errors.collect('password')"
-                  data-vv-name="password"
-                  v-model="editedItem.password"
-                  :label="$t('management.password')"
-                  type="password"
-                  ref="confirmation"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-if="isNewItem"
-                  append-icon="mdi-lock"
-                  v-validate="'required|confirmed:confirmation'"
-                  :error-messages="errors.collect('passwordConfirmation')"
-                  data-vv-name="passwordConfirmation"
-                  v-model="editedItem.passwordConfirmation"
-                  :label="$t('management.passwordConfirmation')"
-                  type="password"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  append-icon="mdi-security"
-                  v-model="editedItem.roleId"
-                  v-validate=""
-                  item-text="name"
-                  item-value="id"
-                  :items="roles"
-                  :error-messages="errors.collect('roleId')"
-                  :label="$t('management.selectRole')"
-                  data-vv-name="roleId"
-                  :disabled="isYouAuth(editedItem.id)"
-                >
-                  <template v-slot:selection="{ item }">
-                    <v-chip>
-                      <span>{{ (item.name.length > 25) ? item.name.slice(0, 24) + '...' : item.name }}</span>
-                    </v-chip>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  append-icon="mdi-account-group"
-                  v-model="editedItem.teamIds"
-                  v-validate=""
-                  item-text="name"
-                  item-value="id"
-                  :items="teams"
-                  :error-messages="errors.collect('teamIds')"
-                  :label="$t('management.selectTeams')"
-                  data-vv-name="teamIds"
-                  multiple
-                >
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
-                      <span>{{ (item.name.length > 15) ? item.name.slice(0, 15) + '...' : item.name }}</span>
-                    </v-chip>
-                    <span
-                      v-if="index === 1"
-                      class="grey--text caption"
-                    >(+{{ editedItem.teamIds.length - 1 }} {{ $t('management.others') }})</span>
-                  </template>
-                </v-select>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <!-- Actions -->
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" type="submit" :loading="loadingSubmit">
-              {{ $t('management.save') }}
-            </v-btn>
-            <v-btn @click="closeUserDialog">
-              {{ $t('management.cancel') }}
-            </v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
+    <save-dialog
+      :dialog="userSaveDialog"
+      :on-submit="onSubmit"
+      :close-dialog="closeUserDialog"
+      :loading-submit="loadingSubmit"
+      :is-new-item="isNewItem"
+      :dialog-title="formTitle"
+      :action-save-text="$t('management.save')"
+      :action-cancel-text="$t('management.cancel')"
+    >
+      <!-- Slot save-header -->
+      <div slot="save-header">
+        <v-icon size="120" v-if="isNewItem">mdi-account-plus</v-icon>
+        <v-avatar size="120" v-else><img :src="editedItem.avatar"></v-avatar>
+      </div>
+      <!-- Slot save-content -->
+      <div slot="save-content">
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              :counter="10"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('firstName')"
+              data-vv-name="firstName"
+              v-model="editedItem.firstName"
+              :label="$t('management.firstName')"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              :counter="20"
+              v-validate="'required|max:20'"
+              :error-messages="errors.collect('lastName')"
+              data-vv-name="lastName"
+              v-model="editedItem.lastName"
+              :label="$t('management.lastName')"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              append-icon="mdi-email"
+              v-validate="'required|email'"
+              :error-messages="errors.collect('email')"
+              data-vv-name="email"
+              v-model="editedItem.email"
+              :label="$t('management.email')"
+              :disabled="editedItem.isExternalAccount"
+              :hint="editedItem.isExternalAccount? $t('accounts.emailForExternalAccounts') : ''"
+              persistent-hint
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-if="isNewItem"
+              append-icon="mdi-lock"
+              v-validate="'required|min:3'"
+              :error-messages="errors.collect('password')"
+              data-vv-name="password"
+              v-model="editedItem.password"
+              :label="$t('management.password')"
+              type="password"
+              ref="confirmation"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-if="isNewItem"
+              append-icon="mdi-lock"
+              v-validate="'required|confirmed:confirmation'"
+              :error-messages="errors.collect('passwordConfirmation')"
+              data-vv-name="passwordConfirmation"
+              v-model="editedItem.passwordConfirmation"
+              :label="$t('management.passwordConfirmation')"
+              type="password"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-select
+              append-icon="mdi-security"
+              v-model="editedItem.roleId"
+              v-validate=""
+              item-text="name"
+              item-value="id"
+              :items="roles"
+              :error-messages="errors.collect('roleId')"
+              :label="$t('management.selectRole')"
+              data-vv-name="roleId"
+              :disabled="isYouAuth(editedItem.id)"
+            >
+              <template v-slot:selection="{ item }">
+                <v-chip>
+                  <span>{{ (item.name.length > 25) ? item.name.slice(0, 24) + '...' : item.name }}</span>
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-select
+              append-icon="mdi-account-group"
+              v-model="editedItem.teamIds"
+              v-validate=""
+              item-text="name"
+              item-value="id"
+              :items="teams"
+              :error-messages="errors.collect('teamIds')"
+              :label="$t('management.selectTeams')"
+              data-vv-name="teamIds"
+              multiple
+            >
+              <template v-slot:selection="{ item, index }">
+                <v-chip v-if="index === 0">
+                  <span>{{ (item.name.length > 15) ? item.name.slice(0, 15) + '...' : item.name }}</span>
+                </v-chip>
+                <span
+                  v-if="index === 1"
+                  class="grey--text caption"
+                >(+{{ editedItem.teamIds.length - 1 }} {{ $t('management.others') }})</span>
+              </template>
+            </v-select>
+          </v-col>
+        </v-row>
+      </div>
+    </save-dialog>
 
     <!--=== TopBar for table ===-->
-    <v-sheet class="d-flex align-baseline mb-5">
-      <!-- User search from table -->
-      <v-text-field
-        v-model="search"
-        append-icon="fas fa-search"
-        :label="$t('management.search')"
-        single-line
-        hide-details
-      ></v-text-field>
-      <v-spacer></v-spacer>
-      <!-- Activator open save dialog  -->
-      <v-btn text color="primary" @click="clickNewItem">{{ $t('management.new_item') }}</v-btn>
-    </v-sheet>
+    <table-top-bar
+      :search="search"
+      :labelSearch="$t('management.search')"
+      :clickNewItem="clickNewItem"
+      :textNewItem="$t('management.new_item')"
+      v-on:onSearch="search = $event"
+    ></table-top-bar>
 
     <!--==== Data Table ===-->
     <v-data-table
@@ -308,7 +265,10 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import ConfirmDialog from '~/components/layout/ConfirmDialog';
+  import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
+  import ViewDialog from '~/components/dialogs/ViewDialog';
+  import SaveDialog from '~/components/dialogs/SaveDialog';
+  import TableTopBar from '~/components/widgets/TopBars/SearchAndBtn';
 
   const debug = require('debug')('app:comp.admins-management-users');
   const isLog = false;
@@ -320,6 +280,9 @@
     },
     components: {
       ConfirmDialog,
+      ViewDialog,
+      SaveDialog,
+      TableTopBar
     },
     data: () => ({
       search: '',

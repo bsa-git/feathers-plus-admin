@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <!-- Page Content -->
+    <!-- Page Content  -->
     <v-container id="page-content" fluid>
       <nuxt></nuxt>
     </v-container>
@@ -16,7 +16,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import AppFooter from '~/components/layout/AppFooter';
+  import AppFooter from '~/components/layout/Footer';
 
   export default {
     components: {

@@ -1,17 +1,13 @@
 <template>
-  <div class="text-center">
-    <app-page-title :page-title="description"></app-page-title>
-    <v-progress-circular class="mt-5"
-                         :size="80"
-                         color="primary"
-                         indeterminate
-    ></v-progress-circular>
-  </div>
+  <!--=== Page TopBar ===-->
+  <page-top-bar
+    :page-title="description"
+  ></page-top-bar>
 </template>
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import AppPageTitle from '~/components/layout/AppPageTitle';
+  import PageTopBar from '~/components/widgets/TopBars/PageTitleAndProgCircular';
   import Auth from '~/plugins/lib/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
   const debug = require('debug')('app:page.user-change');
@@ -21,7 +17,7 @@
 
   export default {
     components: {
-      AppPageTitle
+      PageTopBar
     },
     data() {
       return {
@@ -39,22 +35,12 @@
     },
     created: async function () {
       try {
-//        const idFieldUser = this.$store.state.users.idField;
         const http = new Http();
         const token = http.getParams('token');
         if (isDebug) debug('action.token:', token);
         if (isDebug) debug('<<verifySignUpLong>> Start verifySignUpLong');
         const changeUser = await Auth.verifySignupLong(token);
         if (changeUser){
-          // Get new avatar
-//          const avatar = new this.$Avatar(changeUser.email);
-//          const avatarImage = await avatar.getImage();
-//          let userData = {
-//            [idFieldUser]: changeUser[idFieldUser],
-//            avatar: avatarImage
-//          };
-//          const user = new User(userData);
-//          await user.save();
           if (isDebug) debug('verifySignUpLong.OK');
           this.showSuccess(this.$t('authManagement.successfulUserVerification'));
           if(!this.isAuth){

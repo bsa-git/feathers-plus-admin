@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="inputDialog" persistent max-width="320">
+  <v-dialog v-model="dialog" persistent max-width="320">
     <v-card>
       <v-card-title class="title">{{ titleDialog }}</v-card-title>
       <v-form @submit.prevent="onSubmit">
@@ -60,8 +60,9 @@
       validator: 'new'
     },
     props: {
-      inputDialog: Boolean,
+      dialog: Boolean,
       runAction: Function,
+      showError: Function,
       titleDialog: String,
       validateType: String,
       labelInput: String,
@@ -88,11 +89,9 @@
           this.runAction();
         }
       },
-      ...mapMutations({
-        showSuccess: 'SHOW_SUCCESS',
-        showError: 'SHOW_ERROR',
-        showWarning: 'SHOW_WARNING'
-      }),
+//      ...mapMutations({
+//        showError: 'SHOW_ERROR',
+//      }),
     },
   };
 </script>

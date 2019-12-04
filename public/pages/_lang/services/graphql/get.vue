@@ -1,8 +1,10 @@
 <template>
   <div>
+    <!--=== Page Header ===-->
     <app-page-header
       :page-title="description"
     ></app-page-header>
+    <!--=== Services Graphql ===-->
     <services-graphql
       :sel-title="selTitle"
       :sel-tooltip="selTooltip"
@@ -13,8 +15,8 @@
 </template>
 
 <script>
-  import AppPageHeader from '~/components/layout/AppPageHeader';
-  import ServicesGraphql from '~/components/services/graphql';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import ServicesGraphql from '~/components/app/services/graphql';
   import graphqlQuery from '~/api/graphql-query';
 
   export default {

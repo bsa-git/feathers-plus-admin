@@ -1,18 +1,16 @@
 <template>
-  <div :class="`exotic--${theme.name} display-1 mt-3 mb-6 text-center page-title`">{{ pageTitle }}</div>
+  <div :class="`exotic--${themeName} display-1 mt-3 mb-6 text-center page-title`">{{ pageTitle }}</div>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
-
   export default {
     props: {
       pageTitle: String
     },
     computed: {
-      ...mapGetters({
-        theme: 'getTheme'
-      }),
+      themeName: function () {
+        return this.$vuetify.theme.dark? 'dark' : 'light';
+      },
     }
   };
 </script>

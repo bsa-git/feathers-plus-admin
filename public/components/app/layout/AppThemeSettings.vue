@@ -47,7 +47,7 @@
 
 <script>
 
-  import {mapState, mapMutations} from 'vuex';
+  import {mapGetters, mapMutations} from 'vuex';
 
   export default {
     props: {
@@ -96,7 +96,9 @@
       })
     },
     computed: {
-      ...mapState(['theme']),
+      ...mapGetters({
+        theme: 'getTheme',
+      }),
     },
     watch: {
       themeColor: {

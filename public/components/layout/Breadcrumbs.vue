@@ -1,7 +1,7 @@
 <template>
     <!-- Breadcrumbs -->
     <div class="d-flex align-baseline">
-      <div :class="`exotic--${theme.name} headline pr-3`">{{title}}</div>
+      <div :class="`exotic--${themeName} headline pr-3`">{{title}}</div>
       <v-btn icon :to="$i18n.path(homePath)" :title="$t('app_menu.home')">
         <v-icon>mdi-home</v-icon>
       </v-btn>
@@ -24,8 +24,6 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
-
   export default {
     props: {
       homePath: {
@@ -46,9 +44,9 @@
       },
     },
     computed: {
-      ...mapGetters({
-        theme: 'getTheme'
-      }),
+      themeName: function () {
+        return this.$vuetify.theme.dark? 'dark' : 'light';
+      },
       breadcrumbs: function () {
         let _breadcrumbs = [];
         let child = null;

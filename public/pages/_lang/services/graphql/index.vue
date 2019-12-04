@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- Page Header -->
+    <!--=== Page Header ===-->
     <app-page-header
       :page-title="description"
     ></app-page-header>
-    <!-- Nodal Menu Item -->
+    <!--=== Nodal Menu Item ===-->
     <nodal-menu-item
       nodalName="services"
       page-name="services-graphql"
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import AppPageHeader from '~/components/layout/AppPageHeader';
+  import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import NodalMenuItem from '~/components/menu/NodalMenuItem';
   import appMenu from '~/api/data/app-menu';
 

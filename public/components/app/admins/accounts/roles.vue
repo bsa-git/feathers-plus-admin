@@ -1,15 +1,10 @@
 <template>
   <div>
-    <v-sheet class="pa-3" max-width="50%">
-      <v-text-field
-        v-model="search"
-        :label="$t('management.search')"
-        hide-details
-        clearable
-        clear-icon="mdi-close"
-        append-icon="fas fa-search"
-      ></v-text-field>
-    </v-sheet>
+    <treeview-top-bar
+      :search="search"
+      :labelSearch="$t('management.search')"
+      v-on:onSearch="search = $event"
+    ></treeview-top-bar>
     <v-treeview
       :items="roles"
       :search="search"
@@ -21,10 +16,8 @@
       transition
     >
       <template v-slot:prepend="{ item, active }">
-        <v-icon v-if="item.id.startsWith('user.fullName')">mdi-account</v-icon>
-        <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : ''">
-          mdi-check
-        </v-icon>
+        <v-icon v-if="item.id.startsWith('User.fullName')" :color="active ? 'primary' : ''">mdi-check</v-icon>
+        <v-icon v-else-if="item.name.includes('id :')" :color="active ? 'primary' : ''">mdi-check</v-icon>
       </template>
     </v-treeview>
   </div>
@@ -32,11 +25,15 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import TreeviewTopBar from '~/components/widgets/TopBars/Search';
 
   const debug = require('debug')('app:comp.admins-accounts-roles');
   const isLog = false;
 
   export default {
+    components: {
+      TreeviewTopBar
+    },
     props: {
       getSelObject: Function
     },
