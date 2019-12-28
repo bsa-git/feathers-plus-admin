@@ -33,18 +33,19 @@
       AppSnackBar
     },
     data: function () {
-      return {
-        primaryColor: '',
-      }
+      return {}
     },
-    created() {
-      this.primaryColor = this.$colors[this.theme.primary].base;
-      syncStore.initVuetify(this);
+    created() {},
+    mounted: function () {
+      this.$nextTick(function () {
+        syncStore.initVuetify(this);
+      })
     },
     computed: {
       ...mapGetters({
         snackBar: 'getSnackBar',
         theme: 'getTheme',
+        primaryColor: 'getPrimaryBaseColor'
       }),
     },
     methods: {

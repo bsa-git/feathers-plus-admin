@@ -20,7 +20,9 @@
     <!-- Go to top -->
     <app-fab></app-fab>
     <!-- Right Drawer -->
-    <app-right-drawer></app-right-drawer>
+    <app-right-drawer
+      ref="appRightDrawer"
+    ></app-right-drawer>
     <!-- Snackbar -->
     <app-snack-bar
       :show="snackBar.show"
@@ -34,7 +36,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import appMenu from '~/api/data/app-menu.json';
+  import appMenu from '~/api/app/app-menu.json';
   import syncStore from '~/plugins/lib/sync-store';
   import AppToolbar from '~/components/app/layout/AppToolbar';
   import AppLeftDrawer from '~/components/app/layout/AppLeftDrawer';
@@ -43,6 +45,8 @@
   import AppFab from '~/components/layout/Fab';
   import AppRightDrawer from '~/components/app/layout/AppRightDrawer';
   import AppSnackBar from '~/components/layout/Snackbar';
+
+  import themeColorOptions from '~/api/app/theme-color-options.json';
 
   export default {
     components: {
@@ -60,8 +64,12 @@
         appMenu,
       }
     },
-    created() {
-      syncStore.initVuetify(this);
+    created: function () {},
+    mounted: function () {
+      this.$nextTick(function () {
+        // Init vuetify
+        syncStore.initVuetify(this, true);
+      })
     },
     methods: {
       modelNavLeft: function (newValue) {
@@ -80,7 +88,8 @@
         config: 'getConfig',
         snackBar: 'getSnackBar',
         theme: 'getTheme',
-        user: 'getUser'
+        primaryColor: 'getPrimaryColor',
+        user: 'getUser',
       }),
     }
   }

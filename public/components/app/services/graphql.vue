@@ -9,7 +9,7 @@
       :action-text="$t('management.close')"
       v-on:onClose="responseDialog = false"
     >
-      <div slot="view-content">
+      <div slot="text-content">
         <v-textarea
           outline
           auto-grow

@@ -1,24 +1,38 @@
-// const debug = require('debug')('app:store.getters');
-//
-// const isLog = true;
-// const isDebug = true;
-
+import colors from 'vuetify/lib/util/colors';
+import themeColorOptions from '~/api/app/theme-color-options.json';
 
 const getters = {
 
-  getConfig(state) {
+  getConfig: (state) => {
     return state.config;
   },
 
-  getSnackBar(state) {
+  getSnackBar: (state) => {
     return state.snackbar;
   },
 
-  getTheme(state) {
+  getTheme: (state) => {
     return state.theme;
   },
 
-  isAuth(state) {
+  getPrimaryColor: (state) => {
+    const theme = state.theme;
+    // Get primary color
+    const optColor = themeColorOptions.find(option => option.key === theme.primary);
+    let subColor = optColor? optColor.value[theme.name] : '';
+    subColor = subColor.replace('-', '');
+    const primaryColor = subColor? colors[theme.primary][subColor] : colors[theme.primary]['base'];
+    return primaryColor;
+  },
+
+  getPrimaryBaseColor: (state) => {
+    const theme = state.theme;
+    // Get primary base color
+    const primaryColor = colors[theme.primary].base;
+    return primaryColor;
+  },
+
+  isAuth: (state) => {
     return !!state.auth.accessToken;
   },
 
@@ -37,7 +51,7 @@ const getters = {
     return getters.getMyRole === getters.getRoles(isRole);
   },
 
-  getMyRole(state) {
+  getMyRole: (state) => {
     const role = state.auth.payload ? state.auth.payload.role : '';
     return role ? role : '';
   },
@@ -84,24 +98,29 @@ const getters = {
     return result;
   },
 
-  getUser(state) {
+  getUser: (state) => {
     return state.auth.user;
   },
 
-  isExternalAccount(state){
-    const found = state.config.externalAccounts.find(function(account) {
+  isExternalAccount: (state) => {
+    const found = state.config.externalAccounts.find(function (account) {
       const accountId = `${account}Id`;
-      return (state.auth.user && state.auth.user[accountId])? !!state.auth.user[accountId] : false;
+      return (state.auth.user && state.auth.user[accountId]) ? !!state.auth.user[accountId] : false;
     });
     return !!found;
   },
 
   isUserExternalAccount: (state) => (user) => {
-    const found = state.config.externalAccounts.find(function(account) {
+    const found = state.config.externalAccounts.find(function (account) {
       const accountId = `${account}Id`;
-      return (user && user[accountId])? !!user[accountId] : false;
+      return (user && user[accountId]) ? !!user[accountId] : false;
     });
     return !!found;
+  },
+
+  //--- ECHARTS ---//
+  getDemoRadarData ({ echarts }) {
+    return echarts.demoRadarData;
   }
 };
 

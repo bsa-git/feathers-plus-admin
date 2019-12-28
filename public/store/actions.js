@@ -2,7 +2,7 @@ import {initAuth} from 'feathers-vuex';
 const debug = require('debug')('app:store.actions');
 
 const isLog = false;
-const isDebug = true;
+const isDebug = false;
 
 const actions = {
 
@@ -75,7 +75,7 @@ const actions = {
     const service = new this.$Service(store);
     // authenticate
     let response = await service.authenticate(credentials);
-    if(isDebug) debug('service.authenticate.response:', response);
+    if(isLog) debug('service.authenticate.response:', response);
     if (response && response.accessToken) {
       const isAuth = store.getters.isAuth;
       const isAdmin = store.getters.isAdmin;
@@ -91,6 +91,13 @@ const actions = {
       if(isDebug) debug(`<<authenticate>> Authenticate completed; <<isAuth>>: ${isAuth}; <<myRole>>: ${store.getters.getMyRole? store.getters.getMyRole : 'No'}`);
     }
     return response;
+  },
+
+  //--- ECHARTS ---//
+  asyncIncrementDemoRadarData ({ commit }, { amount = 1, index, delay }) {
+    setTimeout(() => {
+      commit('INCREMENT_DEMO_RADAR_DATA', { amount, index });
+    }, delay);
   }
 };
 

@@ -17,7 +17,7 @@
 <script>
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import ServicesGraphql from '~/components/app/services/graphql';
-  import graphqlQuery from '~/api/graphql-query';
+  import graphqlQuery from '~/api/app/graphql/graphql-query';
 
   export default {
     components: {

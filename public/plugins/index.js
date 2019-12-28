@@ -28,7 +28,7 @@ export default async (context, inject) => {
   // Check auth
   await context.store.dispatch('checkAuth');
   // Set store
-  syncStore.setThemePrimary(context);
   syncStore.setThemeDark(context);
+  syncStore.setThemePrimary(context);
   syncStore.setLocale(context);
 };

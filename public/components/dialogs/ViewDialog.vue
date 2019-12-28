@@ -11,14 +11,15 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
+      <!-- Card content -->
+      <slot name="card-content"></slot>
       <!-- Text content -->
-      <v-card-text>
-        <slot name="view-content"></slot>
+      <v-card-text v-if="isTextContent">
+        <slot name="text-content"></slot>
       </v-card-text>
-      <v-divider></v-divider>
       <!-- Actions -->
-      <v-card-actions>
-        <v-btn class="mx-auto mb-3" color="primary" @click="showDialog = false" text>{{ actionText }}</v-btn>
+      <v-card-actions  class="primary">
+        <v-btn class="mx-auto" @click="showDialog = false" dark text>{{ actionText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -37,6 +38,10 @@ export default {
     maxWidth: {
       type: Number,
       default: 400
+    },
+    isTextContent: {
+      type: Boolean,
+      default: true
     },
   },
   computed: {
