@@ -79,5 +79,4 @@ For more information on all the things you can do, visit [the generator](https:/
 ## License
 
 Copyright (c) 2018
-
 Licensed under the [MIT license](LICENSE).
