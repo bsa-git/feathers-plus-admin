@@ -17,7 +17,7 @@
       :action-text="$t('management.close')"
       v-on:onClose="teamUsersDialog = false"
     >
-      <div slot="view-content">
+      <div slot="text-content">
         <span v-if="!(selItem.members && selItem.members.length)">{{ $t('management.noData') }}</span>
         <v-list three-line v-else>
           <template v-for="(member, index) in selItem.members">
@@ -113,9 +113,9 @@
     <!--=== TopBar for table ===-->
     <table-top-bar
       :search="search"
-      :labelSearch="$t('management.search')"
-      :clickNewItem="clickNewItem"
-      :textNewItem="$t('management.new_item')"
+      :search-label="$t('management.search')"
+      :btn-text="$t('management.new_item')"
+      :btn-click="clickNewItem"
       v-on:onSearch="search = $event"
     ></table-top-bar>
 

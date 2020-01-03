@@ -1,9 +1,8 @@
 const loConcat = require('lodash/concat');
-import appMenu from '~/api/data/app-menu';
+import appMenu from '~/api/app/app-menu';
 import feathersClient from '~/plugins/lib/feathers-client';
 
 const debug = require('debug')('app:plugins.auth-client.class');
-
 const isLog = false;
 
 class AuthClient {

@@ -6,8 +6,10 @@
     ></app-page-header>
     <!--=== Bootons ===-->
     <panels-top-bar
-      :btn1-text="$t('accounts.allOpen')"
-      :btn2-text="$t('accounts.allClose')"
+      btn1-icon="mdi-plus"
+      :btn1-tooltip="$t('accounts.allOpen')"
+      btn2-icon="mdi-minus"
+      :btn2-tooltip="$t('accounts.allClose')"
       :click-btn1="allOpen"
       :click-btn2="allClose"
     ></panels-top-bar>

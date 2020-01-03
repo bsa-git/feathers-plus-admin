@@ -71,8 +71,8 @@
 </template>
 <script>
   import {mapGetters} from 'vuex';
-  import userMenu from '~/api/data/user-menu.json';
-  import appNotifications from '~/api/data/app-notification.json';
+  import userMenu from '~/api/app/user-menu.json';
+  import appNotifications from '~/api/app/app-notification.json';
   import NotificationList from '~/components/layout/NotificationList';
   import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
 
@@ -91,7 +91,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
-        user: 'getUser'
+        user: 'getUser',
       }),
     },
     methods: {

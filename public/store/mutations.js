@@ -3,7 +3,7 @@ import cookies from 'browser-cookies';
 import typeOf from '~/plugins/lib/type-of';
 const debug = require('debug')('app:store.mutations');
 
-const isLog = false;
+const isLog = true;
 
 const mutations = {
 
@@ -72,6 +72,14 @@ const mutations = {
     }else {
       state.snackbar =  {show: true, color: 'error', text: value.text, timeout: value.timeout};
     }
+  },
+
+  //--- ECHARTS ---//
+  INCREMENT_DEMO_RADAR_DATA ({ echarts }, { amount = 1, index = 0 }) {
+    let data = echarts.demoRadarData;
+    let metric = data[index];
+    metric.value = Math.max(Math.min(metric.value + amount, metric.max), 0);
+    if (isLog) debug('mutations.INCREMENT_DEMO_RADAR_DATA.value:', metric.value);
   },
 };
 

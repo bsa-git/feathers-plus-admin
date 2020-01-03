@@ -99,15 +99,28 @@ export default () => ({
     email: process.env.PERSONAL_EMAIL.trim(),
     githubProject: process.env.PERSONAL_GITHUB_PROJECT.trim()
   },
+  //--- SNACKBAR ---//
   snackbar: {
     show: false,
     text: 'Test success!',
     color: 'purple',
     timeout: 6000
   },
+  //---THEME ---//
   theme: {
     primary: 'indigo',
     dark: false,
-    name: 'light'
-  }
+    name: 'light',
+  },
+  //--- ECHARTS ---//
+  echarts: {
+    demoRadarData: [
+      { name: 'attack', max: 20, value: 19 },
+      { name: 'defense', max: 20, value: 9 },
+      { name: 'speed', max: 20, value: 18 },
+      { name: 'power', max: 20, value: 16 },
+      { name: 'endurance', max: 20, value: 16 },
+      { name: 'agile', max: 20, value: 20 }
+    ],
+  },
 });

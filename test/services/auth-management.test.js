@@ -6,14 +6,13 @@ const isTest = true;
 
 describe('<<< Test /services/auth-management.test.js >>>', () => {
 
-  if(!isTest) {
+  if (!isTest) {
     debug('<<< Test /services/auth-management.test.js >>> - NOT >>>');
     return;
   }
 
-  it('registered the service', () => {
+  it('Registered the service', () => {
     const service = app.service('auth-management');
-
     assert.ok(service, 'Registered the service');
   });
 });

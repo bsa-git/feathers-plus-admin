@@ -13,6 +13,7 @@
       app
     >
       <app-theme-settings
+        ref="appThemeSettings"
         :color-options="colorOptions"
       ></app-theme-settings>
     </v-navigation-drawer>
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-  import themeColorOptions from '~/api/data/theme-color-options.json';
+  import themeColorOptions from '~/api/app/theme-color-options.json';
   import AppThemeSettings from '~/components/app/layout/AppThemeSettings';
 
   export default {
@@ -31,6 +32,11 @@
       rightDrawer: false,
       colorOptions: themeColorOptions,
     }),
+    mounted: function () {
+      this.$nextTick(function () {
+//        console.log('$refs.appThemeSettings:', this.$refs.appThemeSettings);
+      })
+    },
     methods: {
       openThemeSettings () {
         this.$vuetify.goTo(0);

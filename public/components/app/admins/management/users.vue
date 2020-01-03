@@ -17,7 +17,7 @@
       :action-text="$t('management.close')"
       v-on:onClose="userTeamsDialog = false"
     >
-      <div slot="view-content">
+      <div slot="text-content">
         <span v-if="!(selItem.teams && selItem.teams.length)">{{ $t('management.noData') }}</span>
         <v-list three-line v-else>
           <template v-for="(team, index) in selItem.teams">
@@ -45,7 +45,7 @@
       :action-text="$t('management.close')"
       v-on:onClose="userProfileDialog = false"
     >
-      <div slot="view-content">
+      <div slot="text-content">
         <span v-if="!profileList(selItem.profileId).length">{{ $t('management.noData') }}</span>
         <v-list two-line v-else>
           <template v-for="(item, index) in profileList(selItem.profileId)">
@@ -199,11 +199,12 @@
     </save-dialog>
 
     <!--=== TopBar for table ===-->
+    <!-- mdi-account-plus  -->
     <table-top-bar
       :search="search"
-      :labelSearch="$t('management.search')"
-      :clickNewItem="clickNewItem"
-      :textNewItem="$t('management.new_item')"
+      :search-label="$t('management.search')"
+      :btn-text="$t('management.new_item')"
+      :btn-click="clickNewItem"
       v-on:onSearch="search = $event"
     ></table-top-bar>
 

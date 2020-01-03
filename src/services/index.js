@@ -1,6 +1,7 @@
 
 // Configure the Feathers services. (Can be re-generated.)
 let authManagement = require('./auth-management/auth-management.service');
+let dataManagement = require('./data-management/data-management.service');
 let mailer = require('./mailer/mailer.service');
 let roles = require('./roles/roles.service');
 let teams = require('./teams/teams.service');
@@ -15,6 +16,7 @@ let graphql = require('./graphql/graphql.service');
 // eslint-disable-next-line no-unused-vars
 let moduleExports = function (app) {
   app.configure(authManagement);
+  app.configure(dataManagement);
   app.configure(mailer);
   app.configure(roles);
   app.configure(teams);

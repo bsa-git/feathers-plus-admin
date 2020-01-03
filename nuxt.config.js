@@ -3,7 +3,7 @@ const pkg = require('./package');
 const Dotenv = require('dotenv-webpack');
 const loConcat = require('lodash/concat');
 
-const appMenu = require('./public/api/data/app-menu');
+const appMenu = require('./public/api/app/app-menu');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
 const generateDir = process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'docs-dist';
 
@@ -124,7 +124,7 @@ module.exports = {
   /*
   ** Nuxt.js modules
   */
-  buildModules: ['@nuxtjs/vuetify'],
+  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/svg'],
 
   /*
   ** Doc: https://github.com/nuxt-community/vuetify-module
@@ -146,13 +146,21 @@ module.exports = {
         config.devtool = '#source-map';
         // console.log('config.module.rules', config.module.rules.find(aRule => aRule.test === /\\.jsx?$/));
       }
+      config.module.rules.push({
+        test: /\.xml$/,
+        loader: 'xml-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      });
     },
     plugins: [
       new Dotenv({
         path: './.env', // Path to .env file (this is the default)
         systemvars: true // It makes it possible to work in production mode on Heroku hosting
       })
-    ]
+    ],
+    transpile: ['vue-echarts', 'resize-detector']
   },
   render: {
     // resourceHints: false

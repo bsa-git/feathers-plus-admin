@@ -12,7 +12,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import appMenu from '~/api/data/app-menu';
+  import appMenu from '~/api/app/app-menu';
   import AppBreadcrumbs from '~/components/layout/Breadcrumbs';
   import AppPageTitle from '~/components/layout/PageTitle';
 

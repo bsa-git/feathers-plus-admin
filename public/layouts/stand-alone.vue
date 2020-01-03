@@ -13,8 +13,10 @@
   import syncStore from '~/plugins/lib/sync-store';
 
   export default {
-    created() {
-      syncStore.initVuetify(this);
-    }
+    mounted: function () {
+      this.$nextTick(function () {
+        syncStore.initVuetify(this);
+      })
+    },
   }
 </script>

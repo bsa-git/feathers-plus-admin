@@ -1,0 +1,449 @@
+[
+  {
+    "header": "Apps",
+    "alias": "apps"
+  },
+  {
+    "title": "Dashboard",
+    "group": "apps",
+    "icon": "mdi-view-dashboard",
+    "name": "dashboard",
+    "alias": "dashboard",
+    "to": "/dashboard"
+  },
+  {
+    "title": "Chat",
+    "group": "apps",
+    "icon": "mdi-chat",
+    "target": "_blank",
+    "name": "chat",
+    "alias": "chat",
+    "to": "/chat"
+  },
+  {
+    "title": "Inbox",
+    "group": "apps",
+    "name": "mail",
+    "alias": "inbox",
+    "target": "_blank",
+    "icon": "mdi-email",
+    "to": "/mail"
+  },
+  {
+    "title": "Administration",
+    "group": "admins",
+    "name": "admins",
+    "alias": "admins",
+    "icon": "mdi-brightness-auto",
+    "to": "/admins",
+    "items": [
+      {
+        "name": "admins-accounts",
+        "alias": "accounts",
+        "title": "Accounts",
+        "icon": "mdi-account-multiple",
+        "to": "/admins/accounts"
+      },
+      {
+        "name": "admins-management",
+        "alias": "management",
+        "title": "Management",
+        "icon": "mdi-account-edit",
+        "to": "/admins/management"
+      },
+      {
+        "name": "admins-settings",
+        "alias": "settings",
+        "title": "Settings",
+        "icon": "mdi-settings",
+        "to": "/admins/settings"
+      }
+    ]
+  },
+  {
+    "title": "Services",
+    "group": "services",
+    "name": "services",
+    "alias": "services",
+    "icon": "mdi-account-circle",
+    "to": "/services",
+    "items": [
+      {
+        "title": "GraphQL",
+        "group": "services",
+        "name": "services-graphql",
+        "alias": "graphql",
+        "to": "/services/graphql",
+        "children": [
+          {
+            "name": "services-graphql-find",
+            "alias": "graphql_find",
+            "title": "Find",
+            "icon": "mdi-find-replace",
+            "to": "/services/graphql/find"
+          },
+          {
+            "name": "services-graphql-get",
+            "alias": "graphql_get",
+            "title": "Get",
+            "icon": "mdi-target-variant",
+            "to": "/services/graphql/get"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Media",
+    "group": "apps",
+    "name": "media",
+    "alias": "media",
+    "icon": "mdi-monitor-dashboard",
+    "to": "/media"
+  },
+  {
+    "title": "Widgets",
+    "group": "widgets",
+    "name": "widgets",
+    "alias": "widgets",
+    "icon": "mdi-widgets",
+    "disabled": false,
+    "to": "/widgets",
+    "items": [
+      {
+        "name": "widgets-social",
+        "alias": "social",
+        "title": "Social",
+        "to": "/widgets/social"
+      },
+      {
+        "name": "widgets-statistic",
+        "alias": "statistic",
+        "title": "Statistic",
+        "to": "/widgets/statistic"
+      },
+      {
+        "name": "widgets-chart",
+        "alias": "chart",
+        "title": "Charts",
+        "to": "/widgets/chart"
+      },
+      {
+        "name": "widgets-echarts",
+        "alias": "echarts",
+        "title": "ECharts",
+        "to": "/widgets/echarts"
+      },
+      {
+        "name": "widgets-list",
+        "alias": "list",
+        "title": "List",
+        "to": "/widgets/widget-list"
+      }
+    ]
+  },
+  {
+    "header": "UI Elements",
+    "alias": "ui_elements"
+  },
+  {
+    "title": "General",
+    "group": "components",
+    "name": "components",
+    "alias": "general",
+    "icon": "mdi-view-grid-plus-outline",
+    "to": "/components",
+    "items": [
+      {
+        "name": "components-alerts",
+        "alias": "alerts",
+        "title": "Alerts",
+        "to": "/components/alerts"
+      },
+      {
+        "name": "components-avatars",
+        "alias": "avatars",
+        "title": "Avatars",
+        "to": "/components/avatars"
+      },
+      {
+        "name": "components-badges",
+        "alias": "badges",
+        "title": "Badges",
+        "to": "/components/badges"
+      },
+      {
+        "name": "components-buttons",
+        "alias": "buttons",
+        "title": "Buttons",
+        "to": "/components/buttons"
+      },
+      {
+        "name": "components-cards",
+        "alias": "cards",
+        "title": "Cards",
+        "to": "/components/cards"
+      },
+      {
+        "name": "components-carousels",
+        "alias": "carousels",
+        "title": "Carousels",
+        "to": "/components/carousels"
+      },
+      {
+        "name": "components-chips",
+        "alias": "chips",
+        "title": "Chips",
+        "to": "/components/chips"
+      },
+      {
+        "name": "components-dialogs",
+        "alias": "dialogs",
+        "title": "Dialogs",
+        "to": "/components/dialogs"
+      },
+      {
+        "name": "components-icons",
+        "alias": "icons",
+        "title": "Icons",
+        "to": "/components/icons"
+      },
+      {
+        "name": "components-tables",
+        "alias": "tables",
+        "title": "Data Tables",
+        "to": "/components/tables"
+      },
+      {
+        "name": "components-parallax",
+        "alias": "parallax",
+        "title": "Parallax  image",
+        "to": "/components/parallax"
+      },
+      {
+        "name": "components-snackbar",
+        "alias": "snackbar",
+        "title": "Snackbar",
+        "to": "/components/snackbar"
+      },
+      {
+        "name": "components-progress",
+        "alias": "progress",
+        "title": "Progress",
+        "to": "/components/progress"
+      },
+      {
+        "name": "components-slider",
+        "alias": "slider",
+        "title": "Slider",
+        "to": "/components/sliders"
+      },
+      {
+        "name": "components-tooltip",
+        "alias": "tooltip",
+        "title": "Tooltip",
+        "to": "/components/tooltips"
+      },
+      {
+        "name": "components-pagination",
+        "alias": "pagination",
+        "title": "Pagination",
+        "to": "/components/paginations"
+      },
+      {
+        "name": "components-typography",
+        "alias": "typography",
+        "title": "Typography",
+        "to": "/components/typography"
+      },
+      {
+        "name": "components-color",
+        "alias": "color",
+        "title": "Color",
+        "to": "/components/color"
+      }
+    ]
+  },
+  {
+    "title": "Pickers",
+    "group": "pickers",
+    "name": "pickers",
+    "alias": "pickers",
+    "icon": "mdi-calendar-multiple",
+    "to": "/pickers",
+    "items": [
+      {
+        "name": "pickers-timepicker",
+        "alias": "timepicker",
+        "title": "Timepicker",
+        "to": "/pickers/color"
+      },
+      {
+        "name": "pickers-datepicker",
+        "alias": "datepicker",
+        "title": "Datepicker",
+        "to": "/pickers/datepicker"
+      }
+    ]
+  },
+  {
+    "title": "Layout",
+    "group": "layout",
+    "name": "layout",
+    "alias": "layout",
+    "icon": "mdi-view-dashboard-variant",
+    "to": "/layout",
+    "items": [
+      {
+        "name": "layout-bottom-sheets",
+        "alias": "bottom_sheets",
+        "title": "Bottom panels",
+        "to": "/layout/bottom-sheets"
+      },
+      {
+        "name": "layout-expansion-panels",
+        "alias": "expansion_panels",
+        "title": "Expansion panels",
+        "to": "/layout/expansion-panels"
+      },
+      {
+        "name": "layout-footer",
+        "alias": "footer",
+        "title": "Footer",
+        "to": "/layout/footer"
+      },
+      {
+        "name": "layout-lists",
+        "alias": "lists",
+        "title": "Lists",
+        "to": "/layout/lists"
+      },
+      {
+        "name": "layout-jumbotrons",
+        "alias": "jumbotrons",
+        "title": "Jumbotrons",
+        "badge": "new",
+        "to": "/layout/jumbotrons"
+      },
+      {
+        "name": "layout-menus",
+        "alias": "menus",
+        "title": "Menus",
+        "to": "/layout/menus"
+      },
+      {
+        "name": "layout-tabs",
+        "alias": "tabs",
+        "title": "Tabs",
+        "to": "/layout/tabs"
+      },
+      {
+        "name": "layout-toolbar",
+        "alias": "toolbar",
+        "title": "Toolbar",
+        "to": "/layout/toolbar"
+      },
+      {
+        "name": "layout-timeline",
+        "alias": "timeline",
+        "title": "Timeline",
+        "to": "/layout/timeline"
+      }
+    ]
+  },
+  {
+    "title": "Forms & Controls",
+    "group": "forms",
+    "name": "forms",
+    "alias": "forms_controls",
+    "icon": "mdi-view-compact-outline",
+    "to": "/forms",
+    "items": [
+      {
+        "name": "forms-basic",
+        "alias": "basic",
+        "title": "General",
+        "to": "/forms/timeline"
+      },
+      {
+        "name": "forms-selects",
+        "alias": "selects",
+        "title": "Selects",
+        "badge": "new",
+        "to": "/forms/selects"
+      },
+      {
+        "name": "forms-selection-controls",
+        "alias": "selection_controls",
+        "title": "Selection Controls",
+        "to": "/forms/selection-controls"
+      },
+      {
+        "name": "forms-text-fields",
+        "alias": "text_fields",
+        "title": "Text Fields",
+        "to": "/forms/text-fields"
+      },
+      {
+        "name": "forms-steppers",
+        "alias": "steppers",
+        "title": "Steppers",
+        "to": "/forms/steppers"
+      },
+      {
+        "name": "forms-editors",
+        "alias": "editors",
+        "title": "Editors",
+        "to": "/forms/editors"
+      }
+    ]
+  },
+  {
+    "divider": true
+  },
+  {
+    "header": "Extras",
+    "alias": "extras"
+  },
+  {
+    "title": "Pages",
+    "group": "system",
+    "name": "system",
+    "alias": "pages",
+    "icon": "mdi-book-open-page-variant",
+    "disabled": true,
+    "to": "/system",
+    "items": [
+      {
+        "name": "system-login",
+        "alias": "login",
+        "title": "Login",
+        "to": "/user/login"
+      },
+      {
+        "name": "system-signup",
+        "alias": "signup",
+        "title": "Signup",
+        "to": "/user/signup"
+      },
+      {
+        "name": "system-404",
+        "alias": "404",
+        "title": "404",
+        "to": "/error/404"
+      },
+      {
+        "name": "system-403",
+        "alias": "403",
+        "title": "403",
+        "to": "/error/403"
+      },
+      {
+        "name": "system-500",
+        "alias": "500",
+        "title": "500",
+        "to": "/error/500"
+      }
+    ]
+  }
+]

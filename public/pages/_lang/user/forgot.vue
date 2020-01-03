@@ -59,7 +59,7 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import appMenu from '~/api/data/app-menu';
+  import appMenu from '~/api/app/app-menu';
   import Auth from '~/plugins/lib/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
 

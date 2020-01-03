@@ -49,6 +49,9 @@
 
   import {mapGetters, mapMutations} from 'vuex';
 
+   const debug = require('debug')('app:comp.AppThemeSettings');
+   const isDebug = false;
+
   export default {
     props: {
       colorOptions: Array
@@ -56,27 +59,32 @@
     data() {
       return {
         themeColor: 'indigo',
+        defaultColor: 'indigo',
         sideBarOption: 'light',
         changedColor: false,
         changedDark: false
       };
     },
+    created: function () {},
     methods: {
       themeColorHandler(val) {
-        const optColor = this.colorOptions.find(option => option.key === val);
-        let subColor = optColor.value[this.sideBarOption];
-        subColor = subColor.replace('-', '');
-        const primaryColor = this.$colors[val][subColor];
+        if(isDebug)debug('themeColorHandler.val:', val);
+        if(isDebug)debug('themeColorHandler.themeColor:', this.themeColor);
         if (this.changedColor) {
-          this.$vuetify.theme.themes.dark.primary = primaryColor;
-          this.$vuetify.theme.themes.light.primary = primaryColor;
           this.setThemePrimary(val);
+          this.$vuetify.theme.themes.dark.primary = this.primaryColor;
+          this.$vuetify.theme.themes.light.primary = this.primaryColor;
+          if(isDebug)debug('themeColorHandler.primaryColor:', this.primaryColor);
         } else {
           this.changedColor = true;
           if (this.theme.primary !== val) {
             this.themeColor = this.theme.primary;
           }
         }
+      },
+      updateThemeColor() {
+        this.themeColorHandler(this.defaultColor);
+        this.themeColorHandler(this.themeColor);
       },
       sideBarOptionHandler(val){
         const isDark = (val === 'dark');
@@ -98,6 +106,7 @@
     computed: {
       ...mapGetters({
         theme: 'getTheme',
+        primaryColor: 'getPrimaryColor'
       }),
     },
     watch: {

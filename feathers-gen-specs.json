@@ -95,6 +95,17 @@
       "isAuthEntity": false,
       "requiresAuth": true,
       "graphql": false
+    },
+    "dataManagement": {
+      "name": "dataManagement",
+      "nameSingular": "dataManagement",
+      "subFolder": "",
+      "fileName": "data-management",
+      "adapter": "generic",
+      "path": "/data-management",
+      "isAuthEntity": false,
+      "requiresAuth": false,
+      "graphql": false
     }
   },
   "hooks": {
