@@ -20,8 +20,8 @@ describe('<<< Test /services/data-management.test.js >>>', () => {
 
   it('Read flight json data from "dataManagement" service', async () => {
     try {
-      const dataManagement = app.service('data-management');
-      const flightData =  await dataManagement.create({
+      const dmService = app.service('data-management');
+      const flightData =  await dmService.create({
         action: 'readJsonFile',
         path: '/public/api/demo/echarts/flight-data.json'
       });
