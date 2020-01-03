@@ -13,7 +13,7 @@ This project uses [FeathersJS](http://feathersjs.com). An open source web framew
 
 Getting  up and running is as easy as 1, 2, 3.
 
-1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
+1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/lang/en/) installed.
 2. Install your dependencies
 
     ```
