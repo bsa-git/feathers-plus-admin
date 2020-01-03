@@ -17,7 +17,7 @@ Getting  up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/feathers-plus-admin; npm install
+    cd path/to/feathers-plus-admin; npm install or yarn install
     ```
 
 3. Environment variables
@@ -31,28 +31,28 @@ data such as user_id, user_secret, etc. are usually specified.
 to work with the MongoDB database
 
 ```bash
-  npm run start-mongod
+  npm run start-mongod or yarn run start-mongod 
   ```
 Start the local server, so that you can see the application running
 
   ```bash
-  npm run dev
+  npm run dev or yarn run dev
   ```
 The application is now running on http://localhost:3030
 
 5. Start your app for production mode
 
 ```bash
-npm start
+npm start or yarn start
 ```
 
 ## Testing
 
-Simply run `npm run test:all` and all your tests in the `test/` directory will be run.
+Simply run `npm run test:all` or `yarn run test:all` and all your tests in the `test/` directory will be run.
 
 ## Seed data
 
-Simply run `npm run start:seed` and all your `fake data` in the `seeds/fake-data.json` 
+Simply run `npm run start:seed` or `yarn run start:seed` and all your `fake data` in the `seeds/fake-data.json` 
 will be written to the appropriate database.
 
 ## Scaffolding
@@ -71,6 +71,14 @@ $ feathers-plus generate graphql             # Generate a GraphQL endp;oint for 
 $ feathers-plus generate all                 # Regenerate the entire app
 $ feathers-plus help                         # Show all commands
 ```
+
+````
+Windows 10
+The Yeoman toolkit used by cli-plus has an outstanding issue when run on Windows 10 
+with Node 10. You either have to call cli-plus from Git Bash using either Node 8 or 10, 
+or you have to use Node 8 when calling cli-plus from PowerShell or command.exe. 
+The generated code will run on Node 10.
+````
 
 ## Help
 
