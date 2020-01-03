@@ -347,8 +347,9 @@
                   <v-btn
                     color="primary"
                     @click="loadFlightData"
+                    :disabled="flightLoaded"
                   >
-                    {{ $t('echartDemo.load') }}
+                    {{ $t('echartDemo.loadData') }}
                     <v-icon right dark>mdi-download</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -364,6 +365,7 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import qs from 'qs'
+  import feathersClient from '~/plugins/lib/feathers-client';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
   import ViewDialog from '~/components/dialogs/ViewDialog';
@@ -399,11 +401,11 @@
   import scatterOptions from '~/api/demo/echarts/scatter'
   import mapOptions from '~/api/demo/echarts/map'
   import radarOptions from '~/api/demo/echarts/radar'
-  import { c1Options, c2Options } from '~/api/demo/echarts/connect'
+  import {c1Options, c2Options} from '~/api/demo/echarts/connect'
   import flightOptions from '~/api/demo/echarts/flight'
 
-//  import flightData from '~/api/demo/echarts/flight.json'
-//  const flightData = require('~/api/demo/echarts/flight.json');
+  //  import flightData from '~/api/demo/echarts/flight.json'
+  //  const flightData = require('~/api/demo/echarts/flight.json');
 
   const debug = require('debug')('app:page.echarts');
   const isLog = true;
@@ -438,6 +440,7 @@
         chartsConnected: true,
         flightLoaded: false,
         flightData: null,
+        flightRoutes: null,
         items: [
           {
             panel: 'bar',
@@ -526,7 +529,7 @@
         this.getRefCharts(val);
       },
       chartsConnected: {
-        handler (value) {
+        handler(value) {
           ECharts[value ? 'connect' : 'disconnect']('radiance')
         },
         immediate: true
@@ -572,10 +575,10 @@
       getRadarOptions: function () {
         this.radarOptions.title.text = this.$t('echartDemo.radarDescription');
         this.radarOptions.title.show = !this.isMobile;
-        this.radarOptions.radar.indicator = this.radarData.map(({ name, max }) => {
-          return { name, max };
+        this.radarOptions.radar.indicator = this.radarData.map(({name, max}) => {
+          return {name, max};
         });
-        this.radarOptions.series[0].data = [{ value: this.radarData.map(({ value }) => value) }];
+        this.radarOptions.series[0].data = [{value: this.radarData.map(({value}) => value)}];
         return this.radarOptions;
       },
       radarDataMetrics() {
@@ -600,23 +603,18 @@
       },
       getFlightOptions: function () {
         const self = this;
-        this.flightOptions.title.text = this.$t('echartDemo.flightDescription');
-
-        function getAirportCoord (idx) {
-          return [self.flightData.airports[idx][3], self.flightData.airports[idx][4]]
-        }
-        let routes = this.flightData? this.flightData.routes.map(function (airline) {
-          return [
-            getAirportCoord(airline[1]),
-            getAirportCoord(airline[2])
-          ]
-        }) : null;
-        if (isLog) debug('computed.getFlightOptions.routes:', routes);
-        this.flightOptions.series[0].data = routes;
+        this.flightOptions.title.text = this.flightLoaded? this.$t('echartDemo.flightDescription') : this.$t('management.noData');
+        this.flightOptions.series[0].data = this.flightRoutes ? this.flightRoutes : null;
         this.flightOptions.tooltip.formatter = function (params) {
-          let route = this.flightData? this.flightData.routes[params.dataIndex] : null;
-          return route? this.flightData.airports[route[1]][1] + ' > ' + this.flightData.airports[route[2]][1] : null
+          if (isLog) debug('computed.getFlightOptions.params:', params);
+          let route = self.flightData ? self.flightData.routes[params.dataIndex] : null;
+          if (isLog) debug('computed.getFlightOptions.route:', route);
+          let tooltip = route ? self.flightData.airports[route[1]][1] + ' > ' + self.flightData.airports[route[2]][1] : '';
+          if (isLog) debug('computed.getFlightOptions.tooltip:', tooltip);
+          return tooltip
         };
+
+        return this.flightOptions;
       },
       ...mapGetters({
         config: 'getConfig',
@@ -811,31 +809,41 @@
           this.incrementRadarData({amount, index: this.radarMetricIndex});
         }
       },
-      async loadFlightData () {
-        this.flightLoaded = true;
-
+      async loadFlightData() {
+        const self = this;
+        //----------------
+        // Show loading
         this.flightChart.showLoading({
           text: `${this.$t('echartDemo.loading')}...`,
           color: '#c23531',
           textColor: 'rgba(255, 255, 255, 0.5)',
           maskColor: '#003',
-//          text: `${this.$t('echartDemo.loading')}...`,
-//          color: this.primaryColor,
-//          textColor: this.theme.dark ? '#FFFFFF' : '#000000',
-//          zlevel: 0
         });
-//        import('~/api/demo/echarts/flight-data.json').then(({ default: data }) => {
-//        import('../../../api/demo/echarts/flight-data.json').then(({ default: data }) => {
-//          if (isLog) debug('methods.loadFlightData.data:', data);
-//          this.flightChart.hideLoading();
-//          this.flightData = data;
-//        });
-//        const { default: data } = await import('~/api/demo/echarts/flight-data.json');
-        const { default: data } = await import('../../../api/demo/echarts/flight-data.json');
+
+        // Get flight json data
+        const dataManagement = feathersClient.service('data-management');
+        const data = await dataManagement.create({
+          action: 'readJsonFile',
+          path: '/public/api/demo/echarts/flight-data.json'
+        });
+        if (isLog) debug('methods.loadFlightData.data:', data);
+        this.flightData = data;
+
+        // Get routes
+        function getAirportCoord(idx) {
+          return [data.airports[idx][3], data.airports[idx][4]]
+        }
+        let routes = data.routes.map(function (airline) {
+          return [
+            getAirportCoord(airline[1]),
+            getAirportCoord(airline[2])
+          ]
+        });
+        this.flightRoutes = routes;
+        // Hide loading
         this.flightChart.hideLoading();
 
-        this.flightData = data;
-        if (isLog) debug('methods.loadFlightData.data:', data);
+        this.flightLoaded = true;
       },
       ...mapMutations({
         incrementRadarData: 'INCREMENT_DEMO_RADAR_DATA',

@@ -12,7 +12,11 @@ let moduleExports = function (app) {
 
   let options = {
     paginate,
-    // !code: options_more // !end
+    // !code: options_more
+    //--------------------
+    app
+    //--------------------
+    // !end
   };
   // !code: options_change // !end
 

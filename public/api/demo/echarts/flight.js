@@ -8,6 +8,7 @@ export default {
   },
   backgroundColor: '#003',
   tooltip: {
+    trigger: 'item',
     formatter: null
   },
   geo: {

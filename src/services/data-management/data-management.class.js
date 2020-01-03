@@ -2,13 +2,27 @@
 // Class for the custom service `dataManagement` on path `/data-management`. (Can be re-generated.)
 /* eslint-disable no-unused-vars */
 
-// !code: imports // !end
+// !code: imports
+//---------------
+const controller = require('./controller');
+const {inspector} = require('../../plugins/lib');
+//---------------
+// !end
 // !code: init // !end
 
 class Service {
   constructor (options) {
     this.options = options || {};
-    // !code: constructor1 // !end
+    // !code: constructor1
+    //--------------------
+    // if(isDebug) debug('Service.constructor.options:', options);
+    this.app = this.options.app;
+    // Initialize our service with any options it requires
+    this.app.configure(controller());
+    this.dataManagement = this.app.service('dataManagement');
+    // if(isDebug) debug('constructor initialized');
+    //--------------------
+    // !end
   }
 
   // !<DEFAULT> code: find
@@ -25,14 +39,16 @@ class Service {
   }
   // !end
 
-  // !<DEFAULT> code: create
+  // !code: create
+  //---------------
   async create (data, params) {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
-
-    return data;
+    const result = await this.dataManagement.create(data);
+    return result;
   }
+  //---------------
   // !end
 
   // !<DEFAULT> code: update
