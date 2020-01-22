@@ -1,7 +1,8 @@
 <template>
   <div>
     <chart
-      id="logo-chart"
+      width="128px"
+      height="128px"
       :options="logo"
       :init-options="initOptions"
       autoresize
@@ -12,8 +13,8 @@
 <script>
   import ECharts from '~/components/chart/ECharts'
   import logo from '~/api/app/echarts/logo'
-
   require('echarts-liquidfill');
+
   export default {
     components: {
       chart: ECharts
@@ -29,10 +30,3 @@
     computed: {},
   };
 </script>
-
-<style scoped lang="sass">
-  #logo-chart
-    width: 128px
-    height: 128px
-
-</style>

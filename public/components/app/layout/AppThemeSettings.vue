@@ -61,6 +61,7 @@
         themeColor: 'indigo',
         defaultColor: 'indigo',
         sideBarOption: 'light',
+//        sideBarOption: this.theme.dark ? 'dark' : 'light',
         changedColor: false,
         changedDark: false
       };
@@ -87,11 +88,17 @@
         this.themeColorHandler(this.themeColor);
       },
       sideBarOptionHandler(val){
+        if(isDebug)debug('methods.sideBarOptionHandler.val:', val);
         const isDark = (val === 'dark');
-        if (this.changedDark) {
+        const isLight = (val === 'light');
+
+        if((isDark || isLight) && this.changedDark){
           this.$vuetify.theme.dark = isDark;
           this.setThemeDark(isDark);
-        } else {
+        }
+        // First setup cycle of the this.theme.dark
+        // The initial value is taken from store.
+        if(!this.changedDark){
           this.changedDark = true;
           if (this.theme.dark !== isDark) {
             this.sideBarOption = this.theme.dark ? 'dark' : 'light';

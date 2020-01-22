@@ -23,7 +23,7 @@
       :click-btn1="allOpen"
       :click-btn2="allClose"
     >
-      <v-btn-toggle v-model="initOptions.renderer" :title="`${$t('echartDemo.value')}: ${initOptions.renderer}`">
+      <v-btn-toggle v-model="chartRenderer" :title="`${$t('echartDemo.value')}: ${initOptions.renderer}`">
         <v-btn value="canvas">
           {{ $t('echartDemo.canvas') }}
         </v-btn>
@@ -78,9 +78,7 @@
           <v-row justify="center" v-if="item.panel === 'bar'">
             <v-col cols="12" md="8">
               <!-- Bar Chart -->
-              <v-card
-                :color="theme.dark? '#333' : '#FFFFFF'"
-              >
+              <v-card :color="getBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getBarOptions"
@@ -111,9 +109,7 @@
           <v-row justify="center" v-if="item.panel === 'pie'">
             <v-col cols="12" md="8">
               <!-- Pie Chart -->
-              <v-card
-                :color="theme.dark? '#333' : '#fef8ef'"
-              >
+              <v-card :color="getBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getPieOptions"
@@ -150,9 +146,7 @@
           <v-row justify="center" v-if="item.panel === 'polar'">
             <v-col cols="12" md="8">
               <!-- Polar Chart -->
-              <v-card
-                :color="theme.dark? '#333' : '#fef8ef'"
-              >
+              <v-card :color="getBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getPolarOptions"
@@ -171,9 +165,7 @@
           <v-row justify="center" v-if="item.panel === 'scatter'">
             <v-col cols="12" md="8">
               <!-- Scatter Chart -->
-              <v-card
-                :color="theme.dark? '#333' : '#fef8ef'"
-              >
+              <v-card :color="getBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getScatterOptions"
@@ -192,14 +184,13 @@
           <v-row justify="center" v-if="item.panel === 'map'">
             <v-col cols="12" md="8">
               <!-- Map Chart -->
-              <v-card
-                :color="theme.dark? '#404a59' : '#404a59'"
-              >
+              <v-card :color="themeDarkBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getMapOptions"
                     :init-options="initOptions"
                     ref="map"
+                    theme="dark"
                     autoresize
                   />
                 </v-card-text>
@@ -220,9 +211,7 @@
           <v-row justify="center" v-if="item.panel === 'radar'">
             <v-col cols="12" md="8">
               <!-- Radar Chart -->
-              <v-card
-                :color="theme.dark? '#333' : '#fef8ef'"
-              >
+              <v-card :color="getBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getRadarOptions"
@@ -280,9 +269,7 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <!-- Scatter Chart1 -->
-                  <v-card
-                    :color="theme.dark? '#333' : '#fef8ef'"
-                  >
+                  <v-card :color="getBackgroundColor">
                     <v-card-text>
                       <chart
                         :options="getC1Options"
@@ -299,9 +286,7 @@
                 </v-col>
                 <v-col cols="12" md="6">
                   <!-- Scatter Chart2 -->
-                  <v-card
-                    :color="theme.dark? '#333' : '#fef8ef'"
-                  >
+                  <v-card :color="getBackgroundColor">
                     <v-card-text>
                       <chart
                         :options="getC2Options"
@@ -331,14 +316,13 @@
           <v-row justify="center" v-if="item.panel === 'flight'">
             <v-col cols="12" md="8">
               <!-- Flight Map Chart -->
-              <v-card
-                :color="theme.dark? '#003' : '#003'"
-              >
+              <v-card :color="themeDarkBackgroundColor">
                 <v-card-text>
                   <chart
                     :options="getFlightOptions"
                     :init-options="initOptions"
                     ref="flight"
+                    theme="dark"
                     autoresize
                   />
                 </v-card-text>
@@ -363,33 +347,18 @@
 </template>
 
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
   import qs from 'qs'
   import feathersClient from '~/plugins/lib/feathers-client';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import ECharts from '~/components/chart/ECharts'
-  import 'echarts/lib/chart/bar'
-  import 'echarts/lib/chart/line'
-  import 'echarts/lib/chart/pie'
-  import 'echarts/lib/chart/map'
-  import 'echarts/lib/chart/radar'
-  import 'echarts/lib/chart/scatter'
-  import 'echarts/lib/chart/effectScatter'
-  import 'echarts/lib/component/tooltip'
-  import 'echarts/lib/component/polar'
-  import 'echarts/lib/component/geo'
-  import 'echarts/lib/component/legend'
-  import 'echarts/lib/component/title'
-  import 'echarts/lib/component/visualMap'
-  import 'echarts/lib/component/dataset'
-  import 'echarts/map/js/world'
-  import 'echarts/theme/vintage'
-  import 'zrender/lib/svg/svg'
 
   // Map of China
   import chinaMap from '~/api/demo/echarts/china.json'
+  // Theme Dark
+  import themeDark from 'echarts/lib/theme/dark'
   // Theme Olivia Green
   import themeOliviaGreen from '~/api/app/echarts/olivia-green-theme.json'
   // ECharts Logo
@@ -404,12 +373,9 @@
   import {c1Options, c2Options} from '~/api/demo/echarts/connect'
   import flightOptions from '~/api/demo/echarts/flight'
 
-  //  import flightData from '~/api/demo/echarts/flight.json'
-  //  const flightData = require('~/api/demo/echarts/flight.json');
-
   const debug = require('debug')('app:page.echarts');
-  const isLog = true;
-  const isDebug = true;
+  const isLog = false;
+  const isDebug = false;
 
   // Register theme
   ECharts.registerTheme('olivia-green', themeOliviaGreen);
@@ -441,6 +407,8 @@
         flightLoaded: false,
         flightData: null,
         flightRoutes: null,
+        themeVintageBackgroundColor: '#fef8ef',
+        themeDarkBackgroundColor: themeDark.backgroundColor,
         items: [
           {
             panel: 'bar',
@@ -484,8 +452,9 @@
           },
         ],
         options,
+        chartRenderer: options.renderer || 'canvas',
         initOptions: {
-          renderer: options.renderer || 'canvas'
+          renderer: ''
         },
         barChart: null,
         pieChart: null,
@@ -515,8 +484,6 @@
         ],
       }
     },
-    created: function () {
-    },
     mounted: function () {
       this.$nextTick(function () {
         if (isLog) debug('mounted.$refs:', this.$refs);
@@ -534,24 +501,39 @@
         },
         immediate: true
       },
+      chartRenderer: {
+        handler(value) {
+          const isCanvas = value === 'canvas';
+          const isSvg = value === 'svg';
+          if (isCanvas || isSvg) {
+            this.initOptions.renderer = value;
+          }
+        },
+        immediate: true
+      },
     },
     computed: {
       isMobile: function () {
         return this.$vuetify.breakpoint.xsOnly;
       },
+      getBackgroundColor: function () {
+        return this.theme.dark ? this.themeDarkBackgroundColor : this.themeVintageBackgroundColor
+      },
       getBarOptions: function () {
-        return this.barOptions;
+        return this.barOptions
       },
       getPieOptions: function () {
         this.pieOptions.title.text = this.$t('echartDemo.pieDescription');
         this.pieOptions.title.show = !this.isMobile;
         this.pieOptions.legend.left = this.isMobile ? 'center' : 'left';
-        return this.pieOptions;
+
+        return this.pieOptions
       },
       getPolarOptions: function () {
         this.polarOptions.title.text = this.$t('echartDemo.polarDescription');
         this.polarOptions.title.show = !this.isMobile;
-        return this.polarOptions;
+
+        return this.polarOptions
       },
       getScatterOptions: function () {
         const self = this;
@@ -565,12 +547,14 @@
           if (isLog) debug('computed.getScatterOptions.data:', data);
           return `<b>${data[3]}, ${seriesName} ${self.$t('echartDemo.year')}</b><br/>${self.$t('echartDemo.gdp')}: ${data[0]}<br/>${self.$t('echartDemo.age')}: ${data[1]}<br/>${self.$t('echartDemo.population')}: ${data[2]}`;
         };
-        return this.scatterOptions;
+
+        return this.scatterOptions
       },
       getMapOptions: function () {
         this.mapOptions.title.text = this.$t('echartDemo.mapDescription');
         this.mapOptions.title.show = !this.isMobile;
-        return this.mapOptions;
+
+        return this.mapOptions
       },
       getRadarOptions: function () {
         this.radarOptions.title.text = this.$t('echartDemo.radarDescription');
@@ -579,7 +563,8 @@
           return {name, max};
         });
         this.radarOptions.series[0].data = [{value: this.radarData.map(({value}) => value)}];
-        return this.radarOptions;
+
+        return this.radarOptions
       },
       radarDataMetrics() {
         let metrics = this.radarData.map((item, index) => {
@@ -596,14 +581,14 @@
         return this.radarData[this.radarMetricIndex].value === 0
       },
       getC1Options: function () {
-        return this.c1Options;
+        return this.c1Options
       },
       getC2Options: function () {
-        return this.c2Options;
+        return this.c2Options
       },
       getFlightOptions: function () {
         const self = this;
-        this.flightOptions.title.text = this.flightLoaded? this.$t('echartDemo.flightDescription') : this.$t('management.noData');
+        this.flightOptions.title.text = this.flightLoaded ? this.$t('echartDemo.flightDescription') : this.$t('management.noData');
         this.flightOptions.series[0].data = this.flightRoutes ? this.flightRoutes : null;
         this.flightOptions.tooltip.formatter = function (params) {
           if (isLog) debug('computed.getFlightOptions.params:', params);
@@ -614,7 +599,7 @@
           return tooltip
         };
 
-        return this.flightOptions;
+        return this.flightOptions
       },
       ...mapGetters({
         config: 'getConfig',
@@ -622,7 +607,6 @@
         primaryColor: 'getPrimaryBaseColor',
         radarData: 'getDemoRadarData'
       }),
-      ...mapState(['echarts']),
     },
     methods: {
       // Open the panels
@@ -639,14 +623,12 @@
       // Close the panels
       allClose() {
         this.panels = []
-      }
-      ,
+      },
       randomizeBar() {
         return [0, 0, 0].map(() => {
           return Math.round(300 + Math.random() * 700) / 10;
         });
-      }
-      ,
+      },
       // Get ref charts
       getRefCharts(panels) {
         let found;
@@ -715,8 +697,7 @@
             }
           }
         }
-      }
-      ,
+      },
       // Refresh bar chart
       refreshBar() {
         // simulating async data from server
@@ -737,8 +718,7 @@
             if (isLog) debug('methods.refreshBar.barOptions:', this.barOptions);
           }
         }, 1000)
-      }
-      ,
+      },
       refreshBarOptions: function () {
         const newDataset = [
           ['Product', '2015', '2016', '2017'],
@@ -748,8 +728,7 @@
           ['Walnut Brownie', ...this.randomizeBar()]
         ];
         this.barOptions.dataset.source = newDataset;
-      }
-      ,
+      },
       startPieDispatchAction() {
         if (!this.pieChart) return;
         let dataLen = this.pieChart.options.series[0].data.length;
@@ -833,6 +812,7 @@
         function getAirportCoord(idx) {
           return [data.airports[idx][3], data.airports[idx][4]]
         }
+
         let routes = data.routes.map(function (airline) {
           return [
             getAirportCoord(airline[1]),

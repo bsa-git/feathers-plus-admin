@@ -1,8 +1,6 @@
 export default {
   legend: {
     orient: 'horizontal',
-    // bottom: 0,
-    // padding: 5
   },
   tooltip: {},
   dataset: {

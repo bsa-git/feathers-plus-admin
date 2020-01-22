@@ -398,7 +398,6 @@ function convertData (data) {
 }
 
 export default {
-  backgroundColor: '#404a59',
   title: {
     text: 'Air quality in major cities',
     show: true,
@@ -417,9 +416,6 @@ export default {
     y: 'bottom',
     x: 'right',
     data: ['pm2.5'],
-    textStyle: {
-      color: '#fff'
-    }
   },
   geo: {
     map: 'china',

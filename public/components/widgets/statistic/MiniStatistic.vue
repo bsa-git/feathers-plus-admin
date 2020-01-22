@@ -19,12 +19,12 @@
 </template>
 
 <script>
-export default {
-  props: {
-    icon: String,
-    title: String,
-    subTitle: String,
-    color: String
-  }
-};
+  export default {
+    props: {
+      icon: String,
+      title: String,
+      subTitle: String,
+      color: String
+    }
+  };
 </script>

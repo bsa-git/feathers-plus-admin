@@ -86,7 +86,7 @@ module.exports = {
     link: [
       {rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico'},
       // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'},
-      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900'},
+      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto: 100,300,400,500,700,900'},
       // https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet
       {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'},
       // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Playball'}

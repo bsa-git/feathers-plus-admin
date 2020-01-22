@@ -6,7 +6,6 @@ export default {
       color: '#eee'
     }
   },
-  backgroundColor: '#003',
   tooltip: {
     trigger: 'item',
     formatter: null

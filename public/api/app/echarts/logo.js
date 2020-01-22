@@ -1,5 +1,6 @@
 /* eslint-disable */
-import logo from '~/static/xml/Svg-ECharts.xml'
+// import logo from '~/static/xml/Svg-ECharts.xml'
+const logo = require('~/static/xml/Svg-ECharts.xml');
 /* eslint-enable */
 
 let d = logo.svg.path[0].$.d;

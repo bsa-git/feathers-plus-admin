@@ -436,5 +436,11 @@
     "flight": "Flight",
     "flightTitle": "Map (with large data)",
     "flightDescription": "World Flights"
+  },
+  "chartDemo": {
+    "title": "Demo charts",
+    "description": "Demo charts",
+    "more": "More",
+    "moreInfo": "More info"
   }
 }

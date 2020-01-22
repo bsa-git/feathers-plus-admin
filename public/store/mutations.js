@@ -3,7 +3,7 @@ import cookies from 'browser-cookies';
 import typeOf from '~/plugins/lib/type-of';
 const debug = require('debug')('app:store.mutations');
 
-const isLog = true;
+const isLog = false;
 
 const mutations = {
 

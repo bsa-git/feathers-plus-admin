@@ -434,5 +434,11 @@
     "flight": "Flight",
     "flightTitle": "Map (with large data)",
     "flightDescription": "Авиа перелеты в мире"
+  },
+  "chartDemo": {
+    "title": "Демо диаграммы",
+    "description": "Демо диаграммы",
+    "more": "Больше",
+    "moreInfo": "Больше информации"
   }
 }
