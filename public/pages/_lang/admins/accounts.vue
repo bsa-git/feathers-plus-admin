@@ -85,7 +85,7 @@
   import {mapGetters} from 'vuex'
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import ViewDialog from '~/components/dialogs/ViewDialog';
-  import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
+  import PanelsTopBar from '~/components/widgets/top-bars/TwoButtons';
   import AdminsAccountsUsers from '~/components/app/admins/accounts/users';
   import AdminsAccountsRoles from '~/components/app/admins/accounts/roles';
   import AdminsAccountsTeams from '~/components/app/admins/accounts/teams';

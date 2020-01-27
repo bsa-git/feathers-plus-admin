@@ -4,7 +4,7 @@
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const {inspector, AuthServer, getHookContext} = require('../plugins');
-const debug = require('debug')('app:constraints.all.hook');
+const debug = require('debug')('app:hooks.constraints');
 
 const isDebug = false;
 const isLog = false;

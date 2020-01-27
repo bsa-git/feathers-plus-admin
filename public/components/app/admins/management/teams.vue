@@ -171,7 +171,7 @@
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
-  import TableTopBar from '~/components/widgets/TopBars/SearchAndBtn';
+  import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
 
   const errors = require('@feathersjs/errors');
   const debug = require('debug')('app:comp.admins-management-roles');

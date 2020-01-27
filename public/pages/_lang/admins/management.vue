@@ -45,7 +45,7 @@
 <script>
   import {mapGetters} from 'vuex'
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
-  import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
+  import PanelsTopBar from '~/components/widgets/top-bars/TwoButtons';
   import AdminsManagementUsers from '~/components/app/admins/management/users';
   import AdminsManagementRoles from '~/components/app/admins/management/roles';
   import AdminsManagementTeams from '~/components/app/admins/management/teams';

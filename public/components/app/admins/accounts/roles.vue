@@ -25,7 +25,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import TreeviewTopBar from '~/components/widgets/TopBars/Search';
+  import TreeviewTopBar from '~/components/widgets/top-bars/Search';
 
   const debug = require('debug')('app:comp.admins-accounts-roles');
   const isLog = false;

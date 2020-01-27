@@ -351,7 +351,7 @@
   import qs from 'qs'
   import feathersClient from '~/plugins/lib/feathers-client';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
-  import PanelsTopBar from '~/components/widgets/TopBars/TwoButtons';
+  import PanelsTopBar from '~/components/widgets/top-bars/TwoButtons';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import ECharts from '~/components/chart/ECharts'
 

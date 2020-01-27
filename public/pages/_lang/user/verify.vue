@@ -7,7 +7,7 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import PageTopBar from '~/components/widgets/TopBars/PageTitleAndProgCircular';
+  import PageTopBar from '~/components/widgets/top-bars/PageTitleAndProgCircular';
   import Auth from '~/plugins/lib/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
   const debug = require('debug')('app:page.user-verify');

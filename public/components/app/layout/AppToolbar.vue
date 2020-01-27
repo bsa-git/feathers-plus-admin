@@ -35,23 +35,24 @@
     </v-btn>
     <!-- App Notifications -->
     <v-menu>
-      <!-- Activator -->
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on" :title="$t('app_toolbar.notifications')">
           <v-badge color="red" overlap>
-            <template v-slot:badge>3</template>
+            <template v-slot:badge>{{ amountNotifications }}</template>
             <v-icon>mdi-bell</v-icon>
           </v-badge>
         </v-btn>
       </template>
       <!-- Menu list -->
       <notification-list
-        :notes="appNotifications"
+        :items="appNotifications"
+        :item-index="selNotification"
+        v-on:onItem="onNotification($event)"
+        v-on:onShowAll="onAllNotifications"
       ></notification-list>
     </v-menu>
     <!-- User menu -->
     <v-menu>
-      <!-- Activator -->
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
           <v-tooltip bottom>
@@ -73,8 +74,11 @@
   import {mapGetters} from 'vuex';
   import userMenu from '~/api/app/user-menu.json';
   import appNotifications from '~/api/app/app-notification.json';
-  import NotificationList from '~/components/layout/NotificationList';
+  import NotificationList from '~/components/widgets/list/NotificationList';
   import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
+  const debug = require('debug')('app:comp.AppToolbar');
+
+  const isLog = true;
 
   export default {
     components: {
@@ -84,11 +88,20 @@
     data: function () {
       return {
         toggleFullScreen: this.$util.toggleFullScreen,
-        appNotifications: appNotifications,
+        appNotifications,
+        selNotification: -1,
         userMenu: userMenu
       }
     },
     computed: {
+      amountNotifications: function () {
+        let amount = 0;
+        const filterNotifications = this.appNotifications.filter(item => !item.header && !item.divider);
+        filterNotifications.forEach(function(item){
+          amount += item.amount;
+        });
+        return amount;
+      },
       ...mapGetters({
         config: 'getConfig',
         user: 'getUser',
@@ -98,7 +111,19 @@
       onNavLeft() {
         this.$emit('onNavLeft')
       },
-
+      onNotification(index){
+        if(index >= 0){
+          const filterNotifications = this.appNotifications.filter(item => !item.header && !item.divider);
+          if(isLog) debug('methods.onNotification.item:', filterNotifications[index]);
+          this.selNotification = index;
+          setTimeout(() => {
+            this.selNotification = -1;
+          }, 1000);
+        }
+      },
+      onAllNotifications(){
+        if(isLog) debug('methods.onAllNotifications: Click');
+      }
     }
   };
 </script>

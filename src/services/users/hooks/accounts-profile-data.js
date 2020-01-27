@@ -4,7 +4,7 @@
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const {inspector} = require('../../../plugins/lib');
-const debug = require('debug')('app:hook.accounts-profile-data');
+const debug = require('debug')('app:service.hook.accounts-profile-data');
 
 const isLog = false;
 const isDebug = false;

@@ -269,7 +269,7 @@
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
-  import TableTopBar from '~/components/widgets/TopBars/SearchAndBtn';
+  import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
 
   const debug = require('debug')('app:comp.admins-management-users');
   const isLog = false;

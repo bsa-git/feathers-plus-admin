@@ -1,0 +1,42 @@
+{
+  "LOGIN": {
+    "gr": "USER",
+    "pr": "10",
+    "title": "Login was successful",
+    "baseColor": "teal",
+    "subColor": " lighten-4",
+    "icon": "mdi-account-arrow-left"
+  },
+  "LOGOUT": {
+    "gr": "USER",
+    "pr": "11",
+    "title": "Logout was successful",
+    "baseColor": "teal",
+    "subColor": " lighten-3",
+    "icon": "mdi-account-arrow-right"
+  },
+  "REG_ACCOUNT": {
+    "gr": "USER",
+    "pr": "12",
+    "title": "Account registration was successful",
+    "baseColor": "teal",
+    "subColor": " lighten-2",
+    "icon": "mdi-account-plus"
+  },
+  "REMOVE_ACCOUNT": {
+    "gr": "USER",
+    "pr": "13",
+    "title": "Account remove was successful",
+    "baseColor": "teal",
+    "subColor": " lighten-1",
+    "icon": "mdi-account-arrow-left"
+  },
+  "CHANGE_PROFILE": {
+    "gr": "USER",
+    "pr": "14",
+    "title": "Change user profile was successful",
+    "baseColor": "teal",
+    "subColor": " lighten-3",
+    "icon": "mdi-account-arrow-left"
+  }
+}

@@ -3,7 +3,7 @@
 
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const {inspector, isString, isObject, isNumber, isNull} = require('../plugins/lib');
-const debug = require('debug')('app:normalize.all.hook');
+const debug = require('debug')('app:hooks.normalize');
 
 const isLog = false;
 const isDebug = false;

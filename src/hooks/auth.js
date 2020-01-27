@@ -3,7 +3,7 @@ const {inspector} = require('../plugins/lib');
 const {AuthServer} = require('../plugins/auth');
 // const { authenticate } = require('@feathersjs/authentication').hooks;
 
-const debug = require('debug')('app:auth.all.hook');
+const debug = require('debug')('app:hooks.auth');
 
 const isLog = false;
 const isDebug = false;
