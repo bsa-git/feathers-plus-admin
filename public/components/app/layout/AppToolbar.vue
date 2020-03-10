@@ -71,7 +71,7 @@
   </v-app-bar>
 </template>
 <script>
-  import {mapGetters} from 'vuex';
+  import {mapGetters, mapMutations} from 'vuex';
   import userMenu from '~/api/app/user-menu.json';
   import appNotifications from '~/api/app/app-notification.json';
   import NotificationList from '~/components/widgets/list/NotificationList';
@@ -90,12 +90,13 @@
     data: function () {
       return {
         toggleFullScreen: this.$util.toggleFullScreen,
-        notifications:  appNotifications.filter(item => !item.header && !item.divider).map(n => Object.assign({}, n)),
+        notifications:  null,
         selNotification: -1,
         userMenu
       }
     },
     created: function () {
+      this.notifications = appNotifications.filter(item => !item.header && !item.divider && item.isEnable).map(n => Object.assign({}, n));
       this.initNotifications();
 //      debug('created.notifications:', this.notifications);
     },
@@ -181,25 +182,32 @@
         if(isLog) debug('methods.onAllNotifications: Click');
       },
       initNotifications(){
-        /*
-        let _item, dtCheckAt, items = null;
+        let _item, dtCheckAt, items = [];
+        dtCheckAt = moment.utc(0).format();
         let stateNoticesCheckAt = this.stateNotices.checkAt;
         if(stateNoticesCheckAt){
           items = JSON.parse(stateNoticesCheckAt);
         }
         this.notifications.forEach(notice => {
-          if(items){
+          if(items.length > 0){
             if(notice.logNames.length > 1){
               notice.logNames.forEach(logName => {
                 _item = items.find(item => item.name === logName);
+                notice.checkAt = _item? _item.checkAt : dtCheckAt;
+                if(!_item){
+                  _item = {name: logName, checkAt: dtCheckAt};
+                  items.push(_item);
+                }
               })
             }else {
               _item = items.find(item => item.name === notice.logNames[0]);
+              notice.checkAt = _item? _item.checkAt : dtCheckAt;
+              if(!_item){
+                _item = {name: notice.logNames[0], checkAt: dtCheckAt};
+                items.push(_item);
+              }
             }
-            notice.checkAt = _item.checkAt;
           } else {
-            dtCheckAt = moment.utc(0).format();
-            items = [];
             if(notice.logNames.length > 1){
               notice.logNames.forEach(logName => {
                 _item = {name: logName, checkAt: dtCheckAt};
@@ -210,11 +218,10 @@
               items.push(_item);
             }
             notice.checkAt = dtCheckAt;
-            this.setNoticesCheckAt(JSON.stringify(items));
           }
-        })
-        debug('initAppNotifications.notifications:', this.notifications);
-        */
+        });
+        this.setNoticesCheckAt(JSON.stringify(items));
+//        debug('initAppNotifications.notifications:', this.notifications);
       },
       ...mapMutations({
         setNoticesCheckAt: 'SET_NOTICES_CHECKAT',

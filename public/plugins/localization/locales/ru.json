@@ -1,5 +1,6 @@
 {
   "$vuetify": {
+    "badge": "Знак",
     "close": "Закрыть",
     "dataIterator": {
       "noResultsText": "Не найдено подходящих записей",

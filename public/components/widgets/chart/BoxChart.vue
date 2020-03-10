@@ -28,7 +28,7 @@
   import ECharts from '~/components/chart/ECharts'
 
   const debug = require('debug')('app:comp.BoxChart');
-  const isLog = true;
+  const isLog = false;
 
   export default {
     components: {
