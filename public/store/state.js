@@ -83,6 +83,9 @@ export default () => ({
     debug: process.env.DEBUG.trim(),
     baseUrl: process.env.BASE_URL.trim(),
     homePath: process.env.HOME_PATH.trim(),
+    //--- LOG-MESSAGES ---//
+    logMsgEnable: util.isTrue(process.env.LOGMSG_ENABLE),
+    logMsgMaxRows: util.getNumber(process.env.LOGMSG_MAXROWS),
     //--- SECRETS ---//
     gmail: process.env.GMAIL.trim(),
     gmail_password: process.env.GMAIL_PASSWORD.trim(),
@@ -106,11 +109,15 @@ export default () => ({
     color: 'purple',
     timeout: 6000
   },
-  //---THEME ---//
+  //--- THEME ---//
   theme: {
     primary: 'indigo',
     dark: false,
     name: 'light',
+  },
+  //--- NOTIFICATIONS ---//
+  notices: {
+    checkAt: '',
   },
   //--- ECHARTS ---//
   echarts: {

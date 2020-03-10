@@ -194,12 +194,17 @@
               </template>
             </v-select>
           </v-col>
+          <v-col cols="12" >
+            <v-checkbox
+              v-model="editedItem.active"
+              :label="$t('management.active')"
+            ></v-checkbox>
+          </v-col>
         </v-row>
       </div>
     </save-dialog>
 
     <!--=== TopBar for table ===-->
-    <!-- mdi-account-plus  -->
     <table-top-bar
       :search="search"
       :search-label="$t('management.search')"
@@ -222,6 +227,10 @@
       <template v-slot:item.profile="{ item }">
         <v-icon v-if="profileList(item.profileId).length" @click="clickUserProfile(item)">mdi-contain</v-icon>
         <v-icon v-else >mdi-code-brackets</v-icon>
+      </template>
+      <!-- Field Active -->
+      <template v-slot:item.active="{ item }">
+        <v-simple-checkbox v-model="item.active" disabled></v-simple-checkbox>
       </template>
       <!-- Field teamNames -->
       <template v-slot:item.teamNames="{ item }">
@@ -270,6 +279,7 @@
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
   import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:comp.admins-management-users');
   const isLog = false;
@@ -286,6 +296,7 @@
       TableTopBar
     },
     data: () => ({
+      saveLogMessage: null,
       search: '',
       confirmDialog: false,
       userSaveDialog: false,
@@ -322,6 +333,11 @@
           value: 'email'
         },
         {
+          text: 'Active',
+          align: 'left',
+          value: 'active'
+        },
+        {
           text: 'Role Name',
           align: 'left',
           value: 'roleName'
@@ -345,6 +361,7 @@
         firstName: '',
         lastName: '',
         email: '',
+        active: true,
         avatar: '',
         roleId: '',
         teamIds: [],
@@ -356,6 +373,7 @@
         firstName: '',
         lastName: '',
         email: '',
+        active: true,
         avatar: '',
         roleId: '',
         teamIds: [],
@@ -365,7 +383,7 @@
       }
     }),
     created: function () {
-
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -394,6 +412,7 @@
             lastName: user.lastName,
             fullName: user.fullName,
             email: user.email,
+            active: user.active,
             avatar: user.avatar,
             isExternalAccount: this.isUserExternalAccount(user),
             profileId: user.profileId,
@@ -535,12 +554,23 @@
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
+              active: data.active,
               avatar: data.avatar,
               roleId: data.roleId,
               password: data.password
             });
+            return await user.save();
           } else {
             user = User.getFromStore(data.id);
+            // User has not been changed
+            if((data.email === user.email) &&
+              (data.active === user.active) &&
+              (data.firstName === user.firstName) &&
+              (data.lastName === user.lastName) &&
+              (data.roleId === user.roleId)){
+              return user
+            }
+            // Change user
             if ((data.email !== user.email) || !data.avatar) {
               const avatar = new this.$Avatar(data.email);
               data.avatar = await avatar.getImage();
@@ -550,11 +580,13 @@
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
+              active: data.active,
               avatar: data.avatar,
               roleId: data.roleId
             });
+            return await user.save();
           }
-          return await user.save();
+
         } catch (error) {
           if (isLog) debug('user.save.error:', error);
           this.loadingSubmit = false;
@@ -563,6 +595,7 @@
           if (!this.isNewItem) {
             await User.get(data.id);
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
 
@@ -608,6 +641,7 @@
         } catch (error) {
           if (isLog) debug('team.save.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
 
@@ -623,6 +657,7 @@
         } catch (error) {
           if (isLog) debug('user.remove.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       ...mapMutations({

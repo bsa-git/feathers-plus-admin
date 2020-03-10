@@ -1,10 +1,10 @@
 
-// logMsg-model.js - A Mongoose model
+// logMessages-model.js - A Mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 // !<DEFAULT> code: mongoose_schema
-const mongooseSchema = require('../services/log-msg/log-msg.mongoose');
+const mongooseSchema = require('../services/log-messages/log-messages.mongoose');
 // !end
 // !code: mongoose_imports // !end
 // !code: mongoose_init // !end
@@ -14,11 +14,11 @@ let moduleExports = function (app) {
   // !code: mongoose_func_init // !end
 
   // !<DEFAULT> code: mongoose_client
-  const logMsg = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
+  const logMessages = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
   // !end
 
-  let existingModel = mongooseClient.models['logMsg']; // needed for client/server tests
-  let returns = existingModel || mongooseClient.model('logMsg', logMsg);
+  let existingModel = mongooseClient.models['logMessages']; // needed for client/server tests
+  let returns = existingModel || mongooseClient.model('logMessages', logMessages);
 
   // !code: mongoose_func_return // !end
   return returns;

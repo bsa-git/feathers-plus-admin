@@ -3,10 +3,11 @@
     <!-- Data Search -->
     <v-text-field
       v-model="searchItems"
-      append-icon="fas fa-search"
       :label="searchLabel"
+      append-outer-icon="fas fa-search"
       single-line
       hide-details
+      clearable
     ></v-text-field>
     <v-spacer></v-spacer>
     <!-- Activator -->
@@ -14,6 +15,7 @@
       <v-btn
         color="primary"
         class="white--text"
+        :disabled="!!btnDisabled"
         @click="btnClick"
       >
         <v-icon class="mr-3" dark>{{ btnIcon }}</v-icon>
@@ -22,11 +24,11 @@
     </template>
 
     <template v-if="btnText && !btnIcon">
-      <v-btn text color="primary" @click="btnClick">{{ btnText }}</v-btn>
+      <v-btn text color="primary" @click="btnClick" :disabled="!!btnDisabled">{{ btnText }}</v-btn>
     </template>
 
     <template v-if="btnIcon && !btnText">
-      <v-btn fab small dark color="primary" @click="btnClick" :title="btnTooltip? btnTooltip : ''">
+      <v-btn fab small dark color="primary" @click="btnClick" :disabled="!!btnDisabled" :title="btnTooltip? btnTooltip : ''">
         <v-icon dark>{{ btnIcon }}</v-icon>
       </v-btn>
     </template>
@@ -42,6 +44,7 @@ export default {
     btnText: String,
     btnIcon: String,
     btnTooltip: String,
+    btnDisabled: Boolean,
     btnClick: Function,
   },
   computed: {

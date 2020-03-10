@@ -61,7 +61,7 @@ const actions = {
     // logout
     await service.logout();
     // Remove access token
-    if(this.$util.isAccessToken){
+    if (this.$util.isAccessToken) {
       this.$util.removeAccessToken();
     }
     service.clearAll();

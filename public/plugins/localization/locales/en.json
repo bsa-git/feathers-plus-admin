@@ -67,6 +67,7 @@
     "accounts": "Accounts",
     "management": "Management",
     "settings": "Settings",
+    "log": "Log Messages",
     "actions": "Actions",
     "graphql": "GraphQL",
     "request": "Request",
@@ -145,9 +146,12 @@
     "notification": "Notification",
     "show_all": "All",
     "new_user": "New user registered",
+    "user_login": "User logged",
+    "new_error": "A new error has appeared",
     "new_order": "New order received",
     "new_payment": "New payment made",
-    "new_message": "New message"
+    "new_message": "New message",
+    "new_email": "New email"
   },
   "theme_settings": {
     "settings": "Theme Settings",
@@ -296,6 +300,8 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
+    "active": "Active",
+    "userIsActive": "User is active",
     "password": "Password",
     "passwordConfirmation": "Confirm the password",
     "roleName": "Role",
@@ -326,7 +332,18 @@
     "personalData": "Personal Data",
     "secretData": "Secret Data",
     "authorization": "Authorization",
-    "database": "Data Base"
+    "database": "Data Base",
+    "logMessages": "Log Messages"
+  },
+  "logMessages": {
+    "title": "Log Messages",
+    "description": "Application Logging",
+    "removeAll": "Remove All",
+    "remove": "Remove",
+    "confirmDeleteItemTitle": "Remove this item",
+    "confirmDeleteItemText": "This item will be removed from the server database as well as from the client store",
+    "confirmDeleteItemsTitle": "Remove selected items",
+    "confirmDeleteItemsText": "This items will be removed from the server database as well as from the client store"
   },
   "graphql": {
     "title": "GraphQL",

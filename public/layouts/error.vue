@@ -25,14 +25,16 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import isNumber from 'lodash/isNumber';
+//  import isNumber from 'lodash/isNumber';
+  import typeOf from '~/plugins/lib/type-of';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   export default {
     layout: 'default',
     props: ['error'],
     data() {
       return {
-//        homePath: this.$i18n.path(process.env.HOME_PATH)
+//        saveLogMessage: null
       }
     },
     head() {
@@ -46,6 +48,7 @@
     created() {
       if (process.client) {
         console.error(`Error message: ${this.error.message}; ${this.error.statusCode ? 'Status Code: ' + this.error.statusCode : ''}`);
+        createLogMessage(this.$store)('ERROR-CLIENT', {error: this.error});
       }
     },
     computed: {
@@ -56,7 +59,7 @@
         return this.$t('error.description');
       },
       statusCode: function () {
-        return isNumber(this.error.statusCode) ? this.error.statusCode : '';
+        return typeOf.isNumber(this.error.statusCode) ? this.error.statusCode : '';
       },
       ...mapGetters({
         config: 'getConfig',

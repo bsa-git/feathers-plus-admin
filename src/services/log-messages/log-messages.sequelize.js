@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Defines Sequelize model for service `logMsg`. (Can be re-generated.)
+// Defines Sequelize model for service `logMessages`. (Can be re-generated.)
 const merge = require('lodash.merge');
 const Sequelize = require('sequelize');
 // eslint-disable-next-line no-unused-vars
@@ -24,6 +24,9 @@ let moduleExports = merge({},
     },
     name: {
       type: DataTypes.TEXT
+    },
+    ownerId: {
+      type: DataTypes.INTEGER
     },
     userId: {
       type: DataTypes.INTEGER

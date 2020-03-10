@@ -1,5 +1,5 @@
 
-// fgraphql populate hook for service `logMsg`. (Can be re-generated.)
+// fgraphql populate hook for service `logMessages`. (Can be re-generated.)
 const runTime = require('@feathers-plus/graphql/lib/run-time');
 const { fgraphql, serialize } = require('feathers-hooks-common');
 const { parse } = require('graphql');
@@ -16,17 +16,31 @@ const queries = {
   // All resolver fields 1 level deep.
   oneLevel: {
     query: {
+      owner: {},
+      user: {},
     }
   },
   // All resolver fields 2 levels deep.
   twoLevels: {
     query: {
+      owner: {
+        fullName: {},
+        role: {},
+        profile: {},
+        teams: {},
+      },
+      user: {
+        fullName: {},
+        role: {},
+        profile: {},
+        teams: {},
+      },
     }
   },
   // !code: queries // !end
 };
 
-async function logMsgPopulate (context) {
+async function logMessagesPopulate (context) {
   // eslint-disable-next-line no-unused-vars
   const params = context.params;
   let query, options, serializer;
@@ -56,7 +70,7 @@ async function logMsgPopulate (context) {
     runTime,
     schema,
     resolvers,
-    recordType: 'LogMsg',
+    recordType: 'LogMessage',
     query,
     options,
   })(context);
@@ -72,7 +86,7 @@ async function logMsgPopulate (context) {
 }
 
 // !code: more // !end
-let moduleExports = logMsgPopulate;
+let moduleExports = logMessagesPopulate;
 
 // !code: exports // !end
 module.exports = moduleExports;
@@ -88,8 +102,73 @@ const twoLevelsFields = {
     gr: 1,
     pr: 1,
     name: 1,
+    ownerId: 1,
     userId: 1,
     msg: 1,
+    owner: {
+      _args: {},
+      id: 1,
+      _id: 1,
+      email: 1,
+      password: 1,
+      firstName: 1,
+      lastName: 1,
+      avatar: 1,
+      roleId: 1,
+      profileId: 1,
+      active: 1,
+      isVerified: 1,
+      verifyToken: 1,
+      verifyShortToken: 1,
+      verifyExpires: 1,
+      verifyChanges: 1,
+      resetToken: 1,
+      resetShortToken: 1,
+      resetExpires: 1,
+      googleId: 1,
+      githubId: 1,
+      googleAccessToken: 1,
+      googleRefreshToken: 1,
+      githubAccessToken: 1,
+      githubRefreshToken: 1,
+      loginAt: 1,
+      fullName: {},
+      role: {},
+      profile: {},
+      teams: {},
+    },
+    user: {
+      _args: {},
+      id: 1,
+      _id: 1,
+      email: 1,
+      password: 1,
+      firstName: 1,
+      lastName: 1,
+      avatar: 1,
+      roleId: 1,
+      profileId: 1,
+      active: 1,
+      isVerified: 1,
+      verifyToken: 1,
+      verifyShortToken: 1,
+      verifyExpires: 1,
+      verifyChanges: 1,
+      resetToken: 1,
+      resetShortToken: 1,
+      resetExpires: 1,
+      googleId: 1,
+      githubId: 1,
+      googleAccessToken: 1,
+      googleRefreshToken: 1,
+      githubAccessToken: 1,
+      githubRefreshToken: 1,
+      loginAt: 1,
+      fullName: {},
+      role: {},
+      profile: {},
+      teams: {},
+    },
   }
 };
 */

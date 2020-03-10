@@ -1,15 +1,19 @@
 
-// Define the Feathers schema for service `logMsg`. (Can be re-generated.)
+// Define the Feathers schema for service `logMessages`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
 
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
-  title: 'LogMsg',
-  description: 'LogMsg database.',
+  title: 'LogMessages',
+  description: 'LogMessages database.',
   // !end
-  // !code: schema_definitions // !end
+  // !code: schema_definitions
+  //--------------------------
+  fakeRecords: 1,
+  //--------------------------
+  // !end
 
   // Required fields.
   required: [
@@ -26,11 +30,12 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     _id: {type: 'ID'},
-    gr: {type: 'string'},
+    gr: {faker: 'name.title'},
     pr: {type: 'integer'},
-    name: {type: 'string'},
-    userId: {type: 'ID'},
-    msg: {type: 'string'}
+    name: {faker: 'name.title'},
+    ownerId: {type: 'ID', faker: {fk: 'users:random'}},
+    userId: {type: 'ID', faker: {fk: 'users:random'}},
+    msg: {faker: 'lorem.sentence'}
     //-------------------------
     // !end
   },
@@ -42,12 +47,12 @@ let extensions = {
   // GraphQL generation.
   graphql: {
     // !code: graphql_header
-    name: 'LogMsg',
+    name: 'LogMessage',
     service: {
       sort: { _id: 1 },
     },
     // sql: {
-    //   sqlTable: 'LogMsg',
+    //   sqlTable: 'LogMessages',
     //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
@@ -58,8 +63,11 @@ let extensions = {
       // !code: graphql_discard // !end
     ],
     add: {
-      // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // !code: graphql_add
+      //-------------------
+      owner: {type: 'User', args: true, relation: {ourTable: 'ownerId', otherTable: '_id'}},
+      user: {type: 'User', args: true, relation: {ourTable: 'userId', otherTable: '_id'}},
+      //-------------------
       // !end
     },
     // !code: graphql_more // !end

@@ -8,6 +8,13 @@ dotenv.load(); // Load environment variables
 const isDebug = true;
 const isLog = false;
 
+// Get json log data
+const jsonLogData = readJsonFileSync(`${appRoot}/public/api/app/app-log-msg.json`) || {};
+const getLogData = (name) => {
+  return jsonLogData.filter(item => !item.isConfig).find(item => item.name === name);
+};
+const logData = getLogData('TEST');
+
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
@@ -31,6 +38,7 @@ let fakeDataUserProfiles = fakeData['userProfiles'];
 let fakeDataUserProfile = fakeDataUserProfiles[0];
 let idFieldUserProfile = 'id' in fakeDataUserProfile ? 'id' : '_id';
 
+let fakeDataLogMessages = fakeData['logMessages'];
 
 const rolesUpdate = () => {
   const roles = Object.values(Auth.getRoles());
@@ -52,6 +60,8 @@ const usersUpdate = () => {
 
   Object.assign(fakeDataUsers, fakeDataUsers.map(user => {
     const nowDate = new Date(0);// Date.now()
+    user.loginAt = nowDate.toJSON();
+    user.active = true,
     user.isVerified = true;
     user.verifyToken = '';
     user.verifyShortToken = '';
@@ -76,6 +86,15 @@ const userTeamsUpdate = () => {
   if(isDebug) console.log(chalk.yellow('UserTeams Update: Ok'));
 };
 
+const logMessagesUpdate = () => {
+  fakeDataLogMessages[0]['gr'] = logData.gr;
+  fakeDataLogMessages[0]['pr'] = logData.pr;
+  fakeDataLogMessages[0]['name'] = logData.name;
+  fakeDataLogMessages[0]['msg'] = JSON.stringify({message: fakeDataLogMessages[0]['msg']});
+  if(isLog) inspector('fake-service.logMessagesUpdate.fakeDataLogMessages:', fakeDataLogMessages);
+  if(isDebug) console.log(chalk.yellow('LogMessages Update: Ok'));
+};
+
 const fakeDataUpdate = () => {
   Object.assign(fakeData, {
     users: fakeDataUsers,
@@ -83,13 +102,17 @@ const fakeDataUpdate = () => {
     teams: fakeDataTeams,
     userTeams: fakeDataUserTeams,
     userProfiles: fakeDataUserProfiles,
+    logMessages: fakeDataLogMessages
   });
   writeJsonFileSync(`${appRoot}/seeds/fake-data.json`, fakeData);
 };
 
 if(isDebug) console.log(chalk.yellow('Start: Fake-Service!'));
+// Services fake data update
 rolesUpdate();
 usersUpdate();
 userTeamsUpdate();
+logMessagesUpdate();
+// All fake data update
 fakeDataUpdate();
 if(isDebug) console.log(chalk.yellow('Finish: Fake-Service!'));

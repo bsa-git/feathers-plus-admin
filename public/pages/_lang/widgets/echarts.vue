@@ -349,7 +349,7 @@
 <script>
   import {mapGetters, mapMutations, mapActions} from 'vuex'
   import qs from 'qs'
-  import feathersClient from '~/plugins/lib/feathers-client';
+  import feathersClient from '~/plugins/auth/feathers-client';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import PanelsTopBar from '~/components/widgets/top-bars/TwoButtons';
   import ViewDialog from '~/components/dialogs/ViewDialog';

@@ -125,9 +125,10 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-  import Auth from '~/plugins/lib/auth-client.class';
+  import Auth from '~/plugins/auth/auth-client.class';
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import InputCodeDialog from '~/components/dialogs/InputDialog';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:page.user-profile');
 
@@ -147,6 +148,7 @@
       return {
         title: this.$t('profile.title'),
         description: this.$t('profile.description'),
+        saveLogMessage: null,
         confirmDialog: false,
         inputCodeDialog: false,
         loadingSubmit: false,
@@ -173,6 +175,7 @@
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
       }
+      this.saveLogMessage = createLogMessage(this.$store);
       if (isDebug) debug('created.isExternalAccount:', this.isExternalAccount);
     },
     computed: {
@@ -244,6 +247,7 @@
           this.showError(error.message);
           // Recover user data
           await User.get(this.user[idFieldUser]);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async remove() {
@@ -253,11 +257,12 @@
           const {User} = this.$FeathersVuex;
           const user = new User({
             [idFieldUser]: this.user[idFieldUser],
+            active: false
           });
-          await user.remove();
+          await user.save();
           this.showSuccess(`${this.$t('profile.successRemoveUser')}!`);
-          setTimeout(() => {
-            this.logout();
+          await this.logout();
+          setTimeout( () => {
             this.$router.push(this.$i18n.path(this.config.homePath));
           }, 1000);
         } catch (error) {
@@ -265,6 +270,7 @@
           this.loadingRemove = false;
           this.error = error;
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       isChangeUser() {
@@ -321,6 +327,7 @@
           } else {
             this.showError({text: error.message, timeout: 10000});
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       setVerifyCode(val) {

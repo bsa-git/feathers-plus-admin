@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Validation definitions for validateSchema hook for service `logMsg`. (Can be re-generated.)
+// Validation definitions for validateSchema hook for service `logMessages`. (Can be re-generated.)
 const { validateSchema } = require('feathers-hooks-common');
 const merge = require('lodash.merge');
 const ajv = require('ajv');
@@ -15,8 +15,9 @@ const ID = 'string';
 let base = merge({},
   // !<DEFAULT> code: base
   {
-    title: "LogMsg",
-    description: "LogMsg database.",
+    title: "LogMessages",
+    description: "LogMessages database.",
+    fakeRecords: 1,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -27,18 +28,30 @@ let base = merge({},
         type: ID
       },
       gr: {
+        faker: "name.title",
         type: "string"
       },
       pr: {
         type: "integer"
       },
       name: {
+        faker: "name.title",
         type: "string"
       },
+      ownerId: {
+        type: ID,
+        faker: {
+          fk: "users:random"
+        }
+      },
       userId: {
-        type: ID
+        type: ID,
+        faker: {
+          fk: "users:random"
+        }
       },
       msg: {
+        faker: "lorem.sentence",
         type: "string"
       }
     }

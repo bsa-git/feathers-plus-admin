@@ -38,7 +38,6 @@
 <script>
   export default {
     props: {
-//      title: String,
       items: Array,
       itemIndex: {
         type: Number,

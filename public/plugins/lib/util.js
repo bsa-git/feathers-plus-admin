@@ -87,6 +87,15 @@ const isTrue = function (value) {
 };
 
 /**
+ * Get number from value
+ * @param value
+ * @return {number}
+ */
+const getNumber = function(value){
+  return Number.isInteger(value)? value : Number.parseInt(value);
+};
+
+/**
  * Get Regex
  * @param type
  * @return {String}
@@ -350,6 +359,7 @@ export default {
   stripSlashes,
   stripSpecific,
   isTrue,
+  getNumber,
   getRegex,
   getAccessToken,
   setAccessToken,

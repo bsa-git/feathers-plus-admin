@@ -8,10 +8,11 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import PageTopBar from '~/components/widgets/top-bars/PageTitleAndProgCircular';
-  import Auth from '~/plugins/lib/auth-client.class';
+  import Auth from '~/plugins/auth/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
-  const debug = require('debug')('app:page.user-change');
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
+  const debug = require('debug')('app:page.user-change');
   const isLog = false;
   const isDebug = false;
 
@@ -23,6 +24,7 @@
       return {
         title: this.$t('authManagement.titleIdentityChange'),
         description: this.$t('authManagement.descriptionIdentityChange'),
+        saveLogMessage: null,
       }
     },
     head() {
@@ -35,6 +37,7 @@
     },
     created: async function () {
       try {
+        this.saveLogMessage = createLogMessage(this.$store);
         const http = new Http();
         const token = http.getParams('token');
         if (isDebug) debug('action.token:', token);
@@ -61,6 +64,7 @@
         }else {
           this.showError(error.message);
         }
+        this.saveLogMessage('ERROR-CLIENT', {error});
       }
     },
     computed: {

@@ -51,6 +51,21 @@ const setLocale = (ct) => {
 };
 
 /**
+ * Set notices checkAt
+ * @param ct {Object}
+ */
+const setNoticesCheckAt = (ct) => {
+  const storeNoticesCheckAt = ct.store.state.notices.checkAt;
+  const serverCookieNoticesCheckAt = (process.server && !process.static) ? util.readCookie(ct.req.headers.cookie, 'notices_checkAt') : storeNoticesCheckAt;
+  const cookiesNoticesCheckAt = process.server ? serverCookieNoticesCheckAt : cookies.get('notices_checkAt');
+  if (process.client && !cookiesNoticesCheckAt) {
+    cookies.set('notices_checkAt', storeNoticesCheckAt);
+  } else if (cookiesNoticesCheckAt !== storeNoticesCheckAt) {
+    ct.store.commit('SET_NOTICES_CHECKAT', cookiesNoticesCheckAt);
+  }
+};
+
+/**
  * Init vuetify
  * @param ctVue {Object}
  * @param isUpdateColor {Boolean}
@@ -83,5 +98,6 @@ export default {
   setThemePrimary,
   setThemeDark,
   setLocale,
+  setNoticesCheckAt,
   initVuetify
 };

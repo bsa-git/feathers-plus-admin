@@ -57,6 +57,13 @@
         "title": "Settings",
         "icon": "mdi-settings",
         "to": "/admins/settings"
+      },
+      {
+        "name": "admins-log",
+        "alias": "log",
+        "title": "Log messages",
+        "icon": "mdi-message-text",
+        "to": "/admins/log"
       }
     ]
   },
@@ -418,6 +425,7 @@
         "name": "system-login",
         "alias": "login",
         "title": "Login",
+        "inactive": true,
         "to": "/user/login"
       },
       {

@@ -61,6 +61,15 @@ const isTrue = function (value) {
 };
 
 /**
+ * Get number from value
+ * @param value
+ * @return {number}
+ */
+const getNumber = function(value){
+  return Number.isInteger(value)? value : Number.parseInt(value);
+};
+
+/**
  * Get Regex
  * @param type
  * @return {String}
@@ -174,37 +183,6 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
   return `${leader}${str}${trailer}`;
 };
 
-const getHookContext = function (context) {
-  let target = {};
-  let {path, method, type, params, id, data, result, dispatch, statusCode, grapql} = context;
-
-  if (path) target.path = path;
-  if (method) target.method = method;
-  if (type) target.type = type;
-  if (params) target.params = params;
-  if (id) target.id = id;
-  if (data && type === 'before') target.data = data;
-  if (result) target.result = result;
-  if (dispatch) target.dispatch = dispatch;
-  if (statusCode) target.statusCode = statusCode;
-  // if (error) target.error = error;
-  if (grapql) target.grapql = grapql;
-  return target;
-};
-
-const getGraphQLContext = function (context) {
-  let target = {};
-  let {batchLoaders, cache, provider, authenticated, pagination, user,} = context;
-
-  if (batchLoaders) target.batchLoaders = batchLoaders;
-  if (cache) target.cache = cache;
-  if (provider) target.provider = provider;
-  if (authenticated) target.authenticated = authenticated;
-  if (pagination) target.pagination = pagination;
-  if (user) target.user = user;
-  return target;
-};
-
 /**
  * Returns new object with values cloned from the original object. Some objects
  * (like Sequelize or MongoDB model instances) contain circular references
@@ -230,36 +208,6 @@ const cloneObject = function (obj) {
   return Object.assign({}, obj1);
 };
 
-/**
- * verifyJWT
- * Pass a jwt token, get back a payload if it's valid.
- *
- * @param token
- * @return {Promise.<void>}
- */
-// const verifyJWT = async function (token) {
-//   const decode = require('jwt-decode');
-//   //-----------------------------------
-//   const payloadIsValid = function payloadIsValid(payload) {
-//     return payload && (!payload.exp || payload.exp * 1000 > new Date().getTime());
-//   };
-//
-//   if (typeof token !== 'string') {
-//     return Promise.reject(new Error('Token provided to verifyJWT is missing or not a string'));
-//   }
-//
-//   try {
-//     let payload = decode(token);
-//
-//     if (payloadIsValid(payload)) {
-//       return Promise.resolve(payload);
-//     }
-//
-//     return Promise.reject(new Error('Invalid token: expired'));
-//   } catch (error) {
-//     return Promise.reject(new Error('Cannot decode malformed token.'));
-//   }
-// };
 
 module.exports = {
   appRoot,
@@ -267,12 +215,10 @@ module.exports = {
   stripSlashes,
   stripSpecific,
   isTrue,
+  getNumber,
   getRegex,
   inspector,
   qlParams,
   stringify,
-  getHookContext,
-  getGraphQLContext,
-  cloneObject,
-  // verifyJWT
+  cloneObject
 };

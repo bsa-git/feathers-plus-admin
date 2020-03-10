@@ -4,6 +4,19 @@
 // !code: init // !end
 
 let moduleExports = `
+type LogMessage {
+  id: ID
+  _id: ID
+  gr: String
+  pr: Int
+  name: String
+  ownerId: ID
+  userId: ID
+  msg: String
+  owner(query: JSON, params: JSON, key: JSON): User
+  user(query: JSON, params: JSON, key: JSON): User
+}
+ 
 type Role {
   id: ID
   _id: ID
@@ -61,6 +74,7 @@ type User {
   avatar: String
   roleId: ID
   profileId: ID
+  active: Boolean
   isVerified: Boolean
   verifyToken: String
   verifyShortToken: String
@@ -75,6 +89,7 @@ type User {
   googleRefreshToken: String
   githubAccessToken: String
   githubRefreshToken: String
+  loginAt: String
   fullName: String!
   role(query: JSON, params: JSON, key: JSON): Role
   profile(query: JSON, params: JSON, key: JSON): UserProfile
@@ -83,6 +98,8 @@ type User {
  
 
 type Query {
+  getLogMessage(key: JSON, query: JSON, params: JSON): LogMessage
+  findLogMessage(query: JSON, params: JSON): [LogMessage]!
   getRole(key: JSON, query: JSON, params: JSON): Role
   findRole(query: JSON, params: JSON): [Role]!
   getTeam(key: JSON, query: JSON, params: JSON): Team

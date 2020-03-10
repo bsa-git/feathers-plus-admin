@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              :counter="15"
+              :counter="20"
               v-validate="{ regex: $util.getRegex('phone')}"
               :error-messages="errors.collect('personalPhone')"
               data-vv-name="personalPhone"
@@ -40,9 +40,9 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:comp.user-profile-address');
-
   const isLog = false;
 
   export default {
@@ -53,6 +53,7 @@
     components: {},
     data() {
       return {
+        saveLogMessage: null,
         loadingSubmit: false,
         error: undefined,
         model: {
@@ -66,6 +67,7 @@
         this.model.personalPhone = this.user.profile.personalPhone;
         this.model.personalWebSite = this.user.profile.personalWebSite;
       }
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -122,6 +124,7 @@
           this.showError(error.message);
           // Recover user profile data
           await UserProfile.get(this.user.profile.id);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
 //      getRegex(type){

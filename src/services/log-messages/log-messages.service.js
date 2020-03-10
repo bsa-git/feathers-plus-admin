@@ -1,8 +1,8 @@
 
-// Initializes the `logMsg` service on path `/log-msg`. (Can be re-generated.)
+// Initializes the `logMessages` service on path `/log-messages`. (Can be re-generated.)
 const createService = require('feathers-mongoose');
-const createModel = require('../../models/log-msg.model');
-const hooks = require('./log-msg.hooks');
+const createModel = require('../../models/log-messages.model');
+const hooks = require('./log-messages.hooks');
 // !code: imports // !end
 // !code: init // !end
 
@@ -20,11 +20,11 @@ let moduleExports = function (app) {
 
   // Initialize our service with any options it requires
   // !<DEFAULT> code: extend
-  app.use('/log-msg', createService(options));
+  app.use('/log-messages', createService(options));
   // !end
 
   // Get our initialized service so that we can register hooks
-  const service = app.service('log-msg');
+  const service = app.service('log-messages');
 
   service.hooks(hooks);
   // !code: func_return // !end

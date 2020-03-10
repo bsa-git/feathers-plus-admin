@@ -50,6 +50,7 @@ let schema = {
     roleId: {type: 'ID', faker: {fk: 'roles:random'}},
     profileId: {type: 'ID', faker: {fk: 'userProfiles:next'}},
     //----------------------------------------------
+    active: {type: 'boolean'},
     isVerified: { type: 'boolean' },
     verifyToken: { type: 'string' },
     verifyShortToken: { type: 'string' },
@@ -66,6 +67,7 @@ let schema = {
     githubAccessToken: {type: 'string', chance: 'guid'},
     githubRefreshToken: {type: 'string', chance: 'guid'},
     //-------------------------
+    loginAt: { type: 'string', format: 'date-time'}, // or a long integer
     // !end
   },
   // !code: schema_more // !end

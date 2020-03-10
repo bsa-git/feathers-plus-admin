@@ -107,15 +107,16 @@
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import Http from '~/plugins/lib/http.client.class';
-  import Auth from '~/plugins/lib/auth-client.class';
+  import Auth from '~/plugins/auth/auth-client.class';
   import fakeData from '~~/seeds/fake-data.json'
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import InputCodeDialog from '~/components/dialogs/InputDialog';
   import InputEmailDialog from '~/components/dialogs/InputDialog';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:user.login');
-  const isLog = true;
-  const isDebug = true;
+  const isLog = false;
+  const isDebug = false;
 
   export default {
     layout: 'user',
@@ -131,6 +132,7 @@
       return {
         title: this.$t('login.title'),
         description: this.$t('login.description'),
+        saveLogMessage: null,
         loadingSubmit: false,
         loadingLogout: false,
         confirmDialog: false,
@@ -153,14 +155,13 @@
         ],
       }
     },
-    created: function () {
+    created: async function () {
       if (this.user) {
-        this.model.avatar = this.user.avatar;
-        this.model.email = this.user.email;
-        this.model.password = '';
-      } else {
-        this.initModel();
+        // Login form should be open for non-logged users
+        await this.logout();
       }
+      this.initModel();
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -205,13 +206,12 @@
       },
       async login(email, password) {
         try {
-          if (isDebug) debug('<<login>> Start login');
+          if (isDebug) debug('<<login>> Start authenticate');
           return await this.authenticate({strategy: 'local', email, password});
         } catch (error) {
           if (isLog) debug('authenticate.error:', error);
           this.loadingSubmit = false;
           this.error = error;
-
           if (error.message === 'User\'s email is not yet verified.') {
             this.showError({text: this.$t('authManagement.msgForErrorEmailNotYetVerified'), timeout: 10000});
             // Open resendVerifySignup confirm dialog
@@ -221,6 +221,7 @@
           } else {
             this.showError({text: error.message, timeout: 10000});
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async resendVerifySignup() {
@@ -239,6 +240,7 @@
           if (isLog) debug('resendVerifySignup.error:', error);
           this.error = error;
           this.showError({text: error.message, timeout: 10000});
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       openInputCodeDialog() {
@@ -279,13 +281,13 @@
           } else {
             this.showError({text: error.message, timeout: 10000});
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       setVerifyCode(val) {
         this.verifyCode = val;
       },
       async sendResetPwd() {
-
         if (isDebug) debug('<<sendResetPwd>> Start sendResetPwd');
         try {
           await Auth.checkUnique({email: this.model.email}, '');
@@ -293,9 +295,11 @@
         } catch (checkUniqueError) {
           if (checkUniqueError.message === 'Values already taken.') {// This is OK!
             try {
+              if (isDebug) debug('sendResetPwd.checkUnique: OK');
               // Close input dialog
               this.inputEmailDialog = false;
-              Auth.sendResetPwd({email: this.model.email});
+              const result = await Auth.sendResetPwd({email: this.model.email});
+              if (isDebug) debug('sendResetPwd.Auth.sendResetPwd.result:', result);
               // sendResetPwd running...
               setTimeout(() => {
                 this.showWarning({text: this.$t('authManagement.sendResetPwdVerification'), timeout: 10000});
@@ -305,6 +309,7 @@
               if (isLog) debug('sendResetPwd.error:', error);
               this.error = error;
               this.showError({text: error.message, timeout: 10000});
+              this.saveLogMessage('ERROR-CLIENT', {error});
             }
           } else {// Unexpected error
             if (isLog) debug('sendResetPwd.checkUniqueError:', checkUniqueError);

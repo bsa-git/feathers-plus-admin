@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Defines Mongoose model for service `logMsg`. (Can be re-generated.)
+// Defines Mongoose model for service `logMessages`. (Can be re-generated.)
 const merge = require('lodash.merge');
 // eslint-disable-next-line no-unused-vars
 const mongoose = require('mongoose');
@@ -13,6 +13,7 @@ let moduleExports = merge({},
     gr: String,
     pr: Number,
     name: String,
+    ownerId: mongoose.Schema.Types.ObjectId,
     userId: mongoose.Schema.Types.ObjectId,
     msg: String
   },

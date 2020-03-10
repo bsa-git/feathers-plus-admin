@@ -1,74 +1,48 @@
-// A hook that logs service method before, after and error
-// See https://github.com/winstonjs/winston for documentation
-// about the logger.
-// const logger = require('../logger');
-const {readJsonFileSync, inspector, getHookContext, appRoot, AuthServer} = require('../plugins');
-const chalk = require('chalk');
+const {getItems, replaceItems} = require('feathers-hooks-common');
+const {AuthServer, isTrue, HookHelper, getLogMessage} = require('../plugins');
 const debug = require('debug')('app:hooks.my-log');
 
 const isDebug = false;
 const isLog = false;
 
-const jsonLogData = readJsonFileSync(`${appRoot}/public/api/app/app-log-msg.json`) || {};
-
-/**
- * Get provider
- * @param context
- * @return {String}
- */
-const getProvider = (context) => context.params.provider ? context.params.provider : 'Not';
-
-// To see more detailed messages, uncomment the following line:
-// logger.level = 'debug';
-
-const getLogMsg = async (context) => {
-  let logContext, payload, logData, idField, msg;
-  logContext = getHookContext(context);
-  switch (`${logContext.path}.${logContext.method}.${logContext.type}`) {
-  // User login
-  case 'authentication.create.after':
-    logData = jsonLogData['LOGIN'];
-    payload = await AuthServer.verifyJWT(logContext.result.accessToken);
-    msg = {title: logData.title, role: payload.role};
-    return {gr: logData.gr, pr: logData.pr, name: 'LOGIN', userId: payload.userId, msg: JSON.stringify(msg)};
-  // User logout
-  case 'authentication.remove.after':
-    logData = jsonLogData['LOGOUT'];
-    payload = await AuthServer.verifyJWT(logContext.result.accessToken);
-    msg = {title: logData.title, role: payload.role};
-    return {gr: logData.gr, pr: logData.pr, name: 'LOGOUT', userId: payload.userId, msg: JSON.stringify(msg)};
-  case 'users.create.after':
-    logData = jsonLogData['REG_ACCOUNT'];
-    idField = 'id' in logContext.result ? 'id' : '_id';
-    msg = {title: logData.title, email: logContext.result['email'], fullName: `${logContext.result['firstName']} ${logContext.result['lastName']}`};
-    return {gr: logData.gr, pr: logData.pr, name: 'REG_ACCOUNT', userId: logContext.result[idField], msg: JSON.stringify(msg)};
-  case 'users.remove.after':
-    logData = jsonLogData['REMOVE_ACCOUNT'];
-    idField = 'id' in logContext.result ? 'id' : '_id';
-    msg = {title: logData.title, email: logContext.result['email'], fullName: `${logContext.result['firstName']} ${logContext.result['lastName']}`};
-    return {gr: logData.gr, pr: logData.pr, name: 'REMOVE_ACCOUNT', userId: logContext.result[idField], msg: JSON.stringify(msg)};
-  default:
-    return '';
-  }
-};
-
-module.exports = function () {
+module.exports = function (isTest = false) {
   return async context => {
-    // Debug info
-    if (isDebug) debug(`Provider: ${getProvider(context)}; ${context.type} app.service('${context.path}').${context.method}()`);
-    if (context.error) {
-      console.error(chalk.red(`context.error.message: ${context.error.message}`));
-      delete context.error.app;
-      delete context.error.hook;
-      inspector('Error Context:', context.error);
-    } else {
-      // Log context
-      if (isLog) {
-        const logContext = getHookContext(context);
-        inspector('Hook Context:', logContext);
+
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    let records = getItems(context);
+
+    // Create HookHelper object
+    const hookHelper = new HookHelper(context);
+    // Show debug info
+    hookHelper.showDebugInfo('', isLog);
+    hookHelper.showDebugError();
+
+    // hookHelper.showDebugInfo('authentication.remove.after', true);
+
+    // Is log msg enable
+    const isLogMsgEnable = isTest ||
+        isTrue(process.env.LOGMSG_ENABLE) &&
+        !AuthServer.isTest() &&
+        (hookHelper.contextProvider ||
+          hookHelper.isMask('authentication.remove.after') ||
+          hookHelper.isMask('mailer.create.before') ||
+          hookHelper.isMask('mailer.create.after') ||
+          hookHelper.contextError
+        );
+
+    if(isLogMsgEnable){
+      // Get log message
+      const logMsg = await getLogMessage(context);
+      // Save log message
+      if(logMsg){
+        if(isDebug) debug('logMsg:', logMsg);
+        await hookHelper.createItem('log-messages', logMsg);
       }
-      const logMsg = await getLogMsg(context);
-      if (logMsg) debug('getLogMsg:', logMsg);
     }
+    // Place the modified records back in the context.
+    replaceItems(context, records);
+    // Best practice: hooks should always return the context.
+    return context;
   };
 };

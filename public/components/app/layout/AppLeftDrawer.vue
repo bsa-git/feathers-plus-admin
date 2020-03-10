@@ -62,7 +62,7 @@
               </v-list-item>
             </v-list-group>
             <!--child item-->
-            <v-list-item v-else
+            <v-list-item v-else-if="!subItem.inactive"
                          :key="subItem.name"
                          :to="$i18n.path(subItem.to)"
                          :disabled="subItem.disabled"
@@ -83,7 +83,7 @@
         </v-subheader>
         <v-divider v-else-if="item.divider" :key="i"></v-divider>
         <!--top-level link-->
-        <v-list-item v-else
+        <v-list-item  v-else
                      :to="$i18n.path(item.to)"
                      ripple="ripple"
                      :disabled="item.disabled"
@@ -106,9 +106,7 @@
   </v-navigation-drawer>
 </template>
 <script>
-
-  import AuthClient from '~/plugins/lib/auth-client.class';
-
+  import AuthClient from '~/plugins/auth/auth-client.class';
   export default {
     props: {
       isIcon: Boolean,

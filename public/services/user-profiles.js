@@ -1,8 +1,9 @@
 const loPick = require('lodash/pick');
 import feathersVuex from 'feathers-vuex';
-import feathersClient from '~/plugins/lib/feathers-client';
+import feathersClient from '~/plugins/auth/feathers-client';
 import normalize from '~/services/hooks/normalize';
-import Service from '~/plugins/lib/service-client.class';
+import log from '~/services/hooks/log';
+import Service from '~/plugins/service-helpers/service-client.class';
 
 const debug = require('debug')('app:service.user-profiles');
 // const isDebug = true;
@@ -176,7 +177,7 @@ const servicePlugin = service(servicePath, {
 feathersClient.service(servicePath)
   .hooks({
     before: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [normalize()],
@@ -185,7 +186,7 @@ feathersClient.service(servicePath)
       remove: []
     },
     after: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [],
@@ -194,7 +195,7 @@ feathersClient.service(servicePath)
       remove: []
     },
     error: {
-      all: [],
+      all: [log()],
       find: [],
       get: [],
       create: [],

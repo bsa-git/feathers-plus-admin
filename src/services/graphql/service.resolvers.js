@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
 // !code: imports
-const {inspector, getGraphQLContext} = require('../../plugins/lib');
+const {inspector} = require('../../plugins/lib');
 const debug = require('debug')('app:service.graphql.resolvers');
 
 const isDebug = false;
@@ -17,6 +17,7 @@ let moduleExports = function serviceResolvers(app, options) {
   // !end
 
   // !<DEFAULT> code: services
+  let logMessages = app.service('/log-messages');
   let roles = app.service('/roles');
   let teams = app.service('/teams');
   let userProfiles = app.service('/user-profiles');
@@ -25,6 +26,31 @@ let moduleExports = function serviceResolvers(app, options) {
   // !end
 
   let returns = {
+
+    LogMessage: {
+
+      // owner(query: JSON, params: JSON, key: JSON): User
+      owner:
+        // !<DEFAULT> code: resolver-LogMessage-owner
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.ownerId }, paginate: false
+          });
+          return users.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
+      // user(query: JSON, params: JSON, key: JSON): User
+      user:
+        // !<DEFAULT> code: resolver-LogMessage-user
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.userId }, paginate: false
+          });
+          return users.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+    },
 
     Role: {
 
@@ -183,6 +209,20 @@ let moduleExports = function serviceResolvers(app, options) {
     // !code: resolver_field_more // !end
 
     Query: {
+
+      // !<DEFAULT> code: query-LogMessage
+      // getLogMessage(query: JSON, params: JSON, key: JSON): LogMessage
+      getLogMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return logMessages.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findLogMessage(query: JSON, params: JSON): [LogMessage!]
+      findLogMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return logMessages.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
 
       // !<DEFAULT> code: query-Role
       // getRole(query: JSON, params: JSON, key: JSON): Role

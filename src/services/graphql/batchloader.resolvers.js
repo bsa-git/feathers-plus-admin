@@ -21,6 +21,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // !end
 
   // !<DEFAULT> code: services
+  let logMessages = app.service('/log-messages');
   let roles = app.service('/roles');
   let teams = app.service('/teams');
   let userProfiles = app.service('/user-profiles');
@@ -69,6 +70,36 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     // !end
 
     /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+
+    // LogMessage.owner(query: JSON, params: JSON, key: JSON): User
+    // !<DEFAULT> code: bl-LogMessage-owner
+    case 'LogMessage.owner':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
+    // LogMessage.user(query: JSON, params: JSON, key: JSON): User
+    // !<DEFAULT> code: bl-LogMessage-user
+    case 'LogMessage.user':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
 
     // Role.users: [User!]
     // !<DEFAULT> code: bl-Role-users
@@ -170,6 +201,19 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
   let returns = {
 
+    LogMessage: {
+
+      // owner(query: JSON, params: JSON, key: JSON): User
+      // !<DEFAULT> code: resolver-LogMessage-owner
+      owner: getResult('LogMessage.owner', 'ownerId'),
+      // !end
+
+      // user(query: JSON, params: JSON, key: JSON): User
+      // !<DEFAULT> code: resolver-LogMessage-user
+      user: getResult('LogMessage.user', 'userId'),
+      // !end
+    },
+
     Role: {
 
       // users: [User!]
@@ -227,6 +271,20 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
     // !code: resolver_field_more // !end
     Query: {
+
+      // !<DEFAULT> code: query-LogMessage
+      // getLogMessage(query: JSON, params: JSON, key: JSON): LogMessage
+      getLogMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return logMessages.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findLogMessage(query: JSON, params: JSON): [LogMessage!]
+      findLogMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return logMessages.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
 
       // !<DEFAULT> code: query-Role
       // getRole(query: JSON, params: JSON, key: JSON): Role

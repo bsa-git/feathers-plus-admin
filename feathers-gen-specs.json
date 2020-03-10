@@ -107,15 +107,15 @@
       "requiresAuth": false,
       "graphql": false
     },
-    "logMsg": {
-      "name": "logMsg",
-      "nameSingular": "logMsg",
+    "logMessages": {
+      "name": "logMessages",
+      "nameSingular": "logMessage",
       "subFolder": "",
-      "fileName": "log-msg",
+      "fileName": "log-messages",
       "adapter": "mongoose",
-      "path": "/log-msg",
+      "path": "/log-messages",
       "isAuthEntity": false,
-      "requiresAuth": false,
+      "requiresAuth": true,
       "graphql": true
     }
   },

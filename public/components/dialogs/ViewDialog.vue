@@ -2,7 +2,7 @@
   <v-dialog v-model="showDialog" scrollable :max-width="maxWidth">
     <v-card>
       <!-- Toolbar -->
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="primary" elevation="0" dense dark>
         <v-icon class="mr-3" v-if="headerIcon">{{ headerIcon }}</v-icon>
         <v-app-bar-nav-icon v-else></v-app-bar-nav-icon>
         <v-toolbar-title>{{ headerTitle }}</v-toolbar-title>
@@ -19,7 +19,7 @@
       </v-card-text>
       <!-- Actions -->
       <v-card-actions  class="primary">
-        <v-btn class="mx-auto" @click="showDialog = false" dark text>{{ actionText }}</v-btn>
+        <v-btn class="mx-auto" @click="showDialog = false" small dark text>{{ actionText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -45,7 +45,7 @@
       </template>
       <!-- Menu list -->
       <notification-list
-        :items="appNotifications"
+        :items="getNotifications"
         :item-index="selNotification"
         v-on:onItem="onNotification($event)"
         v-on:onShowAll="onAllNotifications"
@@ -76,8 +76,10 @@
   import appNotifications from '~/api/app/app-notification.json';
   import NotificationList from '~/components/widgets/list/NotificationList';
   import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
-  const debug = require('debug')('app:comp.AppToolbar');
+  import util from '~/plugins/lib/util';
+  const moment = require('moment');
 
+  const debug = require('debug')('app:comp.AppToolbar');
   const isLog = true;
 
   export default {
@@ -88,23 +90,77 @@
     data: function () {
       return {
         toggleFullScreen: this.$util.toggleFullScreen,
-        appNotifications,
+        notifications:  appNotifications.filter(item => !item.header && !item.divider).map(n => Object.assign({}, n)),
         selNotification: -1,
-        userMenu: userMenu
+        userMenu
       }
     },
+    created: function () {
+      this.initNotifications();
+//      debug('created.notifications:', this.notifications);
+    },
     computed: {
+      logMessages() {
+        const data = [];
+        let logMessages = [];
+        const idFieldLogMessage = this.$store.state['log-messages'].idField;
+        const {LogMessage} = this.$FeathersVuex;
+        this.getQueryNotifications.forEach(q => {
+          let _logMessages = LogMessage.findInStore(q).data;
+          logMessages = logMessages.concat(_logMessages);
+        });
+        util.sortByStringField(logMessages, 'createdAt');
+        logMessages.forEach(logMessage => {
+          const logMessageId = logMessage[idFieldLogMessage];
+          // Get logMessage
+          let item = {
+            id: logMessageId,
+            gr: logMessage.gr,
+            pr: logMessage.pr,
+            name: logMessage.name,
+            title: logMessage.title,
+            icon: logMessage.icon,
+            color: logMessage.color,
+            user: logMessage.user,
+            owner: logMessage.owner,
+            msg: logMessage.msg,
+            formatMsg: logMessage.formatMsg,
+            isServer: logMessage.isServer,
+            dt: logMessage.dtLocal,
+          };
+          data.push(item);
+        });
+        if (isLog) debug('logMessages.data:', data);
+        return data
+      },
       amountNotifications: function () {
         let amount = 0;
-        const filterNotifications = this.appNotifications.filter(item => !item.header && !item.divider);
-        filterNotifications.forEach(function(item){
+        this.getNotifications.forEach(function(item){
           amount += item.amount;
         });
         return amount;
       },
+      getNotifications: function () {
+        return this.notifications.filter(item => item.isEnable);
+      },
+      getQueryNotifications: function () {
+        const _notifications = Object.assign({}, this.notifications);
+        const qq = [];// {query: {$sort: {createdAt: -1}}}
+        _notifications.forEach(n => {
+          n.logNames.forEach(name => {
+            let q = {query: {
+              createdAt: {$gt: n.checkAt},
+              name: name
+            }};
+            qq.push(q);
+          });
+        });
+        return qq
+      },
       ...mapGetters({
         config: 'getConfig',
         user: 'getUser',
+        stateNotices: 'getNotices'
       }),
     },
     methods: {
@@ -123,7 +179,46 @@
       },
       onAllNotifications(){
         if(isLog) debug('methods.onAllNotifications: Click');
-      }
+      },
+      initNotifications(){
+        /*
+        let _item, dtCheckAt, items = null;
+        let stateNoticesCheckAt = this.stateNotices.checkAt;
+        if(stateNoticesCheckAt){
+          items = JSON.parse(stateNoticesCheckAt);
+        }
+        this.notifications.forEach(notice => {
+          if(items){
+            if(notice.logNames.length > 1){
+              notice.logNames.forEach(logName => {
+                _item = items.find(item => item.name === logName);
+              })
+            }else {
+              _item = items.find(item => item.name === notice.logNames[0]);
+            }
+            notice.checkAt = _item.checkAt;
+          } else {
+            dtCheckAt = moment.utc(0).format();
+            items = [];
+            if(notice.logNames.length > 1){
+              notice.logNames.forEach(logName => {
+                _item = {name: logName, checkAt: dtCheckAt};
+                items.push(_item);
+              })
+            }else {
+              _item = {name: notice.logNames[0], checkAt: dtCheckAt};
+              items.push(_item);
+            }
+            notice.checkAt = dtCheckAt;
+            this.setNoticesCheckAt(JSON.stringify(items));
+          }
+        })
+        debug('initAppNotifications.notifications:', this.notifications);
+        */
+      },
+      ...mapMutations({
+        setNoticesCheckAt: 'SET_NOTICES_CHECKAT',
+      }),
     }
   };
 </script>

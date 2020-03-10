@@ -92,11 +92,11 @@
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
-  import feathersClient from '~/plugins/lib/feathers-client';
+  import feathersClient from '~/plugins/auth/feathers-client';
   import ViewDialog from '~/components/dialogs/ViewDialog';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:page.services-graphql-find');
-
   const isLog = true;
   const isDebug = true;
 
@@ -114,11 +114,15 @@
       return {
         title: this.$t('graphql.title'),
         description: this.$t('graphql.description'),
+        saveLogMessage: null,
         responseDialog: false,
         textResponse: '',
         selTab: null,
         isLoading: false
       }
+    },
+    created: function () {
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     methods: {
       changeTab: function (index) {
@@ -140,6 +144,7 @@
           if (isLog) debug('graphql.find.error:', ex);
           const msgError = ex.errors.length? ex.errors[0].message : ex.message;
           this.showError(msgError);
+          this.saveLogMessage('ERROR-CLIENT', {error: ex});
         }
       },
       ...mapMutations({

@@ -17,7 +17,7 @@ const isDebug = false;
 const isLog = false;
 const isTest = true;
 const testConfig = {
-  service: '*', // '*' | 'users' | 'roles' | 'teams' | 'userTeams' | 'userProfiles' | ''
+  service: '*', // '*' | 'users' | 'roles' | 'teams' | 'userTeams' | 'userProfiles' | 'logMessages'
   metod: '*' // '*' | 'create' | 'find' | 'get' |'update' | 'patch' | 'remove'
 };
 
@@ -166,8 +166,8 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
           const authByMethod = Object.assign({}, loPick(_authByMethod, testConfig.metod === '*'? Object.keys(_authByMethod) : testConfig.metod));
           const ourSeedData = seedData[name];
 
-          // if(isLog) inspector('authentication.services.authByMethod:', authByMethod);
-          // if(isLog) inspector('authentication.services.ourSeedData:', ourSeedData);
+          if(isDebug) inspector('authentication.services.authByMethod:', authByMethod);
+          if(isLog) inspector('authentication.services.ourSeedData:', ourSeedData);
 
 
           if (!ourSeedData || !ourSeedData.length) {
@@ -187,7 +187,7 @@ module.exports = function checkHealthAuthTest(appRoot = cwd(), options = {}) {
               ifFail = false;
             }
 
-            // if (isDebug) debug(`<-- method: ${method}; displayCode: ${displayCode(ifFail, authThisMethod)} -->`);
+            if (isDebug) debug(`<-- method: ${method}; displayCode: ${displayCode(ifFail, authThisMethod)} -->`);
 
             it(`${method} ${displayCode(ifFail, authThisMethod)}.`, async () => {
               const service = appClient.service(genService.path);

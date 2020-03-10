@@ -6,7 +6,7 @@ import syncStore from '~/plugins/lib/sync-store';
 import util from '~/plugins/lib/util';
 import HttpBox from '~/plugins/lib/http.client.class';
 import Avatar from '~/plugins/lib/avatar.class';
-import Service from '~/plugins/lib/service-client.class';
+import Service from '~/plugins/service-helpers/service-client.class';
 import colors from 'vuetify/lib/util/colors';
 const debug = require('debug')('app:plugin.index');
 
@@ -31,4 +31,5 @@ export default async (context, inject) => {
   syncStore.setThemeDark(context);
   syncStore.setThemePrimary(context);
   syncStore.setLocale(context);
+  syncStore.setNoticesCheckAt(context);
 };

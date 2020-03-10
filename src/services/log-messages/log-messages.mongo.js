@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Defines the MongoDB $jsonSchema for service `logMsg`. (Can be re-generated.)
+// Defines the MongoDB $jsonSchema for service `logMessages`. (Can be re-generated.)
 const merge = require('lodash.merge');
 // !code: imports // !end
 // !code: init // !end
@@ -15,18 +15,30 @@ let moduleExports = merge({},
         bsonType: "objectId"
       },
       gr: {
+        faker: "name.title",
         bsonType: "string"
       },
       pr: {
         bsonType: "int"
       },
       name: {
+        faker: "name.title",
         bsonType: "string"
       },
+      ownerId: {
+        faker: {
+          fk: "users:random"
+        },
+        bsonType: "objectId"
+      },
       userId: {
+        faker: {
+          fk: "users:random"
+        },
         bsonType: "objectId"
       },
       msg: {
+        faker: "lorem.sentence",
         bsonType: "string"
       }
     }

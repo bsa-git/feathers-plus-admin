@@ -1,8 +1,8 @@
 const loPick = require('lodash/pick');
 const commonHooks = require('feathers-hooks-common');
 import feathersVuex from 'feathers-vuex';
-import feathersClient from '~/plugins/lib/feathers-client';
-import Service from '~/plugins/lib/service-client.class';
+import feathersClient from '~/plugins/auth/feathers-client';
+import Service from '~/plugins/service-helpers/service-client.class';
 import normalize from '~/services/hooks/normalize';
 import log from '~/services/hooks/log';
 
