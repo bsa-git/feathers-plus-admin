@@ -18,6 +18,32 @@ const delayTime = function (sec = 1) {
 };
 
 /**
+ * Pause
+ * @param ms
+ * @return {Promise}
+ */
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * Awaiting positive completion of a function
+ * @param fn
+ * @param cb
+ * @param delay
+ */
+const waitTimeout = function (fn, cb = null, delay = 0) {
+  let _delay = delay? delay : 1000;
+  let timerId = setTimeout(function request() {
+    let result = fn();
+    if(!result){
+      timerId = setTimeout(request, _delay);
+    }else {
+      if(cb) cb();
+      clearInterval(timerId);
+    }
+  }, _delay);
+};
+
+/**
  * Strip slashes
  * @param value String
  * @return {XML|string|*|void}
@@ -58,6 +84,15 @@ const isTrue = function (value) {
   default:
     return false;
   }
+};
+
+/**
+ * Get number from value
+ * @param value
+ * @return {number}
+ */
+const getNumber = function(value){
+  return Number.isInteger(value)? value : Number.parseInt(value);
 };
 
 /**
@@ -174,37 +209,6 @@ const stringify = function (obj, spacer = ' ', separator = ', ', leader = '{', t
   return `${leader}${str}${trailer}`;
 };
 
-const getHookContext = function (context) {
-  let target = {};
-  let {path, method, type, params, id, data, result, dispatch, statusCode, grapql} = context;
-
-  if (path) target.path = path;
-  if (method) target.method = method;
-  if (type) target.type = type;
-  if (params) target.params = params;
-  if (id) target.id = id;
-  if (data && type === 'before') target.data = data;
-  if (result) target.result = result;
-  if (dispatch) target.dispatch = dispatch;
-  if (statusCode) target.statusCode = statusCode;
-  // if (error) target.error = error;
-  if (grapql) target.grapql = grapql;
-  return target;
-};
-
-const getGraphQLContext = function (context) {
-  let target = {};
-  let {batchLoaders, cache, provider, authenticated, pagination, user,} = context;
-
-  if (batchLoaders) target.batchLoaders = batchLoaders;
-  if (cache) target.cache = cache;
-  if (provider) target.provider = provider;
-  if (authenticated) target.authenticated = authenticated;
-  if (pagination) target.pagination = pagination;
-  if (user) target.user = user;
-  return target;
-};
-
 /**
  * Returns new object with values cloned from the original object. Some objects
  * (like Sequelize or MongoDB model instances) contain circular references
@@ -230,17 +234,77 @@ const cloneObject = function (obj) {
   return Object.assign({}, obj1);
 };
 
+/**
+ * sort array by string field
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
+ */
+const sortByStringField = function(items, name, isAscending = true) {
+  items.sort((x, y) => {
+    let textA = x[name].toLocaleUpperCase();
+    let textB = y[name].toLocaleUpperCase();
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+};
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
+ */
+const sortByNumberField = function(items, name, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x[name] - y[name];
+    if(!isAscending) return y[name] - x[name];
+  });
+};
+
+/**
+ * sort array by string
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+const sortByString = function(items, isAscending = true) {
+  items.sort((x, y) => {
+    let textA = x.toLocaleUpperCase();
+    let textB = y.toLocaleUpperCase();
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+};
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+const sortByNumber = function(items, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x - y;
+    if(!isAscending) return y - x;
+  });
+};
+
+
 module.exports = {
   appRoot,
   delayTime,
+  pause,
+  waitTimeout,
   stripSlashes,
   stripSpecific,
   isTrue,
+  getNumber,
   getRegex,
   inspector,
   qlParams,
   stringify,
-  getHookContext,
-  getGraphQLContext,
-  cloneObject
+  cloneObject,
+  sortByStringField,
+  sortByNumberField,
+  sortByString,
+  sortByNumber,
 };

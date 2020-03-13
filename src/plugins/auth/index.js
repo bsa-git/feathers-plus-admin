@@ -1,4 +1,3 @@
-
 const localStorage = require('./local-storage');
 const loginJwt = require('./login-jwt');
 const loginLocal = require('./login-local');

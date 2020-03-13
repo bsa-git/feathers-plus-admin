@@ -1,9 +1,17 @@
 
 const assert = require('assert');
 const myLog = require('../../src/hooks/my-log');
+const {appRoot, inspector, readJsonFileSync, HookHelper, seedService} = require('../../src/plugins');
+const app = require(`${appRoot}/src/app`);
+const chalk = require('chalk');
 const debug = require('debug')('app:my-log.unit.test');
 
+const isLog = false;
+const isDebug = false;
 const isTest = true;
+
+// Get generated fake data
+const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
 
@@ -59,16 +67,49 @@ describe('<<< Test /hooks/my-log.unit.test.js >>>', () => {
     assert(typeof myLog === 'function', 'Hook is not a function.');
   });
 
-  it('???', () => {
-    contextBefore.method = 'create';
-    assert(true);
-
-    /*
-    myLog()(contextBefore);
-
-    assert.deepEqual(contextBefore.data, {
-
-    });
-    */
+  it('Save fake data to \'users\' service', async () => {
+    // Seed service data
+    const results = await seedService(app, 'users');
+    if (Array.isArray(results)) {
+      assert.ok(results.length === fakes['users'].length);
+    } else {
+      if(isLog) debug('seedService.results:', results);
+      assert.ok(false);
+    }
   });
+
+  it('Create log message for user login', async () => {
+    try {
+      const fakeUser = fakes['users'][0];
+      const idField = HookHelper.getIdField(fakeUser);
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+
+      // Set context after
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.params.payload = payload;
+
+      // Create HookHelper object
+      const hookHelper = new HookHelper(contextAfter);
+      // Get count messages before
+      const countMessagesBefore = await hookHelper.getCountItems('log-messages');
+      // Test myLog for contextAfter
+      await myLog(true)(contextAfter);
+      // Get count messages after
+      const countMessagesAfter = await hookHelper.getCountItems('log-messages');
+      if(isDebug) debug('countMessagesBefore:', countMessagesBefore, ', countMessagesAfter:', countMessagesAfter);
+
+      if (isLog) inspector('Create log message for user login::contextAfter:', contextAfter);
+      if (isDebug) debug(`Create log message for user login - "${contextAfter.path}.${contextAfter.method}"`);
+
+      assert(countMessagesAfter > countMessagesBefore, 'Error creating message log');
+    }
+    catch (ex) {
+      console.error(chalk.red(ex.message));
+      assert(false, 'Create log message for user login" generated an error of the wrong type.');
+    }
+  });
+
+
 });

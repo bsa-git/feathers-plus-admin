@@ -1,104 +1,397 @@
 <template>
-  <v-app-bar
-    color="primary"
-    dark
-    app
-  >
-    <!-- Toggle show NavLeft -->
-    <v-toolbar-title
-      class="ml-0 pl-3"
+  <div>
+    <!--=== Log messages dialog ===-->
+    <view-dialog
+      :dialog="viewDialog"
+      :max-width="1200"
+      :header-title="$t('logMessages.title')"
+      :action-text="$t('management.close')"
+      v-on:onClose="viewDialog = false"
     >
-      <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
-    </v-toolbar-title>
-    <!-- Search web -->
-    <v-text-field
-      flat
-      solo-inverted
-      hide-details
-      prepend-inner-icon="mdi-search-web"
-      :label="$t('app_toolbar.search')"
-      class="hidden-sm-and-down"
-    ></v-text-field>
+      <div slot="text-content">
+        <!-- TopBar for table -->
+        <table-top-bar
+          :search="search"
+          :search-label="$t('management.search')"
+          v-on:onSearch="search = $event"
+        ></table-top-bar>
+        <!-- Data Table -->
+        <v-data-table
+          :headers="headers"
+          :items="getSelLogMessages"
+          item-key="id"
+          :search="search"
+        >
+          <!-- Field Icon -->
+          <template v-slot:item.icon="{ item }">
+            <v-icon>{{ item.icon }}</v-icon>
+          </template>
+          <!-- Field Priority -->
+          <template v-slot:item.pr="{ item }">
+            <v-chip :color="item.color" dark>{{ item.pr }}</v-chip>
+          </template>
+          <!-- Field isServer -->
+          <template v-slot:item.isServer="{ item }">
+            <v-simple-checkbox v-model="item.isServer" disabled></v-simple-checkbox>
+          </template>
+          <!-- Field Owner -->
+          <template v-slot:item.owner="{ item }">
+            <v-icon v-if="item.owner"
+                    :title="`${item.owner.fullName}(${item.owner.email})`">mdi-contain
+            </v-icon>
+            <v-icon v-else>mdi-code-brackets</v-icon>
+          </template>
+          <!-- Field User -->
+          <template v-slot:item.user="{ item }">
+            <v-icon v-if="item.user"
+                    :title="`${item.user.fullName}(${item.user.email})`">mdi-contain
+            </v-icon>
+            <v-icon v-else>mdi-code-brackets</v-icon>
+          </template>
+          <!-- Field Message -->
+          <template v-slot:item.formatMsg="{ item }">
+            <v-icon v-if="item.formatMsg" :title="item.msg">mdi-contain</v-icon>
+            <v-icon v-else>mdi-code-brackets</v-icon>
+          </template>
+          <!-- No Data -->
+          <template v-slot:no-data>
+            <span color="primary" class="headline">{{ $t('management.noData') }}</span>
+          </template>
+          <!-- No Results -->
+          <template v-slot:no-results>
+            <v-alert :value="true" color="error" icon="mdi-information-outline">
+              {{ $t('management.searchNoResults') }}
+            </v-alert>
+          </template>
+        </v-data-table>
+      </div>
+    </view-dialog>
+    <!--=== App Bar ===-->
+    <v-app-bar
+      color="primary"
+      dark
+      app
+    >
+      <!-- Toggle show NavLeft -->
+      <v-toolbar-title
+        class="ml-0 pl-3"
+      >
+        <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
+      </v-toolbar-title>
+      <!-- Search web -->
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-search-web"
+        :label="$t('app_toolbar.search')"
+        class="hidden-sm-and-down"
+      ></v-text-field>
 
-    <v-spacer></v-spacer>
-    <!-- Mail to -->
-    <v-btn :href="`mailto:${config.email}`">
-      {{ $t('app_toolbar.hire_me') }}
-    </v-btn>
-    <!-- Go to GitHub project -->
-    <v-btn icon :href="config.githubProject" target="_blank" title="GitHub">
-      <v-icon>fab fa-github</v-icon>
-    </v-btn>
-    <!-- FullScreen -->
-    <v-btn icon @click="toggleFullScreen()" :title="$t('app_toolbar.full_size')">
-      <v-icon>mdi-fullscreen</v-icon>
-    </v-btn>
-    <!-- App Notifications -->
-    <v-menu>
-      <!-- Activator -->
-      <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on" :title="$t('app_toolbar.notifications')">
-          <v-badge color="red" overlap>
-            <template v-slot:badge>3</template>
-            <v-icon>mdi-bell</v-icon>
-          </v-badge>
-        </v-btn>
-      </template>
-      <!-- Menu list -->
-      <notification-list
-        :notes="appNotifications"
-      ></notification-list>
-    </v-menu>
-    <!-- User menu -->
-    <v-menu>
-      <!-- Activator -->
-      <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on" v-text="user? 'fas fa-user-check':'fas fa-user-alt-slash'"></v-icon>
-            </template>
-            <span>{{ user? user.fullName : $t('app_toolbar.not_authorized') }}</span>
-          </v-tooltip>
-        </v-btn>
-      </template>
-      <!-- Menu list -->
-      <app-user-menu-list
-        :user-menu="userMenu"
-      ></app-user-menu-list>
-    </v-menu>
-  </v-app-bar>
+      <v-spacer></v-spacer>
+      <!-- Mail to -->
+      <v-btn :href="`mailto:${config.email}`">
+        {{ $t('app_toolbar.hire_me') }}
+      </v-btn>
+      <!-- Go to GitHub project -->
+      <v-btn icon :href="config.githubProject" target="_blank" title="GitHub">
+        <v-icon>fab fa-github</v-icon>
+      </v-btn>
+      <!-- FullScreen -->
+      <v-btn icon @click="toggleFullScreen()" :title="$t('app_toolbar.full_size')">
+        <v-icon>mdi-fullscreen</v-icon>
+      </v-btn>
+      <!-- App Notifications -->
+      <v-menu>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on" :title="$t('app_toolbar.notifications')">
+            <v-badge color="red" overlap>
+              <template v-slot:badge>{{ amountNotifications }}</template>
+              <v-icon>mdi-bell</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <!-- Menu list -->
+        <notification-list
+          :items="getNotifications"
+          :item-index="selNotification"
+          v-on:onItem="onNotification($event)"
+          v-on:onShowAll="onAllNotifications"
+        ></notification-list>
+      </v-menu>
+      <!-- User menu -->
+      <v-menu>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on" v-text="user? 'fas fa-user-check':'fas fa-user-alt-slash'"></v-icon>
+              </template>
+              <span>{{ user ? user.fullName : $t('app_toolbar.not_authorized') }}</span>
+            </v-tooltip>
+          </v-btn>
+        </template>
+        <!-- Menu list -->
+        <app-user-menu-list
+          :user-menu="userMenu"
+        ></app-user-menu-list>
+      </v-menu>
+    </v-app-bar>
+  </div>
 </template>
 <script>
-  import {mapGetters} from 'vuex';
+  import {mapGetters, mapMutations} from 'vuex';
+
+  const moment = require('moment');
+  import util from '~/plugins/lib/util';
+  import Service from '~/plugins/service-helpers/service-client.class';
   import userMenu from '~/api/app/user-menu.json';
+  import ViewDialog from '~/components/dialogs/ViewDialog';
   import appNotifications from '~/api/app/app-notification.json';
-  import NotificationList from '~/components/layout/NotificationList';
+  import NotificationList from '~/components/widgets/list/NotificationList';
   import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
+  import TableTopBar from '~/components/widgets/top-bars/Search';
+
+
+  const debug = require('debug')('app:comp.AppToolbar');
+  const isLog = false;
+  const isDebug = false;
 
   export default {
     components: {
       NotificationList,
-      AppUserMenuList
+      AppUserMenuList,
+      ViewDialog,
+      TableTopBar
     },
     data: function () {
       return {
+        viewDialog: false,
+        search: '',
         toggleFullScreen: this.$util.toggleFullScreen,
-        appNotifications: appNotifications,
-        userMenu: userMenu
+        notifications: null,
+        selNotification: -1,
+        selLogNames: [],
+        userMenu,
+        service: null,
+        headers: [
+          {
+            text: 'Icon',
+            value: 'icon',
+            sortable: false,
+          },
+          {
+            text: 'DateTime',
+            value: 'dt'
+          },
+          {
+            text: 'Group',
+            value: 'gr'
+          },
+          {
+            text: 'Priority',
+            value: 'pr',
+          },
+          {
+            text: 'Name',
+            value: 'name'
+          },
+          {
+            text: 'Server',
+            value: 'isServer'
+          },
+          {
+            text: 'Msg',
+            align: 'center',
+            value: 'formatMsg',
+            sortable: false,
+          },
+          {
+            text: 'Owner',
+            align: 'center',
+            value: 'owner',
+            sortable: false,
+          },
+          {
+            text: 'User',
+            align: 'center',
+            value: 'user',
+            sortable: false,
+          },
+        ],
       }
     },
+    created: function () {
+      this.notifications = appNotifications.filter(item => !item.header && !item.divider && item.isEnable).map(n => Object.assign({}, n));
+      this.service = new Service(this.$store);
+      this.initNotifications();
+//      this.waitLogMessages();
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+      })
+    },
     computed: {
+      logMessages() {
+        const data = [];
+        let _logMessages = [];
+        const idFieldLogMessage = this.$store.state['log-messages'].idField;
+        const {LogMessage} = this.$FeathersVuex;
+        this.getQueryNotifications.forEach(q => {
+          let findLogMessages = LogMessage.findInStore(q).data;
+          _logMessages = _logMessages.concat(findLogMessages);
+        });
+        util.sortByStringField(_logMessages, 'createdAt', false);
+        _logMessages.forEach(logMessage => {
+          const logMessageId = logMessage[idFieldLogMessage];
+          // Get logMessage
+          let item = {
+            id: logMessageId,
+            gr: logMessage.gr,
+            pr: logMessage.pr,
+            name: logMessage.name,
+            title: logMessage.title,
+            icon: logMessage.icon,
+            color: logMessage.color,
+            user: logMessage.user,
+            owner: logMessage.owner,
+            msg: logMessage.msg,
+            formatMsg: logMessage.formatMsg,
+            isServer: logMessage.isServer,
+            dt: logMessage.dtLocal,
+          };
+          data.push(item);
+        });
+        if (isLog) debug('computed.logMessages.data:', data);
+        return data
+      },
+      amountNotifications: function () {
+        let amount = 0;
+        this.getNotifications.forEach(function (item) {
+          amount += item.amount;
+        });
+        return amount;
+      },
+      getNotifications: function () {
+        let amount = 0;
+        this.notifications.forEach(notice => {
+          notice.logNames.forEach(name => {
+            amount = this.logMessages.filter(msg => msg.name === name).length;
+            notice.amount = amount;
+          });
+        });
+        return this.notifications.filter(notice => notice.amount);
+      },
+      getSelLogMessages: function () {
+        const logMessages = this.logMessages.filter(msg => this.selLogNames.includes(msg.name));
+        debug('computed.getSelLogMessages.logMessages:', logMessages);
+        return logMessages
+      },
+      getQueryNotifications: function () {
+        const qq = [];// {query: {$sort: {createdAt: -1}}}
+        this.notifications.forEach(notice => {
+          notice.logNames.forEach(name => {
+            let q = {
+              query: {
+                createdAt: {$gt: notice.checkAt},
+                name: name
+              }
+            };
+            qq.push(q);
+          });
+        });
+        return qq
+      },
       ...mapGetters({
         config: 'getConfig',
         user: 'getUser',
+        stateNotices: 'getNotices'
       }),
     },
     methods: {
       onNavLeft() {
         this.$emit('onNavLeft')
       },
+      onNotification(index) {
+        if (index >= 0) {
+          this.selNotification = index;
+          let notice = this.getNotifications[index];
+          if (isLog) debug('methods.onNotification.notice:', notice);
+          // Set selLogNames
+          this.selLogNames = notice.logNames;
+          if (isDebug) debug('methods.onNotification.selLogNames:', this.selLogNames);
+          this.viewDialog = true;
 
+          setTimeout(() => {
+            this.selNotification = -1;
+          }, 1000);
+        }
+      },
+      onAllNotifications() {
+        this.selLogNames = [];
+        this.getNotifications.forEach(notice => {
+          this.selLogNames = this.selLogNames.concat(notice.logNames);
+        });
+        if (isDebug) debug('methods.onAllNotifications.selLogNames:', this.selLogNames);
+        this.viewDialog = true;
+
+      },
+      waitLogMessages() {
+        util.waitTimeout(() => {
+          return this.service.findCountInStore('log-messages');
+        }, () => {
+          debug('created.logMessages:', this.logMessages);
+        })
+      },
+      updateNotifications() {
+
+      },
+      initNotifications() {
+        let _item, dtCheckAt, items = [];
+        dtCheckAt = moment.utc(0).format();
+        let stateNoticesCheckAt = this.stateNotices.checkAt;
+        if (stateNoticesCheckAt) {
+          items = JSON.parse(stateNoticesCheckAt);
+        }
+        // Set checkAt for this.notifications and this.stateNotices.checkAt
+        this.notifications.forEach(notice => {
+          if (items.length > 0) {
+            if (notice.logNames.length > 1) {
+              notice.logNames.forEach(logName => {
+                _item = items.find(item => item.name === logName);
+                notice.checkAt = _item ? _item.checkAt : dtCheckAt;
+                if (!_item) {
+                  _item = {name: logName, checkAt: dtCheckAt};
+                  items.push(_item);
+                }
+              })
+            } else {
+              _item = items.find(item => item.name === notice.logNames[0]);
+              notice.checkAt = _item ? _item.checkAt : dtCheckAt;
+              if (!_item) {
+                _item = {name: notice.logNames[0], checkAt: dtCheckAt};
+                items.push(_item);
+              }
+            }
+          } else {
+            if (notice.logNames.length > 1) {
+              notice.logNames.forEach(logName => {
+                _item = {name: logName, checkAt: dtCheckAt};
+                items.push(_item);
+              })
+            } else {
+              _item = {name: notice.logNames[0], checkAt: dtCheckAt};
+              items.push(_item);
+            }
+            notice.checkAt = dtCheckAt;
+          }
+        });
+        this.setNoticesCheckAt(JSON.stringify(items));
+//        debug('initAppNotifications.notifications:', this.notifications);
+      },
+      ...mapMutations({
+        setNoticesCheckAt: 'SET_NOTICES_CHECKAT',
+      }),
     }
   };
 </script>

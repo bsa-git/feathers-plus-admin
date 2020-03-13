@@ -108,6 +108,7 @@ const twoLevelsFields = {
     avatar: 1,
     roleId: 1,
     profileId: 1,
+    active: 1,
     isVerified: 1,
     verifyToken: 1,
     verifyShortToken: 1,
@@ -122,6 +123,7 @@ const twoLevelsFields = {
     googleRefreshToken: 1,
     githubAccessToken: 1,
     githubRefreshToken: 1,
+    loginAt: 1,
     fullName: {
       _args: {},
     },

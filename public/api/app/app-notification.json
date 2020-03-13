@@ -3,31 +3,77 @@
     "title": "New user registered",
     "name": "new_user",
     "color": "light-green",
-    "icon": "mdi-account-circle",
-    "timeLabel": "Just now"
+    "icon": "mdi-account-plus",
+    "timeLabel": "Just now",
+    "isEnable": true,
+    "amount": 2,
+    "logNames": ["USER-CREATE"],
+    "checkAt": ""
   },
-  { "divider": true, "inset": true },
+  {
+    "title": "User logged",
+    "name": "user_login",
+    "color": "teal",
+    "icon": "mdi-login",
+    "timeLabel": "Just now",
+    "isEnable": true,
+    "amount": 2,
+    "logNames": ["LOGIN"],
+    "checkAt": ""
+  },
+  {
+    "title": "A new error has appeared",
+    "name": "new_error",
+    "color": "pink",
+    "icon": "mdi-alert",
+    "timeLabel": "Just now",
+    "isEnable": true,
+    "amount": 2,
+    "logNames": ["ERROR-SRV", "ERROR-CLIENT"],
+    "checkAt": ""
+  },
   {
     "title": "New order received",
     "name": "new_order",
     "color": "light-blue",
     "icon": "mdi-cart",
-    "timeLabel": "2 min ago"
+    "timeLabel": "2 min ago",
+    "isEnable": false,
+    "amount": 1,
+    "logNames": ["NEW-ORDER"],
+    "checkAt": ""
   },
-  { "divider": true, "inset": true },
   {
     "title": "New payment made",
     "name": "new_payment",
     "color": "cyan",
     "icon": "mdi-account-card-details",
-    "timeLabel": "24 min ago"
+    "timeLabel": "24 min ago",
+    "isEnable": false,
+    "amount": 5,
+    "logNames": ["NEW-PAYMENT"],
+    "checkAt": ""
   },
-  { "divider": true, "inset": true },
   {
-    "title": "New message from Michael",
+    "title": "New message received",
     "name": "new_message",
-    "color": "red",
+    "color": "orange",
+    "icon": "mdi-message-text",
+    "timeLabel": "1 hour ago",
+    "isEnable": false,
+    "amount": 3,
+    "logNames": ["NEW-MESSAGE"],
+    "checkAt": ""
+  },
+  {
+    "title": "New email received",
+    "name": "new_email",
+    "color": "deep-orange",
     "icon": "mdi-email",
-    "timeLabel": "1 hour ago"
+    "timeLabel": "1 hour ago",
+    "isEnable": false,
+    "amount": 4,
+    "logNames": ["NEW-EMAIL"],
+    "checkAt": ""
   }
 ]

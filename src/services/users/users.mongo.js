@@ -55,6 +55,9 @@ let moduleExports = merge({},
         },
         bsonType: "objectId"
       },
+      active: {
+        bsonType: "boolean"
+      },
       isVerified: {
         bsonType: "boolean"
       },
@@ -109,6 +112,10 @@ let moduleExports = merge({},
       },
       githubRefreshToken: {
         chance: "guid",
+        bsonType: "string"
+      },
+      loginAt: {
+        format: "date-time",
         bsonType: "string"
       }
     }

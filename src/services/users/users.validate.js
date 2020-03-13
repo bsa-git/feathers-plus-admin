@@ -71,6 +71,9 @@ let base = merge({},
           fk: "userProfiles:next"
         }
       },
+      active: {
+        type: "boolean"
+      },
       isVerified: {
         type: "boolean"
       },
@@ -120,6 +123,10 @@ let base = merge({},
       githubRefreshToken: {
         type: "string",
         chance: "guid"
+      },
+      loginAt: {
+        type: "string",
+        format: "date-time"
       }
     }
   },

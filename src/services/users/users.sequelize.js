@@ -44,6 +44,9 @@ let moduleExports = merge({},
       type: DataTypes.INTEGER,
       unique: true
     },
+    active: {
+      type: DataTypes.BOOLEAN
+    },
     isVerified: {
       type: DataTypes.BOOLEAN
     },
@@ -85,6 +88,9 @@ let moduleExports = merge({},
     },
     githubRefreshToken: {
       type: DataTypes.TEXT
+    },
+    loginAt: {
+      type: DataTypes.DATE
     }
   },
   // !end

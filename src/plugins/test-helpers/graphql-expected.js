@@ -76,7 +76,7 @@ const usersForRole = usersFakeData.filter(user => {
 const usersForTeam = () => {
   const _teamId = teamFakeData[idFieldTeam];
   const _userIdsForTeam = _usersForTeam(_teamId);
-  return  usersFakeData.filter(user => _userIdsForTeam.indexOf(user[idFieldUser]) >= 0).map(user => {
+  return usersFakeData.filter(user => _userIdsForTeam.indexOf(user[idFieldUser]) >= 0).map(user => {
     let _user = loPick(user, [idFieldUser, 'email']);
     Object.assign(_user, {fullName: `${user.firstName} ${user.lastName}`});
     return _user;
@@ -84,8 +84,22 @@ const usersForTeam = () => {
 };
 
 
-let getUser = {
-  getUser: {
+// getUser = Object.create(null).getUser = {
+//   [idFieldUser]: userId,
+//   email: userFakeData.email,
+//   fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
+//   profile: {
+//     personalPhone: userProfileFakeData.personalPhone,
+//     personalWebSite: userProfileFakeData.personalWebSite,
+//     jobCompanyName: userProfileFakeData.jobCompanyName,
+//   },
+//   role: rolesForUser[0],
+//   teams: teamsForUser()
+// };
+
+let getUser = () => {
+  const item = Object.create(null);
+  item.getUser = {
     [idFieldUser]: userId,
     email: userFakeData.email,
     fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
@@ -96,11 +110,14 @@ let getUser = {
     },
     role: rolesForUser[0],
     teams: teamsForUser()
-  }
+  };
+  return item;
 };
 
-let findUser = [{
-  findUser: [{
+let findUser = () => {
+  const items = [];
+  const item = Object.create(null);
+  item.findUser = [{
     [idFieldUser]: userId,
     email: userFakeData.email,
     fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
@@ -111,17 +128,30 @@ let findUser = [{
     },
     role: rolesForUser[0],
     teams: teamsForUser()
-  }]
-}];
+  }];
+  items.push(item);
+  return items;
+};
 
-let getRole = {
-  getRole: {
+// let getRole = {
+//   getRole: {
+//     [idFieldRole]: roleId,
+//     name: roleFakeData.name,
+//     users: usersForRole
+//   }
+// };
+
+let getRole = () => {
+  const item = Object.create(null);
+  item.getRole = {
     [idFieldRole]: roleId,
     name: roleFakeData.name,
     users: usersForRole
-  }
+  };
+  return item;
 };
 
+/*
 let findRole = [{
   findRole: [{
     [idFieldRole]: roleId,
@@ -129,28 +159,65 @@ let findRole = [{
     users: usersForRole
   }]
 }];
+*/
 
-let getTeam = {
+let findRole = () => {
+  const items = [];
+  const item = Object.create(null);
+  item.findRole = [{
+    [idFieldRole]: roleId,
+    name: roleFakeData.name,
+    users: usersForRole
+  }];
+  items.push(item);
+  return items;
+};
+/*
+  let getTeam = {
   getTeam: {
     [idFieldTeam]: teamId,
     name: teamFakeData.name,
     members: usersForTeam()
   }
 };
+*/
 
-let findTeam = [{
+let getTeam = () => {
+  const item = Object.create(null);
+  item.getTeam = {
+    [idFieldTeam]: teamId,
+    name: teamFakeData.name,
+    members: usersForTeam()
+  };
+  return item;
+};
+
+/*
+  let findTeam = [{
   findTeam: [{
     [idFieldTeam]: teamId,
     name: teamFakeData.name,
     members: usersForTeam()
   }]
 }];
+*/
+let findTeam = () => {
+  const items = [];
+  const item = Object.create(null);
+  item.findTeam = [{
+    [idFieldTeam]: teamId,
+    name: teamFakeData.name,
+    members: usersForTeam()
+  }];
+  items.push(item);
+  return items;
+};
 
 module.exports = {
-  getUser,
-  findUser,
-  getRole,
-  findRole,
-  getTeam,
-  findTeam
+  getUser: getUser(),
+  findUser: findUser(),
+  getRole: getRole(),
+  findRole: findRole(),
+  getTeam: getTeam(),
+  findTeam: findTeam()
 };

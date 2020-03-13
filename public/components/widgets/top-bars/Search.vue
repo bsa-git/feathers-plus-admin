@@ -3,10 +3,11 @@
     <v-col cols="12" md="6">
       <v-text-field
         v-model="searchItems"
-        append-icon="fas fa-search"
+        append-outer-icon="fas fa-search"
         :label="labelSearch"
         single-line
         hide-details
+        clearable
       ></v-text-field>
     </v-col>
   </v-row>

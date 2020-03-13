@@ -4,6 +4,7 @@ import util from '~/plugins/lib/util';
 
 const debug = require('debug')('app:plugins.sync-store');
 const isDebug = false;
+const isLog = false;
 
 /**
  * setThemePrimary
@@ -51,6 +52,21 @@ const setLocale = (ct) => {
 };
 
 /**
+ * Set notices checkAt
+ * @param ct {Object}
+ */
+const setNoticesCheckAt = (ct) => {
+  const storeNoticesCheckAt = ct.store.state.notices.checkAt;
+  const serverCookieNoticesCheckAt = (process.server && !process.static) ? util.readCookie(ct.req.headers.cookie, 'notices_checkAt') : storeNoticesCheckAt;
+  const cookiesNoticesCheckAt = process.server ? serverCookieNoticesCheckAt : cookies.get('notices_checkAt');
+  if (process.client && !cookiesNoticesCheckAt) {
+    cookies.set('notices_checkAt', storeNoticesCheckAt);
+  } else if (cookiesNoticesCheckAt !== storeNoticesCheckAt) {
+    ct.store.commit('SET_NOTICES_CHECKAT', cookiesNoticesCheckAt);
+  }
+};
+
+/**
  * Init vuetify
  * @param ctVue {Object}
  * @param isUpdateColor {Boolean}
@@ -62,6 +78,7 @@ const initVuetify = function (ctVue, isUpdateColor = false) {
   // Get color
   const color = ctVue.$store.getters['getPrimaryColor'];
   if (isDebug) debug('initVuetify.primaryColor:', color);
+  if(isLog) debug('initVuetify.ctVue.$vuetify', ctVue.$vuetify);
   // Set theme dark
   ctVue.$vuetify.theme.dark = theme.dark;
   // Set theme primary
@@ -75,13 +92,12 @@ const initVuetify = function (ctVue, isUpdateColor = false) {
       themeSettings.updateThemeColor();
     }
   }
-  // Set vuetify lang
-  ctVue.$vuetify.lang.t = (key, ...params) => ctVue.$t(key, params);
 };
 
 export default {
   setThemePrimary,
   setThemeDark,
   setLocale,
+  setNoticesCheckAt,
   initVuetify
 };

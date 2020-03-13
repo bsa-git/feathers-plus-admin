@@ -14,7 +14,7 @@
           <v-list three-line subheader>
             <!-- Sub Header -->
             <v-subheader>{{ $t('settings.general') }}</v-subheader>
-            <!-- Items -->
+            <!-- GENERAL -->
             <v-list-item >
               <v-list-item-content>
                 <v-list-item-title>NODE_ENV</v-list-item-title>
@@ -151,7 +151,26 @@
 
             <v-divider></v-divider>
 
-            <!-- PERSONAL DATA -->
+            <!-- LOG-MESSAGES -->
+            <v-subheader>{{ $t('settings.logMessages') }}</v-subheader>
+
+            <v-list-item >
+              <v-list-item-content>
+                <v-list-item-title>LOGMSG_ENABLE</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.logMsgEnable }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item >
+              <v-list-item-content>
+                <v-list-item-title>LOGMSG_MAXROWS</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.logMsgMaxRows }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <!-- PERSONAL-DATA -->
             <v-subheader>{{ $t('settings.personalData') }}</v-subheader>
 
             <v-list-item >
@@ -212,7 +231,6 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import appMenu from '~/api/app/app-menu';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
 
   export default {
@@ -223,7 +241,6 @@
       return {
         title: this.$t('settings.title'),
         description: this.$t('settings.description'),
-        appMenu: appMenu,
       }
     },
     head() {

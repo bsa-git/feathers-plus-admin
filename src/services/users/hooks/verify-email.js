@@ -5,7 +5,7 @@ const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const ajv = require('ajv')({allErrors: true});
 const createSchema = require('../users.validate').schema;
-const debug = require('debug')('app:verify-email.service.hook');
+const debug = require('debug')('app:service.hook.verify-email');
 
 const isDebug = false;
 

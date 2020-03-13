@@ -85,7 +85,16 @@ let moduleExports = function (app) {
       ],
       // !code: before // !end
     },
-    // !code: after // !end
+    // !code: after
+    after: {
+      create: [
+        // Login check
+        auth.loginCheck(),
+        // Set user loginAt field
+        auth.setLoginAt()
+      ]
+    }
+    // !end
   });
   // !code: func_return // !end
 };

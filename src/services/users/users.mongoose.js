@@ -33,6 +33,7 @@ let moduleExports = merge({},
       type: mongoose.Schema.Types.ObjectId,
       unique: true
     },
+    active: Boolean,
     isVerified: Boolean,
     verifyToken: String,
     verifyShortToken: String,
@@ -46,7 +47,8 @@ let moduleExports = merge({},
     googleAccessToken: String,
     googleRefreshToken: String,
     githubAccessToken: String,
-    githubRefreshToken: String
+    githubRefreshToken: String,
+    loginAt: Date
   },
   // !end
   // !code: moduleExports // !end

@@ -154,11 +154,11 @@ module.exports = {
         }
       });
     },
-    plugins: [
+    plugins: [// new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|fr|hu/)
       new Dotenv({
         path: './.env', // Path to .env file (this is the default)
         systemvars: true // It makes it possible to work in production mode on Heroku hosting
-      })
+      }),
     ],
     transpile: ['vue-echarts', 'resize-detector']
   },

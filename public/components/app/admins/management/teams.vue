@@ -171,11 +171,11 @@
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
-  import TableTopBar from '~/components/widgets/TopBars/SearchAndBtn';
-
+  import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
   const errors = require('@feathersjs/errors');
-  const debug = require('debug')('app:comp.admins-management-roles');
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
+  const debug = require('debug')('app:comp.admins-management-roles');
   const isLog = false;
   const isDebug = false;
 
@@ -190,6 +190,7 @@
       TableTopBar
     },
     data: () => ({
+      saveLogMessage: null,
       search: '',
       confirmDialog: false,
       teamSaveDialog: false,
@@ -243,6 +244,7 @@
       }
     }),
     created: function () {
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       formTitle() {
@@ -397,14 +399,23 @@
               name: data.teamName,
               description: data.description
             });
+            return await team.save();
           } else {
+            // Team has not been changed
+            team = Team.getFromStore(data.id);
+            if((data.teamName === team.name) &&
+              (data.description === team.description)){
+              return team
+            }
+            // Change team
             team = new Team({
               [idField]: data.id,
               name: data.teamName,
               description: data.description
             });
+            return await team.save();
           }
-          return await team.save();
+
         } catch (error) {
           if (isLog) debug('team.save.error:', error);
           this.loadingSubmit = false;
@@ -413,6 +424,7 @@
           if (!this.isNewItem) {
             await Team.get(data.id);
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async updateUserIds(teamId, userIds = []) {
@@ -425,7 +437,7 @@
           // Users excluded from the team
           const userTeams = UserTeam.findInStore({query: {teamId: teamId}}).data;
           userTeams.forEach(async userTeam => {
-            const userId = userTeam[userId];
+            const userId = userTeam['userId'];
             const isUserId = userIds.indexOf(userId) >= 0;
             if (isUserId) {
               omitUserIds.push(userId);
@@ -449,6 +461,7 @@
         } catch (error) {
           if (isLog) debug('updateUserIds.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async deleteItem() {
@@ -463,6 +476,7 @@
         } catch (error) {
           if (isLog) debug('deleteItem.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       ...mapMutations({

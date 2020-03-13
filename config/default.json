@@ -69,6 +69,14 @@
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
+        },
+        "logMessages": {
+          "create": "noauth",
+          "get": "auth",
+          "find": "auth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
         }
       }
     }

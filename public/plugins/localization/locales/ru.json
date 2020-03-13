@@ -1,5 +1,6 @@
 {
   "$vuetify": {
+    "badge": "Знак",
     "close": "Закрыть",
     "dataIterator": {
       "noResultsText": "Не найдено подходящих записей",
@@ -67,6 +68,7 @@
     "accounts": "Aккаунты",
     "management": "Управление",
     "settings": "Конфигурирование",
+    "log": "Лог Сообщений",
     "actions": "Действия",
     "graphql": "GraphQL",
     "request": "Запрос",
@@ -145,9 +147,12 @@
     "notification": "Уведомление",
     "show_all": "Показать все",
     "new_user": "Новый Пользователь",
+    "user_login": "Пользователь вошел",
+    "new_error": "Появилась новая ошибка",
     "new_order": "Новый заказ",
     "new_payment": "Новый платеж",
-    "new_message": "Новое сообщение"
+    "new_message": "Новое сообщение",
+    "new_email": "Новый емайл"
   },
   "theme_settings": {
     "settings": "Настройки темы",
@@ -282,7 +287,7 @@
     "role_management": "Управление Ролями",
     "team_management": "Управление Командами",
     "selectRole": "Выбрать Роль",
-    "selectTeams": "Выбрать Команды",
+    "selectTeams": "Выбрать Группы",
     "selectUsers": "Выбрать Пользователей",
     "others": "др.",
     "cancel": "Отменить",
@@ -295,6 +300,8 @@
     "firstName": "Имя",
     "lastName": "Фамилия",
     "email": "Эл.Адрес",
+    "active": "Активный",
+    "userIsActive": "Пользователь активен",
     "password": "Пароль",
     "passwordConfirmation": "Подтвердите пароль",
     "roleName": "Роль",
@@ -325,7 +332,18 @@
     "personalData": "Персональные Данные",
     "secretData": "Секретные данные",
     "authorization": "Авторизация",
-    "database": "База Данных"
+    "database": "База Данных",
+    "logMessages": "Лог Сообщения"
+  },
+  "logMessages": {
+    "title": "Лог Сообщений",
+    "description": "Логирование приложения",
+    "removeAll": "Удалить Все",
+    "remove": "Удалить",
+    "confirmDeleteItemTitle": "Удалить этот элемент",
+    "confirmDeleteItemText": "Этот элемент будет удален из базы данных сервера, а также из клиентского хранилища",
+    "confirmDeleteItemsTitle": "Удалить выделенные элементы",
+    "confirmDeleteItemsText": "Эти элементы будут удалены из базы данных сервера, а также из клиентского хранилища"
   },
   "graphql": {
     "title": "GraphQL",

@@ -1,5 +1,5 @@
 import feathersVuex from 'feathers-vuex';
-import feathersClient from '~/plugins/lib/feathers-client';
+import feathersClient from '~/plugins/auth/feathers-client';
 
 const { auth } = feathersVuex(feathersClient, { idField: '_id' });
 const authPlugin = auth({

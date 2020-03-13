@@ -79,9 +79,9 @@
 <script>
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:comp.user-profile-address');
-
   const isLog = false;
 
   export default {
@@ -92,6 +92,7 @@
     components: {},
     data() {
       return {
+        saveLogMessage: null,
         loadingSubmit: false,
         error: undefined,
         model: {
@@ -113,6 +114,7 @@
         this.model.jobWebSite = this.user.profile.jobWebSite;
         this.model.jobEmail = this.user.profile.jobEmail;
       }
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -177,6 +179,7 @@
           this.showError(error.message);
           // Recover user profile data
           await UserProfile.get(this.user.profile.id);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       ...mapMutations({

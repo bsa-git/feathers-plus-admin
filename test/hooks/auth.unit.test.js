@@ -1,14 +1,16 @@
 const assert = require('assert');
-const {appRoot, inspector} = require('../../src/plugins/lib');
+const {appRoot, inspector, readJsonFileSync, AuthServer, HookHelper, seedService} = require('../../src/plugins');
 const authHook = require(`${appRoot}/src/hooks/auth`);
-const {AuthServer} = require(`${appRoot}/src/plugins/auth`);
 const chalk = require('chalk');
-require(`${appRoot}/src/app`);
+const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:auth.unit.test');
 
 const isLog = false;
 const isDebug = false;
 const isTest = true;
+
+// Get generated fake data
+const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
 
@@ -58,8 +60,27 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
     assert(typeof authHook.authCheck() === 'function', 'authHook.authCheck hook is not a function.');
   });
 
+  it('authHook.loginCheck hook exists', () => {
+    assert(typeof authHook.loginCheck() === 'function', 'authHook.loginCheck hook is not a function.');
+  });
+
+  it('authHook.setLoginAt hook exists', () => {
+    assert(typeof authHook.setLoginAt() === 'function', 'authHook.setLoginAt hook is not a function.');
+  });
+
   it('auth.payloadExtension hook exists', () => {
     assert(typeof authHook.payloadExtension() === 'function', 'auth.payloadExtension hook is not a function.');
+  });
+
+  it('Save fake data to \'users\' service', async () => {
+    // Seed service data
+    const results = await seedService(app, 'users');
+    if (Array.isArray(results)) {
+      assert.ok(results.length === fakes['users'].length);
+    } else {
+      if(isLog) debug('seedService.results:', results);
+      assert.ok(false);
+    }
   });
 
   it('Customizing the Payload with Hook', () => {
@@ -166,6 +187,88 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
       assert.strictEqual(ex.code, 403, 'unexpected error.code');
       assert.strictEqual(ex.message, `Access to the service method "${contextBefore.path}.${contextBefore.method}" is denied. Not enough rights`, 'unexpected error.message');
       assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
+    }
+  });
+
+  it('Check auth for active user', async () => {
+    try {
+      const fakeUser = fakes['users'][0];
+      const idField = HookHelper.getIdField(fakeUser);
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.params.payload = payload;
+
+      await authHook.loginCheck(true)(contextAfter);
+      if (isLog) inspector('Check auth for active user services.contextAfter:', contextAfter);
+      if (isDebug) debug(`Check auth for active user method - "${contextAfter.path}.${contextAfter.method}"`);
+      assert(true);
+    }
+    catch (ex) {
+      console.error(chalk.red(ex.message));
+      assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
+    }
+  });
+
+  it('Error check auth for not active user', async () => {
+    try {
+      const fakeUser = fakes['users'][0];
+      const idField = HookHelper.getIdField(fakeUser);
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+
+      // Set user.active = false
+      const users = app.service('users');
+      const pathUser = await users.patch(fakeUser[idField], {active: false});
+      if (isLog) inspector('Error check auth for not active user::pathUser:', pathUser);
+
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.params.payload = payload;
+
+      if (isLog) inspector('Error check auth for not active user.contextAfter:', contextAfter);
+      if (isDebug) debug(`Check access to service method - "${contextAfter.path}.${contextAfter.method}"`);
+
+      await authHook.loginCheck(true)(contextAfter);
+      assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
+    }
+    catch (ex) {
+      assert.strictEqual(ex.code, 403, 'unexpected error.code');
+      assert.strictEqual(ex.message, 'Access to the login is denied because your account is not activated. Contact your administrator.');
+      assert.strictEqual(ex.name, 'Forbidden', 'unexpected error.name');
+    }
+  });
+
+  it('Check of set user loginAt field', async () => {
+    try {
+      const fakeUser = fakes['users'][0];
+      const idField = HookHelper.getIdField(fakeUser);
+      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+
+      // Get user loginAt field
+      const users = app.service('users');
+      let user = await users.get(fakeUser[idField]);
+      let loginAtBefore = user.loginAt;
+      if (isDebug) debug('Check of set user loginAt field::loginAtBefore:', loginAtBefore);
+
+      contextAfter.app = app;
+      contextAfter.path = 'authentication';
+      contextAfter.method = 'create';
+      contextAfter.params.payload = payload;
+
+      await authHook.setLoginAt(true)(contextAfter);
+
+      user = await users.get(fakeUser[idField]);
+      let loginAtAfter = user.loginAt;
+      if (isDebug) debug('Check of set user loginAt field::loginAtAfter:', loginAtAfter);
+      if (isDebug) debug(`Check of set user loginAt field method - "${contextAfter.path}.${contextAfter.method}"`);
+      assert(loginAtAfter !== loginAtBefore);
+    }
+    catch (ex) {
+      console.error(chalk.red(ex.message));
+      assert(false, 'The hook "authHook.loginCheck()" generated an error of the wrong type.');
     }
   });
 });

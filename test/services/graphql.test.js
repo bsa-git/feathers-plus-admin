@@ -5,6 +5,7 @@ const {seedService, graphqlQuery, graphqlExpected} = require(`${appRoot}/src/plu
 const debug = require('debug')('app:graphql.test');
 
 const isLog = false;
+
 const isTest = true;
 const isSeed = true;
 
@@ -15,11 +16,6 @@ let graphql;
 const port = app.get('port') || 3030;
 
 describe('<<< Test services/graphql.test.js >>>', () => {
-
-  if(!isTest) {
-    debug('<<< Test Test services/graphql.test.js - NOT >>>');
-    return;
-  }
 
   let server;
 
@@ -34,6 +30,11 @@ describe('<<< Test services/graphql.test.js >>>', () => {
     server.close();
     setTimeout(() => done(), 500);
   });
+
+  if(!isTest) {
+    debug('<<< Test Test services/graphql.test.js - NOT >>>');
+    return;
+  }
 
   describe('--- Save fake data to services ---', function () {
     if (isSeed) {
@@ -116,6 +117,22 @@ describe('<<< Test services/graphql.test.js >>>', () => {
           assert.ok(false);
         }
       });
+
+      it('registered the \'logMessages\' service', () => {
+        const service = app.service('log-messages');
+        assert.ok(service, 'Registered the service');
+      });
+
+      it('Save fake data to \'logMessages\' service', async () => {
+        // Seed service data
+        const results = await seedService(app, 'logMessages');
+        if (Array.isArray(results)) {
+          assert.ok(results.length === fakes['logMessages'].length);
+        } else {
+          if(isLog) debug('seedService.results:', results);
+          assert.ok(false);
+        }
+      });
     }
   });
 
@@ -129,8 +146,9 @@ describe('<<< Test services/graphql.test.js >>>', () => {
     it('Run \'getUser\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['getUser']}});
       if (isLog) inspector('Response for \'getUser\' query:', response);
+      // inspector('Response for \'getUser\' query:', response);
       if (isLog) inspector('Expected for \'getUser\' query:', graphqlExpected['getUser']);
-      // assert.deepEqual(response, graphqlExpected['getUser']);
+      // inspector('Expected for \'getUser\' query:', graphqlExpected['getUser']);
       assert.deepStrictEqual(response, graphqlExpected['getUser']);
     });
 

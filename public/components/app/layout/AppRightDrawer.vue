@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn small fab dark fixed class="setting-fab" color="red" @click="openThemeSettings">
-      <v-icon>mdi-settings</v-icon>
+      <v-icon>mdi-cog</v-icon>
     </v-btn>
     <v-navigation-drawer
       temporary

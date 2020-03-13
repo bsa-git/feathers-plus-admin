@@ -15,6 +15,10 @@ const getters = {
     return state.theme;
   },
 
+  getNotices: (state) => {
+    return state.notices;
+  },
+
   getPrimaryColor: (state) => {
     const theme = state.theme;
     // Get primary color

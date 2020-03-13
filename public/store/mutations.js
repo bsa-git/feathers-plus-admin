@@ -8,6 +8,11 @@ const isLog = false;
 const mutations = {
 
   //--- LOCALE ---//
+  /**
+   * Set locale
+   * @param state {Object}
+   * @param locale {String}
+   */
   SET_LANG(state, locale) {
     const locales = state.config.locales;
     if(isLog) debug('SET_LANG.state.config.locales', locales);
@@ -20,6 +25,11 @@ const mutations = {
   },
 
   //--- THEME ---//
+  /**
+   * Set primary color for theme
+   * @param state {Object}
+   * @param color {String}
+   */
   SET_THEME_PRIMARY(state, color) {
     state.theme.primary = color;
     if(process.client && cookies.get('theme_primary') !== color){
@@ -27,6 +37,11 @@ const mutations = {
     }
   },
 
+  /**
+   * Set dark color for theme
+   * @param state {Object}
+   * @param isDark {Boolean}
+   */
   SET_THEME_DARK(state, isDark) {
     state.theme.dark = isDark;
     state.theme.name = isDark? 'dark' : 'light';
@@ -37,11 +52,34 @@ const mutations = {
     }
   },
 
+  //--- NOTIFICATIONS ---//
+  /**
+   * Set checkAt for notices
+   * @param state {Object}
+   * @param checkAt {Object|String}
+   */
+  SET_NOTICES_CHECKAT(state, checkAt) {
+    state.notices.checkAt = typeOf.isObject(checkAt)? JSON.stringify(checkAt) : checkAt ;
+    if(process.client && cookies.get('notices_checkAt') !== state.notices.checkAt){
+      cookies.set('notices_checkAt', state.notices.checkAt);
+    }
+  },
+
   //--- SNACKBAR ---//
+  /**
+   * Set snack bar
+   * @param state {Object}
+   * @param snackbar {Object}
+   */
   SET_SNACK_BAR (state, snackbar) {
     state.snackbar =  Object.assign(state.snackbar, snackbar);
   },
 
+  /**
+   * Show success
+   * @param state {Object}
+   * @param value {Object|String}
+   */
   SHOW_SUCCESS (state, value) {
     if(typeOf.isString(value)){
       state.snackbar =  {show: true, color: 'success', text: value};
@@ -50,6 +88,11 @@ const mutations = {
     }
   },
 
+  /**
+   * Show info
+   * @param state {Object}
+   * @param value {Object|String}
+   */
   SHOW_INFO (state, value) {
     if(typeOf.isString(value)){
       state.snackbar =  {show: true, color: 'info', text: value};
@@ -58,6 +101,11 @@ const mutations = {
     }
   },
 
+  /**
+   * Show warning
+   * @param state {Object}
+   * @param value {Object|String}
+   */
   SHOW_WARNING (state, value) {
     if(typeOf.isString(value)){
       state.snackbar =  {show: true, color: 'warning', text: value};
@@ -66,6 +114,11 @@ const mutations = {
     }
   },
 
+  /**
+   * Show error
+   * @param state {Object}
+   * @param value {Object|String}
+   */
   SHOW_ERROR (state, value) {
     if(typeOf.isString(value)){
       state.snackbar =  {show: true, color: 'error', text: value};

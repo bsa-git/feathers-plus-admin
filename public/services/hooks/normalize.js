@@ -1,54 +1,49 @@
 
 const loPick = require('lodash/pick');
-import Service from '~/plugins/lib/service-client.class';
-const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
-const debug = require('debug')('app:normalize.hook');
+const loCamelCase = require('lodash/camelCase');
+const {replaceItems} = require('feathers-hooks-common');
+import Service from '~/plugins/service-helpers/service-client.class';
+import HookHelper from '~/plugins/service-helpers/hook-helper.class';
+import fakeData from '~~/seeds/fake-data.json';
 
-
+const debug = require('debug')('app:hooks.normalize');
 const isLog = false;
 const isDebug = false;
 
 // eslint-disable-next-line no-unused-vars
 export default function (options = {}) {
-
   // Return the actual hook.
   return async (context) => {
-    // Throw if the hook is being called from an unexpected location.
-    checkContext(context, null, ['find', 'get', 'create', 'update', 'patch', 'remove']);
 
-    // Get the record(s) from context.data (before), context.result.data or context.result (after).
-    // getItems always returns an array to simplify your processing.
-    let records = getItems(context);
-    let _records = {};
+    // Create HookHelper object
+    const hh = new HookHelper(context);
+    // Show debug info
+    hh.showDebugInfo('', isLog);
 
-    /*
-    Modify records and/or context.
+    // let records = hh.contextRecords;
+    let _records;
+    const fakeDataKey = loCamelCase(hh.contextPath);
+    if(isDebug) debug('fakeDataKey:', fakeDataKey);
+
+    /**
+     * Pick item
+     * @param record
+     * @return {Object}
      */
-    if (records) {
-      if(isDebug) debug(`${context.type} app.service('${context.path}').${context.method}()`);
-      if (isLog) debug('Before normalize-query:', records);
+    const pickItem = (record) => {
+      if (!record) return {};
+      return Object.assign({}, loPick(record, Service.serviceFields(fakeDataKey)));
+    };
 
-      switch (context.path) {
-      case 'users':
-        Object.assign(_records, loPick(records, Service.serviceFields('users')));
-        break;
-      case 'user-profiles':
-        Object.assign(_records, loPick(records, Service.serviceFields('userProfiles')));
-        break;
-      case 'roles':
-        Object.assign(_records, loPick(records, Service.serviceFields('roles')));
-        break;
-      case 'teams':
-        Object.assign(_records, loPick(records, Service.serviceFields('teams')));
-        break;
-      case 'user-teams':
-        Object.assign(_records, loPick(records, Service.serviceFields('userTeams')));
-        break;
-      default:
-        Object.assign(_records, records);
-      }
-      if (isLog) debug('After normalize-query:', _records);
+    if (isLog) debug('Before normalize-query records:', hh.contextRecords);
+
+    if(fakeData[fakeDataKey]){
+      _records = hh.getPickRecords(pickItem);
+    }else {
+      Object.assign(_records, hh.contextRecords);
     }
+
+    if (isLog) debug('After normalize-query records:', _records);
 
     // Place the modified records back in the context.
     replaceItems(context, _records);

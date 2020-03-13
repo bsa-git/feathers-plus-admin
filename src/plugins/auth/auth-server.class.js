@@ -1,7 +1,7 @@
-const {inspector, readJsonFileSync, stripSpecific, getHookContext, appRoot} = require('../lib');
 const {authenticate} = require('@feathersjs/authentication').hooks;
-const {getItems} = require('feathers-hooks-common');
+const {checkContext, getItems} = require('feathers-hooks-common');
 const crypto = require('crypto');
+const {inspector, readJsonFileSync, stripSpecific, appRoot} = require('../lib');
 const debug = require('debug')('app:plugins.auth-server.class');
 
 const isLog = false;
@@ -51,11 +51,63 @@ class AuthServer {
    * @param context
    */
   constructor(context) {
-    this.context = {};
-    Object.assign(this.context, context);
-    this.provider = this.context.params.provider ? this.context.params.provider : '';
-    this.roleName = this.context.params.payload ? this.context.params.payload.role : '';
-    if (isDebug) debug('AuthServer.constructor: Start');
+    // Throw if the hook is being called from an unexpected location.
+    checkContext(context, null, ['find', 'get', 'create', 'update', 'patch', 'remove']);
+    // Get context
+    this.context = Object.assign({}, context);
+    // context.app is a read only property that contains the Feathers application object.
+    // This can be used to retrieve other services (via context.app.service('name')) or configuration values
+    this.app = this.context.app;
+    // context.service is a read only property and contains the service this hook currently runs on
+    this.contextService = this.context.service ? this.context.service : null;
+    // context.id is a writeable property and the id for a get, remove, update and patch service method call
+    this.contextId = this.context.id;
+    // context.path is a read only property and contains the service name (or path) without leading or trailing slashes
+    this.contextPath = this.context.path;
+    // context.method is a read only property with the name of the service method (one of find, get, create, update, patch, remove)
+    this.contextMethod = this.context.method;
+    // context.type is a read only property with the hook type (one of before, after or error)
+    this.contextType = this.context.type;
+    // context.params is a writeable property that contains the service method parameters
+    this.contextParams = this.context.params? this.context.params : null;
+    // Get the authenticated user.
+    // eslint-disable-next-line no-unused-vars
+    this.contextUser = (this.contextParams && this.contextParams.user)? this.contextParams.user : null;
+    // Get context.params.authenticated
+    this.contextAuthenticated = this.contextParams && this.contextParams.authenticated? this.contextParams.authenticated : null;
+    // Get contextParams.payload
+    this.contextPayload = this.contextParams && this.contextParams.payload? this.contextParams.payload : null;
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    this.contextRecords = getItems(this.context);
+    // context.data is a writeable property containing the data of a create, update and patch service method call
+    this.contextData = this.context.data ? this.context.data : null;
+    // context.result is a writeable property containing the result of the successful service method call.
+    // It is only available in after hooks.
+    this.contextResult = this.context.result ? this.context.result : null;
+    // Get contextResult.accessToken
+    this.contextAccessToken = this.contextResult && this.contextResult.accessToken? this.contextResult.accessToken : '';
+    // context.dispatch is a writeable, optional property and contains a "safe" version of the data that should be sent to any client.
+    // If context.dispatch has not been set context.result will be sent to the client instead
+    this.contextDispatch = this.context.dispatch ? this.context.dispatch : null;
+    // context.statusCode is a writeable, optional property that allows to override the standard HTTP status code that should be returned.
+    this.contextStatusCode = this.context.statusCode;
+    // context.error is a writeable property with the error object that was thrown in a failed method call. It is only available in error hooks.
+    // Note: context.error will only be available if context.type is error.
+    this.contextError = this.context.error ? this.context.error : null;
+    // Get provider
+    this.contextProvider = this.contextParams && this.contextParams.provider ? this.contextParams.provider : '';
+    // Get role name
+    this.roleName = this.contextParams && this.contextParams.payload ? this.contextParams.payload.role : '';
+  }
+
+  /**
+   * Is mask
+   * @param mask // 'authentication.create.after'
+   */
+  isMask(mask = '') {
+    const maskItems = mask.split('.');
+    return (maskItems[0] === this.contextPath) && (maskItems[1] === this.contextMethod) && (maskItems[2] === this.contextType);
   }
 
   /**
@@ -63,7 +115,7 @@ class AuthServer {
    * @return {boolean}
    */
   isAuth() {
-    return !!this.context.params.authenticated;
+    return !!this.contextAuthenticated;
   }
 
   /**
@@ -71,7 +123,7 @@ class AuthServer {
    * @return {null}
    */
   getAuthUser() {
-    return this.isAuth() ? this.context.params.user : null;
+    return this.isAuth() ? this.contextUser : null;
   }
 
   /**
@@ -80,11 +132,15 @@ class AuthServer {
    * @return {Promise.<*>}
    */
   async getRole(id) {
-    const role = await this.context.app.service('roles').get(id);
+    const role = await this.app.service('roles').get(id);
     if (isLog) inspector('AuthServer.getRole:', role);
     return role;
   }
 
+  /**
+   * Get role name
+   * @return {Promise.<*>}
+   */
   async getRoleName() {
     if (!this.roleName) {
       const user = this.getAuthUser();
@@ -92,6 +148,28 @@ class AuthServer {
       this.roleName = myRole ? myRole.name : '';
     }
     return this.roleName;
+  }
+
+  /**
+   * Get roleId
+   * @param isRole
+   * @return {Promise.<string>}
+   */
+  async getRoleId(isRole = '') {
+    let roleId = '';
+    const service = this.app.service('roles');
+    if (service) {
+      const roleName = AuthServer.getRoles(isRole);
+      let findResults = await service.find({query: {name: roleName}});
+      findResults = findResults.data;
+      if(findResults.length){
+        let idField = 'id' in findResults[0] ? 'id' : '_id';
+        roleId = findResults[0][idField];
+      }
+      return roleId;
+    } else {
+      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+    }
   }
 
   /**
@@ -114,15 +192,15 @@ class AuthServer {
     let testServices = (readJsonFileSync(`${appRoot}/config/default.json`) || {})['tests']['client']['overriddenAuth'];
     // inspector('isJwtAuthentication.testServices', testServices);
     const serviceNames = Object.keys(services);
-    const isServiceName = serviceNames.indexOf(this.context.path) >= 0;
+    const isServiceName = serviceNames.indexOf(this.contextPath) >= 0;
     if (isServiceName) {
-      const service = services[this.context.path];
-      const testService = testServices[this.context.path];
+      const service = services[this.contextPath];
+      const testService = testServices[this.contextPath];
       const isRequiresAuth = service['requiresAuth'];
-      const isAuthForMethod = testService ? testService[this.context.method] !== 'noauth' : false;
+      const isAuthForMethod = testService ? testService[this.contextMethod] !== 'noauth' : false;
       return isRequiresAuth && isAuthForMethod;
     } else {
-      if (this.context.path === 'graphql') {
+      if (this.contextPath === 'graphql') {
         const found = Object.entries(services).map(service => service[1]).find(function (value) {
           return value.graphql;
         });
@@ -151,22 +229,120 @@ class AuthServer {
     // Run check
     const publicServices = AuthServer.listServices(process.env.PUBLIC_SERVICES);
     const adminServices = AuthServer.listServices(process.env.ADMIN_SERVICES);
-    const isPublicAccess = !!publicServices[this.context.path] && publicServices[this.context.path].includes(this.context.method);
-    const isAdminAccess = !!adminServices[this.context.path] && adminServices[this.context.path].includes(this.context.method);
+    const isPublicAccess = !!publicServices[this.contextPath] && publicServices[this.contextPath].includes(this.contextMethod);
+    const isAdminAccess = !!adminServices[this.contextPath] && adminServices[this.contextPath].includes(this.contextMethod);
 
     const isAdmin = await this.isAdmin();
-    const notAccess = (!!this.provider && !this.isAuth() && !isPublicAccess) ||
-      (  !!this.provider && this.isAuth() && !isAdmin && isAdminAccess);
+    const notAccess = (!!this.contextProvider && !this.isAuth() && !isPublicAccess) ||
+      (  !!this.contextProvider && this.isAuth() && !isAdmin && isAdminAccess);
 
     // --- DEBUG ---
     const myRole = await this.getRoleName();
-    const msg1 = `<<AuthServer>>: Provider: ${this.provider ? this.provider : 'Not'}; ${this.context.type} app.service('${this.context.path}').${this.context.method}()`;
+    const msg1 = `<<AuthServer>>: Provider: ${this.contextProvider ? this.contextProvider : 'Not'}; ${this.contextType} app.service('${this.contextPath}').${this.contextMethod}()`;
     const msg2 = `; isAuth: ${this.isAuth() ? this.isAuth() : 'Not'}; MyRole: ${myRole ? myRole : 'Not'};`;
-    if (isDebug) debug(`${msg1}${this.provider ? msg2 : ''}`);
-    if (isLog) inspector('AuthServer._context:', getHookContext(this.context));
+    if (isDebug) debug(`${msg1}${this.contextProvider ? msg2 : ''}`);
+    if (isLog) inspector('AuthServer.context:', this.getHookContext());
     if (isDebug) debug(`AuthServer.isAccess: ${!notAccess}`);
 
     return !notAccess;
+  }
+
+  /**
+   * Is login
+   * Checks the ability to log user
+   * @return {Promise.<void>}
+   */
+  async isLogin() {
+    let payload = this.contextPayload;
+    if(!payload){
+      payload = await AuthServer.verifyJWT(this.contextAccessToken);
+    }
+    if(!payload){
+      throw new errors.BadRequest('There is no payload');
+    }
+    const service = this.app.service('users');
+    if (service) {
+      const user = await service.get(payload.userId);
+      if (isLog) inspector('plugins::auth-server.class::isLogin.user:', user);
+      return  Promise.resolve(user.active);
+    } else {
+      throw new errors.BadRequest('There is no service for the path - "users"');
+    }
+  }
+
+  /**
+   * Set user loginAt
+   * @return {Promise.<*>}
+   */
+  async setLoginAt() {
+    const moment = require('moment');
+    let payload = this.contextPayload;
+    if(!payload){
+      payload = await AuthServer.verifyJWT(this.contextAccessToken);
+    }
+    if(!payload){
+      throw new errors.BadRequest('There is no payload');
+    }
+    const service = this.app.service('users');
+    if (service) {
+      const dt = moment.utc().format();
+      const user = await service.patch(payload.userId, {loginAt: dt});
+      if (isLog) inspector('plugins::auth-server.class::setLoginAt.user:', user);
+      return  user;
+    } else {
+      throw new errors.BadRequest('There is no service for the path - "users"');
+    }
+  }
+
+  getHookContext() {
+    let target = {};
+    let {path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql} = this.context;
+
+    if (path) target.path = path;
+    if (method) target.method = method;
+    if (type) target.type = type;
+    if (params) {
+      if(params.connection){
+        delete params.connection;
+      }
+      target.params = params;
+    }
+    if (id) target.id = id;
+    if (data && type === 'before') target.data = data;
+    if (result) target.result = result;
+    // if (dispatch) target.dispatch = dispatch;
+    if (statusCode) target.statusCode = statusCode;
+    // if (error) target.error = error;
+    if (grapql) target.grapql = grapql;
+    return  Object.assign({}, target);
+  }
+
+  /**
+   * verifyJWT
+   * Pass a jwt token, get back a payload if it's valid.
+   *
+   * @param token
+   * @return {Promise.<void>}
+   */
+  static async verifyJWT (token) {
+    const decode = require('jwt-decode');
+    //-----------------------------------
+    const payloadIsValid = function payloadIsValid(payload) {
+      return payload && (!payload.exp || payload.exp * 1000 > new Date().getTime());
+    };
+    if (typeof token !== 'string') {
+      return Promise.reject(new Error('Token provided to verifyJWT is missing or not a string'));
+    }
+    try {
+      let payload = decode(token);
+
+      if (payloadIsValid(payload)) {
+        return Promise.resolve(payload);
+      }
+      return Promise.reject(new Error('Invalid token: expired'));
+    } catch (error) {
+      return Promise.reject(new Error('Cannot decode malformed token.'));
+    }
   }
 
   /**

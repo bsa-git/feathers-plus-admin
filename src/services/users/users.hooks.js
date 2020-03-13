@@ -40,10 +40,9 @@ const hookAddVerification = (context) => {
 
 const hookToEmailYourVerification = (context) => {
   if(!isTest && !AuthServer.isContextExternalAccount(context)){
-    return accountNotifier(context.app).notifier('resendVerifySignup', context.result);
-  }else {
-    return context;
+    accountNotifier(context.app).notifier('resendVerifySignup', context.result);
   }
+  return context;
 };
 
 const hookRemoveVerification = (context) => {

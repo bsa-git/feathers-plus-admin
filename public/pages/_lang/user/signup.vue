@@ -1,6 +1,5 @@
 <template>
   <div class="main-content">
-
     <input-dialog
       :dialog="inputDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"
@@ -108,13 +107,14 @@
 
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-  import Auth from '~/plugins/lib/auth-client.class';
+  import Auth from '~/plugins/auth/auth-client.class';
   import InputDialog from '~/components/dialogs/InputDialog';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:page.user-signup');
 
-  const isLog = true;
-  const isDebug = true;
+  const isLog = false;
+  const isDebug = false;
 
   export default {
     layout: 'user',
@@ -128,6 +128,7 @@
       return {
         title: this.$t('signup.title'),
         description: this.$t('signup.description'),
+        saveLogMessage: null,
         inputDialog: false,
         verifyCode: '',
         loadingSubmit: false,
@@ -137,6 +138,7 @@
           firstName: '',
           lastName: '',
           email: '',
+          active: true,
           avatar: '',
           password: '',
           passwordConfirmation: ''
@@ -157,7 +159,9 @@
         this.model.firstName = this.user.firstName;
         this.model.lastName = this.user.lastName;
         this.model.email = this.user.email;
+        this.model.active = this.user.active;
       }
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -199,6 +203,7 @@
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
+            active: data.active,
             avatar: data.avatar,
             password: data.password
           });
@@ -208,6 +213,7 @@
           this.loadingSubmit = false;
           this.error = error;
           this.showError({text: error.message, timeout: 10000});
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async login(email, password) {
@@ -219,6 +225,7 @@
           this.loadingSubmit = false;
           this.error = error;
           this.showError({text: error.message, timeout: 10000});
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async verifySignupShort() {
@@ -252,6 +259,7 @@
           } else {
             this.showError({text: error.message, timeout: 10000});
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       setVerifyCode(val) {

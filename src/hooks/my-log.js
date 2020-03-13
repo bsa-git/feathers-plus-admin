@@ -1,38 +1,48 @@
-
-// A hook that logs service method before, after and error
-// See https://github.com/winstonjs/winston for documentation
-// about the logger.
-// const logger = require('../logger');
-const {inspector, getHookContext} = require('../plugins/lib');
-const chalk = require('chalk');
-const debug = require('debug')('app:my-log.all.hook');
+const {getItems, replaceItems} = require('feathers-hooks-common');
+const {AuthServer, isTrue, HookHelper, getLogMessage} = require('../plugins');
+const debug = require('debug')('app:hooks.my-log');
 
 const isDebug = false;
 const isLog = false;
 
-/**
- * Get provider
- * @param context
- * @return {String}
- */
-const getProvider = (context) => context.params.provider ? context.params.provider : 'Not';
+module.exports = function (isTest = false) {
+  return async context => {
 
-// To see more detailed messages, uncomment the following line:
-// logger.level = 'debug';
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    let records = getItems(context);
 
-module.exports = function () {
-  return context => {
-    // Debug info
-    if(isDebug) debug(`Provider: ${getProvider(context)}; ${context.type} app.service('${context.path}').${context.method}()`);
-    if (context.error) {
-      console.error(chalk.red(`context.error.message: ${context.error.message}`));
-      delete context.error.app;
-      delete context.error.hook;
-      inspector('Error Context:', context.error);
-    }else {
-      // Log context
-      const logContext = getHookContext(context);
-      if (isLog) inspector('Hook Context:', logContext);
+    // Create HookHelper object
+    const hookHelper = new HookHelper(context);
+    // Show debug info
+    hookHelper.showDebugInfo('', isLog);
+    hookHelper.showDebugError();
+
+    // hookHelper.showDebugInfo('authentication.remove.after', true);
+
+    // Is log msg enable
+    const isLogMsgEnable = isTest ||
+        isTrue(process.env.LOGMSG_ENABLE) &&
+        !AuthServer.isTest() &&
+        (hookHelper.contextProvider ||
+          hookHelper.isMask('authentication.remove.after') ||
+          hookHelper.isMask('mailer.create.before') ||
+          hookHelper.isMask('mailer.create.after') ||
+          hookHelper.contextError
+        );
+
+    if(isLogMsgEnable){
+      // Get log message
+      const logMsg = await getLogMessage(context);
+      // Save log message
+      if(logMsg){
+        if(isDebug) debug('logMsg:', logMsg);
+        await hookHelper.createItem('log-messages', logMsg);
+      }
     }
+    // Place the modified records back in the context.
+    replaceItems(context, records);
+    // Best practice: hooks should always return the context.
+    return context;
   };
 };

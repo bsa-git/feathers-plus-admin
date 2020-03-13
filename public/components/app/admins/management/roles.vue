@@ -167,15 +167,16 @@
 </template>
 
 <script>
+  const errors = require('@feathersjs/errors');
   import {mapGetters, mapMutations} from 'vuex'
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
-  import TableTopBar from '~/components/widgets/TopBars/SearchAndBtn';
+  import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
-  const errors = require('@feathersjs/errors');
+
   const debug = require('debug')('app:comp.admins-management-roles');
-
   const isLog = false;
   const isDebug = true;
 
@@ -190,6 +191,7 @@
       TableTopBar
     },
     data: () => ({
+      saveLogMessage: null,
       search: '',
       confirmDialog: false,
       roleSaveDialog: false,
@@ -243,6 +245,7 @@
       }
     }),
     created: function () {
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -408,17 +411,26 @@
               name: data.roleName,
               description: data.description
             });
+            return await role.save();
           } else {
+            // Role has not been changed
+            role = Role.getFromStore(data.id);
+            if((data.roleName === role.name) &&
+              (data.description === role.description)){
+              return role
+            }
+            // Change role
             // Error: role name not exist in env
-            if (!this.isEnvRole(data.roleName))
+            if (data.roleName !== role.name && !this.isEnvRole(data.roleName)){
               throw new errors.Conflict(this.$t('management.errRoleNameNotExistInEnv'));
+            }
             role = new Role({
               [idField]: data.id,
               name: data.roleName,
               description: data.description
             });
+            return await role.save();
           }
-          return await role.save();
         } catch (error) {
           if (isLog) debug('role.save.error:', error);
           this.loadingSubmit = false;
@@ -427,6 +439,7 @@
           if (!this.isNewItem) {
             await Role.get(data.id);
           }
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async updateUserIds(roleId, userIds = []) {
@@ -466,7 +479,8 @@
           users = User.findInStore({query: {[idFieldUser]: {$in: filterUserIds}}}).data;
           users.forEach(async user => {
             const userId = user[idFieldUser];
-            if (!this.isYouAuth(userId) && this.isEnvRole(role.name)) {
+//            if (!this.isYouAuth(userId) && this.isEnvRole(role.name)) {
+            if (!this.isYouAuth(userId)) {
               newUser = new User({[idFieldUser]: userId, roleId: roleId});
               saveResponse = await newUser.save();
               updatedUserIds.added.push(saveResponse);
@@ -477,6 +491,7 @@
         } catch (error) {
           if (isLog) debug('updateUserIds.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       async deleteItem() {
@@ -491,6 +506,7 @@
         } catch (error) {
           if (isLog) debug('deleteItem.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
       ...mapMutations({

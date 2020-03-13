@@ -38,8 +38,10 @@ module.exports = function(app) {
 
   return {
     notifier: async function(type, user) {// notifier: function(type, user, notifierOptions
-      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, resetToken, langMsgs, langMsg;
+      let tokenLink, email, lang, fullName, verifyToken, verifyShortToken, resetToken, langMsgs, langMsg, idField, senderId;
       fullName = `${user.firstName} ${user.lastName}`;
+      idField = user? 'id' in user ? 'id' : '_id' : '_id';
+      senderId = user? user[idField] : null;
 
       switch (type) {
       case 'resendVerifySignup': //sending the user the verification email
@@ -53,24 +55,28 @@ module.exports = function(app) {
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailResendVerifySignUp'].replace('{tokenLink}', tokenLink).replace('{shortToken}', verifyShortToken);
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Verify SignUp',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       case 'verifySignup': // confirming verification
         // Detect lang message
         lang = await detectLang(fullName);
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailVerifySignUp'];
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Confirm SignUp',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       case 'sendResetPwd':
         if(isLog) inspector('auth-management.notifier.user:', user);
         resetToken = user.resetToken;
@@ -82,36 +88,42 @@ module.exports = function(app) {
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailSendResetPwd'].replace('{tokenLink}', tokenLink);
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Password Reset',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       case 'resetPwd':
         // Detect lang message
         lang = await detectLang(fullName);
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailResetPwd'];
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Confirm Password Reset',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       case 'passwordChange':
         // Detect lang message
         lang = await detectLang(fullName);
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailPasswordChange'];
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.email,
           subject: 'Confirm Password Change',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       case 'identityChange':
         if(isLog) inspector('auth-management.notifier.user:', user);
         verifyToken = user.verifyToken;
@@ -123,12 +135,14 @@ module.exports = function(app) {
         langMsgs = getLangMessages(lang);
         langMsg = langMsgs['authManagement']['mailResendVerifySignUp'].replace('{tokenLink}', tokenLink).replace('{shortToken}', verifyShortToken);
         email = {
+          senderId,
           from: process.env.FROM_EMAIL,
           to: user.verifyChanges.email,
           subject: 'Verify Changes',
           html: langMsg
         };
-        return await sendEmail(email);
+        sendEmail(email);
+        return email;
       default:
         break;
       }

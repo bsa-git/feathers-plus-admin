@@ -60,13 +60,13 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import appMenu from '~/api/app/app-menu';
-  import Auth from '~/plugins/lib/auth-client.class';
+  import Auth from '~/plugins/auth/auth-client.class';
   import Http from '~/plugins/lib/http.client.class';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
   const debug = require('debug')('app:page.user-forgot');
-
-  const isLog = true;
-  const isDebug = true;
+  const isLog = false;
+  const isDebug = false;
 
   export default {
     layout: 'user',
@@ -80,6 +80,7 @@
       return {
         title: this.$t('authManagement.titleResetPwd'),
         description: this.$t('authManagement.descriptionResetPwd'),
+        saveLogMessage: null,
         loadingSubmit: false,
         error: undefined,
         model: {
@@ -97,6 +98,7 @@
       }
     },
     created: function () {
+      this.saveLogMessage = createLogMessage(this.$store);
     },
     computed: {
       ...mapGetters({
@@ -130,6 +132,7 @@
             if (isLog) debug('onSubmit.error:', error);
             this.error = error;
             this.showError(error.message);
+            this.saveLogMessage('ERROR-CLIENT', {error});
           }
         }
       },
