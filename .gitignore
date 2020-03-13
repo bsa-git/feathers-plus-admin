@@ -117,10 +117,10 @@ node_modules
 # Others
 data/db/*
 !data/db/README.md
-!data/db/log/README.md
-data/db/log/*
-data/log/*
-!data/log/README.md
+data/db-log/*
+!data/db-log/README.md
+data/app-log/*
+!data/app-log/README.md
 .nuxt/
 nuxt-dist/
 docs-dist/
