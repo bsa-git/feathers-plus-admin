@@ -18,6 +18,32 @@ const delayTime = function (sec = 1) {
 };
 
 /**
+ * Pause
+ * @param ms
+ * @return {Promise}
+ */
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * Awaiting positive completion of a function
+ * @param fn
+ * @param cb
+ * @param delay
+ */
+const waitTimeout = function (fn, cb = null, delay = 0) {
+  let _delay = delay? delay : 1000;
+  let timerId = setTimeout(function request() {
+    let result = fn();
+    if(!result){
+      timerId = setTimeout(request, _delay);
+    }else {
+      if(cb) cb();
+      clearInterval(timerId);
+    }
+  }, _delay);
+};
+
+/**
  * Strip slashes
  * @param value String
  * @return {XML|string|*|void}
@@ -208,10 +234,66 @@ const cloneObject = function (obj) {
   return Object.assign({}, obj1);
 };
 
+/**
+ * sort array by string field
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
+ */
+const sortByStringField = function(items, name, isAscending = true) {
+  items.sort((x, y) => {
+    let textA = x[name].toLocaleUpperCase();
+    let textB = y[name].toLocaleUpperCase();
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+};
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
+ */
+const sortByNumberField = function(items, name, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x[name] - y[name];
+    if(!isAscending) return y[name] - x[name];
+  });
+};
+
+/**
+ * sort array by string
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+const sortByString = function(items, isAscending = true) {
+  items.sort((x, y) => {
+    let textA = x.toLocaleUpperCase();
+    let textB = y.toLocaleUpperCase();
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+};
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+const sortByNumber = function(items, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x - y;
+    if(!isAscending) return y - x;
+  });
+};
+
 
 module.exports = {
   appRoot,
   delayTime,
+  pause,
+  waitTimeout,
   stripSlashes,
   stripSpecific,
   isTrue,
@@ -220,5 +302,9 @@ module.exports = {
   inspector,
   qlParams,
   stringify,
-  cloneObject
+  cloneObject,
+  sortByStringField,
+  sortByNumberField,
+  sortByString,
+  sortByNumber,
 };

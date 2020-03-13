@@ -43,6 +43,25 @@ const delayTime = function (sec = 1) {
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
+ * Awaiting positive completion of a function
+ * @param fn
+ * @param cb
+ * @param delay
+ */
+const waitTimeout = function (fn, cb = null, delay = 0) {
+  let _delay = delay? delay : 1000;
+  let timerId = setTimeout(function request() {
+    let result = fn();
+    if(!result){
+      timerId = setTimeout(request, _delay);
+    }else {
+      if(cb) cb();
+      clearInterval(timerId);
+    }
+  }, _delay);
+};
+
+/**
  * Strip slashes
  * @param value String
  * @return {string|*|void}
@@ -259,14 +278,55 @@ function readCookie(cookies, name) {
 
 /**
  * sort array by string field
- * @param items
- * @param name
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
  */
-function sortByStringField(items, name) {
+function sortByStringField(items, name, isAscending = true) {
   items.sort((x, y) => {
     let textA = x[name].toLocaleUpperCase();
     let textB = y[name].toLocaleUpperCase();
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+}
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param name {String}
+ * @param isAscending {Boolean}
+ */
+function sortByNumberField(items, name, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x[name] - y[name];
+    if(!isAscending) return y[name] - x[name];
+  });
+}
+
+/**
+ * sort array by string
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+function sortByString(items, isAscending = true) {
+  items.sort((x, y) => {
+    let textA = x.toLocaleUpperCase();
+    let textB = y.toLocaleUpperCase();
+    if(isAscending) return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    if(!isAscending) return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+  });
+}
+
+/**
+ * sort array by number field
+ * @param items {Array}
+ * @param isAscending {Boolean}
+ */
+function sortByNumber(items, isAscending = true) {
+  items.sort((x, y) => {
+    if(isAscending) return x - y;
+    if(!isAscending) return y - x;
   });
 }
 
@@ -356,6 +416,7 @@ export default {
   toggleFullScreen,
   delayTime,
   pause,
+  waitTimeout,
   stripSlashes,
   stripSpecific,
   isTrue,
@@ -368,6 +429,9 @@ export default {
   verifyJWT,
   readCookie,
   sortByStringField,
+  sortByNumberField,
+  sortByString,
+  sortByNumber,
   qlParams,
   stringify,
   getHookContext,

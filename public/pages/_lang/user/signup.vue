@@ -1,6 +1,5 @@
 <template>
   <div class="main-content">
-
     <input-dialog
       :dialog="inputDialog"
       :title-dialog="$t('authManagement.titleVerifySignUp')"

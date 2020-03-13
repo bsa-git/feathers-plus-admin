@@ -4,6 +4,7 @@ import util from '~/plugins/lib/util';
 
 const debug = require('debug')('app:plugins.sync-store');
 const isDebug = false;
+const isLog = false;
 
 /**
  * setThemePrimary
@@ -77,6 +78,7 @@ const initVuetify = function (ctVue, isUpdateColor = false) {
   // Get color
   const color = ctVue.$store.getters['getPrimaryColor'];
   if (isDebug) debug('initVuetify.primaryColor:', color);
+  if(isLog) debug('initVuetify.ctVue.$vuetify', ctVue.$vuetify);
   // Set theme dark
   ctVue.$vuetify.theme.dark = theme.dark;
   // Set theme primary
@@ -90,8 +92,6 @@ const initVuetify = function (ctVue, isUpdateColor = false) {
       themeSettings.updateThemeColor();
     }
   }
-  // Set vuetify lang
-  ctVue.$vuetify.lang.t = (key, ...params) => ctVue.$t(key, params);
 };
 
 export default {

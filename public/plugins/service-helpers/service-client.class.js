@@ -216,7 +216,7 @@ class Service {
    */
   findCountInStore(path, params = {}) {
     const newParams = Object.assign(params, {query: {$limit: 0}});
-    let results = this.getters[`${path}/find`](params);
+    let results = this.getters[`${path}/find`](newParams);
     results = results.total;
     if (isLog) debug(`findCountInStore.path: ${path}`, `findCountInStore.params: ${JSON.stringify(newParams)}`, 'findCountInStore.results:', results);
     return results;
@@ -230,7 +230,7 @@ class Service {
    */
   findAllInStore(path, params = {}) {
     const newParams = Object.assign(params, {query: {$limit: null}});
-    let results = this.getters[`${path}/find`](params);
+    let results = this.getters[`${path}/find`](newParams);
     results = results.data || results;
     if (isLog) debug(`findAllInStore.path: ${path}`, `findAllInStore.params: ${JSON.stringify(newParams)}`, 'findAllInStore.results:', results);
     return results;
