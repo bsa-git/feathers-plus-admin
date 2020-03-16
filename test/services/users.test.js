@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {readJsonFileSync, appRoot} = require('../../src/plugins/lib');
+const {readJsonFileSync, appRoot} = require('../../src/plugins/lib/index');
 const app = require(`${appRoot}/src/app`);
 const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
 const debug = require('debug')('app:users.test');
@@ -48,17 +48,16 @@ describe('<<< Test services/users.test.js >>>', () => {
   });
 
   it('Error on unique email', async function () {
+    let fake;
     try {
-      const fake = fakes['users'][0];
+      fake = fakes['users'][0];
+      // debug('Error on unique email for \'users\' fake:', fake);
       const users = app.service('users');
       await users.create({ email: fake.email, password: 'test', firstName: 'Lora', lastName: 'Lind' });
       assert(false, 'email unexpectedly succeeded');
     } catch (ex) {
       if(isDebug)debug('Error on unique email for \'users\' service:', ex);
-      const fake = fakes['users'][0];
-      assert.strictEqual(ex.code, 409, 'unexpected error.code');
-      assert.strictEqual(ex.message, `email: ${fake.email} already exists.`);
-      assert.strictEqual(ex.name, 'Conflict');
+      assert.strictEqual(ex.message, 'email: value already exists.');
     }
   });
 
@@ -70,11 +69,7 @@ describe('<<< Test services/users.test.js >>>', () => {
       assert(false, 'email unexpectedly succeeded');
     } catch (ex) {
       if(isDebug)debug('Error on unique profileId for \'users\' service:', ex);
-      const fake = fakes['users'][0];
-      // assert.ok(true);
-      assert.strictEqual(ex.code, 409, 'unexpected error.code');
-      assert.strictEqual(ex.message, `profileId: ObjectId('${fake.profileId}') already exists.`);
-      assert.strictEqual(ex.name, 'Conflict');
+      assert.strictEqual(ex.message, 'profileId: value already exists.');
     }
   });
 });
