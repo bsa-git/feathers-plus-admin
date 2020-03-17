@@ -27,7 +27,7 @@
     "mocha:debug": "mocha test-debug/ --recursive --exit --timeout 10000",
     "test:all": "npm run eslint && cross-env NODE_ENV=test npm run mocha",
     "test:debug": "cross-env NODE_ENV=test DEBUG=app:* npm run mocha:debug",
-    "dev": "cross-env NODE_ENV=development DEBUG=app:* nodemon src/ -e js,json,vue,sass",
+    "dev": "cross-env NODE_ENV=development DEBUG=app:* node src/",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node src/",
     "start:seed": "cross-env NODE_ENV=test node src/ --seed",
@@ -105,7 +105,6 @@
     "eslint-utils": ">=1.4.1",
     "lodash.template": ">=4.5.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }

@@ -112,7 +112,13 @@
               :label="$t('management.lastName')"
             ></v-text-field>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" sm="4">
+            <v-checkbox
+              v-model="editedItem.active"
+              :label="$t('management.active')"
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" sm="8">
             <v-text-field
               append-icon="mdi-email"
               v-validate="'required|email'"
@@ -193,12 +199,6 @@
                 >(+{{ editedItem.teamIds.length - 1 }} {{ $t('management.others') }})</span>
               </template>
             </v-select>
-          </v-col>
-          <v-col cols="12" >
-            <v-checkbox
-              v-model="editedItem.active"
-              :label="$t('management.active')"
-            ></v-checkbox>
           </v-col>
         </v-row>
       </div>

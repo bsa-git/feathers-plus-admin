@@ -98,7 +98,10 @@
         <v-icon>fab fa-github</v-icon>
       </v-btn>
       <!-- FullScreen -->
-      <v-btn icon @click="toggleFullScreen()" :title="$t('app_toolbar.full_size')">
+      <v-btn icon v-if="isToggleFullScreen" @click="toggleFullScreen" :title="$t('app_toolbar.normal_size')">
+        <v-icon>mdi-fullscreen-exit</v-icon>
+      </v-btn>
+      <v-btn icon v-else @click="toggleFullScreen" :title="$t('app_toolbar.full_size')">
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
       <!-- App Notifications -->
@@ -168,7 +171,8 @@
       return {
         viewDialog: false,
         search: '',
-        toggleFullScreen: this.$util.toggleFullScreen,
+        isToggleFullScreen: false,
+//        toggleFullScreen: this.$util.toggleFullScreen,
         notifications: null,
         selNotification: -1,
         selLogNames: [],
@@ -388,6 +392,22 @@
         });
         this.setNoticesCheckAt(JSON.stringify(items));
 //        debug('initAppNotifications.notifications:', this.notifications);
+      },
+      toggleFullScreen() {
+        let doc = window.document;
+        let docEl = doc.documentElement;
+
+        let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+        let cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+        if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+          requestFullScreen.call(docEl);
+          this.isToggleFullScreen = true;
+        }
+        else {
+          cancelFullScreen.call(doc);
+          this.isToggleFullScreen = false;
+        }
       },
       ...mapMutations({
         setNoticesCheckAt: 'SET_NOTICES_CHECKAT',

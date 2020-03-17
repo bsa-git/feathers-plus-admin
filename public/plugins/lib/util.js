@@ -4,24 +4,6 @@ const debug = require('debug')('app:plugins.util');
 const isDebug = true;
 
 /**
- * toggleFullScreen
- */
-const toggleFullScreen = () => {
-  let doc = window.document;
-  let docEl = doc.documentElement;
-
-  let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-  let cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-  if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-    requestFullScreen.call(docEl);
-  }
-  else {
-    cancelFullScreen.call(doc);
-  }
-};
-
-/**
  * Delay time
  * @param sec
  * @return {Promise}
@@ -413,7 +395,6 @@ const cloneObject = function (obj) {
 };
 
 export default {
-  toggleFullScreen,
   delayTime,
   pause,
   waitTimeout,
