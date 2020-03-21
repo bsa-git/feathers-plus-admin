@@ -41,11 +41,10 @@ const getColor = (baseColor = '', subColor = '') => {
  * @return {Object|null}
  */
 const getUser = function (userId, store, Models) {
-  let user = null;
-  const idFieldUser = store.state.users.idField;
-  let users = Models.User.findInStore({query: {[idFieldUser]: userId}}).data;
-  if (users.length) {
-    user = users[0];
+  let idFieldUser, user = null;
+  idFieldUser = store.state.users.idField;
+  user = Models.User.getFromStore(userId);
+  if (user){
     const userId = user[idFieldUser];
     user = loPick(user, ['fullName', 'email', 'avatar']);
     user.id = userId;
@@ -56,7 +55,7 @@ const getUser = function (userId, store, Models) {
 const {service} = feathersVuex(feathersClient, {idField: '_id'});
 const servicePath = 'log-messages';
 const servicePlugin = service(servicePath, {
-  instanceDefaults(data, {store, Model, Models}) {
+  instanceDefaults(data, {store, Model, Models}) {// Models
     const moment = require('moment');
     const idField = store.state['log-messages'].idField;
     if (isLog) debug('ServiceInfo:', {
@@ -67,7 +66,10 @@ const servicePlugin = service(servicePath, {
     });
     return {
       get owner() {
-        return getUser(this['ownerId'], store, Models);
+        return (this && this.ownerId)? getUser(this.ownerId, store, Models) : null;
+      },
+      get user() {
+        return (this && this.userId)? getUser(this.userId, store, Models) : null;
       },
       get icon() {
         return (getLogData(this.name) && getLogData(this.name).icon) ? getLogData(this.name).icon : 'mdi-alert';
@@ -89,9 +91,6 @@ const servicePlugin = service(servicePath, {
         const formatMsg = JSON.stringify(objMsg, null, '  ');
         if (isDebug) debug('formatMsg:', formatMsg);
         return formatMsg;
-      },
-      get user() {
-        return getUser(this['userId'], store, Models);
       },
       get dtUTC() {
         let dt = moment.utc(this.createdAt).format('YYYY-MM-DD HH:mm:ss');

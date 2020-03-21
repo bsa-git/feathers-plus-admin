@@ -146,13 +146,15 @@
   "app_notification": {
     "notification": "Notification",
     "show_all": "All",
-    "new_user": "New user registered",
-    "user_login": "User logged",
-    "new_error": "A new error has appeared",
-    "new_order": "New order received",
-    "new_payment": "New payment made",
-    "new_message": "New message",
-    "new_email": "New email"
+    "new_error": "A new errors has appeared",
+    "new_user": "Registered new users",
+    "user_login": "Logged users",
+    "user_change": "User changed",
+    "profile_change": "Profile changed",
+    "user_team_create": "User-team created",
+    "user_team_remove": "User-team removed",
+    "auth_operation": "Auth operation",
+    "mailer_create": "Mailer created"
   },
   "theme_settings": {
     "settings": "Theme Settings",

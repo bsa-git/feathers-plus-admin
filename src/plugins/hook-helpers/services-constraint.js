@@ -1,5 +1,5 @@
 const errors = require('@feathersjs/errors');
-// const {inspector} = require('../lib');
+// const {isObject} = require('../lib');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.servicesConstraint');
@@ -53,28 +53,26 @@ module.exports = async function servicesConstraint(context) {
     await hookHelper.forEachRecords(validate);
     break;
   case 'user-profiles.remove.before':
-    validate = async (record) => {
-      const idField = 'id' in record ? 'id' : '_id';
-      const profileId = record[idField];
-      let servicePath = 'users';
+    validate = async () => {
+      const profileId = hookHelper.getContextId();
+      const servicePath = 'users';
       const findResults = await hookHelper.findItems(servicePath, {profileId});
       if(findResults.length){
         throw new errors.BadRequest('Error deleting item from \'user-profiles\' service. You can not delete an item if it is referenced by other services.');
       }
     };
-    await hookHelper.forEachRecords(validate);
+    await validate();
     break;
   case 'roles.remove.before':
-    validate = async (record) => {
-      const idField = HookHelper.getIdField(record);
-      const roleId = record[idField];
-      let servicePath = 'roles';
+    validate = async () => {
+      const roleId = hookHelper.getContextId();
+      const servicePath = 'roles';
       const getResult = await hookHelper.getItem(servicePath, roleId);
       if(getResult && AuthServer.isBaseRole(getResult.name)){
         throw new errors.BadRequest('Error deleting item from \'roles\' service. You can not delete an item if it is base role.');
       }
     };
-    await hookHelper.forEachRecords(validate);
+    await validate();
     break;
   case 'users.remove.after':
     validate = async (record) => {

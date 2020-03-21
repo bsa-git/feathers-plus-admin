@@ -1,4 +1,4 @@
-// const loConcat = require('lodash/concat');
+const loMerge = require('lodash/merge');
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const {inspector, isObject} = require('../lib');
@@ -157,6 +157,21 @@ class HookHelper {
     return idField ? idField : new errors.GeneralError('Items argument is not an array or object');
   }
 
+  /**
+   * Get context id
+   * @returns {String}
+   */
+  getContextId() {
+    let contextId;
+    if(isObject(this.contextId)){
+      const idField = HookHelper.getIdField(this.contextId);
+      contextId = this.contextId[idField];
+    }else {
+      contextId = this.contextId;
+    }
+    return contextId;
+  }
+
   static getHookContext(context) {
     let target = {};
     let {path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql} = context;
@@ -304,7 +319,8 @@ class HookHelper {
   async findAllItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      const newQuery = Object.assign(query, {$limit: null});
+      // const newQuery = Object.assign(query, {$limit: null});
+      const newQuery = loMerge(query, {$limit: null});
       let findResults = await service.find({query: newQuery});
       findResults = findResults.data;
       if (isLog) inspector(`findItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
@@ -323,7 +339,8 @@ class HookHelper {
   async getCountItems(path = '', query = {}) {
     const service = this.app.service(path);
     if (service) {
-      const newQuery = Object.assign(query, {$limit: 0});
+      // const newQuery = Object.assign(query, {$limit: 0});
+      const newQuery = loMerge(query, {$limit: 0});
       let findResults = await service.find({query: newQuery});
       findResults = findResults.total;
       if (isDebug) inspector(`getCountItems(path='${path}', query=${JSON.stringify(newQuery)}).findResults:`, findResults);
@@ -426,6 +443,7 @@ class HookHelper {
     let findResults = await this.findItems(servicePath, {$limit: 0});
     if (isDebug) debug(`after.log-messages.create: (${findResults}) records have been find from the "${servicePath}" service`);
     if (findResults > maxRows) {
+      if(!this.contextRecords) throw new errors.BadRequest('Value of "restrictMaxRows:contextRecords" must not be empty.');
       const idField = HookHelper.getIdField(this.contextRecords);
       findResults = await this.findItems(servicePath, {
         $limit: null,

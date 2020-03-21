@@ -74,7 +74,8 @@ module.exports = async function getLogMessage(context) {
     logData = getLogData('USER-REMOVE');
     if(!logData.isEnable) break;
     if(configLogData.excludeGroups.includes(logData.gr)) break;
-    idField = HookHelper.getIdField(hookHelper.contextUser);
+    // idField = HookHelper.getIdField(hookHelper.contextUser);
+    idField = HookHelper.getIdField(hookHelper.contextResult);
     ownerId = hookHelper.contextUser[idField];
     userId = hookHelper.contextResult[idField];
     msg = {

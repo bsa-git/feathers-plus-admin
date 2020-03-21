@@ -146,13 +146,15 @@
   "app_notification": {
     "notification": "Уведомление",
     "show_all": "Показать все",
+    "new_error": "Появилась новая ошибка",
     "new_user": "Новый Пользователь",
     "user_login": "Пользователь вошел",
-    "new_error": "Появилась новая ошибка",
-    "new_order": "Новый заказ",
-    "new_payment": "Новый платеж",
-    "new_message": "Новое сообщение",
-    "new_email": "Новый емайл"
+    "user_change": "Пользователь изменен",
+    "profile_change": "Профайл изменен",
+    "user_team_create": "Группа создана",
+    "user_team_remove": "Группа удалена",
+    "auth_operation": "Проверка подлинности",
+    "mailer_create": "Почта отправлена"
   },
   "theme_settings": {
     "settings": "Настройки темы",

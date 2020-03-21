@@ -26,11 +26,11 @@ module.exports = function (isTest = false) {
     if(isDebug) debug('isCheck:', isCheck);
 
     if (isCheck) {
-
       // Create HookHelper object
       const hh = new HookHelper(context);
       // Show debug info
       hh.showDebugInfo('', isLog);
+      hh.showDebugRecords('', isLog);
 
       // hookHelper.showDebugInfo('authentication.create.after', true);
 

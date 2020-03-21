@@ -68,6 +68,7 @@ module.exports = function (options = {}) {
           newRecord.roleId = record.roleId;
           newRecord.profileId = record.profileId;
           newRecord.isVerified = true;
+          newRecord.active = true;
         }
         if(context.method === 'patch'){
           newRecord.isVerified = true;
@@ -95,6 +96,7 @@ module.exports = function (options = {}) {
           newRecord.roleId = record.roleId;
           newRecord.profileId = record.profileId;
           newRecord.isVerified = true;
+          newRecord.active = true;
         }
         if(context.method === 'patch'){
           newRecord.isVerified = true;

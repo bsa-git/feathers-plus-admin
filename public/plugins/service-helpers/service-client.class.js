@@ -1,10 +1,9 @@
 // const loConcat = require('lodash/concat');
 import fakeData from '~~/seeds/fake-data.json';
-
-const loKebabCase = require('lodash/kebabCase');
-const errors = require('@feathersjs/errors');
 import typeOf from '~/plugins/lib/type-of';
-
+const loKebabCase = require('lodash/kebabCase');
+const loMerge = require('lodash/merge');
+const errors = require('@feathersjs/errors');
 const debug = require('debug')('app:plugins.service-client.class');
 
 const isLog = false;
@@ -147,9 +146,17 @@ class Service {
       const idFieldTeam = this.state.teams.idField;
       const idFieldUser = this.state.users.idField;
       const userId = user[idFieldUser];
-      let teamIdsForUser = await this.find('user-teams', {query: {userId: userId, $sort: {teamId: 1}}});
+      let teamIdsForUser = await this.findAll('user-teams', {query: {userId: userId, $sort: {teamId: 1}}});
       teamIdsForUser = teamIdsForUser.map(row => row.teamId.toString());
-      await this.find('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
+      await this.findAll('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
+      // Find log messages
+      let logMessages = await this.findAll('log-messages', {query: {userId: userId}});
+      logMessages = logMessages.filter(msg => msg.ownerId !== msg.userId);
+      if(logMessages.length){
+        let ownerIds = logMessages.map(msg => msg.ownerId);
+        ownerIds.forEach(async (ownerId) => await this.get('users', ownerId));
+        debug('findAllForUser.ownerIds:', ownerIds);
+      }
     }
     if (isDebug) debug('findAllForUser: OK');
   }
@@ -174,7 +181,7 @@ class Service {
    * @return {Promise.<*>}
    */
   async findCount(path, params = {}) {
-    const newParams = Object.assign(params, {query: {$limit: 0}});
+    const newParams = loMerge(params, {query: {$limit: 0}});
     let results = await this.dispatch(`${path}/find`, newParams);
     results = results.total;
     if (isLog) debug(`findCount.path: ${path}`, `findCount.params: ${JSON.stringify(newParams)}`, 'findCount.results:', results);
@@ -188,10 +195,11 @@ class Service {
    * @return {Promise.<*>}
    */
   async findAll(path, params = {}) {
-    const newParams = Object.assign(params, {query: {$limit: null}});
+    const newParams = loMerge(params, {query: {$limit: null}});
     let results = await this.dispatch(`${path}/find`, newParams);
     results = results.data || results;
     if (isLog) debug(`findAll.path: ${path}`, `findAll.params: ${JSON.stringify(newParams)}`, 'findAll.results:', results);
+
     return results;
   }
 
@@ -215,7 +223,7 @@ class Service {
    * @return {Array}
    */
   findCountInStore(path, params = {}) {
-    const newParams = Object.assign(params, {query: {$limit: 0}});
+    const newParams = loMerge(params, {query: {$limit: 0}});
     let results = this.getters[`${path}/find`](newParams);
     results = results.total;
     if (isLog) debug(`findCountInStore.path: ${path}`, `findCountInStore.params: ${JSON.stringify(newParams)}`, 'findCountInStore.results:', results);
@@ -229,7 +237,7 @@ class Service {
    * @return {Array}
    */
   findAllInStore(path, params = {}) {
-    const newParams = Object.assign(params, {query: {$limit: null}});
+    const newParams = loMerge(params, {query: {$limit: null}});
     let results = this.getters[`${path}/find`](newParams);
     results = results.data || results;
     if (isLog) debug(`findAllInStore.path: ${path}`, `findAllInStore.params: ${JSON.stringify(newParams)}`, 'findAllInStore.results:', results);

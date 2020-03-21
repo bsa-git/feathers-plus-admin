@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {AuthServer, readJsonFileSync, seedService, inspector, appRoot} = require('../../src/plugins');
+const {AuthServer, readJsonFileSync, seedService, inspector, appRoot} = require('../../src/plugins/index');
 const constraints = require(`${appRoot}/src/hooks/constraints`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:constraints.unit.test');
@@ -175,7 +175,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
         contextBefore.path = 'user-profiles';
         contextBefore.method = 'remove';
         contextBefore.service = service;
-        contextBefore.data = {
+        contextBefore.id = {
           [idFieldUser]: profileId
         };
         await constraints(true)(contextBefore);
@@ -327,7 +327,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
         contextBefore.path = 'roles';
         contextBefore.method = 'remove';
         contextBefore.service = app.service('roles');
-        contextBefore.data = {
+        contextBefore.id = {
           [idFieldRole]: roleAdminId
         };
         await constraints(true)(contextBefore);
@@ -343,7 +343,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
         contextBefore.path = 'roles';
         contextBefore.method = 'remove';
         contextBefore.service = app.service('roles');
-        contextBefore.data = {
+        contextBefore.id = {
           [idFieldRole]: roleGuestId
         };
         await constraints(true)(contextBefore);

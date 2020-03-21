@@ -6,7 +6,7 @@
       :max-width="1200"
       :header-title="$t('logMessages.title')"
       :action-text="$t('management.close')"
-      v-on:onClose="viewDialog = false"
+      v-on:onClose="closeViewDialog"
     >
       <div slot="text-content">
         <!-- TopBar for table -->
@@ -105,7 +105,7 @@
         <v-icon>mdi-fullscreen</v-icon>
       </v-btn>
       <!-- App Notifications -->
-      <v-menu>
+      <v-menu v-if="getNotifications.length">
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on" :title="$t('app_toolbar.notifications')">
             <v-badge color="red" overlap>
@@ -172,7 +172,6 @@
         viewDialog: false,
         search: '',
         isToggleFullScreen: false,
-//        toggleFullScreen: this.$util.toggleFullScreen,
         notifications: null,
         selNotification: -1,
         selLogNames: [],
@@ -277,18 +276,23 @@
         return amount;
       },
       getNotifications: function () {
-        let amount = 0;
+        let _logMessages, amount = 0;
         this.notifications.forEach(notice => {
           notice.logNames.forEach(name => {
-            amount = this.logMessages.filter(msg => msg.name === name).length;
-            notice.amount = amount;
+            _logMessages = this.logMessages.filter(msg => msg.name === name);
+            notice.amount = _logMessages.length;
+            if(notice.amount){
+              moment.locale(this.config.locale);
+              notice.timeLabel = moment(_logMessages[0].dt).fromNow();
+            }
+
           });
         });
         return this.notifications.filter(notice => notice.amount);
       },
       getSelLogMessages: function () {
         const logMessages = this.logMessages.filter(msg => this.selLogNames.includes(msg.name));
-        debug('computed.getSelLogMessages.logMessages:', logMessages);
+//        debug('computed.getSelLogMessages.logMessages:', logMessages);
         return logMessages
       },
       getQueryNotifications: function () {
@@ -325,10 +329,6 @@
           this.selLogNames = notice.logNames;
           if (isDebug) debug('methods.onNotification.selLogNames:', this.selLogNames);
           this.viewDialog = true;
-
-          setTimeout(() => {
-            this.selNotification = -1;
-          }, 1000);
         }
       },
       onAllNotifications() {
@@ -338,7 +338,33 @@
         });
         if (isDebug) debug('methods.onAllNotifications.selLogNames:', this.selLogNames);
         this.viewDialog = true;
-
+      },
+      closeViewDialog(){
+        // Close viewDialog
+        this.viewDialog = false;
+        // Get now date-time
+        const dtCheckAt = moment.utc().format();
+        // Get stateNotices.checkAt from store
+        let stateNoticesCheckAt = JSON.parse(this.stateNotices.checkAt);
+        // Set checkAt for selNotification and stateNotices
+        if(this.selNotification >= 0){
+          let notice = this.getNotifications[this.selNotification];
+          notice.checkAt = dtCheckAt;
+          notice.logNames.forEach(logName => {
+            let stateNoticeCheckAt = stateNoticesCheckAt.find(item => item.name === logName);
+            stateNoticeCheckAt.checkAt = dtCheckAt;
+          });
+          this.selNotification = -1;
+        }else {
+          this.getNotifications.forEach(notice => {
+            notice.checkAt = dtCheckAt;
+            notice.logNames.forEach(logName => {
+              let stateNoticeCheckAt = stateNoticesCheckAt.find(item => item.name === logName);
+              stateNoticeCheckAt.checkAt = dtCheckAt;
+            })
+          })
+        }
+        this.setStateNoticesCheckAt(JSON.stringify(stateNoticesCheckAt));
       },
       waitLogMessages() {
         util.waitTimeout(() => {
@@ -346,9 +372,6 @@
         }, () => {
           debug('created.logMessages:', this.logMessages);
         })
-      },
-      updateNotifications() {
-
       },
       initNotifications() {
         let _item, dtCheckAt, items = [];
@@ -390,7 +413,7 @@
             notice.checkAt = dtCheckAt;
           }
         });
-        this.setNoticesCheckAt(JSON.stringify(items));
+        this.setStateNoticesCheckAt(JSON.stringify(items));
 //        debug('initAppNotifications.notifications:', this.notifications);
       },
       toggleFullScreen() {
@@ -410,7 +433,7 @@
         }
       },
       ...mapMutations({
-        setNoticesCheckAt: 'SET_NOTICES_CHECKAT',
+        setStateNoticesCheckAt: 'SET_NOTICES_CHECKAT',
       }),
     }
   };
