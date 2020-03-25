@@ -28,12 +28,12 @@ data such as user_id, user_secret, etc. are usually specified.
 to work with the MongoDB database
 
 ```bash
-  npm run start-mongod or yarn run start-mongod 
+  npm run start-mongod or yarn start-mongod 
   ```
 Start the local server, so that you can see the application running
 
   ```bash
-  npm run dev or yarn run dev
+  npm run dev or yarn dev
   ```
 The application is now running on http://localhost:3030
 
@@ -45,11 +45,11 @@ npm start or yarn start
 
 ## Testing
 
-Simply run `npm run test:all` or `yarn run test:all` and all your tests in the `test/` directory will be run.
+Simply run `npm run test:all` or `yarn test:all` and all your tests in the `test/` directory will be run.
 
 ## Seed data
 
-Simply run `npm run start:seed` or `yarn run start:seed` and all your `fake data` in the `seeds/fake-data.json` 
+Simply run `npm run start:seed` or `yarn start:seed` and all your `fake data` in the `seeds/fake-data.json` 
 will be written to the appropriate database.
 
 ## Scaffolding
