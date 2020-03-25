@@ -56,6 +56,7 @@
                   <v-tab
                     v-for="(tab, index) in tabs"
                     :key="`tab-${index + 1}`"
+                    active-class="active-tab"
                   >
                     {{ tab }}
                   </v-tab>
@@ -154,3 +155,9 @@
     }
   }
 </script>
+
+<style scoped lang="sass">
+  .active-tab
+    color: white !important
+</style>
+

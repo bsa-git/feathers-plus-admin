@@ -175,8 +175,8 @@
 
             <v-list-item >
               <v-list-item-content>
-                <v-list-item-title>PERSONAL_IS_</v-list-item-title>
-                <v-list-item-subtitle v-html>{{ config.is }}</v-list-item-subtitle>
+                <v-list-item-title>PERSONAL_IS_AVATAR</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.isAvatar }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
 

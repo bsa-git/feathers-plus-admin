@@ -25,7 +25,7 @@
     <v-list dense expand>
       <template v-for="(item, i) in filterAppMenu">
         <!--group with subitems-->
-        <v-list-group v-if="item.items"
+        <v-list-group v-if="item.items && !item.inactive"
                       :key="item.name"
                       :group="item.group"
                       :prepend-icon="item.icon"
@@ -78,10 +78,11 @@
             </v-list-item>
           </template>
         </v-list-group>
-        <v-subheader v-else-if="item.header" :key="i">
+        <v-subheader v-else-if="item.header && !item.inactive" :key="i">
           {{ item.header }}
         </v-subheader>
-        <v-divider v-else-if="item.divider" :key="i"></v-divider>
+        <v-divider v-else-if="item.divider && !item.inactive" :key="i"></v-divider>
+        <div v-else-if="item.inactive" :key="i"></div>
         <!--top-level link-->
         <v-list-item  v-else
                      :to="$i18n.path(item.to)"

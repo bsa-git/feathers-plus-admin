@@ -63,9 +63,9 @@
       }
     },
     created() {
-      this.nodalItem = this.appMenu.filter(item =>  item.name? (item.name === this.nodalName) : false)[0];
+      this.nodalItem = this.appMenu.find(item =>  item.name? (item.name === this.nodalName) : false);
       if(this.nodalItem.name !== this.pageName){
-        this.nodalItem = this.nodalItem.items.filter(item =>  item.name? (item.name === this.pageName) : false)[0];
+        this.nodalItem = this.nodalItem.items.find(item =>  item.name? (item.name === this.pageName) : false);
       }
       this.pageIcon = this.nodalItem['icon']? this.nodalItem['icon'] : '';
       if(isLog) debug('nodalItem:', this.nodalItem);
@@ -78,30 +78,34 @@
           const childs = [];
           if(item.children){
             item.children.forEach(child => {
-              const _child = {
-                id: `item.title_${child.name}`,
-                name: `${child.title} :`,
-                children: [
-                  {
-                    id: `item.description_${child.name}`,
-                    name: this.$t(`${child.alias}.description`)
-                  },
-                ]
-              };
-              childs.push(_child);
+              if(!child.inactive){
+                const _child = {
+                  id: `item.title_${child.name}`,
+                  name: `${child.title} :`,
+                  children: [
+                    {
+                      id: `item.description_${child.name}`,
+                      name: this.$t(`${child.alias}.description`)
+                    },
+                  ]
+                };
+                childs.push(_child);
+              }
             });
           }
-          const _item = {
-            id: `item.title_${item.name}`,
-            name: `${item.title} :`,
-            children: childs.length? childs : [
-              {
-                id: `item.description_${item.name}`,
-                name: this.$t(`${item.alias}.description`),
-              }
-            ]
-          };
-          data.push(_item);
+          if(!item.inactive){
+            const _item = {
+              id: `item.title_${item.name}`,
+              name: `${item.title} :`,
+              children: childs.length? childs : [
+                {
+                  id: `item.description_${item.name}`,
+                  name: this.$t(`${item.alias}.description`),
+                }
+              ]
+            };
+            data.push(_item);
+          }
         });
         if (isLog) debug('computed.menuItems.data:', data);
         return data

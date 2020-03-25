@@ -1,29 +1,41 @@
 <template>
-  <v-container fluid>
+  <div>
+    <!-- Page Header -->
     <app-page-header
-      :app-menu="appMenu"
-      :home-path="homePath"
+      :page-title="description"
     ></app-page-header>
-    <v-layout align-center justify-center row>
-      <div class="text-md-center">
-        <h1>Widgets/Index</h1>
-      </div>
-    </v-layout>
-  </v-container>
+    <!-- Nodal Menu Item -->
+    <nodal-menu-item
+      nodalName="widgets"
+      page-name="widgets"
+      :app-menu="appMenu"
+    ></nodal-menu-item>
+  </div>
 </template>
 
 <script>
-  import appMenu from '~/api/app/app-menu';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import NodalMenuItem from '~/components/menu/NodalMenuItem';
+  import appMenu from '~/api/app/app-menu';
 
   export default {
     components: {
-      AppPageHeader
+      AppPageHeader,
+      NodalMenuItem
     },
     data() {
       return {
-        appMenu: appMenu,
-        homePath: process.env.HOME_PATH,
+        title: this.$t('app_menu.widgets'),
+        description: this.$t('app_menu.widgets'),
+        appMenu
+      }
+    },
+    head() {
+      return {
+        title: this.title,
+        meta: [
+          {hid: 'description', name: 'description', content: this.description}
+        ],
       }
     },
   }

@@ -18,7 +18,8 @@
     "target": "_blank",
     "name": "chat",
     "alias": "chat",
-    "to": "/chat"
+    "to": "/chat",
+    "inactive": true
   },
   {
     "title": "Inbox",
@@ -27,7 +28,8 @@
     "alias": "inbox",
     "target": "_blank",
     "icon": "mdi-email",
-    "to": "/mail"
+    "to": "/mail",
+    "inactive": true
   },
   {
     "title": "Administration",
@@ -60,7 +62,7 @@
       },
       {
         "name": "admins-log",
-        "alias": "log",
+        "alias": "logMessages",
         "title": "Log messages",
         "icon": "mdi-message-text",
         "to": "/admins/log"
@@ -106,7 +108,8 @@
     "name": "media",
     "alias": "media",
     "icon": "mdi-monitor-dashboard",
-    "to": "/media"
+    "to": "/media",
+    "inactive": true
   },
   {
     "title": "Widgets",
@@ -121,23 +124,25 @@
         "name": "widgets-social",
         "alias": "social",
         "title": "Social",
-        "to": "/widgets/social"
+        "to": "/widgets/social",
+        "inactive": true
       },
       {
         "name": "widgets-statistic",
         "alias": "statistic",
         "title": "Statistic",
-        "to": "/widgets/statistic"
+        "to": "/widgets/statistic",
+        "inactive": true
       },
       {
         "name": "widgets-chart",
-        "alias": "chart",
+        "alias": "chartDemo",
         "title": "Charts",
         "to": "/widgets/chart"
       },
       {
         "name": "widgets-echarts",
-        "alias": "echarts",
+        "alias": "echartDemo",
         "title": "ECharts",
         "to": "/widgets/echarts"
       },
@@ -145,13 +150,15 @@
         "name": "widgets-list",
         "alias": "list",
         "title": "List",
-        "to": "/widgets/widget-list"
+        "to": "/widgets/widget-list",
+        "inactive": true
       }
     ]
   },
   {
     "header": "UI Elements",
-    "alias": "ui_elements"
+    "alias": "ui_elements",
+    "inactive": true
   },
   {
     "title": "General",
@@ -160,6 +167,7 @@
     "alias": "general",
     "icon": "mdi-view-grid-plus-outline",
     "to": "/components",
+    "inactive": true,
     "items": [
       {
         "name": "components-alerts",
@@ -278,6 +286,7 @@
     "alias": "pickers",
     "icon": "mdi-calendar-multiple",
     "to": "/pickers",
+    "inactive": true,
     "items": [
       {
         "name": "pickers-timepicker",
@@ -300,6 +309,7 @@
     "alias": "layout",
     "icon": "mdi-view-dashboard-variant",
     "to": "/layout",
+    "inactive": true,
     "items": [
       {
         "name": "layout-bottom-sheets",
@@ -365,6 +375,7 @@
     "alias": "forms_controls",
     "icon": "mdi-view-compact-outline",
     "to": "/forms",
+    "inactive": true,
     "items": [
       {
         "name": "forms-basic",

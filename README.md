@@ -6,9 +6,6 @@
 
 This project uses [FeathersJS](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
-### Demo
-[https://bsa-git.github.io/feathers-plus-admin](https://bsa-git.github.io/feathers-plus-admin/dashboard)
-
 ## Getting Started
 
 Getting  up and running is as easy as 1, 2, 3.
