@@ -2,6 +2,8 @@
 
 > Project feathers-plus-admin
 
+### [Live Demo...](https://feathers-plus-admin.herokuapp.com/dashboard)
+
 ## About
 
 This project uses [FeathersJS](http://feathersjs.com). An open source web framework for building modern real-time applications.
