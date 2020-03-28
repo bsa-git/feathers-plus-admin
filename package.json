@@ -1,7 +1,7 @@
 {
   "name": "feathers-plus-admin",
   "description": "Project feathers-plus-admin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
   "main": "src",
   "keywords": [
@@ -18,8 +18,9 @@
     "test": "test/"
   },
   "engines": {
-    "node": ">= 8.0.0",
-    "npm": ">= 6.4.1"
+    "node": "12.x",
+    "npm": "6.x",
+    "yarn": "1.x"
   },
   "scripts": {
     "eslint": "eslint src/. test/. --config .eslintrc.json",
@@ -41,7 +42,8 @@
     "generate:auth": "feathers-plus generate authentication",
     "generate:graphql": "feathers-plus generate graphql",
     "generate:hook": "feathers-plus generate hook",
-    "generate:test": "feathers-plus generate test"
+    "generate:test": "feathers-plus generate test",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@feathers-plus/graphql": "^1.10.0",

@@ -1,5 +1,5 @@
 {
-  "mongodb": "mongodb://localhost:27017/feathers_plus_app",
+  "mongodb": "MONGODB_TEST_URL",
   "mysql": "mysql://root:@no-connection-string-config-test",
   "nedb": "nedb://../data",
   "postgres": "postgres://postgres:@no-connection-string-config-test",

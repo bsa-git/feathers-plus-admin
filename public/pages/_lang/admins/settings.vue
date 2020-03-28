@@ -17,6 +17,20 @@
             <!-- GENERAL -->
             <v-list-item >
               <v-list-item-content>
+                <v-list-item-title>HOST</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.host }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item >
+              <v-list-item-content>
+                <v-list-item-title>PORT</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.port }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item >
+              <v-list-item-content>
                 <v-list-item-title>NODE_ENV</v-list-item-title>
                 <v-list-item-subtitle v-html>{{ config.nodeEnv }}</v-list-item-subtitle>
               </v-list-item-content>

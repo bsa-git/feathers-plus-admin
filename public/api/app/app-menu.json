@@ -57,15 +57,8 @@
         "name": "admins-settings",
         "alias": "settings",
         "title": "Settings",
-        "icon": "mdi-settings",
+        "icon": "mdi-file-cog-outline",
         "to": "/admins/settings"
-      },
-      {
-        "name": "admins-log",
-        "alias": "logMessages",
-        "title": "Log messages",
-        "icon": "mdi-message-text",
-        "to": "/admins/log"
       }
     ]
   },

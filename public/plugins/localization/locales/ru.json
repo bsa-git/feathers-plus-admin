@@ -141,7 +141,9 @@
     "settings": "Конфигурация",
     "logout": "Выход",
     "signup": "Регистрация",
-    "login": "Логин"
+    "login": "Логин",
+    "log": "Лог...",
+    "info": "Информация"
   },
   "app_notification": {
     "notification": "Уведомление",

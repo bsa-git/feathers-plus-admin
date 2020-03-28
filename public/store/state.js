@@ -58,8 +58,30 @@ const locales = (envLocales) => {
   return util.stripSpecific(envLocales, ';').split(';').map(item => item.trim());
 };
 
+/**
+ * Get external accounts
+ * @param envAccounts
+ * @returns {Array}
+ */
 const externalAccounts = (envAccounts) => {
   return util.stripSpecific(envAccounts, ';').split(';').map(item => item.trim());
+};
+
+/**
+ * Get mongodb
+ * @param env
+ * @returns {string}
+ */
+const getMongoDB= (env) => {
+  let dbMongoUrl = '';
+  const dbMongoDevUrl = process.env.MONGODB_DEV_URL.trim();
+  const dbMongoProdUrl = process.env.MONGODB_PROD_URL.trim();
+  const dbMongoTestUrl = process.env.MONGODB_TEST_URL.trim();
+  if(env === 'development') dbMongoUrl = dbMongoDevUrl;
+  if(env === 'production') dbMongoUrl = dbMongoProdUrl;
+  if(env === 'test') dbMongoUrl = dbMongoTestUrl;
+  console.log('env:', env, 'dbMongoUrl:', dbMongoUrl);
+  return dbMongoUrl;
 };
 
 export default () => ({
@@ -68,8 +90,6 @@ export default () => ({
     locales: locales(process.env.LOCALES),
     locale: (process.env.LOCALE || 'en').trim(),
     fallbackLocale: (process.env.FALLBACK_LOCALE || 'en').trim(),
-    //--- DATABASE ---//
-    mongodb: process.env.MONGODB.trim(),
     //--- AUTH ---//
     roles: authRoles(process.env.ROLES),
     baseRoles: baseRoles(process.env.BASE_ROLES),
@@ -78,11 +98,15 @@ export default () => ({
     publicServices: authServices(process.env.PUBLIC_SERVICES),
     adminServices: authServices(process.env.ADMIN_SERVICES),
     externalAccounts: externalAccounts(process.env.EXTERNAL_ACCOUNTS),
-    //--- SYSTEM ---//
+    //--- GENERAL ---//
+    host: process.env.HOST.trim(),
+    port: process.env.PORT.trim(),
     nodeEnv: process.env.NODE_ENV.trim(),
     debug: process.env.DEBUG.trim(),
     baseUrl: process.env.BASE_URL.trim(),
     homePath: process.env.HOME_PATH.trim(),
+    //--- DATABASE ---//
+    mongodb: getMongoDB(process.env.NODE_ENV),
     //--- LOG-MESSAGES ---//
     logMsgEnable: util.isTrue(process.env.LOGMSG_ENABLE),
     logMsgMaxRows: util.getNumber(process.env.LOGMSG_MAXROWS),

@@ -141,7 +141,9 @@
     "settings": "Settings",
     "logout": "Logout",
     "signup": "Signup",
-    "login": "Login"
+    "login": "Login",
+    "log": "Log...",
+    "info": "Information"
   },
   "app_notification": {
     "notification": "Notification",

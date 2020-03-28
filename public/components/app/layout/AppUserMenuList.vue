@@ -37,6 +37,8 @@
           switch (item.name) {
             case 'profile':
             case 'logout':
+            case 'log':
+            case 'info':
               return this.isAuth;
               break;
             case 'signup':
