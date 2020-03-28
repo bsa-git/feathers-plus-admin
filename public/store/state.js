@@ -74,9 +74,9 @@ const externalAccounts = (envAccounts) => {
  */
 const getMongoDB= (env) => {
   let dbMongoUrl = '';
-  const dbMongoDevUrl = process.env.MONGODB_DEV_URL.trim();
-  const dbMongoProdUrl = process.env.MONGODB_PROD_URL.trim();
-  const dbMongoTestUrl = process.env.MONGODB_TEST_URL.trim();
+  const dbMongoDevUrl = (process.env.MONGODB_DEV_URL || '').trim();
+  const dbMongoProdUrl = (process.env.MONGODB_PROD_URL || '').trim();
+  const dbMongoTestUrl = (process.env.MONGODB_TEST_URL || '').trim();
   if(env === 'development') dbMongoUrl = dbMongoDevUrl;
   if(env === 'production') dbMongoUrl = dbMongoProdUrl;
   if(env === 'test') dbMongoUrl = dbMongoTestUrl;
@@ -99,32 +99,32 @@ export default () => ({
     adminServices: authServices(process.env.ADMIN_SERVICES),
     externalAccounts: externalAccounts(process.env.EXTERNAL_ACCOUNTS),
     //--- GENERAL ---//
-    host: process.env.HOST.trim(),
-    port: process.env.PORT.trim(),
-    nodeEnv: process.env.NODE_ENV.trim(),
-    debug: process.env.DEBUG.trim(),
-    baseUrl: process.env.BASE_URL.trim(),
-    homePath: process.env.HOME_PATH.trim(),
+    host: (process.env.HOST || 'localhost').trim(),
+    port: (process.env.PORT || '3030').trim(),
+    nodeEnv: (process.env.NODE_ENV || 'development').trim(),
+    debug: (process.env.DEBUG || '').trim(),
+    baseUrl: (process.env.BASE_URL || 'http://localhost:3030').trim(),
+    homePath: (process.env.HOME_PATH || '/dashboard').trim(),
     //--- DATABASE ---//
     mongodb: getMongoDB(process.env.NODE_ENV),
     //--- LOG-MESSAGES ---//
     logMsgEnable: util.isTrue(process.env.LOGMSG_ENABLE),
     logMsgMaxRows: util.getNumber(process.env.LOGMSG_MAXROWS),
     //--- SECRETS ---//
-    gmail: process.env.GMAIL.trim(),
-    gmail_password: process.env.GMAIL_PASSWORD.trim(),
-    githubId: process.env.GITHUB_ID.trim(),
-    githubSecret: process.env.GITHUB_SECRET.trim(),
-    googleId: process.env.GOOGLE_ID.trim(),
-    googleSecret: process.env.GOOGLE_SECRET.trim(),
+    gmail: (process.env.GMAIL || 'my@gmail.com').trim(),
+    gmail_password: (process.env.GMAIL_PASSWORD || 'gmailpassword').trim(),
+    githubId: (process.env.GITHUB_ID || '').trim(),
+    githubSecret: (process.env.GITHUB_SECRET || '').trim(),
+    googleId: (process.env.GOOGLE_ID || '').trim(),
+    googleSecret: (process.env.GOOGLE_SECRET || '').trim(),
     //--- PERSONAL-DATA ---//
     isAvatar: util.isTrue(process.env.PERSONAL_IS_AVATAR),
-    logoImage: process.env.PERSONAL_ICON.trim(),
-    logoTitle: process.env.PERSONAL_LOGO_TITLE.trim(),
-    copyright: process.env.PERSONAL_COPYRIGHT.trim(),
-    website: process.env.PERSONAL_WEBSITE.trim(),
-    email: process.env.PERSONAL_EMAIL.trim(),
-    githubProject: process.env.PERSONAL_GITHUB_PROJECT.trim()
+    logoImage: (process.env.PERSONAL_ICON || '').trim(),
+    logoTitle: (process.env.PERSONAL_LOGO_TITLE || '').trim(),
+    copyright: (process.env.PERSONAL_COPYRIGHT || '').trim(),
+    website: (process.env.PERSONAL_WEBSITE || '').trim(),
+    email: (process.env.PERSONAL_EMAIL || '').trim(),
+    githubProject: (process.env.PERSONAL_GITHUB_PROJECT || '').trim()
   },
   //--- SNACKBAR ---//
   snackbar: {
