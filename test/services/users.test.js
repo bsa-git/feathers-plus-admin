@@ -57,19 +57,20 @@ describe('<<< Test services/users.test.js >>>', () => {
       assert(false, 'email unexpectedly succeeded');
     } catch (ex) {
       if(isDebug)debug('Error on unique email for \'users\' service:', ex);
-      assert.strictEqual(ex.message, 'email: value already exists.');
+      assert.ok((ex.message === 'email: value already exists.') || ( ex.message === `email: ${fake.email} already exists.`));
     }
   });
 
   it('Error on unique profileId', async function () {
+    let fake;
     try {
-      const fake = fakes['users'][0];
+      fake = fakes['users'][0];
       const users = app.service('users');
       await users.create({ email: 'test@test.com', password: 'test', firstName: 'Lora', lastName: 'Lind', profileId: fake.profileId });
       assert(false, 'email unexpectedly succeeded');
     } catch (ex) {
       if(isDebug)debug('Error on unique profileId for \'users\' service:', ex);
-      assert.strictEqual(ex.message, 'profileId: value already exists.');
+      assert.ok((ex.message === 'profileId: value already exists.') || ( ex.message === `profileId: ObjectId('${fake.profileId}') already exists.`));
     }
   });
 });

@@ -26,8 +26,8 @@
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "mocha": "mocha test/ --recursive --exit --timeout 10000",
     "mocha:debug": "mocha test-debug/ --recursive --exit --timeout 10000",
-    "test:all": "npm run eslint && cross-env NODE_ENV=test npm run mocha",
-    "test:debug": "cross-env NODE_ENV=test DEBUG=app:* npm run mocha:debug",
+    "test:all": "yarn run eslint && cross-env NODE_ENV=test yarn run mocha",
+    "test:debug": "cross-env NODE_ENV=test DEBUG=app:* yarn run mocha:debug",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* node src/",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node src/",
@@ -43,7 +43,7 @@
     "generate:graphql": "feathers-plus generate graphql",
     "generate:hook": "feathers-plus generate hook",
     "generate:test": "feathers-plus generate test",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "yarn run build"
   },
   "dependencies": {
     "@feathers-plus/graphql": "^1.10.0",
