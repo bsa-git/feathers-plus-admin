@@ -68,7 +68,7 @@
     "accounts": "Accounts",
     "management": "Management",
     "settings": "Settings",
-    "logMessages": "Log Messages",
+    "log": "Log",
     "actions": "Actions",
     "graphql": "GraphQL",
     "request": "Request",

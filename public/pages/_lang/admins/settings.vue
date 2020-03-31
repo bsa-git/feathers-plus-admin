@@ -60,6 +60,7 @@
             <v-divider></v-divider>
 
             <!-- DATABASE -->
+            <!--
             <v-subheader>{{ $t('settings.database') }}</v-subheader>
 
             <v-list-item >
@@ -70,8 +71,10 @@
             </v-list-item>
 
             <v-divider></v-divider>
+            -->
 
             <!-- SECRET DATA -->
+            <!--
             <v-subheader>{{ $t('settings.secretData') }}</v-subheader>
 
             <v-list-item >
@@ -117,6 +120,7 @@
             </v-list-item>
 
             <v-divider></v-divider>
+            -->
 
             <!-- AUTHORIZATION -->
             <v-subheader>{{ $t('settings.authorization') }}</v-subheader>

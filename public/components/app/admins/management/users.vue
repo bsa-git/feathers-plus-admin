@@ -232,6 +232,10 @@
       <template v-slot:item.active="{ item }">
         <v-simple-checkbox v-model="item.active" disabled></v-simple-checkbox>
       </template>
+      <!-- Field isVerified -->
+      <template v-slot:item.isVerified="{ item }">
+        <v-simple-checkbox v-model="item.isVerified" disabled></v-simple-checkbox>
+      </template>
       <!-- Field teamNames -->
       <template v-slot:item.teamNames="{ item }">
         <v-btn icon v-if="item.teamNames" @click="clickUserTeams(item)">
@@ -338,6 +342,11 @@
           value: 'active'
         },
         {
+          text: 'isVerified',
+          align: 'left',
+          value: 'isVerified'
+        },
+        {
           text: 'Role Name',
           align: 'left',
           value: 'roleName'
@@ -413,6 +422,7 @@
             fullName: user.fullName,
             email: user.email,
             active: user.active,
+            isVerified: user.isVerified,
             avatar: user.avatar,
             isExternalAccount: this.isUserExternalAccount(user),
             profileId: user.profileId,

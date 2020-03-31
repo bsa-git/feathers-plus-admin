@@ -12,6 +12,14 @@
     "to": "/dashboard"
   },
   {
+    "title": "Log...",
+    "group": "apps",
+    "icon": "mdi-order-bool-descending",
+    "name": "log",
+    "alias": "log",
+    "to": "/log"
+  },
+  {
     "title": "Chat",
     "group": "apps",
     "icon": "mdi-chat",
@@ -67,7 +75,7 @@
     "group": "services",
     "name": "services",
     "alias": "services",
-    "icon": "mdi-account-circle",
+    "icon": "mdi-webrtc",
     "to": "/services",
     "items": [
       {

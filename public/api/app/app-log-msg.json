@@ -182,7 +182,7 @@
     "pr": 61,
     "name": "RESEND-VERIFY-SIGNUP",
     "title": "Resend verify signup",
-    "icon": "mdi-account-plus",
+    "icon": "mdi-account-check",
     "isEnable": true,
     "isServer": true
   },
@@ -191,7 +191,7 @@
     "pr": 62,
     "name": "VERIFY-SIGNUP-LONG",
     "title": "Verify signup long",
-    "icon": "mdi-account-plus",
+    "icon": "mdi-account-check",
     "isEnable": true,
     "isServer": true
   },
@@ -200,7 +200,7 @@
     "pr": 63,
     "name": "VERIFY-SIGNUP-SHORT",
     "title": "Verify signup short",
-    "icon": "mdi-account-plus",
+    "icon": "mdi-account-check",
     "isEnable": true,
     "isServer": true
   },

@@ -69,7 +69,7 @@
               :search="search"
               :search-label="$t('management.search')"
               :btn-text="$t('logMessages.removeAll')"
-              :btn-disabled="!selected.length"
+              :btn-disabled="isAdmin? !selected.length : true"
               :btn-click="clickRemoveItems"
               v-on:onSearch="search = $event"
             ></table-top-bar>
@@ -120,6 +120,7 @@
                   small
                   @click="clickRemoveItem(item)"
                   :title="$t('common.remove')"
+                  :disabled="!isAdmin"
                 >fas fa-trash-alt
                 </v-icon>
               </template>
@@ -263,6 +264,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        isAdmin: 'isAdmin'
       }),
       logMessages() {
         const data = [];

@@ -106,17 +106,19 @@ export default () => ({
     baseUrl: (process.env.BASE_URL || 'http://localhost:3030').trim(),
     homePath: (process.env.HOME_PATH || '/dashboard').trim(),
     //--- DATABASE ---//
-    mongodb: getMongoDB(process.env.NODE_ENV),
+    // mongodb: getMongoDB(process.env.NODE_ENV),
     //--- LOG-MESSAGES ---//
     logMsgEnable: util.isTrue(process.env.LOGMSG_ENABLE),
     logMsgMaxRows: util.getNumber(process.env.LOGMSG_MAXROWS),
     //--- SECRETS ---//
+    /*
     gmail: (process.env.GMAIL || 'my@gmail.com').trim(),
     gmail_password: (process.env.GMAIL_PASSWORD || 'gmailpassword').trim(),
     githubId: (process.env.GITHUB_ID || '').trim(),
     githubSecret: (process.env.GITHUB_SECRET || '').trim(),
     googleId: (process.env.GOOGLE_ID || '').trim(),
     googleSecret: (process.env.GOOGLE_SECRET || '').trim(),
+    */
     //--- PERSONAL-DATA ---//
     isAvatar: util.isTrue(process.env.PERSONAL_IS_AVATAR),
     logoImage: (process.env.PERSONAL_ICON || '').trim(),

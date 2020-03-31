@@ -17,20 +17,6 @@
     "divider": true
   },
   {
-    "header": "Info",
-    "name": "info"
-  },
-  {
-    "icon": "mdi-message-text",
-    "to": "/user/log",
-    "title": "Log...",
-    "name": "log"
-  },
-  {
-    "divider": true,
-    "name": "info"
-  },
-  {
     "header": "User",
     "name": "user"
   },
