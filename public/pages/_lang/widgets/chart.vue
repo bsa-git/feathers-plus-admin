@@ -11,7 +11,7 @@
       :max-width="500"
       :is-text-content="false"
       header-icon="mdi-menu"
-      :header-title="$t('app_menu.chart')"
+      :header-title="$t('app_menu.chartDemo')"
       :action-text="$t('management.close')"
       v-on:onClose="boxChartDialog = false; aliasBoxChart = ''"
     >
