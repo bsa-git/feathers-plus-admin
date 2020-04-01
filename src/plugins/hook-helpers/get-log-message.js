@@ -389,7 +389,7 @@ module.exports = async function getLogMessage(context) {
     // After create data-management
   case 'data-management.create.after':
     if(context.contextBeforeData){
-      logData = getLogData('DATA-CREATE');
+      logData = getLogData('DATA-REQUEST');
       if(!logData.isEnable) break;
       if(configLogData.excludeGroups.includes(logData.gr)) break;
       if(hookHelper.contextAuthenticated){

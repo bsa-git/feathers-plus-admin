@@ -261,9 +261,9 @@
   {
     "gr": "DATA",
     "pr": 71,
-    "name": "DATA-CREATE",
-    "title": "Data created",
-    "icon": "mdi-database-plus",
+    "name": "DATA-REQUEST",
+    "title": "Data request",
+    "icon": "mdi-database-search",
     "isEnable": true,
     "isServer": true
   },
