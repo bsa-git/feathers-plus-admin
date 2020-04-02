@@ -155,6 +155,12 @@
     "profile_change": "Profile changed",
     "user_team_create": "User-team created",
     "user_team_remove": "User-team removed",
+    "team_create": "Team created",
+    "team_remove": "Team removed",
+    "team_change": "Team changed",
+    "role_create": "Role created",
+    "role_remove": "Role removed",
+    "role_change": "Role changed",
     "auth_operation": "Auth operation",
     "mailer_create": "Mailer created"
   },

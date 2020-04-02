@@ -1,5 +1,8 @@
 <template>
-  <v-list>
+  <v-list
+    :color="theme.dark? 'secondary' : ''"
+    :dark="theme.dark? true : false"
+  >
     <template v-for="(item, i) in filterUserMenu">
       <v-subheader v-if="item.header" :key="i">{{ $t(`user_menu.${item.name}`) }}</v-subheader>
       <v-divider v-else-if="item.divider" :key="i"></v-divider>
@@ -50,6 +53,7 @@
       },
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
         isAuth: 'isAuth'
       }),
     },

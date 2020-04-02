@@ -2,7 +2,7 @@
   {
     "title": "A new error has appeared",
     "name": "new_error",
-    "color": "red",
+    "color": "",
     "icon": "mdi-alert",
     "timeLabel": "",
     "isEnable": true,
@@ -13,7 +13,7 @@
   {
     "title": "New user registered",
     "name": "new_user",
-    "color": "light-green",
+    "color": "",
     "icon": "mdi-account-plus",
     "timeLabel": "",
     "isEnable": true,
@@ -24,7 +24,7 @@
   {
     "title": "User logged",
     "name": "user_login",
-    "color": "teal",
+    "color": "",
     "icon": "mdi-login",
     "timeLabel": "",
     "isEnable": true,
@@ -35,7 +35,7 @@
   {
     "title": "User changed",
     "name": "user_change",
-    "color": "teal",
+    "color": "",
     "icon": "mdi-account-edit",
     "timeLabel": "",
     "isEnable": true,
@@ -46,7 +46,7 @@
   {
     "title": "Profile changed",
     "name": "profile_change",
-    "color": "teal",
+    "color": "",
     "icon": "mdi-account-edit-outline",
     "timeLabel": "",
     "isEnable": true,
@@ -57,7 +57,7 @@
   {
     "title": "User-team created",
     "name": "user_team_create",
-    "color": "green",
+    "color": "",
     "icon": "mdi-account-multiple-plus",
     "timeLabel": "",
     "isEnable": true,
@@ -68,7 +68,7 @@
   {
     "title": "User-team removed",
     "name": "user_team_remove",
-    "color": "green",
+    "color": "",
     "icon": "mdi-account-multiple-minus",
     "timeLabel": "",
     "isEnable": true,
@@ -77,9 +77,76 @@
     "checkAt": ""
   },
   {
+    "title": "Role created",
+    "name": "role_create",
+    "color": "",
+    "icon": "mdi-shield-plus",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["ROLE-CREATE"],
+    "checkAt": ""
+  },
+  {
+    "title": "Role removed",
+    "name": "role_remove",
+    "color": "",
+    "icon": "mdi-shield-remove",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["ROLE-REMOVE"],
+    "checkAt": ""
+  },
+  {
+    "title": "Role changed",
+    "name": "role_change",
+    "color": "",
+    "icon": "mdi-shield-edit",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["ROLE-CHANGE"],
+    "checkAt": ""
+  },
+
+  {
+    "title": "Team created",
+    "name": "team_create",
+    "color": "",
+    "icon": "mdi-account-multiple-plus",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["TEAM-CREATE"],
+    "checkAt": ""
+  },
+  {
+    "title": "Team removed",
+    "name": "team_remove",
+    "color": "",
+    "icon": "mdi-account-multiple-minus",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["TEAM-REMOVE"],
+    "checkAt": ""
+  },
+  {
+    "title": "Team changed",
+    "name": "team_change",
+    "color": "",
+    "icon": "mdi-account-multiple-check",
+    "timeLabel": "",
+    "isEnable": true,
+    "amount": 0,
+    "logNames": ["TEAM-CHANGE"],
+    "checkAt": ""
+  },
+  {
     "title": "Auth operation",
     "name": "auth_operation",
-    "color": "orange",
+    "color": "",
     "icon": "mdi-shield-account",
     "timeLabel": "",
     "isEnable": true,
@@ -90,7 +157,7 @@
   {
     "title": "Mailer created",
     "name": "mailer_create",
-    "color": "brown",
+    "color": "",
     "icon": "mdi-email-send",
     "timeLabel": "",
     "isEnable": true,

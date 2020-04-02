@@ -43,6 +43,7 @@
       header-icon="mdi-account-check"
       :header-title="`${selItem.firstName} ${selItem.lastName}`"
       :action-text="$t('management.close')"
+      :maxWidth="500"
       v-on:onClose="userProfileDialog = false"
     >
       <div slot="text-content">

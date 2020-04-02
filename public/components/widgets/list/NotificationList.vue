@@ -1,11 +1,20 @@
 <template>
-  <v-card class="elevation-0">
+  <v-card
+    class="elevation-0"
+    :color="theme.dark? 'secondary' : ''"
+    :dark="theme.dark? true : false"
+  >
     <v-toolbar dense color="transparent" class="elevation-0">
       <v-toolbar-title>{{ $t('app_notification.notification') }}</v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
     <!-- rounded -->
-    <v-list two-line subheader>
+    <v-list
+      :color="theme.dark? 'secondary' : ''"
+      :dark="theme.dark? true : false"
+      two-line
+      subheader
+    >
       <v-list-item-group v-model="selItem" color="primary">
         <template v-for="(item, index) in items">
           <v-subheader v-if="item.header" :key="item.header" inset>{{ $t(`app_notification.${item.name}`) }}</v-subheader>
@@ -36,6 +45,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   export default {
     props: {
       items: Array,
@@ -45,6 +55,9 @@
       }
     },
     computed: {
+      ...mapGetters({
+        theme: 'getTheme',
+      }),
       selItem: {
         // Getter:
         get: function () {

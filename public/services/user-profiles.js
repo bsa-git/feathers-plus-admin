@@ -22,7 +22,7 @@ const getProfileIcon = function (key) {
     break;
   case 'personalPhone':
   case 'jobPhone':
-    icon = 'mdi-contact-phone';
+    icon = 'mdi-phone';
     break;
   case 'personalWebSite':
   case 'jobWebSite':

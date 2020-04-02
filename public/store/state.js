@@ -72,17 +72,17 @@ const externalAccounts = (envAccounts) => {
  * @param env
  * @returns {string}
  */
-const getMongoDB= (env) => {
-  let dbMongoUrl = '';
-  const dbMongoDevUrl = (process.env.MONGODB_DEV_URL || '').trim();
-  const dbMongoProdUrl = (process.env.MONGODB_PROD_URL || '').trim();
-  const dbMongoTestUrl = (process.env.MONGODB_TEST_URL || '').trim();
-  if(env === 'development') dbMongoUrl = dbMongoDevUrl;
-  if(env === 'production') dbMongoUrl = dbMongoProdUrl;
-  if(env === 'test') dbMongoUrl = dbMongoTestUrl;
-  console.log('env:', env, 'dbMongoUrl:', dbMongoUrl);
-  return dbMongoUrl;
-};
+// const getMongoDB= (env) => {
+//   let dbMongoUrl = '';
+//   const dbMongoDevUrl = (process.env.MONGODB_DEV_URL || '').trim();
+//   const dbMongoProdUrl = (process.env.MONGODB_PROD_URL || '').trim();
+//   const dbMongoTestUrl = (process.env.MONGODB_TEST_URL || '').trim();
+//   if(env === 'development') dbMongoUrl = dbMongoDevUrl;
+//   if(env === 'production') dbMongoUrl = dbMongoProdUrl;
+//   if(env === 'test') dbMongoUrl = dbMongoTestUrl;
+//   console.log('env:', env, 'dbMongoUrl:', dbMongoUrl);
+//   return dbMongoUrl;
+// };
 
 export default () => ({
   config: {

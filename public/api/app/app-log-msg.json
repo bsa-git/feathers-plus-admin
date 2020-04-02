@@ -5,8 +5,8 @@
     "groupColors": {
       "TEST": "shades:black",
       "ERROR": "red",
-      "USER": "teal",
-      "ROLE": "purple",
+      "USER": "purple",
+      "ROLE": "teal",
       "TEAM": "indigo",
       "USER-TEAM": "green",
       "AUTH": "orange",

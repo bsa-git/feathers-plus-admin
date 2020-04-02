@@ -2,11 +2,11 @@
   <div>
     <!--=== Log messages dialog ===-->
     <view-dialog
-      :dialog="viewDialog"
+      :dialog="viewLogMessagesDialog"
       :max-width="1200"
       :header-title="$t('logMessages.title')"
       :action-text="$t('management.close')"
-      v-on:onClose="closeViewDialog"
+      v-on:onClose="closeViewLogMessagesDialog"
     >
       <div slot="text-content">
         <!-- TopBar for table -->
@@ -36,21 +36,21 @@
           </template>
           <!-- Field Owner -->
           <template v-slot:item.owner="{ item }">
-            <v-icon v-if="item.owner"
+            <v-icon v-if="item.owner" @click="clickGetOwner(item)"
                     :title="`${item.owner.fullName}(${item.owner.email})`">mdi-contain
             </v-icon>
             <v-icon v-else>mdi-code-brackets</v-icon>
           </template>
           <!-- Field User -->
           <template v-slot:item.user="{ item }">
-            <v-icon v-if="item.user"
+            <v-icon v-if="item.user" @click="clickGetUser(item)"
                     :title="`${item.user.fullName}(${item.user.email})`">mdi-contain
             </v-icon>
             <v-icon v-else>mdi-code-brackets</v-icon>
           </template>
           <!-- Field Message -->
           <template v-slot:item.formatMsg="{ item }">
-            <v-icon v-if="item.formatMsg" :title="item.msg">mdi-contain</v-icon>
+            <v-icon v-if="item.formatMsg" @click="clickLogMsg(item)" :title="item.msg">mdi-contain</v-icon>
             <v-icon v-else>mdi-code-brackets</v-icon>
           </template>
           <!-- No Data -->
@@ -64,6 +64,47 @@
             </v-alert>
           </template>
         </v-data-table>
+      </div>
+    </view-dialog>
+    <!--=== Owner/User for log message dialog ===-->
+    <view-dialog
+      :dialog="viewDialog"
+      :header-icon="iconViewDialog"
+      :header-title="titleViewDialog"
+      :action-text="$t('management.close')"
+      v-on:onClose="viewDialog = false"
+    >
+      <div slot="text-content">
+        <span v-if="!(selItem.user || selItem.owner || selItem.formatMsg)">{{ $t('management.noData') }}</span>
+        <v-list three-line v-else-if="clickGetItem === 'owner'">
+          <v-list-item>
+            <v-list-item-avatar><img :src="selItem.owner.avatar"></v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="selItem.owner.fullName"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="`<span class='font-italic'>Email:</span> ${selItem.owner.email}`"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list three-line v-else-if="clickGetItem === 'user'">
+          <v-list-item>
+            <v-list-item-avatar><img :src="selItem.user.avatar"></v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="selItem.user.fullName"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="`<span class='font-italic'>Email:</span> ${selItem.user.email}`"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-textarea v-else-if="clickGetItem === 'msg'"
+                    class="pa-5"
+                    counter="512"
+                    outline
+                    auto-grow
+                    name="text-msg"
+                    :value="selItem.formatMsg"
+                    :rows="(selItem.formatMsg.split('\n').length > 5)? selItem.formatMsg.split('\n').length - 1 : -1"
+        ></v-textarea>
       </div>
     </view-dialog>
     <!--=== App Bar ===-->
@@ -147,6 +188,7 @@
 
   const moment = require('moment');
   import util from '~/plugins/lib/util';
+  import colors from 'vuetify/lib/util/colors';
   import Service from '~/plugins/service-helpers/service-client.class';
   import userMenu from '~/api/app/user-menu.json';
   import ViewDialog from '~/components/dialogs/ViewDialog';
@@ -154,7 +196,6 @@
   import NotificationList from '~/components/widgets/list/NotificationList';
   import AppUserMenuList from '~/components/app/layout/AppUserMenuList';
   import TableTopBar from '~/components/widgets/top-bars/Search';
-
 
   const debug = require('debug')('app:comp.AppToolbar');
   const isLog = false;
@@ -169,7 +210,7 @@
     },
     data: function () {
       return {
-        viewDialog: false,
+        viewLogMessagesDialog: false,
         search: '',
         isToggleFullScreen: false,
         notifications: null,
@@ -177,6 +218,11 @@
         selLogNames: [],
         userMenu,
         service: null,
+        viewDialog: false,
+        iconViewDialog: '',
+        titleViewDialog: '',
+        clickGetItem: '',// user, owner, msg
+        selItem: {},
         headers: [
           {
             text: 'Icon',
@@ -284,8 +330,8 @@
             if(notice.amount){
               moment.locale(this.config.locale);
               notice.timeLabel = moment(_logMessages[0].dt).fromNow();
+              notice.color = _logMessages[0].color;
             }
-
           });
         });
         return this.notifications.filter(notice => notice.amount);
@@ -328,7 +374,7 @@
           // Set selLogNames
           this.selLogNames = notice.logNames;
           if (isDebug) debug('methods.onNotification.selLogNames:', this.selLogNames);
-          this.viewDialog = true;
+          this.viewLogMessagesDialog = true;
         }
       },
       onAllNotifications() {
@@ -337,11 +383,11 @@
           this.selLogNames = this.selLogNames.concat(notice.logNames);
         });
         if (isDebug) debug('methods.onAllNotifications.selLogNames:', this.selLogNames);
-        this.viewDialog = true;
+        this.viewLogMessagesDialog = true;
       },
-      closeViewDialog(){
+      closeViewLogMessagesDialog(){
         // Close viewDialog
-        this.viewDialog = false;
+        this.viewLogMessagesDialog = false;
         // Get now date-time
         const dtCheckAt = moment.utc().format();
         // Get stateNotices.checkAt from store
@@ -365,6 +411,29 @@
           })
         }
         this.setStateNoticesCheckAt(JSON.stringify(stateNoticesCheckAt));
+      },
+      clickGetOwner(item) {
+        this.selItem = item;
+        this.clickGetItem = 'owner';
+        this.iconViewDialog = 'mdi-account-question';
+        this.titleViewDialog = item.title;
+        this.viewDialog = true;
+      },
+
+      clickGetUser(item) {
+        this.selItem = item;
+        this.clickGetItem = 'user';
+        this.iconViewDialog = 'mdi-account-question';
+        this.titleViewDialog = item.title;
+        this.viewDialog = true;
+      },
+
+      clickLogMsg(item) {
+        this.selItem = item;
+        this.clickGetItem = 'msg';
+        this.iconViewDialog = 'mdi-circle-edit-outline';
+        this.titleViewDialog = item.title;
+        this.viewDialog = true;
       },
       waitLogMessages() {
         util.waitTimeout(() => {
