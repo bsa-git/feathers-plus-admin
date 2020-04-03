@@ -30,16 +30,24 @@ const {preventChanges, discard, disallow, isProvider} = commonHooks;
 
 const isTest = AuthServer.isTest();
 
-const hookAddVerification = (context) => {
+const hookAddVerification = async (context) => {
   if(!isTest && !AuthServer.isContextExternalAccount(context)){
-    return verifyHooks.addVerification()(context);
+    let _context = await verifyHooks.addVerification()(context);
+    if(!AuthServer.isAuthManager() && _context.data){
+      _context.data.isVerified = true;
+      _context.data.verifyToken = null;
+      _context.data.verifyShortToken = null;
+      _context.data.verifyExpires = null;
+      _context.data.verifyChanges = {};
+    }
+    return _context;
   }else {
     return context;
   }
 };
 
 const hookToEmailYourVerification = (context) => {
-  if(!isTest && !AuthServer.isContextExternalAccount(context)){
+  if(!isTest && !AuthServer.isContextExternalAccount(context) && AuthServer.isAuthManager()){
     accountNotifier(context.app).notifier('resendVerifySignup', context.result);
   }
   return context;

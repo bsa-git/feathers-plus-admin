@@ -183,11 +183,23 @@
           const signupResponse = await this.save(this.model);
           if (signupResponse) {
             if (isLog) debug('signupResponse:', signupResponse);
-            this.showWarning({text: `${this.$t('authManagement.signUpVerification')}`, timeout: 10000});
-            setTimeout(() => {
-              this.loadingSubmit = false;
-              this.inputDialog = true;
-            }, 1000);
+            // Is signUpVerification
+            if(this.config.isAuthManager){
+              this.showWarning({text: `${this.$t('authManagement.signUpVerification')}`, timeout: 10000});
+              setTimeout(() => {
+                this.loadingSubmit = false;
+                this.inputDialog = true;
+              }, 1000);
+            } else {
+              const loginResponse = await this.login(this.model.email, this.model.password);
+              if (loginResponse && loginResponse.accessToken) {
+                if (isLog) debug('loginResponse:', loginResponse);
+                setTimeout(() => {
+                  this.showSuccess(`${this.$t('signup.successSignUpAndLogin')}!`);
+                  this.$router.push(this.$i18n.path(this.config.homePath));
+                }, 1000);
+              }
+            }
           }
         }
       },
@@ -205,7 +217,8 @@
             email: data.email,
             active: data.active,
             avatar: data.avatar,
-            password: data.password
+            password: data.password,
+//            isVerified: !this.config.isAuthManager
           });
           return await user.save();
         } catch (error) {

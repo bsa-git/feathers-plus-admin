@@ -91,6 +91,7 @@ export default () => ({
     locale: (process.env.LOCALE || 'en').trim(),
     fallbackLocale: (process.env.FALLBACK_LOCALE || 'en').trim(),
     //--- AUTH ---//
+    isAuthManager: (process.env.IS_AUTH_MANAGER !== undefined)? util.isTrue(process.env.IS_AUTH_MANAGER) : true,
     roles: authRoles(process.env.ROLES),
     baseRoles: baseRoles(process.env.BASE_ROLES),
     publicPaths: authPaths(process.env.PUBLIC_PATHS),

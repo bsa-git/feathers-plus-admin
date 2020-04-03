@@ -1,7 +1,7 @@
 const {authenticate} = require('@feathersjs/authentication').hooks;
 const {checkContext, getItems} = require('feathers-hooks-common');
 const crypto = require('crypto');
-const {inspector, readJsonFileSync, stripSpecific, appRoot} = require('../lib');
+const {inspector, readJsonFileSync, stripSpecific, isTrue, appRoot} = require('../lib');
 const debug = require('debug')('app:plugins.auth-server.class');
 
 const isLog = false;
@@ -403,6 +403,14 @@ class AuthServer {
       Object.assign(_roles, role);
     });
     return isBaseRole ? _roles[isBaseRole] : _roles;
+  }
+
+  /**
+   * Is auth manager
+   * @return {boolean}
+   */
+  static isAuthManager() {
+    return (process.env.IS_AUTH_MANAGER !== undefined)? isTrue(process.env.IS_AUTH_MANAGER) : true;
   }
 
   /**
