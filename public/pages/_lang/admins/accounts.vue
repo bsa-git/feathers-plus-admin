@@ -9,20 +9,18 @@
       :action-text="$t('management.close')"
       v-on:onClose="dialog = false"
     >
-      <div slot="text-content">
-        <v-list three-line>
-          <template v-for="(item, index) in selItems">
-            <v-list-item
-              :key="index"
-              @click=""
-            >
-              <v-list-item-content>
-                <v-list-item-title v-html="item[0] + ' :'"></v-list-item-title>
-                <v-list-item-subtitle v-html="item[1]"></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
+      <div slot="list-content">
+        <template v-for="(item, index) in selItems">
+          <v-list-item
+            :key="index"
+            @click=""
+          >
+            <v-list-item-content>
+              <v-list-item-title v-html="item[0] + ' :'"></v-list-item-title>
+              <v-list-item-subtitle v-html="item[1]"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </div>
     </view-dialog>
 

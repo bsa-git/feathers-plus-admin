@@ -17,22 +17,19 @@
       :action-text="$t('management.close')"
       v-on:onClose="roleUsersDialog = false"
     >
-      <div slot="text-content">
-        <span v-if="!(selItem.users && selItem.users.length)">{{ $t('management.noData') }}</span>
-        <v-list three-line v-else>
-          <template v-for="(user, index) in selItem.users">
-            <v-list-item
-              :key="user.id"
-            >
-              <v-list-item-avatar><img :src="user.avatar"></v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title v-html="user.fullName"></v-list-item-title>
-                <v-list-item-subtitle
-                  v-html="`<span class='font-italic'>Email:</span> ${user.email}`"></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
+      <div slot="list-content">
+        <template v-for="(user, index) in selItem.users">
+          <v-list-item
+            :key="user.id"
+          >
+            <v-list-item-avatar><img :src="user.avatar"></v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="user.fullName"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="`<span class='font-italic'>Email:</span> ${user.email}`"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </div>
     </view-dialog>
 
@@ -328,7 +325,7 @@
         this.editedIndex = -1;
         this.roleSaveDialog = true;
       },
-      deleteItemFromSelection (item) {
+      deleteItemFromSelection(item) {
         const index = this.editedItem.userIds.indexOf(item.id);
         if (index >= 0) this.editedItem.userIds.splice(index, 1)
       },
@@ -415,13 +412,13 @@
           } else {
             // Role has not been changed
             role = Role.getFromStore(data.id);
-            if((data.roleName === role.name) &&
-              (data.description === role.description)){
+            if ((data.roleName === role.name) &&
+              (data.description === role.description)) {
               return role
             }
             // Change role
             // Error: role name not exist in env
-            if (data.roleName !== role.name && !this.isEnvRole(data.roleName)){
+            if (data.roleName !== role.name && !this.isEnvRole(data.roleName)) {
               throw new errors.Conflict(this.$t('management.errRoleNameNotExistInEnv'));
             }
             role = new Role({

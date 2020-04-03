@@ -17,23 +17,20 @@
       :action-text="$t('management.close')"
       v-on:onClose="userTeamsDialog = false"
     >
-      <div slot="text-content">
-        <span v-if="!(selItem.teams && selItem.teams.length)">{{ $t('management.noData') }}</span>
-        <v-list three-line v-else>
-          <template v-for="(team, index) in selItem.teams">
-            <v-list-item
-              :key="team.id"
-            >
-              <v-list-item-avatar>
-                <v-icon>mdi-account-group</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title v-html="team.name"></v-list-item-title>
-                <v-list-item-subtitle v-html="team.description"></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
+      <div slot="list-content">
+        <template v-for="(team, index) in selItem.teams">
+          <v-list-item
+            :key="team.id"
+          >
+            <v-list-item-avatar>
+              <v-icon>mdi-account-group</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="team.name"></v-list-item-title>
+              <v-list-item-subtitle v-html="team.description"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </div>
     </view-dialog>
 
@@ -46,31 +43,28 @@
       :maxWidth="500"
       v-on:onClose="userProfileDialog = false"
     >
-      <div slot="text-content">
-        <span v-if="!profileList(selItem.profileId).length">{{ $t('management.noData') }}</span>
-        <v-list two-line v-else>
-          <template v-for="(item, index) in profileList(selItem.profileId)">
-            <v-subheader
-              v-if="item.header"
-              :key="item.header"
-            >
-              {{ item.header }}
-            </v-subheader>
-            <v-list-item
-              v-else
-              :key="`${item.name}-${index}`"
-              @click=""
-            >
-              <v-list-item-avatar>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title v-html="item.name"></v-list-item-title>
-                <v-list-item-subtitle v-html="item.val"></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
+      <div slot="list-content">
+        <template v-for="(item, index) in profileList(selItem.profileId)">
+          <v-subheader
+            v-if="item.header"
+            :key="item.header"
+          >
+            {{ item.header }}
+          </v-subheader>
+          <v-list-item
+            v-else
+            :key="`${item.name}-${index}`"
+            @click=""
+          >
+            <v-list-item-avatar>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="item.name"></v-list-item-title>
+              <v-list-item-subtitle v-html="item.val"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </div>
     </view-dialog>
 
@@ -227,7 +221,7 @@
       <!-- Field Profile -->
       <template v-slot:item.profile="{ item }">
         <v-icon v-if="profileList(item.profileId).length" @click="clickUserProfile(item)">mdi-contain</v-icon>
-        <v-icon v-else >mdi-code-brackets</v-icon>
+        <v-icon v-else>mdi-code-brackets</v-icon>
       </template>
       <!-- Field Active -->
       <template v-slot:item.active="{ item }">
@@ -574,11 +568,11 @@
           } else {
             user = User.getFromStore(data.id);
             // User has not been changed
-            if((data.email === user.email) &&
+            if ((data.email === user.email) &&
               (data.active === user.active) &&
               (data.firstName === user.firstName) &&
               (data.lastName === user.lastName) &&
-              (data.roleId === user.roleId)){
+              (data.roleId === user.roleId)) {
               return user
             }
             // Change user

@@ -1,5 +1,7 @@
 <template>
   <v-card
+    :color="getTheme.dark? 'secondary' : ''"
+    :dark="getTheme.dark? true : false"
     :outlined="outlined"
   >
     <div class="d-flex justify-space-between align-center align-baseline">
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   import ECharts from '~/components/chart/ECharts'
 
   const debug = require('debug')('app:comp.BoxChart');
@@ -68,6 +71,9 @@
       })
     },
     computed: {
+      ...mapGetters({
+        getTheme: 'getTheme',
+      }),
       getChartOptions() {
         const darkColor = this.$colors.grey.darken3;
         const lightColor = this.$colors.shades.white;

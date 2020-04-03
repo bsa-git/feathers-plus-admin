@@ -24,6 +24,8 @@
       <v-row justify="center">
         <v-col cols="12" sm="8">
           <v-card
+            :color="theme.dark? 'secondary' : ''"
+            :dark="theme.dark? true : false"
             :loading="isLoading"
           >
             <v-toolbar
@@ -70,6 +72,8 @@
               >
                 <v-textarea
                   class="pa-5"
+                  :class="theme.dark? 'secondary' : ''"
+                  :dark="theme.dark? true : false"
                   clearable
                   counter="512"
                   outline
@@ -124,6 +128,11 @@
     },
     created: function () {
       this.saveLogMessage = createLogMessage(this.$store);
+    },
+    computed: {
+      ...mapGetters({
+        theme: 'getTheme',
+      }),
     },
     methods: {
       changeTab: function (index) {

@@ -17,23 +17,20 @@
       :action-text="$t('management.close')"
       v-on:onClose="teamUsersDialog = false"
     >
-      <div slot="text-content">
-        <span v-if="!(selItem.members && selItem.members.length)">{{ $t('management.noData') }}</span>
-        <v-list three-line v-else>
-          <template v-for="(member, index) in selItem.members">
-            <v-list-item
-              :key="member.id"
-            >
-              <v-list-item-avatar><img :src="member.avatar"></v-list-item-avatar>
+      <div slot="list-content">
+        <template v-for="(member, index) in selItem.members">
+          <v-list-item
+            :key="member.id"
+          >
+            <v-list-item-avatar><img :src="member.avatar"></v-list-item-avatar>
 
-              <v-list-item-content>
-                <v-list-item-title v-html="member.fullName"></v-list-item-title>
-                <v-list-item-subtitle
-                  v-html="`<span class='font-italic'>Email:</span> ${member.email}`"></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list>
+            <v-list-item-content>
+              <v-list-item-title v-html="member.fullName"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="`<span class='font-italic'>Email:</span> ${member.email}`"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </div>
     </view-dialog>
 
@@ -172,6 +169,7 @@
   import ViewDialog from '~/components/dialogs/ViewDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
   import TableTopBar from '~/components/widgets/top-bars/SearchAndBtn';
+
   const errors = require('@feathersjs/errors');
   import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
@@ -310,7 +308,7 @@
     },
     methods: {
       isYouSelf(teamId) {
-        const teamIds = this.user? this.user.teams.map(team => team.id) : [];
+        const teamIds = this.user ? this.user.teams.map(team => team.id) : [];
         return teamIds.includes(teamId);
       },
       clickEditItem(item) {
@@ -403,8 +401,8 @@
           } else {
             // Team has not been changed
             team = Team.getFromStore(data.id);
-            if((data.teamName === team.name) &&
-              (data.description === team.description)){
+            if ((data.teamName === team.name) &&
+              (data.description === team.description)) {
               return team
             }
             // Change team

@@ -20,10 +20,8 @@
       :action-text="$t('management.close')"
       v-on:onClose="viewDialog = false"
     >
-      <div slot="text-content">
-        <span v-if="!(selItem.user || selItem.owner || selItem.formatMsg)">{{ $t('management.noData') }}</span>
-        <v-list three-line v-else-if="clickGetItem === 'owner'">
-          <v-list-item>
+      <div slot="list-content">
+          <v-list-item v-if="clickGetItem === 'owner'">
             <v-list-item-avatar><img :src="selItem.owner.avatar"></v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="selItem.owner.fullName"></v-list-item-title>
@@ -31,9 +29,7 @@
                 v-html="`<span class='font-italic'>Email:</span> ${selItem.owner.email}`"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </v-list>
-        <v-list three-line v-else-if="clickGetItem === 'user'">
-          <v-list-item>
+          <v-list-item v-if="clickGetItem === 'user'">
             <v-list-item-avatar><img :src="selItem.user.avatar"></v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="selItem.user.fullName"></v-list-item-title>
@@ -41,22 +37,27 @@
                 v-html="`<span class='font-italic'>Email:</span> ${selItem.user.email}`"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </v-list>
-        <v-textarea v-else-if="clickGetItem === 'msg'"
-                    class="pa-5"
-                    counter="512"
-                    outline
-                    auto-grow
-                    name="text-msg"
-                    :value="selItem.formatMsg"
-                    :rows="(selItem.formatMsg.split('\n').length > 5)? selItem.formatMsg.split('\n').length - 1 : -1"
+      </div>
+      <div slot="text-content">
+        <v-textarea
+          v-if="clickGetItem === 'msg'"
+          class="pa-5"
+          counter="512"
+          outline
+          auto-grow
+          name="text-msg"
+          :value="selItem.formatMsg"
+          :rows="(selItem.formatMsg.split('\n').length > 5)? selItem.formatMsg.split('\n').length - 1 : -1"
         ></v-textarea>
       </div>
     </view-dialog>
     <!--=== Log message table ===-->
     <v-row justify="center">
       <v-col cols="12" sm="10">
-        <v-card>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+        >
           <!-- Toolbar -->
           <v-toolbar color="primary" dark>
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
@@ -76,6 +77,8 @@
 
             <!-- Data Table -->
             <v-data-table
+              :class="theme.dark? 'secondary' : ''"
+              :dark="theme.dark? true : false"
               v-model="selected"
               :headers="headers"
               :items="logMessages"
@@ -264,6 +267,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
         isAdmin: 'isAdmin'
       }),
       logMessages() {

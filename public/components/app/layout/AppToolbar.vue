@@ -21,6 +21,8 @@
           :items="getSelLogMessages"
           item-key="id"
           :search="search"
+          :class="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
         >
           <!-- Field Icon -->
           <template v-slot:item.icon="{ item }">
@@ -74,36 +76,34 @@
       :action-text="$t('management.close')"
       v-on:onClose="viewDialog = false"
     >
+      <div slot="list-content">
+        <v-list-item v-if="clickGetItem === 'owner'">
+          <v-list-item-avatar><img :src="selItem.owner.avatar"></v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="selItem.owner.fullName"></v-list-item-title>
+            <v-list-item-subtitle
+              v-html="`<span class='font-italic'>Email:</span> ${selItem.owner.email}`"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="clickGetItem === 'user'">
+          <v-list-item-avatar><img :src="selItem.user.avatar"></v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="selItem.user.fullName"></v-list-item-title>
+            <v-list-item-subtitle
+              v-html="`<span class='font-italic'>Email:</span> ${selItem.user.email}`"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </div>
       <div slot="text-content">
-        <span v-if="!(selItem.user || selItem.owner || selItem.formatMsg)">{{ $t('management.noData') }}</span>
-        <v-list three-line v-else-if="clickGetItem === 'owner'">
-          <v-list-item>
-            <v-list-item-avatar><img :src="selItem.owner.avatar"></v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="selItem.owner.fullName"></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="`<span class='font-italic'>Email:</span> ${selItem.owner.email}`"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-list three-line v-else-if="clickGetItem === 'user'">
-          <v-list-item>
-            <v-list-item-avatar><img :src="selItem.user.avatar"></v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="selItem.user.fullName"></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="`<span class='font-italic'>Email:</span> ${selItem.user.email}`"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-textarea v-else-if="clickGetItem === 'msg'"
-                    class="pa-5"
-                    counter="512"
-                    outline
-                    auto-grow
-                    name="text-msg"
-                    :value="selItem.formatMsg"
-                    :rows="(selItem.formatMsg.split('\n').length > 5)? selItem.formatMsg.split('\n').length - 1 : -1"
+        <v-textarea
+          v-if="clickGetItem === 'msg'"
+          class="pa-5"
+          counter="512"
+          outline
+          auto-grow
+          name="text-msg"
+          :value="selItem.formatMsg"
+          :rows="(selItem.formatMsg.split('\n').length > 5)? selItem.formatMsg.split('\n').length - 1 : -1"
         ></v-textarea>
       </div>
     </view-dialog>
@@ -327,7 +327,7 @@
           notice.logNames.forEach(name => {
             _logMessages = this.logMessages.filter(msg => msg.name === name);
             notice.amount = _logMessages.length;
-            if(notice.amount){
+            if (notice.amount) {
               moment.locale(this.config.locale);
               notice.timeLabel = moment(_logMessages[0].dt).fromNow();
               notice.color = _logMessages[0].color;
@@ -359,6 +359,7 @@
       ...mapGetters({
         config: 'getConfig',
         user: 'getUser',
+        theme: 'getTheme',
         stateNotices: 'getNotices'
       }),
     },
@@ -385,7 +386,7 @@
         if (isDebug) debug('methods.onAllNotifications.selLogNames:', this.selLogNames);
         this.viewLogMessagesDialog = true;
       },
-      closeViewLogMessagesDialog(){
+      closeViewLogMessagesDialog() {
         // Close viewDialog
         this.viewLogMessagesDialog = false;
         // Get now date-time
@@ -393,7 +394,7 @@
         // Get stateNotices.checkAt from store
         let stateNoticesCheckAt = JSON.parse(this.stateNotices.checkAt);
         // Set checkAt for selNotification and stateNotices
-        if(this.selNotification >= 0){
+        if (this.selNotification >= 0) {
           let notice = this.getNotifications[this.selNotification];
           notice.checkAt = dtCheckAt;
           notice.logNames.forEach(logName => {
@@ -401,7 +402,7 @@
             stateNoticeCheckAt.checkAt = dtCheckAt;
           });
           this.selNotification = -1;
-        }else {
+        } else {
           this.getNotifications.forEach(notice => {
             notice.checkAt = dtCheckAt;
             notice.logNames.forEach(logName => {

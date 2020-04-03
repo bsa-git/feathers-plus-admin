@@ -1,8 +1,9 @@
 export default {
   legend: {
     show: true,
-    orient: 'vertical',
-    left: 10,
+    // orient: 'vertical',
+    // left: 10,
+    bottom: '2%'
   },
   tooltip: {
     trigger: 'item',

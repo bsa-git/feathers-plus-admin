@@ -5,13 +5,21 @@
     ></app-page-header>
     <v-row justify="center">
       <v-col cols="12" sm="8">
-        <v-card>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+        >
           <!-- Toolbar -->
           <v-toolbar color="primary" dark>
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
             <v-toolbar-title>{{ $t('settings.environment') }}</v-toolbar-title>
           </v-toolbar>
-          <v-list three-line subheader>
+          <v-list
+            :color="theme.dark? 'secondary' : ''"
+            :dark="theme.dark? true : false"
+            three-line
+            subheader
+          >
             <!-- Sub Header -->
             <v-subheader>{{ $t('settings.general') }}</v-subheader>
             <!-- GENERAL -->
@@ -272,6 +280,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
       }),
     },
   }

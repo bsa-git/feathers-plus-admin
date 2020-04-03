@@ -1,5 +1,9 @@
 <template>
-  <v-card :outlined="outlined">
+  <v-card
+    :color="getTheme.dark? 'secondary' : ''"
+    :dark="getTheme.dark? true : false"
+    :outlined="outlined"
+  >
     <v-card-text class="pa-0">
       <v-container class="pa-0">
         <v-row class="ma-0">
@@ -32,6 +36,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   import ECharts from '~/components/chart/ECharts'
 
   const debug = require('debug')('app:comp.MiniChart');
@@ -80,6 +85,9 @@
       })
     },
     computed: {
+      ...mapGetters({
+        getTheme: 'getTheme',
+      }),
       getChartOptions() {
         const darkColor = this.$colors.grey.darken3;
         const lightColor = this.$colors.shades.white;

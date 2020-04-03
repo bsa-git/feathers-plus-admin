@@ -5,6 +5,15 @@
       :page-title="description"
     ></app-page-header>
 
+    <!--=== ECharts Logo ===-->
+    <div class="d-flex justify-center">
+      <a href="https://github.com/Justineo/vue-echarts" :title="$t('echartDemo.vueEChartsOnGithub')" target="_blank">
+        <logo-chart
+          :init-options="initOptions"
+        ></logo-chart>
+      </a>
+    </div>
+
     <!--=== Box charts dialog ===-->
     <view-dialog
       :dialog="boxChartDialog"
@@ -27,7 +36,7 @@
           :outlined="true"
         />
         <box-chart
-          v-else-if="aliasBoxChart === 'pageView'"
+          v-if="aliasBoxChart === 'pageView'"
           title="Page View"
           :sub-title="dataset.monthUniqueVisit.value"
           icon="mdi-chart-line-variant"
@@ -37,7 +46,7 @@
           :outlined="true"
         />
         <box-chart
-          v-else-if="aliasBoxChart === 'dailySalesTrend'"
+          v-if="aliasBoxChart === 'dailySalesTrend'"
           title="Daily Sales Trend"
           :sub-title="dataset.dayPageView.value"
           icon="mdi-chart-line-variant"
@@ -47,7 +56,7 @@
           :outlined="true"
         />
         <box-chart
-          v-else-if="aliasBoxChart === 'monthlySalesTrend'"
+          v-if="aliasBoxChart === 'monthlySalesTrend'"
           title="Monthly Sales Trend"
           :sub-title="dataset.monthUniqueVisit.value"
           icon="mdi-chart-line-variant"
@@ -63,8 +72,10 @@
     <v-row justify="center">
       <v-col cols="12">
         <div class="text-center">
-          <v-btn-toggle class="" v-model="realTime"
-                        :title="`${$t('echartDemo.value')}: ${realTime === 'start'? $t('echartDemo.start') : $t('echartDemo.stop')}`">
+          <v-btn-toggle
+            class="" v-model="realTime"
+            :title="`${$t('echartDemo.value')}: ${realTime === 'start'? $t('echartDemo.start') : $t('echartDemo.stop')}`"
+          >
             <v-btn value="start">
               {{ $t('echartDemo.start') }}
             </v-btn>
@@ -168,7 +179,11 @@
         <h4>Complex Charts</h4>
       </v-col>
       <v-col cols="12" sm="6" lg="4">
-        <v-card outlined>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+          outlined
+        >
           <box-chart
             title="Monthly Sales"
             :sub-title="dataset.monthSales.value"
@@ -189,20 +204,24 @@
             :is-more="false"
             :outlined="true"
           />
+          <v-divider />
           <v-card-actions>
             <v-spacer/>
+            <!-- color="primary" -->
             <v-btn
               v-if="realTime === 'stop'"
-              text
+              small
               color="primary"
+              text
               @click="clickRealTime('start')"
             >
               {{ $t('echartDemo.start') }}
             </v-btn>
             <v-btn
               v-else
-              text
+              small
               color="primary"
+              text
               @click="clickRealTime('stop')"
             >
               {{ $t('echartDemo.stop') }}
@@ -211,7 +230,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" lg="4">
-        <v-card outlined>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+          outlined
+        >
           <box-chart
             title="Page View"
             :sub-title="dataset.monthUniqueVisit.value"
@@ -232,6 +255,7 @@
             :is-more="false"
             :outlined="true"
           />
+          <v-divider />
           <v-card-actions>
             <v-spacer/>
             <v-btn
@@ -254,7 +278,11 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" lg="4">
-        <v-card outlined>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+          outlined
+        >
           <box-chart
             title="Daily Sales Trend"
             :sub-title="dataset.dayPageView.value"
@@ -275,6 +303,7 @@
             :is-more="false"
             :outlined="true"
           />
+          <v-divider />
           <v-card-actions>
             <v-spacer/>
             <v-btn
@@ -398,6 +427,8 @@
     locationData,
   } from '~/api/demo/chart/chart-data';
 
+  // ECharts Logo
+  import LogoChart from '~/components/app/widgets/echarts/logo';
 
   import miniBarOptions from '~/api/app/chart/mini-bar'
   import miniLineOptions from '~/api/app/chart/mini-line'
@@ -421,12 +452,16 @@
       MiniChart,
       BoxChart,
       ViewDialog,
-      VWidget
+      VWidget,
+      LogoChart
     },
     data() {
       return {
         title: this.$t('chartDemo.title'),
         description: this.$t('chartDemo.description'),
+        initOptions: {
+          renderer: 'canvas'
+        },
         boxChartDialog: false,
         aliasBoxChart: '',
         seconds: -1,
