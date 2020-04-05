@@ -135,6 +135,13 @@
 
             <v-list-item >
               <v-list-item-content>
+                <v-list-item-title>IS_AUTH_MANAGER</v-list-item-title>
+                <v-list-item-subtitle v-html>{{ config.isAuthManager }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item >
+              <v-list-item-content>
                 <v-list-item-title>EXTERNAL_ACCOUNTS</v-list-item-title>
                 <v-list-item-subtitle v-html>{{ config.externalAccounts }}</v-list-item-subtitle>
               </v-list-item-content>
