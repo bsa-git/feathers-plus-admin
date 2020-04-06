@@ -188,7 +188,7 @@
 
   const moment = require('moment');
   import util from '~/plugins/lib/util';
-  import colors from 'vuetify/lib/util/colors';
+  // import colors from 'vuetify/lib/util/colors';
   import Service from '~/plugins/service-helpers/service-client.class';
   import userMenu from '~/api/app/user-menu.json';
   import ViewDialog from '~/components/dialogs/ViewDialog';
@@ -281,15 +281,28 @@
       })
     },
     computed: {
+      ...mapGetters({
+        config: 'getConfig',
+        user: 'getUser',
+        isAdmin: 'isAdmin',
+        theme: 'getTheme',
+        stateNotices: 'getNotices'
+      }),
       logMessages() {
         const data = [];
+        if(!this.user) return data;
         let _logMessages = [];
         const idFieldLogMessage = this.$store.state['log-messages'].idField;
+        const idFieldUser = this.$store.state.users.idField;
+        const userId = this.user? this.user[idFieldUser] : '';
         const {LogMessage} = this.$FeathersVuex;
         this.getQueryNotifications.forEach(q => {
           let findLogMessages = LogMessage.findInStore(q).data;
           _logMessages = _logMessages.concat(findLogMessages);
         });
+        if(!this.isAdmin){
+          _logMessages = _logMessages.filter(msg => msg.userId === userId);
+        }
         util.sortByStringField(_logMessages, 'createdAt', false);
         _logMessages.forEach(logMessage => {
           const logMessageId = logMessage[idFieldLogMessage];
@@ -356,12 +369,6 @@
         });
         return qq
       },
-      ...mapGetters({
-        config: 'getConfig',
-        user: 'getUser',
-        theme: 'getTheme',
-        stateNotices: 'getNotices'
-      }),
     },
     methods: {
       onNavLeft() {

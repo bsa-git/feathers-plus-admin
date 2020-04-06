@@ -154,7 +154,8 @@ class Service {
       logMessages = logMessages.filter(msg => msg.ownerId !== msg.userId);
       if(logMessages.length){
         let ownerIds = logMessages.map(msg => msg.ownerId);
-        ownerIds.forEach(async (ownerId) => await this.get('users', ownerId));
+        // ownerIds.forEach(async (ownerId) => await this.get('users', ownerId));
+        ownerIds.forEach((ownerId) => this.get('users', ownerId));
         debug('findAllForUser.ownerIds:', ownerIds);
       }
     }

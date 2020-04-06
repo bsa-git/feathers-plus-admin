@@ -268,13 +268,22 @@
       ...mapGetters({
         config: 'getConfig',
         theme: 'getTheme',
-        isAdmin: 'isAdmin'
+        isAdmin: 'isAdmin',
+        user: 'getUser'
       }),
       logMessages() {
+        let logMessages;
         const data = [];
+        if(!this.user) return data;
         const idFieldLogMessage = this.$store.state['log-messages'].idField;
+        const idFieldUser = this.$store.state.users.idField;
+        const userId = this.user[idFieldUser];
         const {LogMessage} = this.$FeathersVuex;
-        const logMessages = LogMessage.findInStore({query: {$sort: {createdAt: -1}}}).data;
+        if(this.isAdmin){
+          logMessages = LogMessage.findInStore({query: {$sort: {createdAt: -1}}}).data;
+        }else {
+          logMessages = LogMessage.findInStore({query: {userId: userId, $sort: {createdAt: -1}}}).data;
+        }
         logMessages.forEach(logMessage => {
           const logMessageId = logMessage[idFieldLogMessage];
           // Get logMessage
