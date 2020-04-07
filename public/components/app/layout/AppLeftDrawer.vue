@@ -18,7 +18,10 @@
         <span class="font-weight-black font-italic">{{ logoTitle }}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon :to="$i18n.path(homePath)" class="mr-3" :title="$t('app_menu.home')">
+      <v-btn icon  v-if="$vuetify.breakpoint.name === 'xs'" @click.stop="compDrawer = false" class="mr-3" :title="$t('common.close')">
+        <v-icon>mdi-close-thick</v-icon>
+      </v-btn>
+      <v-btn icon v-else :to="$i18n.path(homePath)" class="mr-3" :title="$t('app_menu.home')">
         <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-toolbar>
