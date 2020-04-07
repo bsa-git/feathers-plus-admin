@@ -1,5 +1,5 @@
 //--- User messages notifier ---//
-const {inspector} = require('../../plugins/lib');
+const {inspector, AuthServer} = require('../../plugins');
 const errors = require('@feathersjs/errors');
 const {detectLang, getLangMessages} = require('../../plugins/lib/lang-helpers');
 const debug = require('debug')('app:service.authManagement.notifier');
@@ -122,7 +122,9 @@ module.exports = function(app) {
           subject: 'Confirm Password Change',
           html: langMsg
         };
-        sendEmail(email);
+        if(AuthServer.isAuthManager()){
+          sendEmail(email);
+        }
         return email;
       case 'identityChange':
         if(isLog) inspector('auth-management.notifier.user:', user);

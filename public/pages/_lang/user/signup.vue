@@ -13,7 +13,10 @@
     ></input-dialog>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+        >
           <!-- Form title -->
           <v-card-title>
             <v-icon class="mr-3">mdi-account-plus</v-icon>
@@ -166,6 +169,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
       }),
       ...mapState('auth', [
         'user'

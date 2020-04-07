@@ -2,7 +2,10 @@
   <div class="main-content">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+        >
           <v-card-title>
             <span class="headline">{{ $t('authManagement.titleNewPwd') }}</span>
             <v-spacer></v-spacer>
@@ -103,6 +106,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
       }),
     },
     methods: {

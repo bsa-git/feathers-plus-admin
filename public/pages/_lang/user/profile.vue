@@ -2,7 +2,10 @@
   <div class="main-content">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card>
+        <v-card
+          :color="theme.dark? 'secondary' : ''"
+          :dark="theme.dark? true : false"
+        >
           <!-- Form title -->
           <v-card-title>
             <v-icon class="mr-3">mdi-account-circle</v-icon>
@@ -153,6 +156,7 @@
     computed: {
       ...mapGetters({
         config: 'getConfig',
+        theme: 'getTheme',
         user: 'getUser'
       }),
     },

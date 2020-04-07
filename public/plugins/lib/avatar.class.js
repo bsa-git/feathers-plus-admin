@@ -35,12 +35,11 @@ class Avatar {
       defaultType: 'mp', // '404'
       size: 80,
       defaultImage: '/static/img/avatar/user_default.png',
-      isMultiImages: true,
+      isMultiImages: false,
       multiImages: 'vuetifyAvatars',// avataaars || vuetifyAvatars || localAvatars
     };
     Object.assign(this.params, params);
     this.email = email;
-
   }
 
   /**
@@ -99,7 +98,6 @@ class Avatar {
    * @return {string}
    */
   getRandomAvatar() {
-
     let avatar = '';
     switch(this.params.multiImages) {
     case 'localAvatars':

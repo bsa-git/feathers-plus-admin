@@ -233,11 +233,27 @@
             if (isDebug) debug('passwordChange.OK');
           }
           if (this.isChangeEmail()) {
-            if (isDebug) debug('<<identityChange>> Start identityChange');
-            changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
-            this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
-            this.inputCodeDialog = true;
-            if (isDebug) debug('identityChange.OK');
+            // Is auth manager
+            if(this.config.isAuthManager){
+              if (isDebug) debug('<<identityChange>> Start identityChange');
+              changeResult = await Auth.identityChange(data.password, {email: data.email}, {email: this.user.email});
+              this.showWarning({text: this.$t('authManagement.resendVerification'), timeout: 10000});
+              this.inputCodeDialog = true;
+              if (isDebug) debug('identityChange.OK');
+            } else {
+              // Get new avatar
+              const avatar = new this.$Avatar(this.model.email);
+              const avatarImage = await avatar.getImage();
+              userData = {
+                [idFieldUser]: this.user[idFieldUser],
+                email: data.email,
+                avatar: avatarImage
+              };
+              const user = new User(userData);
+              changeResult = await user.save();
+              if (isDebug) debug('emailChange.OK');
+              this.showSuccess(this.$t('authManagement.successfulUserVerification'));
+            }
           }
           return changeResult;
         } catch (error) {

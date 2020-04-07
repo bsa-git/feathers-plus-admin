@@ -410,7 +410,7 @@ class AuthServer {
    * @return {boolean}
    */
   static isAuthManager() {
-    return (process.env.IS_AUTH_MANAGER !== undefined)? isTrue(process.env.IS_AUTH_MANAGER) : true;
+    return (process.env.IS_AUTH_MANAGER === undefined)? true : isTrue(process.env.IS_AUTH_MANAGER);
   }
 
   /**
