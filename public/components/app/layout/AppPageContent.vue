@@ -22,6 +22,9 @@
     components: {
       AppFooter,
     },
+    props: {
+      refAppToolbar: Object,
+    },
     data() {
       return {};
     },

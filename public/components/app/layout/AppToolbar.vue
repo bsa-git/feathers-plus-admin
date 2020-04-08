@@ -188,7 +188,6 @@
 
   const moment = require('moment');
   import util from '~/plugins/lib/util';
-  // import colors from 'vuetify/lib/util/colors';
   import Service from '~/plugins/service-helpers/service-client.class';
   import userMenu from '~/api/app/user-menu.json';
   import ViewDialog from '~/components/dialogs/ViewDialog';

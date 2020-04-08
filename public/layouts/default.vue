@@ -3,6 +3,7 @@
     <!-- Top toolbar -->
     <app-toolbar
       v-on:onNavLeft="navLeft = !navLeft"
+      ref="refAppToolbar"
     ></app-toolbar>
     <!-- Left Drawer -->
     <app-left-drawer
@@ -16,7 +17,9 @@
       v-on:onNavLeft="modelNavLeft"
     ></app-left-drawer>
     <!-- Page content -->
-    <app-page-content></app-page-content>
+    <app-page-content
+      :ref-app-toolbar="refAppToolbar"
+    ></app-page-content>
     <!-- Go to top -->
     <app-fab></app-fab>
     <!-- Right Drawer -->
@@ -62,11 +65,14 @@
       return {
         navLeft: true,
         appMenu,
+        refAppToolbar: null
       }
     },
     created: function () {},
     mounted: function () {
       this.$nextTick(function () {
+        // Get refAppToolbar
+        this.refAppToolbar = Object.assign({}, this.$refs['refAppToolbar']);
         // Init vuetify
         syncStore.initVuetify(this, true);
       })

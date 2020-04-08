@@ -443,7 +443,7 @@
   import barAndLinesOptions from '~/api/app/chart/bar-and-lines'
 
   const debug = require('debug')('app:page.chart');
-  const isLog = true;
+  const isLog = false;
   const isDebug = false;
 
   export default {
