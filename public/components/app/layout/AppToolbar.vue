@@ -113,7 +113,7 @@
       dark
       app
     >
-      <!-- Toggle show NavLeft pl-3 -->
+      <!-- Toggle show NavLeft -->
       <v-toolbar-title
         class="mr-3 "
       >
