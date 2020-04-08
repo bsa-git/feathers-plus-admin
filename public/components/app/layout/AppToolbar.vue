@@ -115,7 +115,7 @@
     >
       <!-- Toggle show NavLeft -->
       <v-toolbar-title
-        class="mr-3 "
+        class=""
       >
         <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
       </v-toolbar-title>
