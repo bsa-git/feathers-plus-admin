@@ -114,11 +114,7 @@
       app
     >
       <!-- Toggle show NavLeft -->
-      <v-toolbar-title
-        class=""
-      >
-        <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
-      </v-toolbar-title>
+      <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
       <!-- Search web -->
       <v-text-field
         flat
