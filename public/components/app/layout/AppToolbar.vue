@@ -113,9 +113,9 @@
       dark
       app
     >
-      <!-- Toggle show NavLeft -->
+      <!-- Toggle show NavLeft pl-3 -->
       <v-toolbar-title
-        class="ml-0 pl-3"
+        class="mr-3 "
       >
         <v-app-bar-nav-icon @click.stop="onNavLeft"></v-app-bar-nav-icon>
       </v-toolbar-title>
