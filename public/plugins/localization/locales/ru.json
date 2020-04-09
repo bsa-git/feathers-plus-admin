@@ -103,8 +103,9 @@
     "color": "Цвет",
     "tooltip": "Подсказка",
     "pickers": "Выбор данных",
-    "timepicker": "Выбор времени",
-    "datepicker": "Выбор даты",
+    "color_picker": "Выбор цвета",
+    "time_picker": "Выбор времени",
+    "date_picker": "Выбор даты",
     "layout": "Макет",
     "bottom_sheets": "Нижние панели",
     "expansion_panels": "Панели расширения",
@@ -188,6 +189,22 @@
   "dashboard": {
     "title": "Рабочий стол",
     "description": "Суммарная Информация"
+  },
+  "media": {
+    "title": "Медиа",
+    "description": "Примеры работы с изображениями"
+  },
+  "colorPicker": {
+    "title": "Выбор цвета",
+    "description": "Примеры выбора цвета"
+  },
+  "datePicker": {
+    "title": "Выбор даты",
+    "description": "Примеры выбора даты"
+  },
+  "timePicker": {
+    "title": "Выбор времени",
+    "description": "Примеры выбора времени"
   },
   "error": {
     "title": "Ошибка",

@@ -24,41 +24,19 @@
         </v-col>
       </template>
       <template v-if="!user">
-        <v-col cols="12" sm="6" lg="3">
+        <v-col
+          v-for="(item, i) in miniStatistic"
+          :key="i"
+          cols="12"
+          sm="6"
+          lg="3"
+        >
           <mini-statistic
-            icon="fab fa-facebook-f"
-            title="100+"
-            sub-title="Likes"
-            color="indigo"
-          >
-          </mini-statistic>
-        </v-col>
-        <v-col cols="12" sm="6" lg="3">
-          <mini-statistic
-            icon="fab fa-google"
-            title="150+"
-            sub-title="Connections"
-            color="red"
-          >
-          </mini-statistic>
-        </v-col>
-        <v-col cols="12" sm="6" lg="3">
-          <mini-statistic
-            icon="fab fa-twitter"
-            title="200+"
-            sub-title="Followers"
-            color="teal"
-          >
-          </mini-statistic>
-        </v-col>
-        <v-col cols="12" sm="6" lg="3">
-          <mini-statistic
-            icon="fab fa-instagram"
-            title="50+"
-            sub-title="Shots"
-            color="purple"
-          >
-          </mini-statistic>
+            :icon="item.icon"
+            :title="item.title"
+            :sub-title="item.subtitle"
+            :color="item.color"
+          />
         </v-col>
       </template>
     </v-row>
@@ -304,6 +282,7 @@
   import MiniChart from '~/components/widgets/chart/MiniChart';
   import BoxChart from '~/components/widgets/chart/BoxChart';
   import VWidget from '~/components/widgets/VWidget';
+  import miniStatistic from '~/api/demo/list/mini-statistic';
   import {
     StackData,
     SinData,
@@ -370,6 +349,7 @@
           location: locationData,
           stackData: StackData,
         },
+        miniStatistic,
         barAndLinesChart: null,
 
         miniBarOptions,

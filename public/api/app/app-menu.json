@@ -109,8 +109,7 @@
     "name": "media",
     "alias": "media",
     "icon": "mdi-monitor-dashboard",
-    "to": "/media",
-    "inactive": true
+    "to": "/media"
   },
   {
     "title": "Widgets",
@@ -121,20 +120,6 @@
     "disabled": false,
     "to": "/widgets",
     "items": [
-      {
-        "name": "widgets-social",
-        "alias": "social",
-        "title": "Social",
-        "to": "/widgets/social",
-        "inactive": true
-      },
-      {
-        "name": "widgets-statistic",
-        "alias": "statistic",
-        "title": "Statistic",
-        "to": "/widgets/statistic",
-        "inactive": true
-      },
       {
         "name": "widgets-chart",
         "alias": "chartDemo",
@@ -153,13 +138,26 @@
         "title": "List",
         "to": "/widgets/widget-list",
         "inactive": true
+      },
+      {
+        "name": "widgets-social",
+        "alias": "social",
+        "title": "Social",
+        "to": "/widgets/social",
+        "inactive": true
+      },
+      {
+        "name": "widgets-statistic",
+        "alias": "statistic",
+        "title": "Statistic",
+        "to": "/widgets/statistic",
+        "inactive": true
       }
     ]
   },
   {
     "header": "UI Elements",
-    "alias": "ui_elements",
-    "inactive": true
+    "alias": "ui_elements"
   },
   {
     "title": "General",
@@ -287,19 +285,24 @@
     "alias": "pickers",
     "icon": "mdi-calendar-multiple",
     "to": "/pickers",
-    "inactive": true,
     "items": [
       {
-        "name": "pickers-timepicker",
-        "alias": "timepicker",
-        "title": "Timepicker",
+        "name": "pickers-color",
+        "alias": "color_picker",
+        "title": "Color picker",
         "to": "/pickers/color"
       },
       {
-        "name": "pickers-datepicker",
-        "alias": "datepicker",
-        "title": "Datepicker",
-        "to": "/pickers/datepicker"
+        "name": "pickers-date",
+        "alias": "date_picker",
+        "title": "Date picker",
+        "to": "/pickers/date"
+      },
+      {
+        "name": "pickers-time",
+        "alias": "time_picker",
+        "title": "Time picker",
+        "to": "/pickers/time"
       }
     ]
   },

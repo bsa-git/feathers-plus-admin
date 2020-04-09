@@ -105,8 +105,9 @@
     "color": "Color",
     "tooltip": "Tooltip",
     "pickers": "Pickers",
-    "timepicker": "Timepicker",
-    "datepicker": "Datepicker",
+    "color_picker": "Color picker",
+    "time_picker": "Time picker",
+    "date_picker": "Date picker",
     "layout": "Layout",
     "bottom_sheets": "Bottom panels",
     "expansion_panels": "Expansion panels",
@@ -188,6 +189,22 @@
   "dashboard": {
     "title": "Dashboard",
     "description": "Summary Information"
+  },
+  "media": {
+    "title": "Media",
+    "description": "Image Examples"
+  },
+  "colorPicker": {
+    "title": "Color picker",
+    "description": "Color Picker Examples"
+  },
+  "datePicker": {
+    "title": "Date picker",
+    "description": "Date Picker Examples"
+  },
+  "timePicker": {
+    "title": "Time picker",
+    "description": "Time Picker Examples"
   },
   "error": {
     "title": "Error",
