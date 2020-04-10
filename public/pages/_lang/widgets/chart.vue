@@ -22,7 +22,7 @@
       header-icon="mdi-menu"
       :header-title="$t('app_menu.chartDemo')"
       :action-text="$t('management.close')"
-      v-on:onClose="boxChartDialog = false; aliasBoxChart = ''"
+      v-on:onClose="boxChartDialog = false"
     >
       <div slot="card-content">
         <box-chart
