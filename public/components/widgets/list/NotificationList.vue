@@ -1,8 +1,8 @@
 <template>
   <v-card
     class="elevation-0"
-    :color="theme.dark? 'secondary' : ''"
-    :dark="theme.dark? true : false"
+    color="secondary"
+    :dark="theme.dark"
   >
     <v-toolbar dense color="transparent" class="elevation-0">
       <v-toolbar-title>{{ $t('app_notification.notification') }}</v-toolbar-title>
@@ -11,7 +11,7 @@
     <!-- rounded -->
     <v-list
       :color="theme.dark? 'secondary' : ''"
-      :dark="theme.dark? true : false"
+      :dark="theme.dark"
       two-line
       subheader
     >

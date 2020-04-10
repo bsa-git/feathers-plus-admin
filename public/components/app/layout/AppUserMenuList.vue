@@ -1,7 +1,7 @@
 <template>
   <v-list
     :color="theme.dark? 'secondary' : ''"
-    :dark="theme.dark? true : false"
+    :dark="theme.dark"
   >
     <template v-for="(item, i) in filterUserMenu">
       <v-subheader v-if="item.header" :key="i">{{ $t(`user_menu.${item.name}`) }}</v-subheader>

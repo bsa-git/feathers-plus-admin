@@ -2,8 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" :max-width="maxWidth" persistent>
       <v-card
-        :color="theme.dark? 'secondary' : ''"
-        :dark="theme.dark? true : false"
+        color="secondary"
+        :dark="theme.dark"
       >
         <!-- Toolbar -->
         <v-toolbar color="primary" elevation="0" dark>

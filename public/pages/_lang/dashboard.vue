@@ -47,8 +47,8 @@
       </v-col>
       <v-col cols="12" sm="6" lg="4">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="primary"
+          :dark="theme.dark"
           outlined
         >
           <box-chart
@@ -74,11 +74,10 @@
           <v-divider />
           <v-card-actions>
             <v-spacer/>
-            <!-- color="primary" -->
             <v-btn
               v-if="realTime === 'stop'"
               small
-              color="primary"
+              dark
               text
               @click="clickRealTime('start')"
             >
@@ -87,7 +86,7 @@
             <v-btn
               v-else
               small
-              color="primary"
+              dark
               text
               @click="clickRealTime('stop')"
             >
@@ -98,8 +97,8 @@
       </v-col>
       <v-col cols="12" sm="6" lg="4">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="primary"
+          :dark="theme.dark"
           outlined
         >
           <box-chart
@@ -128,7 +127,7 @@
             <v-btn
               v-if="realTime === 'stop'"
               text
-              color="primary"
+              dark
               @click="clickRealTime('start')"
             >
               {{ $t('echartDemo.start') }}
@@ -136,7 +135,7 @@
             <v-btn
               v-else
               text
-              color="primary"
+              dark
               @click="clickRealTime('stop')"
             >
               {{ $t('echartDemo.stop') }}
@@ -146,8 +145,8 @@
       </v-col>
       <v-col cols="12" sm="6" lg="4">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="primary"
+          :dark="theme.dark"
           outlined
         >
           <box-chart
@@ -176,7 +175,7 @@
             <v-btn
               v-if="realTime === 'stop'"
               text
-              color="primary"
+              dark
               @click="clickRealTime('start')"
             >
               {{ $t('echartDemo.start') }}
@@ -184,7 +183,7 @@
             <v-btn
               v-else
               text
-              color="primary"
+              dark
               @click="clickRealTime('stop')"
             >
               {{ $t('echartDemo.stop') }}

@@ -2,8 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="320">
       <v-card
-        :color="theme.dark? 'secondary' : ''"
-        :dark="theme.dark? true : false"
+        color="secondary"
+        :dark="theme.dark"
       >
         <v-card-title class="title">{{ titleDialog }}?</v-card-title>
         <v-card-text>

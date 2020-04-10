@@ -36,8 +36,8 @@
     <v-row>
       <v-col cols="12" sm="6" offset-sm="3">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="secondary"
+          :dark="theme.dark"
         >
           <v-container fluid>
             <v-row>

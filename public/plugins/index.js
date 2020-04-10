@@ -1,7 +1,7 @@
 
 // require('@babel/polyfill');
 import vueI18n from '~/plugins/localization/vue-i18n';
-import veeValidate from '~/plugins/validators/vee-validate';
+import veeValidate from '~/plugins/vuetify/vee-validate';
 import syncStore from '~/plugins/lib/sync-store';
 import util from '~/plugins/lib/util';
 import HttpBox from '~/plugins/lib/http.client.class';

@@ -56,7 +56,7 @@
       <v-col cols="12" sm="10">
         <v-card
           :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          :dark="theme.dark"
         >
           <!-- Toolbar -->
           <v-toolbar color="primary" dark>
@@ -78,7 +78,7 @@
             <!-- Data Table -->
             <v-data-table
               :class="theme.dark? 'secondary' : ''"
-              :dark="theme.dark? true : false"
+              :dark="theme.dark"
               v-model="selected"
               :headers="headers"
               :items="logMessages"

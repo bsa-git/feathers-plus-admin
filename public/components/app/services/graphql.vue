@@ -24,8 +24,8 @@
       <v-row justify="center">
         <v-col cols="12" sm="8">
           <v-card
-            :color="theme.dark? 'secondary' : ''"
-            :dark="theme.dark? true : false"
+            color="secondary"
+            :dark="theme.dark"
             :loading="isLoading"
           >
             <v-toolbar
@@ -73,7 +73,7 @@
                 <v-textarea
                   class="pa-5"
                   :class="theme.dark? 'secondary' : ''"
-                  :dark="theme.dark? true : false"
+                  :dark="theme.dark"
                   clearable
                   counter="512"
                   outline

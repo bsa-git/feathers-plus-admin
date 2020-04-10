@@ -6,8 +6,8 @@
     <v-row justify="center">
       <v-col cols="12" sm="8">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="secondary"
+          :dark="theme.dark"
         >
           <!-- Toolbar -->
           <v-toolbar color="primary" dark>
@@ -15,8 +15,8 @@
             <v-toolbar-title>{{ $t('settings.environment') }}</v-toolbar-title>
           </v-toolbar>
           <v-list
-            :color="theme.dark? 'secondary' : ''"
-            :dark="theme.dark? true : false"
+            color="secondary"
+            :dark="theme.dark"
             three-line
             subheader
           >

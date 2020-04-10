@@ -21,8 +21,8 @@
           :items="getSelLogMessages"
           item-key="id"
           :search="search"
-          :class="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          class="secondary"
+          :dark="theme.dark"
         >
           <!-- Field Icon -->
           <template v-slot:item.icon="{ item }">

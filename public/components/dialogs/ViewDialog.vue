@@ -2,8 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" :max-width="maxWidth" scrollable>
       <v-card
-        :color="theme.dark? 'secondary' : ''"
-        :dark="theme.dark? true : false"
+        color="secondary"
+        :dark="theme.dark"
       >
         <!-- Toolbar -->
         <v-toolbar color="primary" elevation="0" dense dark>
@@ -22,8 +22,8 @@
           <slot name="text-content"></slot>
           <v-list
             three-line
-            :color="theme.dark? 'secondary' : ''"
-            :dark="theme.dark? true : false"
+            color="secondary"
+            :dark="theme.dark"
           >
             <slot name="list-content"></slot>
           </v-list>

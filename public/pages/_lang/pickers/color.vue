@@ -19,7 +19,7 @@
       >
         <v-card
           color="secondary"
-          :dark="theme.dark? true : false"
+          :dark="theme.dark"
         >
           <v-card-text>
             <v-row>
@@ -78,7 +78,7 @@
       >
         <v-card
           color="secondary"
-          :dark="theme.dark? true : false"
+          :dark="theme.dark"
         >
           <v-card-text>
             <v-row justify="space-around">
@@ -105,7 +105,7 @@
       >
         <v-card
           color="secondary"
-          :dark="theme.dark? true : false"
+          :dark="theme.dark"
         >
           <v-card-text>
             <v-row justify="space-around">
@@ -156,7 +156,7 @@
       >
         <v-card
           color="secondary"
-          :dark="theme.dark? true : false"
+          :dark="theme.dark"
         >
           <v-card-text>
             <v-row justify="space-around">

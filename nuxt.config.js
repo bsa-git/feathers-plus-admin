@@ -130,7 +130,14 @@ module.exports = {
   ** Doc: https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/style/app.sass']
+    customVariables: ['~/assets/style/app.sass'],
+    defaultAssets: {
+      font: {
+        family: 'Roboto'
+      },
+      icons: 'mdi'
+    },
+    optionsPath: '~/plugins/vuetify/vuetify.options.js'
   },
 
   /*

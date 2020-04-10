@@ -3,8 +3,8 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card
-          :color="theme.dark? 'secondary' : ''"
-          :dark="theme.dark? true : false"
+          color="secondary"
+          :dark="theme.dark"
         >
           <!-- Form title -->
           <v-card-title>
