@@ -4,6 +4,10 @@
     <app-page-header
       :page-title="description"
     ></app-page-header>
+    <!--=== Description ===-->
+    <blockquote class="blockquote line-left"><em>The <kbd>v-color-picker</kbd> allows you to select a color using a variety
+      of input methods.</em></blockquote>
+    <br/>
     <!--=== Model ===-->
     <div class="title">Model</div>
     <div class="subtitle-1">The <kbd>v-color-picker</kbd> uses the <kbd>v-model</kbd> prop to control the color
