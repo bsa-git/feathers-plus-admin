@@ -2,9 +2,12 @@
   <div>
     <v-row justify="center">
       <v-col cols="12" sm="8">
-        <v-card>
+        <v-card
+          color="secondary"
+          :dark="theme.dark"
+        >
           <!-- Toolbar -->
-          <v-toolbar color="" dark>
+          <v-toolbar color="primary"  dark>
             <v-icon class="mr-3" v-if="pageIcon">{{ pageIcon }}</v-icon>
             <v-app-bar-nav-icon v-else></v-app-bar-nav-icon>
             <v-toolbar-title>{{ nodalItem.title }}</v-toolbar-title>
@@ -42,8 +45,9 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   const debug = require('debug')('app:comp.admins-accounts-roles');
-  const isLog = true;
+  const isLog = false;
 
   export default {
     components: {
@@ -71,6 +75,9 @@
       if(isLog) debug('nodalItem:', this.nodalItem);
     },
     computed: {
+      ...mapGetters({
+        theme: 'getTheme',
+      }),
       menuItems() {
         const data = [];
         const items = this.nodalItem.items? this.nodalItem.items : this.nodalItem.children;

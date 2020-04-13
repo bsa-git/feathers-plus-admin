@@ -185,8 +185,8 @@
     },
     data() {
       return {
-        title: this.$t('colorPicker.title'),
-        description: this.$t('colorPicker.description'),
+        title: this.$t('color_picker.title'),
+        description: this.$t('color_picker.description'),
         types: ['hex', 'hexa', 'rgba', 'hsla', 'hsva'],
         type: 'hex',
         hex: '#FF00FF',

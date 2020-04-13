@@ -194,15 +194,15 @@
     "title": "Media",
     "description": "Image Examples"
   },
-  "colorPicker": {
+  "color_picker": {
     "title": "Color picker",
     "description": "Color Picker Examples"
   },
-  "datePicker": {
+  "date_picker": {
     "title": "Date picker",
     "description": "Date Picker Examples"
   },
-  "timePicker": {
+  "time_picker": {
     "title": "Time picker",
     "description": "Time Picker Examples"
   },

@@ -206,6 +206,7 @@
               <v-date-picker
                 v-model="picker"
                 color="primary"
+                :locale="config.locale"
                 year-icon="mdi-calendar-blank"
                 prev-icon="mdi-skip-previous"
                 next-icon="mdi-skip-next"
@@ -231,7 +232,7 @@
         >
           <v-card-text>
             <v-row justify="center">
-              <v-date-picker v-model="date" color="primary" readonly></v-date-picker>
+              <v-date-picker v-model="date" color="primary" :locale="config.locale" readonly></v-date-picker>
             </v-row>
           </v-card-text>
         </v-card>
@@ -254,8 +255,8 @@
         >
           <v-card-text>
             <v-row justify="space-around">
-              <v-date-picker v-model="date1" :show-current="false" color="primary"></v-date-picker>
-              <v-date-picker v-model="date2" show-current="2013-07-13" color="primary"></v-date-picker>
+              <v-date-picker v-model="date1" :locale="config.locale" :show-current="false" color="primary"></v-date-picker>
+              <v-date-picker v-model="date2" :locale="config.locale" show-current="2013-07-13" color="primary"></v-date-picker>
             </v-row>
           </v-card-text>
         </v-card>
@@ -299,7 +300,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" color="primary" no-title scrollable>
+                  <v-date-picker v-model="date" :locale="config.locale" color="primary" no-title scrollable>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                     <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -324,7 +325,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" color="primary" scrollable>
+                  <v-date-picker v-model="date" :locale="config.locale" color="primary" scrollable>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
                     <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
@@ -349,7 +350,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" color="primary" @input="menu2 = false"></v-date-picker>
+                  <v-date-picker v-model="date" :locale="config.locale" color="primary" @input="menu2 = false"></v-date-picker>
                 </v-menu>
               </v-col>
               <v-spacer></v-spacer>
@@ -395,7 +396,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" no-title color="primary" @input="menu1 = false"></v-date-picker>
+                  <v-date-picker v-model="date" :locale="config.locale" no-title color="primary" @input="menu1 = false"></v-date-picker>
                 </v-menu>
                 <p>Date in ISO format: <strong>{{ date }}</strong></p>
               </v-col>
@@ -419,7 +420,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date" no-title color="primary" @input="menu2 = false"></v-date-picker>
+                  <v-date-picker v-model="date" :locale="config.locale" no-title color="primary" @input="menu2 = false"></v-date-picker>
                 </v-menu>
                 <p>Date in ISO format: <strong>{{ date }}</strong></p>
               </v-col>
@@ -462,6 +463,7 @@
                   </template>
                   <v-date-picker
                     v-model="date"
+                    :locale="config.locale"
                     color="primary"
                     @change="menu1 = false"
                   ></v-date-picker>
@@ -486,6 +488,7 @@
                   </template>
                   <v-date-picker
                     v-model="date"
+                    :locale="config.locale"
                     color="primary"
                     @change="menu2 = false"
                   ></v-date-picker>
@@ -498,7 +501,7 @@
     </v-row>
 
     <!--=== Date pickers - Multiple ===-->
-    <div class="title">Formatting dates is possible also with external libs such as Moment.js or date-fns</div>
+    <div class="title">Date pickers - Multiple</div>
     <div>Date picker can now select multiple dates with the <kbd>multiple</kbd> prop. If using <kbd>multiple</kbd> then date picker expects
       its model to be an array.</div>
     <br/>
@@ -542,7 +545,7 @@
                       v-on="on"
                     ></v-combobox>
                   </template>
-                  <v-date-picker v-model="dates" color="primary" multiple no-title scrollable>
+                  <v-date-picker v-model="dates" :locale="config.locale" color="primary" multiple no-title scrollable>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                     <v-btn text color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
@@ -572,7 +575,7 @@
           <v-card-text>
             <v-row>
               <v-col cols="12" sm="6">
-                <v-date-picker v-model="dates" color="primary" range></v-date-picker>
+                <v-date-picker v-model="dates" :locale="config.locale" color="primary" range></v-date-picker>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field v-model="dateRangeText" label="Date range" prepend-icon="mdi-calendar" readonly></v-text-field>
@@ -619,6 +622,7 @@
               <v-date-picker
                 ref="birthdayPicker"
                 v-model="date3"
+                :locale="config.locale"
                 color="primary"
                 :max="new Date().toISOString().substr(0, 10)"
                 min="1950-01-01"
@@ -651,6 +655,7 @@
                 <div class="subheading">Defined by array</div>
                 <v-date-picker
                   v-model="date"
+                  :locale="config.locale"
                   color="primary"
                   :events="arrayEvents"
                   event-color="green lighten-1"
@@ -660,6 +665,7 @@
                 <div class="subheading">Defined by function</div>
                 <v-date-picker
                   v-model="date1"
+                  :locale="config.locale"
                   color="primary"
                   :event-color="date => date[9] % 2 ? 'red' : 'yellow'"
                   :events="functionEvents"
@@ -694,6 +700,7 @@
                 <v-menu
                   ref="menu4"
                   v-model="menu4"
+                  :locale="config.locale"
                   :close-on-content-click="false"
                   :return-value.sync="date4"
                   transition="scale-transition"
@@ -712,6 +719,7 @@
                   </template>
                   <v-date-picker
                     v-model="date4"
+                    :locale="config.locale"
                     color="primary"
                     type="month"
                     no-title
@@ -741,7 +749,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="date4" color="primary" type="month" scrollable>
+                  <v-date-picker v-model="date4" :locale="config.locale" color="primary" type="month" scrollable>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="modal2 = false">Cancel</v-btn>
                     <v-btn text color="primary" @click="$refs.dialog.save(date4)">OK</v-btn>
@@ -767,8 +775,8 @@
     },
     data(vm) {
       return {
-        title: this.$t('datePicker.title'),
-        description: this.$t('datePicker.description'),
+        title: this.$t('date_picker.title'),
+        description: this.$t('date_picker.description'),
         picker: new Date().toISOString().substr(0, 10),
         picker2: new Date().toISOString().substr(0, 10),
         picker3: '2018-03-02',

@@ -194,15 +194,15 @@
     "title": "Медиа",
     "description": "Примеры работы с изображениями"
   },
-  "colorPicker": {
+  "color_picker": {
     "title": "Выбор цвета",
     "description": "Примеры выбора цвета"
   },
-  "datePicker": {
+  "date_picker": {
     "title": "Выбор даты",
     "description": "Примеры выбора даты"
   },
-  "timePicker": {
+  "time_picker": {
     "title": "Выбор времени",
     "description": "Примеры выбора времени"
   },
