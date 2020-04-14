@@ -109,6 +109,7 @@
     "time_picker": "Time picker",
     "date_picker": "Date picker",
     "layout": "Layout",
+    "grids": "Grids",
     "bottom_sheets": "Bottom panels",
     "expansion_panels": "Expansion panels",
     "footer": "Footer",
@@ -205,6 +206,10 @@
   "time_picker": {
     "title": "Time picker",
     "description": "Time Picker Examples"
+  },
+  "grids": {
+    "title": "Grid system",
+    "description": "Grids Examples"
   },
   "error": {
     "title": "Error",

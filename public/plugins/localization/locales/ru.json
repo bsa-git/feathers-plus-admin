@@ -81,8 +81,8 @@
     "widgets": "Виджеты",
     "social": "Социальные",
     "statistic": "Статистика",
-    "chartDemo": "График",
-    "echartDemo": "ECharts",
+    "chartDemo": "Графики",
+    "echartDemo": "EГрафики",
     "list": "Список",
     "ui_elements": "Интерфейс",
     "general": "Основной",
@@ -108,6 +108,7 @@
     "date_picker": "Выбор даты",
     "layout": "Макет",
     "bottom_sheets": "Нижние панели",
+    "grids": "Сетка",
     "expansion_panels": "Панели расширения",
     "footer": "Нижний колонтитул",
     "lists": "Списки",
@@ -205,6 +206,10 @@
   "time_picker": {
     "title": "Выбор времени",
     "description": "Примеры выбора времени"
+  },
+  "grids": {
+    "title": "Сетка",
+    "description": "Примеры сетки"
   },
   "error": {
     "title": "Ошибка",

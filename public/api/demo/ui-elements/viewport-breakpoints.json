@@ -1,0 +1,83 @@
+[
+  {
+    "isThead": true,
+    "thead": [
+      {
+        "name": "icon",
+        "title": "Icon",
+        "type": "icon",
+        "align": "center"
+      },
+      {
+        "name": "device",
+        "title": "Device",
+        "type": "text",
+        "align": "left"
+      },
+      {
+        "name": "code",
+        "title": "Code",
+        "type": "html",
+        "align": "center"
+      },
+      {
+        "name": "types",
+        "title": "Types",
+        "type": "text",
+        "align": "left"
+      },
+      {
+        "name": "range",
+        "title": "Range",
+        "type": "text",
+        "align": "left"
+      }
+    ]
+  },
+  {
+    "isTfoot": true,
+    "tfoot": [
+      {
+        "colspan": 4,
+        "text": "<small><em  class=\"grey--text\">* -16px on Desktop</em></small>",
+        "type": "html",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "icon": "mdi-cellphone-iphone",
+    "device": "Extra small",
+    "code": "<strong>xs</strong>",
+    "types": "small to large handset",
+    "range": "< 600px"
+  },
+  {
+    "icon": "mdi-tablet",
+    "device": "Small",
+    "code": "<strong>sm</strong>",
+    "types": "small to medium tablet",
+    "range": "600px > < 960px"
+  },
+  {
+    "icon": "mdi-laptop",
+    "device": "Medium",
+    "code": "<strong>md</strong>",
+    "types": "large tablet to laptop",
+    "range": "960px > < 1264px*"
+  },
+  {
+    "icon": "mdi-monitor",
+    "device": "Large",
+    "code": "<strong>lg</strong>",
+    "types": "desktop",
+    "range": "1264px* > < 1904px*"
+  },
+  {
+    "icon": "mdi-television",
+    "device": "Extra large",
+    "code": "<strong>xl</strong>",
+    "types": "4k and ultra-wides",
+    "range": "> 1904px*"
+  }
+]

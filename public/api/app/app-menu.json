@@ -313,62 +313,61 @@
     "alias": "layout",
     "icon": "mdi-view-dashboard-variant",
     "to": "/layout",
-    "inactive": true,
     "items": [
       {
-        "name": "layout-bottom-sheets",
-        "alias": "bottom_sheets",
-        "title": "Bottom panels",
-        "to": "/layout/bottom-sheets"
+        "name": "layout-grids",
+        "alias": "grids",
+        "title": "Grids",
+        "to": "/layout/grids"
       },
       {
         "name": "layout-expansion-panels",
         "alias": "expansion_panels",
         "title": "Expansion panels",
-        "to": "/layout/expansion-panels"
+        "to": "/layout/expansion-panels",
+        "inactive": true
       },
       {
         "name": "layout-footer",
         "alias": "footer",
         "title": "Footer",
-        "to": "/layout/footer"
+        "to": "/layout/footer",
+        "inactive": true
       },
       {
         "name": "layout-lists",
         "alias": "lists",
         "title": "Lists",
-        "to": "/layout/lists"
-      },
-      {
-        "name": "layout-jumbotrons",
-        "alias": "jumbotrons",
-        "title": "Jumbotrons",
-        "badge": "new",
-        "to": "/layout/jumbotrons"
+        "to": "/layout/lists",
+        "inactive": true
       },
       {
         "name": "layout-menus",
         "alias": "menus",
         "title": "Menus",
-        "to": "/layout/menus"
+        "to": "/layout/menus",
+        "inactive": true
       },
       {
         "name": "layout-tabs",
         "alias": "tabs",
         "title": "Tabs",
-        "to": "/layout/tabs"
+        "to": "/layout/tabs",
+        "inactive": true
       },
       {
         "name": "layout-toolbar",
         "alias": "toolbar",
         "title": "Toolbar",
-        "to": "/layout/toolbar"
+        "to": "/layout/toolbar",
+        "inactive": true
       },
       {
         "name": "layout-timeline",
         "alias": "timeline",
         "title": "Timeline",
-        "to": "/layout/timeline"
+        "to": "/layout/timeline",
+        "inactive": true
       }
     ]
   },
