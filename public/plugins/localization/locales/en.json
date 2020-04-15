@@ -84,6 +84,7 @@
     "chartDemo": "Chart",
     "echartDemo": "ECharts",
     "list": "List",
+    "table_widget": "Table",
     "ui_elements": "UI Elements",
     "general": "General",
     "alerts": "Alerts",
@@ -493,5 +494,9 @@
     "description": "Demo charts",
     "more": "More",
     "moreInfo": "More info"
+  },
+  "table_widget": {
+    "title": "Table",
+    "description": "Table widget"
   }
 }

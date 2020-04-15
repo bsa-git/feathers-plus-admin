@@ -84,6 +84,7 @@
     "chartDemo": "Графики",
     "echartDemo": "EГрафики",
     "list": "Список",
+    "table_widget": "Таблица",
     "ui_elements": "Интерфейс",
     "general": "Основной",
     "alerts": "Предупреждения",
@@ -491,5 +492,9 @@
     "description": "Демо диаграммы",
     "more": "Больше",
     "moreInfo": "Больше информации"
+  },
+  "table_widget": {
+    "title": "Таблица",
+    "description": "Табличный виджет"
   }
 }

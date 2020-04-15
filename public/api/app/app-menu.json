@@ -152,6 +152,12 @@
         "title": "Statistic",
         "to": "/widgets/statistic",
         "inactive": true
+      },
+      {
+        "name": "widgets-table",
+        "alias": "table_widget",
+        "title": "Table",
+        "to": "/widgets/table"
       }
     ]
   },

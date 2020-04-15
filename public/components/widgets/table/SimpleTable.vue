@@ -1,5 +1,6 @@
 <template>
   <v-simple-table
+    class="simple-table"
     :fixed-header="fixedHeader"
     :height="height"
     :dense="dense"
@@ -57,3 +58,8 @@
     }
   };
 </script>
+
+<style scoped lang="sass">
+  .simple-table
+    border: 1px solid #cccccc
+</style>
