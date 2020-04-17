@@ -110,6 +110,7 @@
     "time_picker": "Time picker",
     "date_picker": "Date picker",
     "layout": "Layout",
+    "application_layout": "Application",
     "grids": "Grids",
     "bottom_sheets": "Bottom panels",
     "expansion_panels": "Expansion panels",
@@ -211,6 +212,10 @@
   "grids": {
     "title": "Grid system",
     "description": "Grids Examples"
+  },
+  "application_layout": {
+    "title": "Application",
+    "description": "Layout for applications"
   },
   "error": {
     "title": "Error",

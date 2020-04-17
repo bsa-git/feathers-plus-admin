@@ -321,6 +321,12 @@
     "to": "/layout",
     "items": [
       {
+        "name": "layout-application",
+        "alias": "application_layout",
+        "title": "Application",
+        "to": "/layout/application"
+      },
+      {
         "name": "layout-grids",
         "alias": "grids",
         "title": "Grids",
