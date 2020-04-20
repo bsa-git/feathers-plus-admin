@@ -122,7 +122,7 @@
     "toolbar": "Toolbar",
     "timeline": "Timeline",
     "forms_controls": "Forms & Controls",
-    "basic": "General",
+    "basic_forms": "General",
     "selects": "Selects",
     "selection_controls": "Selection Controls",
     "text_fields": "Text Fields",
@@ -216,6 +216,10 @@
   "application_layout": {
     "title": "Application",
     "description": "Layout for applications"
+  },
+  "basic_forms": {
+    "title": "General",
+    "description": "General functions"
   },
   "error": {
     "title": "Error",

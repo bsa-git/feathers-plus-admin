@@ -390,44 +390,48 @@
     "alias": "forms_controls",
     "icon": "mdi-view-compact-outline",
     "to": "/forms",
-    "inactive": true,
     "items": [
       {
         "name": "forms-basic",
-        "alias": "basic",
-        "title": "General",
-        "to": "/forms/timeline"
+        "alias": "basic_forms",
+        "title": "General Forms",
+        "to": "/forms/basic"
       },
       {
         "name": "forms-selects",
         "alias": "selects",
         "title": "Selects",
         "badge": "new",
-        "to": "/forms/selects"
+        "to": "/forms/selects",
+        "inactive": true
       },
       {
         "name": "forms-selection-controls",
         "alias": "selection_controls",
         "title": "Selection Controls",
-        "to": "/forms/selection-controls"
+        "to": "/forms/selection-controls",
+        "inactive": true
       },
       {
         "name": "forms-text-fields",
         "alias": "text_fields",
         "title": "Text Fields",
-        "to": "/forms/text-fields"
+        "to": "/forms/text-fields",
+        "inactive": true
       },
       {
         "name": "forms-steppers",
         "alias": "steppers",
         "title": "Steppers",
-        "to": "/forms/steppers"
+        "to": "/forms/steppers",
+        "inactive": true
       },
       {
         "name": "forms-editors",
         "alias": "editors",
         "title": "Editors",
-        "to": "/forms/editors"
+        "to": "/forms/editors",
+        "inactive": true
       }
     ]
   },

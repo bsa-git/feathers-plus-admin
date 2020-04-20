@@ -5,7 +5,8 @@
       :page-title="description"
     ></app-page-header>
     <!--=== Description ===-->
-    <blockquote class="blockquote line-left"><em>The <kbd>v-color-picker</kbd> allows you to select a color using a variety
+    <blockquote class="blockquote line-left"><em>The <kbd>v-color-picker</kbd> allows you to select a color using a
+      variety
       of input methods.</em></blockquote>
     <br/>
     <!--=== Model ===-->
@@ -16,54 +17,42 @@
       <strong>HSLA</strong> and <strong>HSVA</strong> values.
     </div>
     <br/>
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        md="4"
-      >
-        <v-card
-          color="secondary"
-          :dark="theme.dark"
+    <flex-box-card :md="4">
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
         >
-          <v-card-text>
-            <v-row>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <v-btn
-                  v-for="t in types"
-                  :key="t"
-                  class="my-4"
-                  block
-                  @click="type = t"
-                >{{ t }}
-                </v-btn>
-              </v-col>
-              <!--  -->
-              <v-col
-                class="d-flex justify-center"
-                cols="12"
-                md="8"
-              >
-                <v-color-picker v-model="color"></v-color-picker>
-              </v-col>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <v-sheet
-                  dark
-                  class="pa-4"
-                >
-                  <pre>{{ showColor }}</pre>
-                </v-sheet>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+          <v-btn
+            v-for="t in types"
+            :key="t"
+            class="my-4"
+            block
+            @click="type = t"
+          >{{ t }}
+          </v-btn>
+        </v-col>
+        <!--  -->
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          md="8"
+        >
+          <v-color-picker v-model="color"></v-color-picker>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-sheet
+            dark
+            class="pa-4"
+          >
+            <pre>{{ showColor }}</pre>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </flex-box-card>
     <!--=== Swatches ===-->
     <div class="title">Swatches</div>
     <div class="subtitle-1">Using the <kbd>show-swatches</kbd> prop you can display an array of color swatches
@@ -75,25 +64,13 @@
       section with the <kbd>swatches-max-height</kbd> prop.
     </div>
     <br/>
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        md="10"
-      >
-        <v-card
-          color="secondary"
-          :dark="theme.dark"
-        >
-          <v-card-text>
-            <v-row justify="space-around">
-              <v-color-picker class="ma-2" show-swatches></v-color-picker>
-              <v-color-picker class="ma-2" :swatches="swatches" show-swatches></v-color-picker>
-              <v-color-picker class="ma-2" show-swatches swatches-max-height="300px"></v-color-picker>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <flex-box-card :md="10">
+      <v-row justify="space-around">
+        <v-color-picker class="ma-2" show-swatches></v-color-picker>
+        <v-color-picker class="ma-2" :swatches="swatches" show-swatches></v-color-picker>
+        <v-color-picker class="ma-2" show-swatches swatches-max-height="300px"></v-color-picker>
+      </v-row>
+    </flex-box-card>
     <!--=== Inputs ===-->
     <div class="title">Inputs</div>
     <div class="subtitle-1">The number inputs can be hidden with the <kbd>hide-inputs</kbd> prop. You can also hide the
@@ -102,50 +79,38 @@
       <kbd>mode</kbd> prop.
     </div>
     <br/>
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <v-card
-          color="secondary"
-          :dark="theme.dark"
+    <flex-box-card :md="8">
+      <v-row justify="space-around">
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          md="6"
         >
-          <v-card-text>
-            <v-row justify="space-around">
-              <v-col
-                class="d-flex justify-center"
-                cols="12"
-                md="6"
-              >
-                <v-color-picker class="ma-2" hide-inputs></v-color-picker>
-              </v-col>
-              <v-col
-                class="d-flex justify-center"
-                cols="12"
-                md="6"
-              >
-                <v-color-picker class="ma-2" hide-mode-switch></v-color-picker>
-              </v-col>
-              <v-col
-                class="d-flex justify-center"
-                cols="12"
-                md="6"
-              >
-                <v-color-picker :mode.sync="mode"></v-color-picker>
-              </v-col>
-              <v-col
-                class="d-flex justify-center"
-                cols="12"
-                md="6"
-              >
-                <v-select v-model="mode" :items="modes" style="max-width: 300px"></v-select>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+          <v-color-picker class="ma-2" hide-inputs></v-color-picker>
+        </v-col>
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          md="6"
+        >
+          <v-color-picker class="ma-2" hide-mode-switch></v-color-picker>
+        </v-col>
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          md="6"
+        >
+          <v-color-picker :mode.sync="mode"></v-color-picker>
+        </v-col>
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          md="6"
+        >
+          <v-select v-model="mode" :items="modes" style="max-width: 300px"></v-select>
+        </v-col>
+      </v-row>
+    </flex-box-card>
     <!--=== Canvas ===-->
     <div class="title">Canvas</div>
     <div class="subtitle-1">The canvas can be hidden with the <kbd>hide-canvas</kbd> prop, and you can set its height
@@ -153,35 +118,25 @@
       prop <kbd>canvas-height</kbd>. The size of the selection dot can be controlled with the <kbd>dot-size</kbd> prop.
     </div>
     <br/>
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <v-card
-          color="secondary"
-          :dark="theme.dark"
-        >
-          <v-card-text>
-            <v-row justify="space-around">
-              <v-color-picker class="ma-2" hide-canvas></v-color-picker>
-              <v-color-picker class="ma-2" canvas-height="300"></v-color-picker>
-              <v-color-picker class="ma-2" dot-size="30"></v-color-picker>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <flex-box-card :md="8">
+      <v-row justify="space-around">
+        <v-color-picker class="ma-2" hide-canvas></v-color-picker>
+        <v-color-picker class="ma-2" canvas-height="300"></v-color-picker>
+        <v-color-picker class="ma-2" dot-size="30"></v-color-picker>
+      </v-row>
+    </flex-box-card>
   </div>
 </template>
 
 <script>
   import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
 
   export default {
     components: {
       AppPageHeader,
+      FlexBoxCard
     },
     data() {
       return {

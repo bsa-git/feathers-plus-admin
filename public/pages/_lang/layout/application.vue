@@ -14,19 +14,21 @@
       managing your layout sizing. The <kbd>v-app</kbd> component is <strong>REQUIRED</strong> for all applications.
       This is the mount point
       for many of Vuetify's components and functionality and ensures that it propagates the default application
-      variant (dark/light) to children components and also ensures proper cross-browser support for certain
+      variant (<strong>dark/light</strong>) to children components and also ensures proper cross-browser support for certain
       click events in browsers like Safari. <kbd>v-app</kbd> should only be used within your application
       <strong>ONCE</strong>.</em></blockquote>
     <br/>
-    <v-alert type="error">
-      In order for your application to work properly, you <span class="font-weight-bold">must</span> wrap it in a <kbd>v-app</kbd>
-      component. This component
-      is required for ensuring proper <span class="font-weight-bold">cross-browser compatibility</span>. Vuetify doesn't
-      support multiple isolated
-      Vuetify instances on a page. v-app can exist <span class="font-weight-bold">anywhere</span> inside the body of
-      your app, however, there should
-      only be one and it must be the parent of <span class="font-weight-bold">ALL</span> Vuetify components.
-    </v-alert>
+    <flex-box :md="10">
+      <v-alert type="error">
+        In order for your application to work properly, you <span class="font-weight-bold">must</span> wrap it in a <kbd>v-app</kbd>
+        component. This component
+        is required for ensuring proper <span class="font-weight-bold">cross-browser compatibility</span>. Vuetify doesn't
+        support multiple isolated
+        Vuetify instances on a page. v-app can exist <span class="font-weight-bold">anywhere</span> inside the body of
+        your app, however, there should
+        only be one and it must be the parent of <span class="font-weight-bold">ALL</span> Vuetify components.
+      </v-alert>
+    </flex-box>
 
     <!--=== Default application markup ===-->
     <div class="title">Default application markup</div>
@@ -40,16 +42,16 @@
         place your views inside <kbd>v-content</kbd>.</p>
     </div>
     <br/>
-    <hljs-pre-code
-      lang="xml"
-    >
+    <highlight-code lang="xml">
       <code1></code1>
-    </hljs-pre-code>
+    </highlight-code>
 
-    <v-alert type="info">
-      Applying the <kbd>app</kbd> prop automatically applies position: <kbd>fixed</kbd> to the layout element. If your application
-      calls for an absolute element, you can overwrite this functionality by using the <kbd>absolute</kbd> prop.
-    </v-alert>
+    <flex-box :md="10">
+      <v-alert type="info">
+        Applying the <kbd>app</kbd> prop automatically applies position: <kbd>fixed</kbd> to the layout element. If your application
+        calls for an absolute element, you can overwrite this functionality by using the <kbd>absolute</kbd> prop.
+      </v-alert>
+    </flex-box>
 
     <!--=== Application components ===-->
     <div class="title">Application components</div>
@@ -89,13 +91,15 @@
 <script>
   import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
-  import HljsPreCode from '~/components/widgets/highlight/hljs-pre-code';
+  import FlexBox from '~/components/widgets/containers/flex-box';
+  import HighlightCode from '~/components/widgets/highlight/highlight-code';
   import Code1 from '~/components/codes/layout/application/code-html-1';
 
   export default {
     components: {
       AppPageHeader,
-      HljsPreCode,
+      FlexBox,
+      HighlightCode,
       Code1,
     },
     data() {

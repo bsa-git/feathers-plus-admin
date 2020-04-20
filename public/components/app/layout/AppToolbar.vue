@@ -125,6 +125,14 @@
         class="hidden-sm-and-down"
       ></v-text-field>
 
+      <v-progress-linear
+        :active="loading"
+        :indeterminate="loading"
+        absolute
+        bottom
+        color="deep-purple accent-4"
+      ></v-progress-linear>
+
       <v-spacer></v-spacer>
       <!-- Mail to -->
       <v-btn :href="`mailto:${config.email}`">
@@ -213,6 +221,7 @@
         selLogNames: [],
         userMenu,
         service: null,
+        loading: false,
         viewDialog: false,
         iconViewDialog: '',
         titleViewDialog: '',
@@ -274,6 +283,12 @@
     mounted: function () {
       this.$nextTick(function () {
       })
+    },
+    watch: {
+      loading (val) {
+        if (!val) return;
+        setTimeout(() => (this.loading = false), 3000)
+      },
     },
     computed: {
       ...mapGetters({

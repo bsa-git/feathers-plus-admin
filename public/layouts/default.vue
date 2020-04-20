@@ -73,6 +73,7 @@
       this.$nextTick(function () {
         // Get refAppToolbar
         this.refAppToolbar = Object.assign({}, this.$refs['refAppToolbar']);
+        this.refAppToolbar.loading = true;
         // Init vuetify
         syncStore.initVuetify(this, true);
       })
