@@ -25,7 +25,11 @@
 
   export default {
     props: {
-      lang: {
+      init: {
+        type: Boolean,
+        default: false
+      },
+      lang: {// xml, javascript, json
         type: String,
         default: ''
       },
@@ -48,8 +52,10 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        const hl = new Highlight(this.lang);
-        hl.initBlock('pre code.hljs');
+        if(this.init){
+          const hl = new Highlight(this.lang);
+          hl.initBlock('pre code.hljs');
+        }
       })
     },
     computed: {

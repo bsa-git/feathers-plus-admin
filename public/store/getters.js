@@ -19,6 +19,14 @@ const getters = {
     return state.notices;
   },
 
+  getSystem: (state) => {
+    return state.system;
+  },
+
+  getLoading: (state) => {
+    return state.system.loading;
+  },
+
   getPrimaryColor: (state) => {
     const theme = state.theme;
     // Get primary color

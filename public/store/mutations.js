@@ -75,6 +75,42 @@ const mutations = {
     state.snackbar =  Object.assign(state.snackbar, snackbar);
   },
 
+  //--- SYSTEM ---//
+  /**
+   * Set system
+   * @param state {Object}
+   * @param system {Object}
+   */
+  SET_SYSTEM (state, system) {
+    state.system =  Object.assign(state.system, system);
+  },
+
+  /**
+   * Set system loading
+   * @param state {Object}
+   * @param loading {Boolean}
+   */
+  SET_LOADING (state, loading) {
+    state.system.loading =  loading;
+    if( loading && state.system.loadingDelay > 0){
+      setTimeout(() => {
+        if(state.system.loading){
+          state.system.loading = false;
+          state.system.loadingDelay = 0;
+        }
+      }, state.system.loadingDelay);
+    }
+  },
+
+  /**
+   * Set system loadingDelay
+   * @param state {Object}
+   * @param delay {Number}
+   */
+  SET_LOADING_DELAY (state, delay) {
+    state.system.loadingDelay =  delay;
+  },
+
   /**
    * Show success
    * @param state {Object}

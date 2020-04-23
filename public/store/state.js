@@ -146,6 +146,12 @@ export default () => ({
   notices: {
     checkAt: '',
   },
+  //--- NOTIFICATIONS ---//
+  system: {
+    loading: false,
+    loadingColor: 'amber',
+    loadingDelay: 0
+  },
   //--- ECHARTS ---//
   echarts: {
     demoRadarData: [

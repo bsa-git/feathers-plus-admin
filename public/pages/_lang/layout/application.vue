@@ -42,7 +42,7 @@
         place your views inside <kbd>v-content</kbd>.</p>
     </div>
     <br/>
-    <highlight-code lang="xml">
+    <highlight-code lang="xml" :init="true">
       <code1></code1>
     </highlight-code>
 

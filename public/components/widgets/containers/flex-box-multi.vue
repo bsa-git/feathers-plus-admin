@@ -4,16 +4,11 @@
     :align="align"
   >
     <v-col
+      :class="`d-flex justify-${j}`"
       cols="12"
-      :md="md1"
+      :md="md"
     >
-      <slot name="slot1"></slot>
-    </v-col>
-    <v-col
-      cols="12"
-      :md="md2"
-    >
-      <slot name="slot2"></slot>
+      <slot></slot>
     </v-col>
   </v-row>
 </template>
@@ -25,17 +20,17 @@
         type: String,
         default: 'center'
       },
+      j: {
+        type: String,
+        default: 'center'
+      },
       align: {
         type: String,
         default: 'center'
       },
-      md1: {
+      md: {
         type: Number,
-        default: 4
-      },
-      md2: {
-        type: Number,
-        default: 4
+        default: 6
       }
     },
   };

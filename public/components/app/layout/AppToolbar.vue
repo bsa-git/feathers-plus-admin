@@ -130,7 +130,7 @@
         :indeterminate="loading"
         absolute
         bottom
-        color="deep-purple accent-4"
+        :color="system.loadingColor"
       ></v-progress-linear>
 
       <v-spacer></v-spacer>
@@ -221,7 +221,6 @@
         selLogNames: [],
         userMenu,
         service: null,
-        loading: false,
         viewDialog: false,
         iconViewDialog: '',
         titleViewDialog: '',
@@ -278,39 +277,35 @@
       this.notifications = appNotifications.filter(item => !item.header && !item.divider && item.isEnable).map(n => Object.assign({}, n));
       this.service = new Service(this.$store);
       this.initNotifications();
-//      this.waitLogMessages();
     },
     mounted: function () {
       this.$nextTick(function () {
       })
     },
-    watch: {
-      loading (val) {
-        if (!val) return;
-        setTimeout(() => (this.loading = false), 3000)
-      },
-    },
+    watch: {},
     computed: {
       ...mapGetters({
         config: 'getConfig',
         user: 'getUser',
         isAdmin: 'isAdmin',
         theme: 'getTheme',
-        stateNotices: 'getNotices'
+        stateNotices: 'getNotices',
+        system: 'getSystem',
+        loading: 'getLoading'
       }),
       logMessages() {
         const data = [];
-        if(!this.user) return data;
+        if (!this.user) return data;
         let _logMessages = [];
         const idFieldLogMessage = this.$store.state['log-messages'].idField;
         const idFieldUser = this.$store.state.users.idField;
-        const userId = this.user? this.user[idFieldUser] : '';
+        const userId = this.user ? this.user[idFieldUser] : '';
         const {LogMessage} = this.$FeathersVuex;
         this.getQueryNotifications.forEach(q => {
           let findLogMessages = LogMessage.findInStore(q).data;
           _logMessages = _logMessages.concat(findLogMessages);
         });
-        if(!this.isAdmin){
+        if (!this.isAdmin) {
           _logMessages = _logMessages.filter(msg => msg.userId === userId);
         }
         util.sortByStringField(_logMessages, 'createdAt', false);
@@ -381,6 +376,10 @@
       },
     },
     methods: {
+      ...mapMutations({
+        setStateNoticesCheckAt: 'SET_NOTICES_CHECKAT',
+        setLoading: 'SET_LOADING',
+      }),
       onNavLeft() {
         this.$emit('onNavLeft')
       },
@@ -513,15 +512,11 @@
         if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
           requestFullScreen.call(docEl);
           this.isToggleFullScreen = true;
-        }
-        else {
+        } else {
           cancelFullScreen.call(doc);
           this.isToggleFullScreen = false;
         }
       },
-      ...mapMutations({
-        setStateNoticesCheckAt: 'SET_NOTICES_CHECKAT',
-      }),
     }
   };
 </script>
