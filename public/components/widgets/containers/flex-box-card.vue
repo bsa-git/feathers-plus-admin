@@ -11,6 +11,7 @@
       :dark="this.theme.dark"
       :outlined="outlined"
     >
+      <v-card-title class="d-flex justify-center">{{ title }}</v-card-title>
       <v-card-text>
         <slot></slot>
       </v-card-text>
@@ -23,6 +24,10 @@
   import {mapGetters} from 'vuex';
   export default {
     props: {
+      title: {
+        type: String,
+        default: ''
+      },
       justify: {
         type: String,
         default: 'center'

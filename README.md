@@ -22,8 +22,9 @@ Getting  up and running is as easy as 1, 2, 3.
 3. Environment variables
 
 Add file ".env" to your project to set user environment variables.
-See the sample file ".env.example". In environment variables, user's secret
-data such as user_id, user_secret, etc. are usually specified.
+See the sample file ".env.dev.example" for development mode or ".env.prod.example" 
+for production mode. In environment variables, user's secret data such as user_id, 
+user_secret, etc. are usually specified.
 
 4. Start your app for development mode
 

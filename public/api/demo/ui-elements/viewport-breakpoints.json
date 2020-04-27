@@ -38,7 +38,7 @@
     "isTfoot": true,
     "tfoot": [
       {
-        "colspan": 4,
+        "colspan": 5,
         "text": "<small><em  class=\"grey--text\">* -16px on Desktop</em></small>",
         "type": "html",
         "align": "center"

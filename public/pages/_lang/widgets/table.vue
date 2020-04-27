@@ -11,28 +11,18 @@
       Inside the component you can use all the regular table elements such as <code>thead</code>, <code>tbody</code>, <code>tr</code>, etc.
     </div>
     <br/>
-    <v-row justify="center">
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <v-card
-          color="secondary"
-          :dark="theme.dark"
-          outlined
-        >
-          <v-card-title class="d-flex justify-center">Material Design Viewport Breakpoints</v-card-title>
-          <v-card-text>
-            <simple-table
-              height="350px"
-              :thead="theadBreakpoints.thead"
-              :tfoot="tfootBreakpoints.tfoot"
-              :tbody="tbodyBreakpoints"
-            ></simple-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <flex-box-card
+      title="Material Design Viewport Breakpoints"
+      :md="8"
+      :outlined="true"
+    >
+      <simple-table
+        height="350px"
+        :thead="theadBreakpoints.thead"
+        :tfoot="tfootBreakpoints.tfoot"
+        :tbody="tbodyBreakpoints"
+      ></simple-table>
+    </flex-box-card>
 
   </div>
 </template>
@@ -41,12 +31,14 @@
   import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import SimpleTable from '~/components/widgets/table/SimpleTable';
+  import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
   import viewportBreakpoints from '~/api/demo/ui-elements/viewport-breakpoints.json';
 
   export default {
     components: {
       AppPageHeader,
-      SimpleTable
+      SimpleTable,
+      FlexBoxCard
     },
     data() {
       return {
