@@ -120,6 +120,7 @@
     "timeline": "График",
     "forms_controls": "Формы",
     "basic_forms": "Основной",
+    "autocompletes_forms": "Автозаполнение",
     "text_fields": "Текстовые поля",
     "steppers": "Степперы",
     "editors": "Редакторы",
@@ -220,6 +221,10 @@
   "basic_forms": {
     "title": "Общие",
     "description": "Общие фУНКЦИИ"
+  },
+  "autocompletes_forms": {
+    "title": "Автозаполнение",
+    "description": "Примеры компонентов автозаполнения"
   },
   "error": {
     "title": "Ошибка",

@@ -16,7 +16,7 @@
           <v-expansion-panel-header v-if="icon" disable-icon-rotate>
             {{ title }}
             <template v-slot:actions>
-              <v-icon color="primary">{{ icon }}</v-icon>
+              <v-icon>{{ icon }}</v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-header v-else>{{ title }}</v-expansion-panel-header>

@@ -123,6 +123,7 @@
     "timeline": "Timeline",
     "forms_controls": "Forms & Controls",
     "basic_forms": "General",
+    "autocompletes_forms": "Autocompletes",
     "selects": "Selects",
     "selection_controls": "Selection Controls",
     "text_fields": "Text Fields",
@@ -220,6 +221,10 @@
   "basic_forms": {
     "title": "General",
     "description": "General functions"
+  },
+  "autocompletes_forms": {
+    "title": "Autocompletes",
+    "description": "Examples of Autocomplete Components"
   },
   "error": {
     "title": "Error",

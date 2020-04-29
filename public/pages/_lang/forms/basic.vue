@@ -58,7 +58,7 @@
       <v-card
         style="max-width: 500px;"
         color="secondary"
-        :dark="this.theme.dark"
+        :dark="theme.dark"
       >
         <v-system-bar
           :color="'primary' + ' darken-1'"
@@ -360,8 +360,6 @@
   import Code9 from '~/components/codes/forms/basic/code-html-9';
   import Code10 from '~/components/codes/forms/basic/code-js-10';
 
-  import Highlight from '~/plugins/lib/highlight.class';
-
   const debug = require('debug')('app:page.basicForms');
 
   export default {
@@ -412,16 +410,7 @@
         ],
       }
     },
-    created: function () {
-      this.setLoadingDelay(1000);
-      this.setLoading(true);
-      // debug('created.loading:', this.loading)
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-        this.initHighlight();
-      })
-    },
+    created: function () {},
     watch: {
       isLoading (val) {
         if (!val) return;
@@ -430,12 +419,6 @@
           this.$refs.form.reset();
         },3000)
       },
-      // panel (val) {
-      //   debug('watch.panel.val', val);
-      //   if(val !== undefined){
-      //     this.initPanelDelay(1000);
-      //   }
-      // },
     },
     computed: {
       ...mapGetters({
@@ -449,10 +432,6 @@
         setLoading: 'SET_LOADING',
         setLoadingDelay: 'SET_LOADING_DELAY',
       }),
-      initHighlight: function() {
-        const hl = new Highlight();
-        hl.initBlock('pre code.hljs');
-      },
       initPanelDelay: function(delay) {
         this.setLoadingDelay(delay);
         this.setLoading(true);

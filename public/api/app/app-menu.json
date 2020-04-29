@@ -398,12 +398,10 @@
         "to": "/forms/basic"
       },
       {
-        "name": "forms-selects",
-        "alias": "selects",
-        "title": "Selects",
-        "badge": "new",
-        "to": "/forms/selects",
-        "inactive": true
+        "name": "forms-autocompletes",
+        "alias": "autocompletes_forms",
+        "title": "Autocompletes",
+        "to": "/forms/autocompletes"
       },
       {
         "name": "forms-selection-controls",
