@@ -311,6 +311,10 @@
       }
     },
     methods: {
+      ...mapMutations({
+        showSuccess: 'SHOW_SUCCESS',
+        showError: 'SHOW_ERROR',
+      }),
       isDelete(roleName) {
         return !this.isBaseRole(roleName);
       },
@@ -506,10 +510,6 @@
           this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
-      ...mapMutations({
-        showSuccess: 'SHOW_SUCCESS',
-        showError: 'SHOW_ERROR',
-      }),
     }
   }
 </script>
