@@ -303,12 +303,14 @@
                   <v-btn
                     icon
                     v-on="on"
+                    dark
                   >
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </template>
+                <!--     :color="theme.dark? 'secondary' : ''" -->
                 <v-list
-                  :color="theme.dark? 'secondary' : ''"
+                  color="secondary"
                   :dark="theme.dark"
                 >
                   <v-list-item @click="exx3IsUpdating = true">

@@ -166,38 +166,13 @@
     "alias": "ui_elements"
   },
   {
-    "title": "General",
+    "title": "Components",
     "group": "components",
     "name": "components",
-    "alias": "general",
+    "alias": "components",
     "icon": "mdi-view-grid-plus-outline",
     "to": "/components",
-    "inactive": true,
     "items": [
-      {
-        "name": "components-alerts",
-        "alias": "alerts",
-        "title": "Alerts",
-        "to": "/components/alerts"
-      },
-      {
-        "name": "components-avatars",
-        "alias": "avatars",
-        "title": "Avatars",
-        "to": "/components/avatars"
-      },
-      {
-        "name": "components-badges",
-        "alias": "badges",
-        "title": "Badges",
-        "to": "/components/badges"
-      },
-      {
-        "name": "components-buttons",
-        "alias": "buttons",
-        "title": "Buttons",
-        "to": "/components/buttons"
-      },
       {
         "name": "components-cards",
         "alias": "cards",
@@ -205,82 +180,123 @@
         "to": "/components/cards"
       },
       {
+        "name": "components-alerts",
+        "alias": "alerts",
+        "title": "Alerts",
+        "to": "/components/alerts",
+        "inactive": true
+      },
+      {
+        "name": "components-avatars",
+        "alias": "avatars",
+        "title": "Avatars",
+        "to": "/components/avatars",
+        "inactive": true
+      },
+      {
+        "name": "components-badges",
+        "alias": "badges",
+        "title": "Badges",
+        "to": "/components/badges",
+        "inactive": true
+      },
+      {
+        "name": "components-buttons",
+        "alias": "buttons",
+        "title": "Buttons",
+        "to": "/components/buttons",
+        "inactive": true
+      },
+      {
         "name": "components-carousels",
         "alias": "carousels",
         "title": "Carousels",
-        "to": "/components/carousels"
+        "to": "/components/carousels",
+        "inactive": true
       },
       {
         "name": "components-chips",
         "alias": "chips",
         "title": "Chips",
-        "to": "/components/chips"
+        "to": "/components/chips",
+        "inactive": true
       },
       {
         "name": "components-dialogs",
         "alias": "dialogs",
         "title": "Dialogs",
-        "to": "/components/dialogs"
+        "to": "/components/dialogs",
+        "inactive": true
       },
       {
         "name": "components-icons",
         "alias": "icons",
         "title": "Icons",
-        "to": "/components/icons"
+        "to": "/components/icons",
+        "inactive": true
       },
       {
         "name": "components-tables",
         "alias": "tables",
         "title": "Data Tables",
-        "to": "/components/tables"
+        "to": "/components/tables",
+        "inactive": true
       },
       {
         "name": "components-parallax",
         "alias": "parallax",
         "title": "Parallax  image",
-        "to": "/components/parallax"
+        "to": "/components/parallax",
+        "inactive": true
       },
       {
         "name": "components-snackbar",
         "alias": "snackbar",
         "title": "Snackbar",
-        "to": "/components/snackbar"
+        "to": "/components/snackbar",
+        "inactive": true
       },
       {
         "name": "components-progress",
         "alias": "progress",
         "title": "Progress",
-        "to": "/components/progress"
+        "to": "/components/progress",
+        "inactive": true
       },
       {
         "name": "components-slider",
         "alias": "slider",
         "title": "Slider",
-        "to": "/components/sliders"
+        "to": "/components/sliders",
+        "inactive": true
       },
       {
         "name": "components-tooltip",
         "alias": "tooltip",
         "title": "Tooltip",
-        "to": "/components/tooltips"
+        "to": "/components/tooltips",
+        "inactive": true
       },
       {
         "name": "components-pagination",
         "alias": "pagination",
         "title": "Pagination",
-        "to": "/components/paginations"
+        "to": "/components/paginations",
+        "inactive": true
       },
       {
         "name": "components-typography",
         "alias": "typography",
         "title": "Typography",
-        "to": "/components/typography"
+        "to": "/components/typography",
+        "inactive": true
       },
       {
         "name": "components-color",
         "alias": "color",
         "title": "Color",
-        "to": "/components/color"
+        "to": "/components/color",
+        "inactive": true
       }
     ]
   },

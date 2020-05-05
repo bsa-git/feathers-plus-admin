@@ -10,6 +10,7 @@
                    :to="item.to ? $i18n.path(item.to) : null" :href="item.href"
                    ripple="ripple"
                    :disabled="item.disabled || config.locale === item.click"
+                   :color="(item.disabled || config.locale === item.click)? 'grey' : ''"
                    :target="item.target"
                    @click="item.click ? itemClick(item.click) : null"
                    rel="noopener"

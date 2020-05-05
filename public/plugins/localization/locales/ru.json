@@ -86,7 +86,7 @@
     "list": "Список",
     "table_widget": "Таблица",
     "ui_elements": "Интерфейс",
-    "general": "Основной",
+    "components": "Компоненты",
     "alerts": "Предупреждения",
     "avatars": "Аватары",
     "badges": "Значки",
@@ -197,6 +197,10 @@
   "media": {
     "title": "Медиа",
     "description": "Примеры работы с изображениями"
+  },
+  "cards": {
+    "title": "Компонент карты",
+    "description": "Примеры карт"
   },
   "color_picker": {
     "title": "Выбор цвета",

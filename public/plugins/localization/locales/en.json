@@ -86,7 +86,7 @@
     "list": "List",
     "table_widget": "Table",
     "ui_elements": "UI Elements",
-    "general": "General",
+    "components": "Components",
     "alerts": "Alerts",
     "avatars": "Avatars",
     "badges": "Badges",
@@ -197,6 +197,10 @@
   "media": {
     "title": "Media",
     "description": "Image Examples"
+  },
+  "cards": {
+    "title": "Card component",
+    "description": "Card Examples"
   },
   "color_picker": {
     "title": "Color picker",
