@@ -959,13 +959,13 @@
       <v-card-actions>
         <v-btn
           text
-          color="deep-purple accent-4"
+          color="orange"
         >
           Read
         </v-btn>
         <v-btn
           text
-          color="deep-purple accent-4"
+          color="orange"
         >
           Bookmark
         </v-btn>

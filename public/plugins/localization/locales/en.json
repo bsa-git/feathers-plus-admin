@@ -92,6 +92,7 @@
     "badges": "Badges",
     "buttons": "Buttons",
     "cards": "Cards",
+    "lists": "Lists",
     "carousels": "Carousels",
     "chips": "Chips",
     "dialogs": "Dialogs",
@@ -115,7 +116,6 @@
     "bottom_sheets": "Bottom panels",
     "expansion_panels": "Expansion panels",
     "footer": "Footer",
-    "lists": "Lists",
     "jumbotrons": "Jumbotrons",
     "menus": "Menus",
     "tabs": "Tabs",
@@ -201,6 +201,10 @@
   "cards": {
     "title": "Card component",
     "description": "Card Examples"
+  },
+  "lists": {
+    "title": "List component",
+    "description": "List Examples"
   },
   "color_picker": {
     "title": "Color picker",

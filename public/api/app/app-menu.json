@@ -180,6 +180,12 @@
         "to": "/components/cards"
       },
       {
+        "name": "components-lists",
+        "alias": "lists",
+        "title": "Lists",
+        "to": "/components/lists"
+      },
+      {
         "name": "components-alerts",
         "alias": "alerts",
         "title": "Alerts",
@@ -360,13 +366,6 @@
         "alias": "footer",
         "title": "Footer",
         "to": "/layout/footer",
-        "inactive": true
-      },
-      {
-        "name": "layout-lists",
-        "alias": "lists",
-        "title": "Lists",
-        "to": "/layout/lists",
         "inactive": true
       },
       {
