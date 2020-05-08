@@ -14,36 +14,38 @@
         :loading="loading"
         :tile="tile"
       >
-        <!-- Slot card system bar -->
-        <slot name="system-bar"></slot>
-        <!-- Slot card toolbar -->
-        <slot name="tool-bar"></slot>
-        <!-- Slot card app-bar -->
-        <slot name="app-bar"></slot>
-        <!-- Slot card img -->
-        <slot name="card-img"></slot>
-        <!-- Card title -->
-        <v-card-title v-if="title" class="d-flex justify-center">{{ title }}</v-card-title>
-        <!-- List slots -->
-        <template  v-for="list in vlists">
-          <slot :name="`list${list}`"></slot>
-        </template>
-        <v-list
-          v-if="!vlists"
-          :color="color? color : theme.dark ? 'secondary' : ''"
-          :dark="theme.dark"
-          :disabled="disabled"
-          :shaped="shaped"
-          :dense="dense"
-          :flat="flat"
-          :rounded="rounded"
-          :two-line="twoLine"
-          :three-line="threeLine"
-          :subheader="subheader"
-        >
-          <!-- Slot list content -->
-          <slot></slot>
-        </v-list>
+        <v-navigation-drawer permanent>
+          <!-- Slot card system bar -->
+          <slot name="system-bar"></slot>
+          <!-- Slot card toolbar -->
+          <slot name="tool-bar"></slot>
+          <!-- Slot card app-bar -->
+          <slot name="app-bar"></slot>
+          <!-- Slot card img -->
+          <slot name="card-img"></slot>
+          <!-- Card title -->
+          <v-card-title v-if="title" class="d-flex justify-center">{{ title }}</v-card-title>
+          <!-- List slots -->
+          <template  v-for="list in vlists">
+            <slot :name="`list${list}`"></slot>
+          </template>
+          <v-list
+            v-if="!vlists"
+            :color="color? color : theme.dark ? 'secondary' : ''"
+            :dark="theme.dark"
+            :disabled="disabled"
+            :shaped="shaped"
+            :dense="dense"
+            :flat="flat"
+            :rounded="rounded"
+            :two-line="twoLine"
+            :three-line="threeLine"
+            :subheader="subheader"
+          >
+            <!-- Slot list content -->
+            <slot></slot>
+          </v-list>
+        </v-navigation-drawer>
       </v-card>
     </v-col>
   </v-row>

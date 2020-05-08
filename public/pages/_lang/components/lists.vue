@@ -1107,6 +1107,430 @@
     </flex-box-list>
     <br/>
 
+    <!--=== Title with sub-title, actions and action-text ===-->
+    <div class="title">Title with sub-title, actions and action-text (Exx.13)</div>
+    <div class="subtitle-1">
+      A list can contain a stack within an action. This is useful when you need to display meta text next to your action
+      item.
+    </div>
+    <!-- Template/Script -->
+    <flex-box-panel
+      title="Template/Script"
+      icon="mdi-contain"
+      :model="panel"
+      v-on:onTogglePanel="modelPanel"
+    >
+      <v-row
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template" :init="true">
+            <code20></code20>
+          </highlight-code>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template">
+            <code21></code21>
+          </highlight-code>
+        </v-col>
+      </v-row>
+    </flex-box-panel>
+    <br/>
+    <!-- List -->
+    <flex-box-list
+      :md="4"
+      :twoLine="true"
+    >
+      <template v-slot:tool-bar>
+        <v-toolbar
+          color="pink"
+          dark
+        >
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+          <v-toolbar-title>Inbox</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon>
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+
+          <v-btn icon>
+            <v-icon>mdi-checkbox-marked-circle</v-icon>
+          </v-btn>
+        </v-toolbar>
+      </template>
+      <v-list-item-group
+        v-model="exx13Selected"
+        multiple
+        active-class="pink--text"
+      >
+        <template v-for="(item, index) in exx13Items">
+          <v-list-item :key="item.title">
+            <template v-slot:default="{ active, toggle }">
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle>
+                <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                <v-icon
+                  v-if="!active"
+                  color="grey lighten-1"
+                >
+                  mdi-star-outline
+                </v-icon>
+
+                <v-icon
+                  v-else
+                  color="orange"
+                >
+                  mdi-star
+                </v-icon>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+
+          <v-divider
+            v-if="index + 1 < exx13Items.length"
+            :key="index"
+          ></v-divider>
+        </template>
+      </v-list-item-group>
+    </flex-box-list>
+    <br/>
+
+    <!--=== Action with title and sub-title ===-->
+    <div class="title">Action with title and sub-title (Exx.14)</div>
+    <div class="subtitle-1">
+      A <kbd>three-line</kbd> list with actions. Utilizing
+      <a href="https://vuetifyjs.com/en/components/list-item-groups/" target="_blank">v-list-item-group</a>,
+      easily connect actions to your tiles.
+      item.
+    </div>
+    <!-- Template/Script -->
+    <flex-box-panel
+      title="Template/Script"
+      icon="mdi-contain"
+      :model="panel"
+      v-on:onTogglePanel="modelPanel"
+    >
+      <v-row
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template" :init="true">
+            <code22></code22>
+          </highlight-code>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Script">
+            <code23></code23>
+          </highlight-code>
+        </v-col>
+      </v-row>
+    </flex-box-panel>
+    <br/>
+    <!-- List -->
+    <flex-box-list
+      :md="4"
+      :threeLine="true"
+      :subheader="true"
+      :flat="true"
+      :vlists="2"
+    >
+      <template v-slot:tool-bar>
+        <v-toolbar
+          color="purple"
+          dark
+        >
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+          <v-toolbar-title>Settings</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon>
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </v-toolbar>
+      </template>
+
+      <template v-slot:list1>
+        <v-list
+          color="secondary"
+          :dark="theme.dark"
+          subheader
+          three-line
+        >
+          <v-subheader>User Controls</v-subheader>
+
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Content filtering</v-list-item-title>
+              <v-list-item-subtitle>Set the content filtering level to restrict appts that can be downloaded
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Password</v-list-item-title>
+              <v-list-item-subtitle>Require password for purchase or use password to restrict purchase
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+      </template>
+
+      <template v-slot:list2>
+        <v-list
+          color="secondary"
+          :dark="theme.dark"
+          flat
+          subheader
+          three-line
+        >
+          <v-subheader>General</v-subheader>
+
+          <v-list-item-group
+            v-model="exx14Settings"
+            multiple
+            active-class=""
+          >
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-checkbox v-model="active"></v-checkbox>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>Notifications</v-list-item-title>
+                  <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-checkbox v-model="active"></v-checkbox>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>Sound</v-list-item-title>
+                  <v-list-item-subtitle>Auto-update apps at any time. Data charges may apply</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+
+            <v-list-item>
+              <template v-slot:default="{ active }">
+                <v-list-item-action>
+                  <v-checkbox v-model="active"></v-checkbox>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>Auto-add widgets</v-list-item-title>
+                  <v-list-item-subtitle>Automatically add home screen widgets when downloads complete
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </template>
+    </flex-box-list>
+    <br/>
+
+    <!--=== Expansion Lists ===-->
+    <div class="title">Expansion Lists (Exx.15)</div>
+    <div class="subtitle-1">
+      A list can contain a group of items which will display on click. Expansion lists are also used within the
+      <a href="https://vuetifyjs.com/en/components/list-item-groups/" target="_blank">v-navigation-drawer</a> component.
+    </div>
+    <!-- Template/Script -->
+    <flex-box-panel
+      title="Template/Script"
+      icon="mdi-contain"
+      :model="panel"
+      v-on:onTogglePanel="modelPanel"
+    >
+      <v-row
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template" :init="true">
+            <code24></code24>
+          </highlight-code>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Script">
+            <code25></code25>
+          </highlight-code>
+        </v-col>
+      </v-row>
+    </flex-box-panel>
+    <br/>
+    <!-- List -->
+    <flex-box-list
+      :md="3"
+    >
+      <template v-slot:tool-bar>
+        <v-toolbar
+          color="teal"
+          dark
+        >
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+          <v-toolbar-title>Topics</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon>
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </v-toolbar>
+      </template>
+
+      <v-list-group
+        v-for="item in exx15Items"
+        :key="item.title"
+        v-model="item.active"
+        :prepend-icon="item.action"
+        no-action
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="subItem in item.items"
+          :key="subItem.title"
+          @click=""
+        >
+          <v-list-item-content>
+            <v-list-item-title v-text="subItem.title"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
+    </flex-box-list>
+    <br/>
+
+    <!--=== Navigation lists ===-->
+    <div class="title">Navigation lists (Exx.16)</div>
+    <div class="subtitle-1">
+      Lists can receive an alternative <kbd>nav</kbd> styling that reduces the width <kbd>v-list-item</kbd> takes up as well
+      as adding a border radius.
+    </div>
+    <!-- Template/Script -->
+    <flex-box-panel
+      title="Template/Script"
+      icon="mdi-contain"
+      :model="panel"
+      v-on:onTogglePanel="modelPanel"
+    >
+      <v-row
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template" :init="true">
+            <code26></code26>
+          </highlight-code>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Script">
+            <code27></code27>
+          </highlight-code>
+        </v-col>
+      </v-row>
+    </flex-box-panel>
+    <br/>
+    <!-- List -->
+    <flex-box-ndrawer-list
+      :md="3"
+      :tile="true"
+      :vlists="2"
+    >
+      <template v-slot:system-bar>
+        <v-system-bar></v-system-bar>
+      </template>
+      <template v-slot:list1>
+        <v-list>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+            </v-list-item-avatar>
+          </v-list-item>
+
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title class="title">John Leider</v-list-item-title>
+              <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-icon>mdi-menu-down</v-icon>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+      </template>
+      <template v-slot:list2>
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item-group v-model="exx16Item" color="primary">
+            <v-list-item
+              v-for="(item, i) in exx16Items"
+              :key="i"
+            >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </template>
+    </flex-box-ndrawer-list>
+    <br/>
+
   </div>
 </template>
 
@@ -1116,6 +1540,7 @@
   import FlexBox from '~/components/widgets/containers/flex-box';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
   import FlexBoxList from '~/components/widgets/containers/flex-box-list';
+  import FlexBoxNdrawerList from '~/components/widgets/containers/flex-box-ndrawer-list';
   import FlexBoxPanel from '~/components/widgets/containers/flex-box-panel';
   import HighlightCode from '~/components/widgets/highlight/highlight-code';
   import Code1 from '~/components/codes/components/lists/code-html-1';
@@ -1137,6 +1562,12 @@
   import Code17 from '~/components/codes/components/lists/code-html-17';
   import Code18 from '~/components/codes/components/lists/code-js-18';
   import Code19 from '~/components/codes/components/lists/code-html-19';
+  import Code20 from '~/components/codes/components/lists/code-html-20';
+  import Code21 from '~/components/codes/components/lists/code-js-21';
+  import Code22 from '~/components/codes/components/lists/code-html-22';
+  import Code23 from '~/components/codes/components/lists/code-js-23';
+  import Code24 from '~/components/codes/components/lists/code-html-24';
+  import Code25 from '~/components/codes/components/lists/code-js-25';
 
   const debug = require('debug')('app:page.basicForms');
 
@@ -1146,6 +1577,7 @@
       FlexBox,
       FlexBoxCard,
       FlexBoxList,
+      FlexBoxNdrawerList,
       FlexBoxPanel,
       HighlightCode,
       Code1,
@@ -1167,6 +1599,12 @@
       Code17,
       Code18,
       Code19,
+      Code20,
+      Code21,
+      Code22,
+      Code23,
+      Code24,
+      Code25,
     },
     data() {
       return {
@@ -1275,6 +1713,104 @@
           ['Delete', 'mdi-database-remove'],
         ],
         exx11Settings: [],
+        exx13Selected: [2],
+        exx13Items: [
+          {
+            action: '15 min',
+            headline: 'Brunch this weekend?',
+            title: 'Ali Connors',
+            subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
+          },
+          {
+            action: '2 hr',
+            headline: 'Summer BBQ',
+            title: 'me, Scrott, Jennifer',
+            subtitle: "Wish I could come, but I'm out of town this weekend.",
+          },
+          {
+            action: '6 hr',
+            headline: 'Oui oui',
+            title: 'Sandra Adams',
+            subtitle: 'Do you have Paris recommendations? Have you ever been?',
+          },
+          {
+            action: '12 hr',
+            headline: 'Birthday gift',
+            title: 'Trevor Hansen',
+            subtitle: 'Have any ideas about what we should get Heidi for her birthday?',
+          },
+          {
+            action: '18hr',
+            headline: 'Recipe to try',
+            title: 'Britta Holt',
+            subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
+          },
+        ],
+        exx14Settings: [],
+        exx15Items: [
+          {
+            action: 'mdi-star-face',
+            title: 'Attractions',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+          {
+            action: 'mdi-food',
+            title: 'Dining',
+            active: true,
+            items: [
+              {title: 'Breakfast & brunch'},
+              {title: 'New American'},
+              {title: 'Sushi'},
+            ],
+          },
+          {
+            action: 'mdi-school',
+            title: 'Education',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+          {
+            action: 'mdi-run',
+            title: 'Family',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+          {
+            action: 'mdi-hospital-box-outline',
+            title: 'Health',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+          {
+            action: 'mdi-content-cut',
+            title: 'Office',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+          {
+            action: 'mdi-offer',
+            title: 'Promotions',
+            items: [
+              {title: 'List Item'},
+            ],
+          },
+        ],
+        exx16Item: 0,
+        exx16Items: [
+          { text: 'My Files', icon: 'mdi-folder' },
+          { text: 'Shared with me', icon: 'mdi-account-multiple' },
+          { text: 'Starred', icon: 'mdi-star' },
+          { text: 'Recent', icon: 'mdi-history' },
+          { text: 'Offline', icon: 'mdi-check-circle' },
+          { text: 'Uploads', icon: 'mdi-upload' },
+          { text: 'Backups', icon: 'mdi-cloud-upload' },
+        ],
       }
     },
     head() {
