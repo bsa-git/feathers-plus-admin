@@ -6,7 +6,6 @@
     <v-col
       cols="12"
       :md="md"
-      :loading="loading"
     >
       <v-card
         :color="color? color : theme.dark ? 'secondary' : ''"

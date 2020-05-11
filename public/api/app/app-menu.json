@@ -186,6 +186,12 @@
         "to": "/components/lists"
       },
       {
+        "name": "components-calendars",
+        "alias": "calendars",
+        "title": "Calendars",
+        "to": "/components/calendars"
+      },
+      {
         "name": "components-alerts",
         "alias": "alerts",
         "title": "Alerts",

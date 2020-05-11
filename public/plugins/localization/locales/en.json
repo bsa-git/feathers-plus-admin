@@ -93,6 +93,7 @@
     "buttons": "Buttons",
     "cards": "Cards",
     "lists": "Lists",
+    "calendars": "Calendars",
     "carousels": "Carousels",
     "chips": "Chips",
     "dialogs": "Dialogs",
@@ -205,6 +206,10 @@
   "lists": {
     "title": "List component",
     "description": "List Examples"
+  },
+  "calendars": {
+    "title": "Calendar component",
+    "description": "Calendar Examples"
   },
   "color_picker": {
     "title": "Color picker",

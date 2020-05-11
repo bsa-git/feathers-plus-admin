@@ -1484,10 +1484,16 @@
       :vlists="2"
     >
       <template v-slot:system-bar>
-        <v-system-bar></v-system-bar>
+        <v-system-bar
+          color="primary"
+          dark
+        ></v-system-bar>
       </template>
       <template v-slot:list1>
-        <v-list>
+        <v-list
+          color="secondary"
+          :dark="theme.dark"
+        >
           <v-list-item>
             <v-list-item-avatar>
               <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
@@ -1509,6 +1515,8 @@
       </template>
       <template v-slot:list2>
         <v-list
+          color="secondary"
+          :dark="theme.dark"
           nav
           dense
         >

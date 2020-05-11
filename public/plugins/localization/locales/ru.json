@@ -93,6 +93,7 @@
     "buttons": "Кнопки",
     "cards": "Карты",
     "lists": "Списки",
+    "calendars": "Календари",
     "carousels": "Карусели",
     "chips": "Чипсы",
     "dialogs": "Диалоги",
@@ -205,6 +206,10 @@
   "lists": {
     "title": "Компонент списка",
     "description": "Примеры списков"
+  },
+  "calendars": {
+    "title": "Компонент календаря",
+    "description": "Примеры календарей"
   },
   "color_picker": {
     "title": "Выбор цвета",

@@ -14,7 +14,7 @@
         :loading="loading"
         :tile="tile"
       >
-        <v-navigation-drawer permanent>
+        <v-navigation-drawer permanent width="100%">
           <!-- Slot card system bar -->
           <slot name="system-bar"></slot>
           <!-- Slot card toolbar -->
