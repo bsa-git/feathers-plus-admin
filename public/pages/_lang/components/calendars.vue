@@ -167,6 +167,7 @@
     >
       <v-calendar
         ref="calendar"
+        :locale="config.locale"
         :now="exx2Today"
         :value="exx2Today"
         :events="exx2Events"
@@ -209,6 +210,7 @@
       <v-calendar
         color="primary"
         type="day"
+        :locale="config.locale"
       >
         <template v-slot:day-header="{ present }">
           <template
@@ -271,6 +273,7 @@
         :now="exx4Today"
         :value="exx4Today"
         color="primary"
+        :locale="config.locale"
       >
         <template v-slot:day="{ present, past, date }">
           <v-row
@@ -331,14 +334,14 @@
     <flex-box-sheet
       :height="64"
     >
-      <v-toolbar flat color="white">
-        <v-btn outlined class="mr-4" color="grey darken-2" @click="exx5SetToday">
-          Today
+      <v-toolbar flat>
+        <v-btn outlined class="mr-4" @click="exx5SetToday">
+          {{ $t('calendars.today') }}
         </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="exx5Prev">
+        <v-btn fab text small @click="exx5Prev">
           <v-icon small>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="exx5Next">
+        <v-btn fab text small @click="exx5Next">
           <v-icon small>mdi-chevron-right</v-icon>
         </v-btn>
         <v-toolbar-title>{{ exx5Title }}</v-toolbar-title>
@@ -347,25 +350,24 @@
           <template v-slot:activator="{ on }">
             <v-btn
               outlined
-              color="grey darken-2"
               v-on="on"
             >
-              <span>{{ exx5TypeToLabel[exx5Type] }}</span>
+              <span>{{ $t(`calendars.${exx5Type}`) }}</span>
               <v-icon right>mdi-menu-down</v-icon>
             </v-btn>
           </template>
           <v-list>
             <v-list-item @click="exx5Type = 'day'">
-              <v-list-item-title>Day</v-list-item-title>
+              <v-list-item-title>{{ $t('calendars.day') }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="exx5Type = 'week'">
-              <v-list-item-title>Week</v-list-item-title>
+              <v-list-item-title>{{ $t('calendars.week') }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="exx5Type = 'month'">
-              <v-list-item-title>Month</v-list-item-title>
+              <v-list-item-title>{{ $t('calendars.month') }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="exx5Type = '4day'">
-              <v-list-item-title>4 days</v-list-item-title>
+              <v-list-item-title>{{ $t('calendars.4day') }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -376,6 +378,7 @@
     >
       <v-calendar
         ref="calendar"
+        :locale="config.locale"
         v-model="exx5Focus"
         color="primary"
         :events="exx5Events"
@@ -433,6 +436,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import {mapGetters, mapMutations} from 'vuex';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import FlexBox from '~/components/widgets/containers/flex-box';
@@ -449,6 +453,7 @@
   import Code8 from '~/components/codes/components/calendars/code-js-8';
   import Code9 from '~/components/codes/components/calendars/code-html-9';
   import Code10 from '~/components/codes/components/calendars/code-js-10';
+
 
   const debug = require('debug')('app:page.basicForms');
 
@@ -521,15 +526,9 @@
         },
         exx4Colors: ['#1867c0', '#fb8c00', '#000000'],
         exx4Category: ['Development', 'Meetings', 'Slacking'],
-        exx5Today: '2019-01-10',
+        exx5Today: moment().format("YYYY-MM-DD"), //'2019-01-10',
         exx5Focus: '',
         exx5Type: 'month',
-        exx5TypeToLabel: {
-          month: 'Month',
-          week: 'Week',
-          day: 'Day',
-          '4day': '4 Days',
-        },
         exx5Start: null,
         exx5End: null,
         exx5SelectedEvent: {},
@@ -537,7 +536,9 @@
         exx5SelectedOpen: false,
         exx5Events: [],
         exx5Colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-        exx5Names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+        exx5Names: [this.$t('calendars.meeting'), this.$t('calendars.holiday'), this.$t('calendars.pto'),
+          this.$t('calendars.travel'), this.$t('calendars.event'), this.$t('calendars.birthday'),
+          this.$t('calendars.conference'), this.$t('calendars.party')],
       }
     },
     head() {
@@ -558,28 +559,28 @@
         loading: 'getLoading'
       }),
       exx5Title () {
-        const { start, end } = this
-        if (!start || !end) {
+        const { exx5Start, exx5End } = this;
+        if (!exx5Start || !exx5End) {
           return ''
         }
 
-        const startMonth = this.exx5MonthFormatter(start)
-        const endMonth = this.exx5MonthFormatter(end)
-        const suffixMonth = startMonth === endMonth ? '' : endMonth
+        const startMonth = this.exx5MonthFormatter(exx5Start);
+        const endMonth = this.exx5MonthFormatter(exx5End);
+        const suffixMonth = startMonth === endMonth ? '' : endMonth;
 
-        const startYear = start.year
-        const endYear = end.year
-        const suffixYear = startYear === endYear ? '' : endYear
+        const startYear = exx5Start.year;
+        const endYear = exx5End.year;
+        const suffixYear = startYear === endYear ? '' : endYear;
 
-        const startDay = start.day + this.exx5Nth(start.day)
-        const endDay = end.day + this.exx5Nth(end.day)
+        const startDay = exx5Start.day + this.exx5Nth(exx5Start.day);
+        const endDay = exx5End.day + this.exx5Nth(exx5End.day);
 
         switch (this.exx5Type) {
           case 'month':
-            return `${startMonth} ${startYear}`
+            return `${startMonth} ${startYear}`;
           case 'week':
           case '4day':
-            return `${startMonth} ${startDay} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`
+            return `${startMonth} ${startDay} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`;
           case 'day':
             return `${startMonth} ${startDay} ${startYear}`
         }
@@ -606,19 +607,19 @@
         }
       },
       exx1GetEvents ({ start, end }) {
-        const events = []
+        const events = [];
 
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.exx1Rnd(days, days + 20)
+        const min = new Date(`${start.date}T00:00:00`);
+        const max = new Date(`${end.date}T23:59:59`);
+        const days = (max.getTime() - min.getTime()) / 86400000;
+        const eventCount = this.exx1Rnd(days, days + 20);
 
         for (let i = 0; i < eventCount; i++) {
-          const allDay = this.exx1Rnd(0, 3) === 0
-          const firstTimestamp = this.exx1Rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.exx1Rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
+          const allDay = this.exx1Rnd(0, 3) === 0;
+          const firstTimestamp = this.exx1Rnd(min.getTime(), max.getTime());
+          const first = new Date(firstTimestamp - (firstTimestamp % 900000));
+          const secondTimestamp = this.exx1Rnd(2, allDay ? 288 : 8) * 900000;
+          const second = new Date(first.getTime() + secondTimestamp);
 
           events.push({
             name: this.exx1Names[this.exx1Rnd(0, this.exx1Names.length - 1)],
@@ -642,7 +643,7 @@
           : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`
       },
       exx5ViewDay ({ date }) {
-        this.exx5Focus = date
+        this.exx5Focus = date;
         this.exx5Type = 'day'
       },
       exx5GetEventColor (event) {
@@ -659,13 +660,13 @@
       },
       exx5ShowEvent ({ nativeEvent, event }) {
         const open = () => {
-          this.exx5SelectedEvent = event
-          this.exx5SelectedElement = nativeEvent.target
+          this.exx5SelectedEvent = event;
+          this.exx5SelectedElement = nativeEvent.target;
           setTimeout(() => this.exx5SelectedOpen = true, 10)
-        }
+        };
 
         if (this.exx5SelectedOpen) {
-          this.exx5SelectedOpen = false
+          this.exx5SelectedOpen = false;
           setTimeout(open, 10)
         } else {
           open()
@@ -674,19 +675,19 @@
         nativeEvent.stopPropagation()
       },
       exx5UpdateRange ({ start, end }) {
-        const events = []
+        const events = [];
 
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.exx5Rnd(days, days + 20)
+        const min = new Date(`${start.date}T00:00:00`);
+        const max = new Date(`${end.date}T23:59:59`);
+        const days = (max.getTime() - min.getTime()) / 86400000;
+        const eventCount = this.exx5Rnd(days, days + 20);
 
         for (let i = 0; i < eventCount; i++) {
-          const allDay = this.exx5Rnd(0, 3) === 0
-          const firstTimestamp = this.exx5Rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.exx5Rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
+          const allDay = this.exx5Rnd(0, 3) === 0;
+          const firstTimestamp = this.exx5Rnd(min.getTime(), max.getTime());
+          const first = new Date(firstTimestamp - (firstTimestamp % 900000));
+          const secondTimestamp = this.exx5Rnd(2, allDay ? 288 : 8) * 900000;
+          const second = new Date(first.getTime() + secondTimestamp);
 
           events.push({
             name: this.exx5Names[this.exx5Rnd(0, this.exx5Names.length - 1)],
@@ -696,8 +697,8 @@
           })
         }
 
-        this.exx5Start = start
-        this.exx5End = end
+        this.exx5Start = start;
+        this.exx5End = end;
         this.exx5Events = events
       },
       exx5Nth (d) {

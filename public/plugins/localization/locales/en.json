@@ -209,7 +209,20 @@
   },
   "calendars": {
     "title": "Calendar component",
-    "description": "Calendar Examples"
+    "description": "Calendar Examples",
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "4day": "4 Days",
+    "meeting": "Meeting",
+    "holiday": "Holiday",
+    "pto": "PTO",
+    "travel": "Travel",
+    "event": "Event",
+    "birthday": "Birthday",
+    "conference": "Conference",
+    "party": "Party"
   },
   "color_picker": {
     "title": "Color picker",

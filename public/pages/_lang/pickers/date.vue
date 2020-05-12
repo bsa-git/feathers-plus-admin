@@ -395,6 +395,7 @@
           <v-date-picker
             v-model="dates"
             color="primary"
+            :locale="config.locale"
             multiple
           ></v-date-picker>
         </v-col>
