@@ -4,11 +4,13 @@
     <app-page-header
       :page-title="description"
     ></app-page-header>
+
     <!--=== Description ===-->
     <blockquote class="blockquote line-left"><em>The <kbd>v-color-picker</kbd> allows you to select a color using a
       variety
       of input methods.</em></blockquote>
     <br/>
+
     <!--=== Model ===-->
     <div class="title">Model</div>
     <div class="subtitle-1">The <kbd>v-color-picker</kbd> uses the <kbd>v-model</kbd> prop to control the color
@@ -53,6 +55,8 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
+
     <!--=== Swatches ===-->
     <div class="title">Swatches</div>
     <div class="subtitle-1">Using the <kbd>show-swatches</kbd> prop you can display an array of color swatches
@@ -71,6 +75,8 @@
         <v-color-picker class="ma-2" show-swatches swatches-max-height="300px"></v-color-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
+
     <!--=== Inputs ===-->
     <div class="title">Inputs</div>
     <div class="subtitle-1">The number inputs can be hidden with the <kbd>hide-inputs</kbd> prop. You can also hide the
@@ -111,6 +117,8 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
+
     <!--=== Canvas ===-->
     <div class="title">Canvas</div>
     <div class="subtitle-1">The canvas can be hidden with the <kbd>hide-canvas</kbd> prop, and you can set its height

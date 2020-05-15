@@ -192,6 +192,18 @@
         "to": "/components/calendars"
       },
       {
+        "name": "components-steppers",
+        "alias": "steppers",
+        "title": "Steppers",
+        "to": "/components/steppers"
+      },
+      {
+        "name": "components-timelines",
+        "alias": "timelines",
+        "title": "Timelines",
+        "to": "/components/timelines"
+      },
+      {
         "name": "components-alerts",
         "alias": "alerts",
         "title": "Alerts",

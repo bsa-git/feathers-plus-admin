@@ -24,6 +24,7 @@
         <v-time-picker v-model="e" color="green lighten-1" header-color="purple"></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Disabled ===-->
     <div class="title">Disabled</div>
@@ -47,6 +48,7 @@
         ></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== 24h format ===-->
     <div class="title">24h Format</div>
@@ -59,6 +61,7 @@
         <v-time-picker v-model="e1" color="primary" format="24hr"></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Allowed times ===-->
     <div class="title">Allowed times</div>
@@ -88,6 +91,7 @@
         ></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Setting picker width ===-->
     <div class="title">Setting picker width</div>
@@ -114,6 +118,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== AM/PM switch in title ===-->
     <div class="title">AM/PM switch in title</div>
@@ -138,6 +143,7 @@
         ></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== AM/PM switch in title ===-->
     <div class="title">AM/PM switch in title</div>
@@ -161,6 +167,7 @@
         ></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== With seconds ===-->
     <div class="title">With seconds</div>
@@ -185,6 +192,7 @@
         ></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Scrollable ===-->
     <div class="title">Scrollable</div>
@@ -196,6 +204,7 @@
         <v-time-picker v-model="picker" color="primary" scrollable></v-time-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== In dialog and menu ===-->
     <div class="title">In dialog and menu</div>
@@ -267,6 +276,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Range ===-->
     <div class="title">Range</div>
@@ -286,7 +296,6 @@
         </v-col>
       </v-row>
     </flex-box-card>
-
   </div>
 </template>
 

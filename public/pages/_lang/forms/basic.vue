@@ -196,7 +196,7 @@
         </v-dialog>
       </v-card>
     </flex-box>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Creating rules ===-->
     <div class="title">Creating rules</div>
@@ -230,8 +230,7 @@
         </v-row>
       </flex-box-multi>
     </flex-box-panel>
-
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Validation with submit & clear ===-->
     <div class="title">Validation with submit & clear</div>
@@ -268,7 +267,7 @@
         </v-row>
       </flex-box-multi>
     </flex-box-panel>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Vuelidate ===-->
     <div class="title">Vuelidate</div>
@@ -302,7 +301,7 @@
         </v-row>
       </flex-box-multi>
     </flex-box-panel>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Vee-validate ===-->
     <div class="title">Vee-validate</div>
@@ -336,8 +335,6 @@
         </v-row>
       </flex-box-multi>
     </flex-box-panel>
-    <br/>
-
   </div>
 </template>
 

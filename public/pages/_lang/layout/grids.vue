@@ -39,6 +39,7 @@
         </v-card-text>
       </v-card>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Usage ===-->
     <div class="title">Usage</div>
@@ -77,7 +78,7 @@
         </v-alert>
       </flex-box>
     </div>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Auto sizing columns ===-->
     <div class="title">Auto sizing columns</div>
@@ -109,6 +110,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== One column width ===-->
     <div class="title">One column width</div>
@@ -151,6 +153,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Variable content width ===-->
     <div class="title">Variable content width</div>
@@ -222,6 +225,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Grow and Shrink ===-->
     <div class="title">Grow and Shrink</div>
@@ -266,6 +270,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Row and column breakpoints ===-->
     <div class="title">Row and column breakpoints</div>
@@ -310,6 +315,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Unique layouts ===-->
     <div class="title">Unique layouts</div>
@@ -380,6 +386,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Vertical alignment ===-->
     <div class="title">Vertical alignment</div>
@@ -434,6 +441,7 @@
         </v-row>
       </v-container>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Horizontal alignment ===-->
     <div class="title">Horizontal alignment</div>
@@ -462,6 +470,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== No gutters ===-->
     <div class="title">No gutters</div>
@@ -498,6 +507,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Column wrapping ===-->
     <div class="title">Column wrapping</div>
@@ -537,6 +547,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Order classes ===-->
     <div class="title">Order classes</div>
@@ -575,6 +586,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Order last / first ===-->
     <div class="title">Order last / first</div>
@@ -614,6 +626,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Offset ===-->
     <div class="title">Offset</div>
@@ -693,6 +706,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Offset breakpoint ===-->
     <div class="title">Offset breakpoint</div>
@@ -762,6 +776,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Margin utilities ===-->
     <div class="title">Margin utilities</div>
@@ -844,6 +859,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Nested grid ===-->
     <div class="title">Nested grid</div>
@@ -893,6 +909,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Spacers ===-->
     <div class="title">Spacers</div>
@@ -966,7 +983,6 @@
         </v-col>
       </v-row>
     </flex-box-card>
-
   </div>
 </template>
 

@@ -55,7 +55,7 @@
     <flex-box-sheet
       :tile="true"
       :height="54"
-      classValue="d-flex"
+      class-value="d-flex"
     >
       <v-btn
         icon
@@ -116,7 +116,7 @@
         @change="exx1GetEvents"
       ></v-calendar>
     </flex-box-sheet>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Weekly ===-->
     <div class="title">Weekly (Exx.2)</div>
@@ -175,6 +175,7 @@
         type="week"
       ></v-calendar>
     </flex-box-sheet>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Daily ===-->
     <div class="title">Daily (Exx.3)</div>
@@ -230,6 +231,7 @@
         </template>
       </v-calendar>
     </flex-box-sheet>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Slots ===-->
     <div class="title">Slots (Exx.4)</div>
@@ -294,6 +296,7 @@
         </template>
       </v-calendar>
     </flex-box-sheet>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Events ===-->
     <div class="title">Events (Exx.5)</div>

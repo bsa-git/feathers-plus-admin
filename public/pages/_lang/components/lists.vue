@@ -27,7 +27,7 @@
       <kbd>three-line</kbd>. The line declaration
       specifies the minimum height of the item and can also be controlled from <kbd>v-list</kbd> with the same prop.
     </div>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Disabled lists ===-->
     <div class="title">Disabled lists (Exx.1)</div>
@@ -84,7 +84,7 @@
         </v-list-item>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Shaped lists ===-->
     <div class="title">Shaped lists (Exx.2)</div>
@@ -141,7 +141,7 @@
         </v-list-item>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Dense ===-->
     <div class="title">Dense (Exx.3)</div>
@@ -198,7 +198,7 @@
         </v-list-item>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Flat ===-->
     <div class="title">Flat (Exx.4)</div>
@@ -255,7 +255,7 @@
         </v-list-item>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Rounded ===-->
     <div class="title">Rounded (Exx.5)</div>
@@ -312,7 +312,7 @@
         </v-list-item>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Avatar with title and action ===-->
     <div class="title">Avatar with title and action (Exx.6)</div>
@@ -393,7 +393,7 @@
         </v-list-item-avatar>
       </v-list-item>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Icon with 2 lines and action ===-->
     <div class="title">Icon with 2 lines and action(Exx.7)</div>
@@ -511,7 +511,7 @@
         </v-list-item-action>
       </v-list-item>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Avatar with 3 lines ===-->
     <div class="title">Avatar with 3 lines (Exx.8)</div>
@@ -600,7 +600,7 @@
         </v-list-item>
       </template>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Avatar with title and action ===-->
     <div class="title">Avatar with title and action (Exx.9)</div>
@@ -711,7 +711,7 @@
         </v-list>
       </template>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Nested lists ===-->
     <div class="title">Nested lists (Exx.10)</div>
@@ -813,7 +813,7 @@
         </v-list-group>
       </v-list-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Subheadings and dividers ===-->
     <div class="title">Subheadings and dividers (Exx.11)</div>
@@ -977,7 +977,7 @@
         </v-list>
       </template>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Card image with toolbar and list ===-->
     <div class="title">Card image with toolbar and list (Exx.12)</div>
@@ -1105,7 +1105,7 @@
         </v-list-item-content>
       </v-list-item>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Title with sub-title, actions and action-text ===-->
     <div class="title">Title with sub-title, actions and action-text (Exx.13)</div>
@@ -1207,7 +1207,7 @@
         </template>
       </v-list-item-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Action with title and sub-title ===-->
     <div class="title">Action with title and sub-title (Exx.14)</div>
@@ -1358,7 +1358,7 @@
         </v-list>
       </template>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Expansion Lists ===-->
     <div class="title">Expansion Lists (Exx.15)</div>
@@ -1440,7 +1440,7 @@
         </v-list-item>
       </v-list-group>
     </flex-box-list>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Navigation lists ===-->
     <div class="title">Navigation lists (Exx.16)</div>
@@ -1537,8 +1537,6 @@
         </v-list>
       </template>
     </flex-box-ndrawer-list>
-    <br/>
-
   </div>
 </template>
 

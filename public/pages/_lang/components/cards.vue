@@ -40,7 +40,7 @@
         </li>
       </ul>
     </div>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Outlined cards ===-->
     <div class="title">Outlined cards (Exx.1)</div>
@@ -93,7 +93,7 @@
         <v-btn text>Button</v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Intermediate ===-->
     <div class="title">Intermediate (Exx.2)</div>
@@ -165,7 +165,7 @@
         </v-row>
       </v-container>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Information card ===-->
     <div class="title">Information card (Exx.3)</div>
@@ -218,7 +218,7 @@
         </v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Media with text ===-->
     <div class="title">Media with text (Exx.4)</div>
@@ -285,7 +285,7 @@
         </v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Grids ===-->
     <div class="title">Grids (Exx.5)</div>
@@ -395,7 +395,7 @@
         </v-row>
       </v-container>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Horizontal cards ===-->
     <div class="title">Horizontal cards (Exx.6)</div>
@@ -520,7 +520,7 @@
         </v-row>
       </v-container>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Custom actions ===-->
     <div class="title">Custom actions (Exx.7)</div>
@@ -608,7 +608,7 @@
         </div>
       </v-expand-transition>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Twitter card ===-->
     <div class="title">Twitter card (Exx.8)</div>
@@ -692,7 +692,7 @@
         </v-list-item>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Loading card ===-->
     <div class="title">Loading card (Exx.9)</div>
@@ -798,7 +798,7 @@
         </v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Weather card ===-->
     <div class="title">Weather card (Exx.10)</div>
@@ -909,7 +909,7 @@
         <v-btn text>Full Report</v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Advanced ===-->
     <div class="title">Advanced (Exx.11)</div>
@@ -978,7 +978,6 @@
         </v-btn>
       </v-card-actions>
     </flex-box-card>
-    <br/>
   </div>
 </template>
 

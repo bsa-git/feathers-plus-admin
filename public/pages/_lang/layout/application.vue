@@ -83,8 +83,6 @@
       <code>v-navigation-drawer</code> can occupy the left or right side and <code>v-footer</code> always sits on top of
       <code>v-bottom-navigation</code>.
     </div>
-    <br/>
-
   </div>
 </template>
 

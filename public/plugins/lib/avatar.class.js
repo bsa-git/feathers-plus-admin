@@ -36,7 +36,7 @@ class Avatar {
       size: 80,
       defaultImage: '/static/img/avatar/user_default.png',
       isMultiImages: false,
-      multiImages: 'vuetifyAvatars',// avataaars || vuetifyAvatars || localAvatars
+      multiImages: 'vuetifyAvatars',// avataaars | vuetifyAvatars | localAvatars | pravatar
     };
     Object.assign(this.params, params);
     this.email = email;
@@ -109,6 +109,9 @@ class Avatar {
     case 'avataaars':
       avatar = avataaars[Math.floor(Math.random() * avataaars.length)];
       avatar = `https://avataaars.io/${avatar}`;
+      break;
+    case 'pravatar':
+      avatar = `http://i.pravatar.cc/${this.params.size}`;
       break;
     default:
       avatar = this.params.defaultImage;

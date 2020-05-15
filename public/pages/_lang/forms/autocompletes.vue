@@ -47,6 +47,7 @@
           target="_blank">MDN</a>
       </v-alert>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Searching an API ===-->
     <div class="title">Searching an API (Exx.1)</div>
@@ -145,7 +146,7 @@
         </v-card-actions>
       </v-card>
     </flex-box>
-    <br/>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Custom filter on autocomplete ===-->
     <div class="title">Custom filter on autocomplete (Exx.2)</div>
@@ -233,6 +234,7 @@
         </v-card-actions>
       </v-card>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Slots ===-->
     <div class="title">Slots (Exx.3)</div>
@@ -433,6 +435,7 @@
         </v-card-actions>
       </v-card>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Asynchronous items ===-->
     <div class="title">Asynchronous items (Exx.4)</div>
@@ -502,6 +505,7 @@
         </v-toolbar>
       </v-card>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Advanced slots ===-->
     <div class="title">Advanced slots (Exx.5)</div>
@@ -614,6 +618,7 @@
         </v-toolbar>
       </v-card>
     </flex-box>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== State selector ===-->
     <div class="title">State selector (Exx.6)</div>

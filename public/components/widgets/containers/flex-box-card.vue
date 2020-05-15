@@ -8,6 +8,7 @@
       :md="md"
     >
       <v-card
+        :class="classValue"
         :color="color? color : theme.dark ? 'secondary' : ''"
         :dark="theme.dark"
         :outlined="outlined"
@@ -22,6 +23,8 @@
         <slot name="app-bar"></slot>
         <!-- Slot card img -->
         <slot name="card-img"></slot>
+        <!-- Slot card title -->
+        <slot name="card-title"></slot>
         <!-- Card title -->
         <v-card-title v-if="title" class="d-flex justify-center">{{ title }}</v-card-title>
         <v-card-text>
@@ -38,10 +41,7 @@
 
   export default {
     props: {
-      title: {
-        type: String,
-        default: ''
-      },
+      //--- V-ROW ---//
       justify: {
         type: String,
         default: 'center'
@@ -50,9 +50,19 @@
         type: String,
         default: 'center'
       },
+      //--- V-COL ---//
       md: {
         type: Number,
         default: 6
+      },
+      //--- V-CARD ---//
+      title: {
+        type: String,
+        default: ''
+      },
+      classValue: {
+        type: String,
+        default: undefined
       },
       color: {
         type: String,

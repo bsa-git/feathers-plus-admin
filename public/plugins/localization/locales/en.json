@@ -94,6 +94,8 @@
     "cards": "Cards",
     "lists": "Lists",
     "calendars": "Calendars",
+    "steppers": "Steppers",
+    "timelines": "Timelines",
     "carousels": "Carousels",
     "chips": "Chips",
     "dialogs": "Dialogs",
@@ -128,7 +130,6 @@
     "selects": "Selects",
     "selection_controls": "Selection Controls",
     "text_fields": "Text Fields",
-    "steppers": "Steppers",
     "editors": "Editors",
     "extras": "Extras",
     "pages": "Pages",
@@ -223,6 +224,14 @@
     "birthday": "Birthday",
     "conference": "Conference",
     "party": "Party"
+  },
+  "steppers": {
+    "title": "Stepper component",
+    "description": "Stepper Examples"
+  },
+  "timelines": {
+    "title": "Timeline component",
+    "description": "Timeline Examples"
   },
   "color_picker": {
     "title": "Color picker",

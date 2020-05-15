@@ -4,6 +4,7 @@
     <app-page-header
       :page-title="description"
     ></app-page-header>
+
     <!--=== Description ===-->
     <blockquote class="blockquote line-left"><em>The <kbd>v-date-picker</kbd> is stand-alone component that can be
       utilized
@@ -32,6 +33,7 @@
         ></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Allowed dates ===-->
     <div class="title">Date pickers - Allowed dates</div>
@@ -50,6 +52,7 @@
         ></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Setting picker width ===-->
     <div class="title">Date pickers - Setting picker width</div>
@@ -74,7 +77,7 @@
         ></v-date-picker>
       </v-row>
     </flex-box-card>
-
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - react to displayed month/year change ===-->
     <div class="title">Date pickers - react to displayed month/year change</div>
@@ -103,6 +106,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Internationalization ===-->
     <div class="title">Date pickers - Internationalization</div>
@@ -127,6 +131,7 @@
         ></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - icons ===-->
     <div class="title">Date pickers - icons</div>
@@ -144,6 +149,7 @@
         ></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - read only ===-->
     <div class="title">Date pickers - read only</div>
@@ -154,6 +160,7 @@
         <v-date-picker v-model="date" color="primary" :locale="config.locale" readonly></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - current date indicator ===-->
     <div class="title">Date pickers - current date indicator</div>
@@ -170,6 +177,7 @@
                        color="primary"></v-date-picker>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - In dialog and menu ===-->
     <div class="title">Date pickers - In dialog and menu</div>
@@ -259,6 +267,7 @@
         <v-spacer></v-spacer>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - formatting date ===-->
     <div class="title">Date pickers - formatting date</div>
@@ -321,6 +330,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - formatting date using external libs ===-->
     <div class="title">Formatting dates is possible also with external libs such as Moment.js or date-fns</div>
@@ -381,6 +391,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Multiple ===-->
     <div class="title">Date pickers - Multiple</div>
@@ -430,6 +441,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Range ===-->
     <div class="title">Date pickers - Range</div>
@@ -450,6 +462,7 @@
         </v-col>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - birthday picker ===-->
     <div class="title">Date pickers - birthday picker</div>
@@ -486,6 +499,7 @@
         ></v-date-picker>
       </v-menu>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Events ===-->
     <div class="title">Date pickers - Events</div>
@@ -519,6 +533,7 @@
         </div>
       </v-row>
     </flex-box-card>
+    <v-divider class="my-5"></v-divider>
 
     <!--=== Month pickers - In dialog and menu ===-->
     <div class="title">Month pickers - In dialog and menu</div>
