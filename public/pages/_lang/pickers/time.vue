@@ -13,7 +13,7 @@
     <br/>
 
     <!--=== Colors ===-->
-    <div class="title">Colors</div>
+    <div class="title">Colors (Exx.1)</div>
     <div class="subtitle-1">Time picker colors can be set using the <kbd>color</kbd> and <kbd>header-color</kbd> props.
       If header-color prop is not provided header will use the <kbd>color</kbd> prop value.
     </div>
@@ -27,7 +27,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Disabled ===-->
-    <div class="title">Disabled</div>
+    <div class="title">Disabled (Exx.2)</div>
     <div class="subtitle-1">You can't interact with disabled picker.</div>
     <br/>
     <flex-box-card :md="8">
@@ -51,7 +51,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== 24h format ===-->
-    <div class="title">24h Format</div>
+    <div class="title">24h Format (Exx.3)</div>
     <div class="subtitle-1">A time picker can be switched to 24hr format. Note that the <kbd>format</kbd> prop defines
       only the way the picker is displayed, picker's value (model) is always in 24hr format.
     </div>
@@ -64,7 +64,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Allowed times ===-->
-    <div class="title">Allowed times</div>
+    <div class="title">Allowed times (Exx.4)</div>
     <div class="subtitle-1">You can specify allowed times using arrays, objects, and functions.
       You can also specify time step/precision/interval - e.g. 10 minutes.
     </div>
@@ -94,7 +94,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Setting picker width ===-->
-    <div class="title">Setting picker width</div>
+    <div class="title">Setting picker width (Exx.5)</div>
     <div class="subtitle-1">You can specify allowed the picker's width or make it full width.
     </div>
     <br/>
@@ -121,7 +121,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== AM/PM switch in title ===-->
-    <div class="title">AM/PM switch in title</div>
+    <div class="title">AM/PM switch in title (Exx.6)</div>
     <div class="subtitle-1">You can move AM/PM switch to picker's title.
     </div>
     <br/>
@@ -146,7 +146,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== AM/PM switch in title ===-->
-    <div class="title">AM/PM switch in title</div>
+    <div class="title">AM/PM switch in title (Exx.7)</div>
     <div class="subtitle-1">You can move AM/PM switch to picker's title.
     </div>
     <br/>
@@ -170,7 +170,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== With seconds ===-->
-    <div class="title">With seconds</div>
+    <div class="title">With seconds (Exx.8)</div>
     <div class="subtitle-1">Time picker can have seconds input.
     </div>
     <br/>
@@ -195,7 +195,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Scrollable ===-->
-    <div class="title">Scrollable</div>
+    <div class="title">Scrollable (Exx.9)</div>
     <div class="subtitle-1">You can edit time picker's value using mouse wheel.
     </div>
     <br/>
@@ -207,7 +207,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== In dialog and menu ===-->
-    <div class="title">In dialog and menu</div>
+    <div class="title">In dialog and menu (Exx.10)</div>
     <div class="subtitle-1">Due to the flexibility of pickers, you can really dial in the experience exactly how you
       want it.
     </div>
@@ -279,7 +279,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Range ===-->
-    <div class="title">Range</div>
+    <div class="title">Range (Exx.11)</div>
     <div class="subtitle-1">This is an example of joining pickers together using <kbd>min</kbd> and <kbd>max</kbd> prop.
     </div>
     <br/>

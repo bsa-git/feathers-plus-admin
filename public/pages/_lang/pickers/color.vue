@@ -12,7 +12,7 @@
     <br/>
 
     <!--=== Model ===-->
-    <div class="title">Model</div>
+    <div class="title">Model (Exx.1)</div>
     <div class="subtitle-1">The <kbd>v-color-picker</kbd> uses the <kbd>v-model</kbd> prop to control the color
       displayed. It supports hex
       strings such as <kbd>#FF00FF</kbd> and <kbd>#FF00FF00</kbd>, and objects representing <strong>RGBA</strong>,
@@ -58,7 +58,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Swatches ===-->
-    <div class="title">Swatches</div>
+    <div class="title">Swatches (Exx.2)</div>
     <div class="subtitle-1">Using the <kbd>show-swatches</kbd> prop you can display an array of color swatches
       that users can pick from. It is also possible to customize what colors are shown using the <kbd>swatches</kbd>
       prop.
@@ -78,7 +78,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Inputs ===-->
-    <div class="title">Inputs</div>
+    <div class="title">Inputs (Exx.3)</div>
     <div class="subtitle-1">The number inputs can be hidden with the <kbd>hide-inputs</kbd> prop. You can also hide the
       mode
       switch icon with the <kbd>hide-mode-switch</kbd> prop. The mode can also be controlled externally through the
@@ -120,7 +120,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Canvas ===-->
-    <div class="title">Canvas</div>
+    <div class="title">Canvas (Exx.4)</div>
     <div class="subtitle-1">The canvas can be hidden with the <kbd>hide-canvas</kbd> prop, and you can set its height
       with the
       prop <kbd>canvas-height</kbd>. The size of the selection dot can be controlled with the <kbd>dot-size</kbd> prop.
