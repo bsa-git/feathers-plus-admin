@@ -204,6 +204,12 @@
         "to": "/components/timelines"
       },
       {
+        "name": "components-tables",
+        "alias": "tables",
+        "title": "Data Tables",
+        "to": "/components/tables"
+      },
+      {
         "name": "components-alerts",
         "alias": "alerts",
         "title": "Alerts",
@@ -257,13 +263,6 @@
         "alias": "icons",
         "title": "Icons",
         "to": "/components/icons",
-        "inactive": true
-      },
-      {
-        "name": "components-tables",
-        "alias": "tables",
-        "title": "Data Tables",
-        "to": "/components/tables",
         "inactive": true
       },
       {

@@ -84,7 +84,7 @@
     "chartDemo": "Chart",
     "echartDemo": "ECharts",
     "list": "List",
-    "table_widget": "Table",
+    "table_widget": "Simple table",
     "ui_elements": "UI Elements",
     "components": "Components",
     "alerts": "Alerts",
@@ -96,11 +96,11 @@
     "calendars": "Calendars",
     "steppers": "Steppers",
     "timelines": "Timelines",
+    "tables": "Data Tables",
     "carousels": "Carousels",
     "chips": "Chips",
     "dialogs": "Dialogs",
     "icons": "Icons",
-    "tables": "Data Tables",
     "parallax": "Parallax",
     "snackbar": "Snackbar",
     "progress": "Progress",
@@ -232,6 +232,10 @@
   "timelines": {
     "title": "Timeline component",
     "description": "Timeline Examples"
+  },
+  "tables": {
+    "title": "Table component",
+    "description": "Table Examples"
   },
   "color_picker": {
     "title": "Color picker",
@@ -545,7 +549,7 @@
     "moreInfo": "More info"
   },
   "table_widget": {
-    "title": "Table",
-    "description": "Table widget"
+    "title": "Simple table",
+    "description": "Simple table widget"
   }
 }

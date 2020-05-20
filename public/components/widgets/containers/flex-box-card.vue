@@ -6,11 +6,12 @@
     <v-col
       cols="12"
       :md="md"
+      :class="outlined && !theme.dark? 'card-border pa-0' : ''"
     >
       <v-card
         :class="classValue"
         :color="color? color : theme.dark ? 'secondary' : ''"
-        :dark="theme.dark"
+        :dark="(dark === undefined)? theme.dark : dark"
         :outlined="outlined"
         :loading="loading"
         :tile="tile"
@@ -67,6 +68,10 @@
       color: {
         type: String,
         default: 'secondary'
+      },
+      dark: {
+        type: Boolean,
+        default: undefined
       },
       outlined: {
         type: Boolean,

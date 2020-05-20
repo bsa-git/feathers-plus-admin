@@ -21,24 +21,18 @@
         the v1.5 docs
       </v-alert>
     </flex-box>
-
-    <flex-box :md="8">
-      <v-card
-        color="secondary"
-        :dark="theme.dark"
-        outlined
-      >
-        <v-card-title class="d-flex justify-center">Material Design Viewport Breakpoints</v-card-title>
-        <v-card-text>
-          <simple-table
-            height="350px"
-            :thead="theadBreakpoints.thead"
-            :tfoot="tfootBreakpoints.tfoot"
-            :tbody="tbodyBreakpoints"
-          ></simple-table>
-        </v-card-text>
-      </v-card>
-    </flex-box>
+    <flex-box-card
+      title="Material Design Viewport Breakpoints"
+      :md="8"
+      :outlined="true"
+    >
+      <simple-table
+        height="350px"
+        :thead="theadBreakpoints.thead"
+        :tfoot="tfootBreakpoints.tfoot"
+        :tbody="tbodyBreakpoints"
+      ></simple-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Usage ===-->
@@ -89,7 +83,10 @@
     </div>
     <br/>
 
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card
+      :md="8"
+      :outlined="true"
+    >
       <v-row
         v-for="n in 2"
         :key="n"
@@ -118,7 +115,7 @@
       siblings to automatically resize around it.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         no-gutters
@@ -161,7 +158,7 @@
       width of their content.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         justify="center"
@@ -235,7 +232,7 @@
       a value from <span class="font-weight-bold">1 to 12</span>.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         no-gutters
@@ -278,7 +275,7 @@
       the <kbd>top row</kbd> layout change on <span class="font-weight-bold">sm, md, and lg</span> breakpoints)
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         no-gutters
@@ -323,7 +320,7 @@
       interfaces.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <!-- Stack the columns on mobile by making one full-width and the other half-width -->
       <v-row>
         <v-col
@@ -394,7 +391,7 @@
       <kbd>align</kbd> and <kbd>align-self</kbd> properties.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-container
         v-for="align in alignments"
         :key="align"
@@ -449,7 +446,7 @@
       <kbd>justify</kbd> and <kbd>justify-self</kbd> properties.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         v-for="j in justify"
         :key="j"
@@ -478,7 +475,7 @@
       <kbd>v-col</kbd> children using the <kbd>no-gutters</kbd> property.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row no-gutters>
         <v-col
           cols="12"
@@ -515,7 +512,7 @@
       <kbd>.flex-nowrap</kbd> utility class), each group of extra columns will wrap onto a new line.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row no-gutters>
         <v-col cols="9">
           <v-card
@@ -555,7 +552,7 @@
       for different sizes. Design specialized screen layouts that accommodate to any application.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row no-gutters>
         <v-col>
           <v-card
@@ -595,7 +592,7 @@
       respectively to the order CSS property.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row no-gutters>
         <v-col order="last">
           <v-card
@@ -635,7 +632,7 @@
       This allows you to fine tune your application layout precisely to your needs.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         no-gutters
@@ -713,7 +710,7 @@
     <div class="subtitle-1">Offset can also be applied on a per breakpoint basis.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row
         class="mb-6"
         no-gutters
@@ -785,7 +782,7 @@
       you can force sibling columns away from each other.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row>
         <v-col md="4">
           <v-card
@@ -866,7 +863,7 @@
     <div class="subtitle-1">Grids can be nested, similar to other frameworks, in order to achieve very custom layouts.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row>
         <v-col sm="9">
           <v-card
@@ -918,7 +915,7 @@
       between two components.
     </div>
     <br/>
-    <flex-box-card :md="8" justify="left">
+    <flex-box-card :md="8" :outlined="true">
       <v-row>
         <v-col>
           <v-card

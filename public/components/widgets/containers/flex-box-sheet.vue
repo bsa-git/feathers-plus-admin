@@ -9,7 +9,7 @@
     >
       <v-sheet
         :color="color? color : theme.dark ? 'secondary' : ''"
-        :dark="theme.dark"
+        :dark="(dark === undefined)? theme.dark : dark"
         :tile="tile"
         :height="height"
         :class="classValue"
@@ -44,6 +44,10 @@
       color: {
         type: String,
         default: 'secondary'
+      },
+      dark: {
+        type: Boolean,
+        default: undefined
       },
       tile: {
         type: Boolean,

@@ -84,7 +84,7 @@
     "chartDemo": "Графики",
     "echartDemo": "EГрафики",
     "list": "Список",
-    "table_widget": "Таблица",
+    "table_widget": "Простая таблица",
     "ui_elements": "Интерфейс",
     "components": "Компоненты",
     "alerts": "Предупреждения",
@@ -96,11 +96,11 @@
     "calendars": "Календари",
     "steppers": "Шаги",
     "timelines": "Хронология событий",
+    "tables": "Таблицы данных",
     "carousels": "Карусели",
     "chips": "Чипсы",
     "dialogs": "Диалоги",
     "icons": "Иконки",
-    "tables": "Таблицы данных",
     "parallax": "Паралакс",
     "slider": "Слайдер",
     "pagination": "Пагинация",
@@ -232,6 +232,10 @@
   "timelines": {
     "title": "Компонент хронологии событий",
     "description": "Примеры хронологии событий"
+  },
+  "tables": {
+    "title": "Конмпонент таблицы",
+    "description": "Примеры таблиц"
   },
   "color_picker": {
     "title": "Выбор цвета",
@@ -543,7 +547,7 @@
     "moreInfo": "Больше информации"
   },
   "table_widget": {
-    "title": "Таблица",
+    "title": "Простая таблица",
     "description": "Табличный виджет"
   }
 }
