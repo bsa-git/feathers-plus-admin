@@ -53,9 +53,10 @@
             :loading-text="loadingText"
             :dense="dense"
             :footer-props="footerProps"
+            :custom-filter="customFilter"
           >
-            <!-- Slot data-table -->
-            <!--            <slot></slot>-->
+            <!-- Slot v-data-table -->
+            <slot></slot>
           </v-data-table>
         </v-card-text>
       </v-card>
@@ -186,6 +187,10 @@
       },
       footerProps: {
         type: Object,
+        default: undefined
+      },
+      customFilter: {
+        type: Function,
         default: undefined
       },
     },
