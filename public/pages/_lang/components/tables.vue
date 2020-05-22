@@ -106,7 +106,9 @@
       :show-select="true"
     >
       <template v-slot:card-title>
-        <v-switch v-model="exx2SingleSelect" label="Single select" class="pa-3"></v-switch>
+        <v-card-title>
+          <v-switch v-model="exx2SingleSelect" label="Single select" class="pa-3"></v-switch>
+        </v-card-title>
       </template>
     </flex-box-table>
     <v-divider class="my-5"></v-divider>

@@ -210,6 +210,12 @@
         "to": "/components/tables"
       },
       {
+        "name": "components-treeviews",
+        "alias": "treeviews",
+        "title": "TreeViews",
+        "to": "/components/treeviews"
+      },
+      {
         "name": "components-alerts",
         "alias": "alerts",
         "title": "Alerts",

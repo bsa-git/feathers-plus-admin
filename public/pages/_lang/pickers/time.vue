@@ -18,36 +18,37 @@
       If header-color prop is not provided header will use the <kbd>color</kbd> prop value.
     </div>
     <br/>
-    <flex-box-card :md="6">
-      <v-row justify="space-around">
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker v-model="e" color="green lighten-1"></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker v-model="e" color="green lighten-1" header-color="purple"></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Disabled ===-->
     <div class="title">Disabled (Exx.2)</div>
     <div class="subtitle-1">You can't interact with disabled picker.</div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row
-        justify="space-around"
-        align="center"
-      >
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker
           v-model="picker"
           color="primary"
           disabled
         ></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker
           v-model="picker"
           color="primary"
           :landscape="$vuetify.breakpoint.smAndUp"
           disabled
         ></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== 24h format ===-->
@@ -56,11 +57,9 @@
       only the way the picker is displayed, picker's value (model) is always in 24hr format.
     </div>
     <br/>
-    <flex-box-card :md="4">
-      <v-row justify="center">
-        <v-time-picker v-model="e1" color="primary" format="24hr"></v-time-picker>
-      </v-row>
-    </flex-box-card>
+    <row-box>
+      <v-time-picker v-model="e1" color="primary" format="24hr"></v-time-picker>
+    </row-box>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Allowed times ===-->
@@ -69,8 +68,8 @@
       You can also specify time step/precision/interval - e.g. 10 minutes.
     </div>
     <br/>
-    <flex-box-card :md="6">
-      <v-row justify="space-around">
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker
           v-model="time"
           color="primary"
@@ -82,6 +81,8 @@
           min="9:30"
           max="22:15"
         ></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker
           v-model="timeStep"
           color="primary"
@@ -89,8 +90,8 @@
           class="mt-4"
           format="24hr"
         ></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Setting picker width ===-->
@@ -98,8 +99,11 @@
     <div class="subtitle-1">You can specify allowed the picker's width or make it full width.
     </div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row align="center">
+    <flex-box-cols
+      :md="5"
+      :vcols="1"
+    >
+      <template v-slot:col1>
         <v-time-picker
           v-model="time"
           color="primary"
@@ -107,17 +111,16 @@
           width="290"
           class="ml-4"
         ></v-time-picker>
-        <v-col class="pa-0 mx-4 mt-4 mt-sm-0">
-          <v-time-picker
-            v-model="time"
-            color="primary"
-            :landscape="$vuetify.breakpoint.mdAndUp"
-            full-width
-            type="month"
-          ></v-time-picker>
-        </v-col>
-      </v-row>
-    </flex-box-card>
+        <v-time-picker
+          v-model="time"
+          color="primary"
+          :landscape="$vuetify.breakpoint.mdAndUp"
+          full-width
+          type="month"
+          class="ma-4"
+        ></v-time-picker>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== AM/PM switch in title ===-->
@@ -125,85 +128,84 @@
     <div class="subtitle-1">You can move AM/PM switch to picker's title.
     </div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row
-        justify="space-around"
-        align="center"
-      >
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker
           v-model="picker"
           color="primary"
           ampm-in-title
         ></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker
           v-model="picker"
           color="primary"
           :landscape="$vuetify.breakpoint.smAndUp"
           ampm-in-title
         ></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
-    <!--=== AM/PM switch in title ===-->
-    <div class="title">AM/PM switch in title (Exx.7)</div>
-    <div class="subtitle-1">You can move AM/PM switch to picker's title.
+    <!--=== No title ===-->
+    <div class="title">No title (Exx.7)</div>
+    <div class="subtitle-1">
+      You can remove picker's title.
     </div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row
-        justify="space-around"
-      >
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker
           v-model="picker"
           color="primary"
           no-title
         ></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker
           v-model="picker"
           color="primary"
           :landscape="$vuetify.breakpoint.smAndUp"
           no-title
         ></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== With seconds ===-->
     <div class="title">With seconds (Exx.8)</div>
-    <div class="subtitle-1">Time picker can have seconds input.
+    <div class="subtitle-1">
+      Time picker can have seconds input.
     </div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row
-        justify="space-around"
-        align="center"
-      >
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-time-picker
           v-model="picker"
           color="primary"
           use-seconds
         ></v-time-picker>
+      </template>
+      <template v-slot:col2>
         <v-time-picker
           v-model="picker"
           color="primary"
           :landscape="$vuetify.breakpoint.smAndUp"
           use-seconds
         ></v-time-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Scrollable ===-->
     <div class="title">Scrollable (Exx.9)</div>
-    <div class="subtitle-1">You can edit time picker's value using mouse wheel.
+    <div class="subtitle-1">
+      You can edit time picker's value using mouse wheel.
     </div>
     <br/>
-    <flex-box-card :md="4">
-      <v-row justify="space-around" align="center">
-        <v-time-picker v-model="picker" color="primary" scrollable></v-time-picker>
-      </v-row>
-    </flex-box-card>
+    <row-box>
+      <v-time-picker v-model="picker" color="primary" scrollable></v-time-picker>
+    </row-box>
     <v-divider class="my-5"></v-divider>
 
     <!--=== In dialog and menu ===-->
@@ -303,11 +305,15 @@
   import {mapGetters} from 'vuex';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
+  import RowBox from '~/components/widgets/containers/row-box';
+  import FlexBoxCols from '~/components/widgets/containers/flex-box-cols';
 
   export default {
     components: {
       AppPageHeader,
-      FlexBoxCard
+      FlexBoxCard,
+      RowBox,
+      FlexBoxCols
     },
     data() {
       return {

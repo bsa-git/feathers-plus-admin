@@ -97,6 +97,7 @@
     "steppers": "Steppers",
     "timelines": "Timelines",
     "tables": "Data Tables",
+    "treeviews": "TreeViews",
     "carousels": "Carousels",
     "chips": "Chips",
     "dialogs": "Dialogs",
@@ -236,6 +237,10 @@
   "tables": {
     "title": "Table component",
     "description": "Table Examples"
+  },
+  "treeviews": {
+    "title": "TreeView component",
+    "description": "TreeView Examples"
   },
   "color_picker": {
     "title": "Color picker",

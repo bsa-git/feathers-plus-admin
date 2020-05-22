@@ -18,48 +18,51 @@
       If <kbd>header-color</kbd> prop is not provided header will use the <kbd>color</kbd> prop value.
     </div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row justify="space-around">
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-date-picker
           v-model="exx1Picker"
           :locale="config.locale"
           color="pink lighten-3"
           header-color="pink"
         ></v-date-picker>
+      </template>
+      <template v-slot:col2>
         <v-date-picker
           v-model="exx1Picker2"
           :locale="config.locale"
           color="purple"
         ></v-date-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Allowed dates ===-->
     <div class="title">Date pickers - Allowed dates (Exx.2)</div>
     <div>You can specify allowed dates using arrays, objects, and functions.</div>
     <br/>
-    <flex-box-card :md="4">
-      <v-row justify="center">
-        <v-date-picker
-          v-model="exx2Picker"
-          color="primary"
-          :allowed-dates="exx2AllowedDates"
-          class="mt-4"
-          min="2016-06-15"
-          max="2018-03-20"
-          :locale="config.locale"
-        ></v-date-picker>
-      </v-row>
-    </flex-box-card>
+    <row-box>
+      <v-date-picker
+        v-model="exx2Picker"
+        color="primary"
+        :allowed-dates="exx2AllowedDates"
+        class="mt-4"
+        min="2016-06-15"
+        max="2018-03-20"
+        :locale="config.locale"
+      ></v-date-picker>
+    </row-box>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - Setting picker width ===-->
     <div class="title">Date pickers - Setting picker width (Exx.3)</div>
     <div>You can specify allowed the picker's width or make it full width.</div>
     <br/>
-    <flex-box-card :md="8">
-      <v-row align="center" justify="center">
+    <flex-box-cols
+      :md="5"
+      :vcols="1"
+    >
+      <template v-slot:col1>
         <v-date-picker
           v-model="exx3Date"
           :locale="config.locale"
@@ -75,8 +78,9 @@
           :landscape="$vuetify.breakpoint.smAndUp"
           class="ma-4"
         ></v-date-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
+
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - react to displayed month/year change ===-->
@@ -94,7 +98,6 @@
             color="primary"
             v-model="exx4Date"
             :picker-date.sync="exx4PickerDate"
-            full-width
           ></v-date-picker>
         </v-col>
         <v-col cols="12" sm="6" class="my-2 px-1">
@@ -115,51 +118,54 @@
       <kbd>first-day-of-week</kbd> prop.
     </div>
     <br/>
-    <flex-box-card :md="6">
-      <v-row justify="space-around">
+    <flex-box-cols>
+      <template v-slot:col1>
         <v-date-picker
           v-model="exx5Picker"
           color="primary"
           :first-day-of-week="0"
           locale="zh-cn"
         ></v-date-picker>
+      </template>
+      <template v-slot:col2>
         <v-date-picker
           v-model="exx5Picker"
           color="primary"
           :first-day-of-week="1"
           locale="sv-se"
         ></v-date-picker>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - icons ===-->
     <div class="title">Date pickers - icons (Exx.6)</div>
     <div>You can override the default icons used in the picker.</div>
     <br/>
-    <flex-box-card :md="4">
-      <v-row justify="center">
-        <v-date-picker
-          v-model="exx6Picker"
-          color="primary"
-          :locale="config.locale"
-          year-icon="mdi-calendar-blank"
-          prev-icon="mdi-skip-previous"
-          next-icon="mdi-skip-next"
-        ></v-date-picker>
-      </v-row>
-    </flex-box-card>
+    <row-box>
+      <v-date-picker
+        v-model="exx6Picker"
+        color="primary"
+        :locale="config.locale"
+        year-icon="mdi-calendar-blank"
+        prev-icon="mdi-skip-previous"
+        next-icon="mdi-skip-next"
+      ></v-date-picker>
+    </row-box>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - read only ===-->
     <div class="title">Date pickers - read only (Exx.7)</div>
     <div>Selecting new date could be disabled by adding <kbd>readonly</kbd> prop.</div>
     <br/>
-    <flex-box-card :md="4">
-      <v-row justify="center">
-        <v-date-picker v-model="exx7Date" color="primary" :locale="config.locale" readonly></v-date-picker>
-      </v-row>
-    </flex-box-card>
+    <row-box>
+      <v-date-picker
+        v-model="exx7Date"
+        color="primary"
+        :locale="config.locale"
+        readonly
+      ></v-date-picker>
+    </row-box>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - current date indicator ===-->
@@ -169,14 +175,24 @@
       the border or select different date to be displayed as the current one.
     </div>
     <br/>
-    <flex-box-card :md="6">
-      <v-row justify="space-around">
-        <v-date-picker v-model="exx8Date1" :locale="config.locale" :show-current="false"
-                       color="primary"></v-date-picker>
-        <v-date-picker v-model="exx8Date2" :locale="config.locale" show-current="2013-07-13"
-                       color="primary"></v-date-picker>
-      </v-row>
-    </flex-box-card>
+    <flex-box-cols>
+      <template v-slot:col1>
+        <v-date-picker
+          v-model="exx8Date1"
+          :locale="config.locale"
+          :show-current="false"
+          color="primary"
+        ></v-date-picker>
+      </template>
+      <template v-slot:col2>
+        <v-date-picker
+          v-model="exx8Date2"
+          :locale="config.locale"
+          show-current="2013-07-13"
+          color="primary"
+        ></v-date-picker>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Date pickers - In dialog and menu ===-->
@@ -509,8 +525,8 @@
       in case you want to display multiple event indicators.
     </div>
     <br/>
-    <flex-box-card :md="6" class-value="px-6">
-      <v-row justify="space-between">
+    <flex-box-cols>
+      <template v-slot:col1>
         <div>
           <div class="subheading">Defined by array</div>
           <v-date-picker
@@ -521,6 +537,8 @@
             event-color="green lighten-1"
           ></v-date-picker>
         </div>
+      </template>
+      <template v-slot:col2>
         <div>
           <div class="subheading">Defined by function</div>
           <v-date-picker
@@ -531,8 +549,8 @@
             :events="exx15FunctionEvents"
           ></v-date-picker>
         </div>
-      </v-row>
-    </flex-box-card>
+      </template>
+    </flex-box-cols>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Month pickers - In dialog and menu ===-->
@@ -617,11 +635,15 @@
   import moment from 'moment'
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
+  import RowBox from '~/components/widgets/containers/row-box';
+  import FlexBoxCols from '~/components/widgets/containers/flex-box-cols';
 
   export default {
     components: {
       AppPageHeader,
-      FlexBoxCard
+      FlexBoxCard,
+      RowBox,
+      FlexBoxCols
     },
     data(vm) {
       return {
@@ -697,7 +719,7 @@
       exx10Date(val) {
         this.exx10DateFormatted = this.exx10FormatDate(this.date)
       },
-      exx14Menu (val) {
+      exx14Menu(val) {
         val && setTimeout(() => (this.$refs.exx14Picker.activePicker = 'YEAR'))
       },
     },

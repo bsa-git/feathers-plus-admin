@@ -3,12 +3,15 @@
     :justify="justify"
     :align="align"
   >
-    <template  v-for="col in vcols">
+    <template  v-for="n in vcols">
       <v-col
-        cols="12"
+        class="mx-3"
+        cols="auto"
         :md="md"
       >
-        <slot :name="`slot${col}`"></slot>
+        <v-row justify="center">
+          <slot :name="`col${n}`"></slot>
+        </v-row>
       </v-col>
     </template>
   </v-row>
@@ -27,7 +30,7 @@
       },
       md: {
         type: Number,
-        default: 4
+        default: undefined
       },
       vcols: {
         type: Number,
