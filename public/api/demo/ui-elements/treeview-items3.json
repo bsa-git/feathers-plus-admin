@@ -1,0 +1,32 @@
+{
+  "treeItems3": [
+    {
+      "name": ".git"
+    },
+    {
+      "name": "node_modules"
+    },
+    {
+      "name": "public",
+      "children": [
+        {
+          "name": "static",
+          "children": [
+            {
+              "name": "logo.png",
+              "file": "png"
+            }
+          ]
+        },
+        {
+          "name": "favicon.ico",
+          "file": "png"
+        },
+        {
+          "name": "index.html",
+          "file": "html"
+        }
+      ]
+    }
+  ]
+}

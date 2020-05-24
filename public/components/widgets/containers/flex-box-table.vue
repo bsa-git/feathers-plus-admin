@@ -28,10 +28,7 @@
         <!-- Card title -->
         <v-card-title v-if="title" class="d-flex justify-center">{{ title }}</v-card-title>
         <v-card-text>
-          <!-- Slot data-table  -->
-          <slot name="data-table"></slot>
           <v-data-table
-            v-if="!isSlotDataTable"
             :class="color"
             :dark="(dark === undefined)? theme.dark : dark"
             v-model="model"
@@ -109,10 +106,6 @@
         default: false
       },
       //--- V-DATA-TABLE ---//
-      isSlotDataTable: {
-        type: Boolean,
-        default: false
-      },
       model: {
         type: Array,
         default: () => []

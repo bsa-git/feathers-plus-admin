@@ -29,10 +29,7 @@
         <!-- Card title -->
         <v-card-title v-if="title" class="d-flex justify-center">{{ title }}</v-card-title>
         <v-card-text>
-          <!-- Slot treeview  -->
-          <slot name="treeview"></slot>
           <v-treeview
-            v-if="!isSlotTreeView"
             :dark="(dark === undefined)? theme.dark : dark"
             :items="items"
             :dense="dense"
@@ -44,6 +41,7 @@
             :hoverable="hoverable"
             :rounded="rounded"
             :item-disabled="itemDisabled"
+            :open-all="openAll"
           >
             <!-- Slot treeview -->
             <slot></slot>
@@ -103,10 +101,6 @@
         default: false
       },
       //--- V-TREE-VIEW ---//
-      isSlotTreeView: {
-        type: Boolean,
-        default: false
-      },
       items: {
         type: Array,
         default: () => []
@@ -146,6 +140,10 @@
       itemDisabled: {
         type: String,
         default: ''
+      },
+      openAll: {
+        type: Boolean,
+        default: false
       },
     },
     computed: {

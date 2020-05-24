@@ -60,7 +60,8 @@
     <!--=== Selectable rows ===-->
     <div class="title">Selectable rows (Exx.2)</div>
     <div class="subtitle-1">
-      The <kbd>show-select</kbd> prop will render a checkbox in the default header to toggle all rows, and a checkbox for
+      The <kbd>show-select</kbd> prop will render a checkbox in the default header to toggle all rows, and a checkbox
+      for
       each default row. You can customize these with the slots <kbd>header.data-table-select</kbd> and <kbd>item.data-table-select</kbd>
       respectively. You can also switch between allowing multiple selected rows at the same time or just one with the
       <kbd>single-select</kbd> prop.
@@ -317,8 +318,10 @@
     <!--=== Loading state ===-->
     <div class="title">Loading state (Exx.7)</div>
     <div class="subtitle-1">
-      You can use the <kbd>loading</kbd> prop to indicate that data in the table is currently loading. If there is no data
-      in the table, a loading message will also be displayed. This message can be customized using the <kbd>loading-text</kbd> prop
+      You can use the <kbd>loading</kbd> prop to indicate that data in the table is currently loading. If there is no
+      data
+      in the table, a loading message will also be displayed. This message can be customized using the
+      <kbd>loading-text</kbd> prop
       or the <kbd>loading</kbd> slot.
     </div>
     <!-- Template/Script -->
@@ -400,7 +403,8 @@
     <!--=== Footer props ===-->
     <div class="title">Footer props (Exx.9)</div>
     <div class="subtitle-1">
-      The <kbd>v-data-table</kbd> renders a default footer using the <kbd>v-data-footer</kbd> component. You can pass props to this
+      The <kbd>v-data-table</kbd> renders a default footer using the <kbd>v-data-footer</kbd> component. You can pass
+      props to this
       component using <kbd>footer-props</kbd>.
     </div>
     <!-- Template/Script -->
@@ -512,8 +516,10 @@
     <!--=== Slots ===-->
     <div class="title">Slots (Exx.11)</div>
     <div class="subtitle-1">
-      The <kbd>v-data-table</kbd> provides a large number of slots for customizing the table. This example showcases some
-      of these slots and what you can do with each. It is important to note some slot (eg: <kbd>item/body/header</kbd>) will
+      The <kbd>v-data-table</kbd> provides a large number of slots for customizing the table. This example showcases
+      some
+      of these slots and what you can do with each. It is important to note some slot (eg: <kbd>item/body/header</kbd>)
+      will
       completely takes over the internal rendering of the component which will require you to re-implement
       functionalities such as selection and expansion. Some slots will override each other such
       as: <kbd>body</kbd> > <kbd>item</kbd> > <kbd>item.name</kbd> and <kbd>header/header.name</kbd>.
@@ -549,11 +555,10 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
         <v-select v-model="exx11Enabled" :items="exx11Slots" label="Slot" clearable></v-select>
         <v-data-table
           :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
@@ -589,7 +594,8 @@
             <v-progress-linear color="purple" :height="10" indeterminate></v-progress-linear>
           </template>
 
-          <template v-if="exx11IsEnabled('item.data-table-select')" v-slot:item.data-table-select="{ isSelected, select }">
+          <template v-if="exx11IsEnabled('item.data-table-select')"
+                    v-slot:item.data-table-select="{ isSelected, select }">
             <v-simple-checkbox color="green" :value="isSelected" @input="select($event)"></v-simple-checkbox>
           </template>
 
@@ -640,8 +646,7 @@
             </div>
           </template>
         </v-data-table>
-      </template>
-    </flex-box-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Simple Checkbox ===-->
@@ -682,24 +687,22 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx12Headers"
-          :items="exx12Desserts"
-          :items-per-page="5"
-        >
-          <template v-slot:item.glutenFree="{ item }">
-            <v-simple-checkbox v-model="item.glutenFree" disabled></v-simple-checkbox>
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx12Headers"
+        :items="exx12Desserts"
+        :items-per-page="5"
+      >
+        <template v-slot:item.glutenFree="{ item }">
+          <v-simple-checkbox v-model="item.glutenFree" disabled></v-simple-checkbox>
+        </template>
+      </v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Expandable rows ===-->
@@ -742,9 +745,9 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
       <template v-slot:tool-bar>
         <v-toolbar color="secondary" flat>
@@ -753,33 +756,35 @@
           <v-switch v-model="exx13SingleExpand" label="Single expand" class="mt-2"></v-switch>
         </v-toolbar>
       </template>
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx13Headers"
-          :items="exx13Desserts"
-          :items-per-page="5"
-          :single-expand="exx13SingleExpand"
-          :expanded.sync="exx13Expanded"
-          item-key="name"
-          show-expand
-        >
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length" class="orange--text">More info about {{ item.name }}</td>
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx13Headers"
+        :items="exx13Desserts"
+        :items-per-page="5"
+        :single-expand="exx13SingleExpand"
+        :expanded.sync="exx13Expanded"
+        item-key="name"
+        show-expand
+      >
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length" class="orange--text">More info about {{ item.name }}</td>
+        </template>
+      </v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Custom filtering ===-->
     <div class="title">Custom filtering (Exx.14)</div>
     <div class="subtitle-1">
-      You can override the default filtering used with <kbd>search</kbd> prop by supplying a function to the <kbd>custom-filter</kbd> prop.
-      If you need to customize the filtering of a specific column, you can supply a function to the <kbd>filter</kbd> property
-      on header items. The signature is <kbd>(value: any, search: string | null, item: any) => boolean</kbd>. This function
-      will always be run even if <kbd>search</kbd> prop has not been provided. Thus you need to make sure to exit early with a
+      You can override the default filtering used with <kbd>search</kbd> prop by supplying a function to the <kbd>custom-filter</kbd>
+      prop.
+      If you need to customize the filtering of a specific column, you can supply a function to the <kbd>filter</kbd>
+      property
+      on header items. The signature is <kbd>(value: any, search: string | null, item: any) => boolean</kbd>. This
+      function
+      will always be run even if <kbd>search</kbd> prop has not been provided. Thus you need to make sure to exit early
+      with a
       value of <kbd>true</kbd> if <kbd>filter</kbd> should not be applied.
     </div>
     <!-- Template/Script -->
@@ -813,42 +818,41 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx14Headers"
-          :items="exx14Desserts"
-          item-key="name"
-          :items-per-page="5"
-          :search="exx14Search"
-          :custom-filter="exx14FilterOnlyCapsText"
-        >
-          <template v-slot:top>
-            <v-text-field v-model="exx14Search" label="Search (UPPER CASE ONLY)" class="mx-4"></v-text-field>
-          </template>
-          <template v-slot:body.append>
-            <tr>
-              <td></td>
-              <td>
-                <v-text-field v-model="exx14Calories" type="number" label="Less than"></v-text-field>
-              </td>
-              <td colspan="4"></td>
-            </tr>
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx14Headers"
+        :items="exx14Desserts"
+        item-key="name"
+        :items-per-page="5"
+        :search="exx14Search"
+        :custom-filter="exx14FilterOnlyCapsText"
+      >
+        <template v-slot:top>
+          <v-text-field v-model="exx14Search" label="Search (UPPER CASE ONLY)" class="mx-4"></v-text-field>
+        </template>
+        <template v-slot:body.append>
+          <tr>
+            <td></td>
+            <td>
+              <v-text-field v-model="exx14Calories" type="number" label="Less than"></v-text-field>
+            </td>
+            <td colspan="4"></td>
+          </tr>
+        </template>
+      </v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Customizing default header ===-->
     <div class="title">Customizing default header (Exx.15)</div>
     <div class="subtitle-1">
-      You can use the dynamic slots <kbd>header.name</kbd> to customize only certain columns. <kbd>name</kbd> is the name of the
+      You can use the dynamic slots <kbd>header.name</kbd> to customize only certain columns. <kbd>name</kbd> is the
+      name of the
       <kbd>value</kbd> property in the corresponding header item sent to <kbd>headers</kbd>.
     </div>
     <!-- Template/Script -->
@@ -882,31 +886,31 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx15Headers"
-          :items="exx15Desserts"
-          :items-per-page="5"
-        >
-          <template v-slot:header.name="{ header }">
-            {{ header.text.toUpperCase() }}
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx15Headers"
+        :items="exx15Desserts"
+        :items-per-page="5"
+      >
+        <template v-slot:header.name="{ header }">
+          {{ header.text.toUpperCase() }}
+        </template>
+      </v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Customizing default rows ===-->
     <div class="title">Customizing default rows (Exx.16)</div>
     <div class="subtitle-1">
-      You can use the dynamic slots <kbd>item.name</kbd> to customize only certain columns. <kbd>name</kbd> is the name of the
-      <kbd>value</kbd> property in the corresponding header item sent to <kbd>headers</kbd>. So to customize the calories column we're
+      You can use the dynamic slots <kbd>item.name</kbd> to customize only certain columns. <kbd>name</kbd> is the name
+      of the
+      <kbd>value</kbd> property in the corresponding header item sent to <kbd>headers</kbd>. So to customize the
+      calories column we're
       using the <kbd>item.calories</kbd> slot.
     </div>
     <!-- Template/Script -->
@@ -940,24 +944,22 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx16Headers"
-          :items="exx16Desserts"
-          :items-per-page="5"
-        >
-          <template v-slot:item.calories="{ item }">
-            <v-chip :color="exx16GetColor(item.calories)" dark>{{ item.calories }}</v-chip>
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx16Headers"
+        :items="exx16Desserts"
+        :items-per-page="5"
+      >
+        <template v-slot:item.calories="{ item }">
+          <v-chip :color="exx16GetColor(item.calories)" dark>{{ item.calories }}</v-chip>
+        </template>
+      </v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== External pagination ===-->
@@ -997,40 +999,39 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx17Headers"
-          :items="exx17Desserts"
-          :items-per-page="exx17ItemsPerPage"
-          :page.sync="exx17Page"
-          hide-default-footer
-          @page-count="exx17PageCount = $event"
-        ></v-data-table>
-        <div class="text-center pt-2">
-          <v-pagination v-model="exx17Page" :length="exx17PageCount"></v-pagination>
-          <v-text-field
-            :value="exx17ItemsPerPage"
-            label="Items per page"
-            type="number"
-            min="-1"
-            max="15"
-            @input="exx17ItemsPerPage = parseInt($event, 10)"
-          ></v-text-field>
-        </div>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx17Headers"
+        :items="exx17Desserts"
+        :items-per-page="exx17ItemsPerPage"
+        :page.sync="exx17Page"
+        hide-default-footer
+        @page-count="exx17PageCount = $event"
+      ></v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="exx17Page" :length="exx17PageCount"></v-pagination>
+        <v-text-field
+          :value="exx17ItemsPerPage"
+          label="Items per page"
+          type="number"
+          min="-1"
+          max="15"
+          @input="exx17ItemsPerPage = parseInt($event, 10)"
+        ></v-text-field>
+      </div>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== External sorting ===-->
     <div class="title">External sorting (Exx.18)</div>
     <div class="subtitle-1">
-      Sorting can also be controlled externally by using the individual props, or by using the the <kbd>options</kbd> prop.
+      Sorting can also be controlled externally by using the individual props, or by using the the <kbd>options</kbd>
+      prop.
       Remember that you must apply the <kbd>.sync</kbd> modifier.
     </div>
     <!-- Template/Script -->
@@ -1064,34 +1065,34 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx18Headers"
-          :items="exx18Desserts"
-          :items-per-page="5"
-          :sort-by.sync="exx18SortBy"
-          :sort-desc.sync="exx18SortDesc"
-        ></v-data-table>
-        <div class="text-center pt-2">
-          <v-btn color="primary" class="mr-2" @click="exx18ToggleOrder">Toggle sort order</v-btn>
-          <v-btn color="primary" @click="exx18NextSort">Sort next column</v-btn>
-        </div>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx18Headers"
+        :items="exx18Desserts"
+        :items-per-page="5"
+        :sort-by.sync="exx18SortBy"
+        :sort-desc.sync="exx18SortDesc"
+      ></v-data-table>
+      <div class="text-center pt-2">
+        <v-btn color="primary" class="mr-2" @click="exx18ToggleOrder">Toggle sort order</v-btn>
+        <v-btn color="primary" @click="exx18NextSort">Sort next column</v-btn>
+      </div>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Paginate and sort server-side ===-->
     <div class="title">Paginate and sort server-side (Exx.19)</div>
     <div class="subtitle-1">
-      If you're loading data already paginated and sorted from a backend, you can use the <kbd>server-items-length</kbd> prop.
+      If you're loading data already paginated and sorted from a backend, you can use the <kbd>server-items-length</kbd>
+      prop.
       Defining this prop will disable the built-in sorting and pagination, and you will instead need to use the
-      available events (<kbd>update:page, update:sortBy, update:options</kbd>, etc) to know when to request new pages from your
+      available events (<kbd>update:page, update:sortBy, update:options</kbd>, etc) to know when to request new pages
+      from your
       backend. Use the <kbd>loading</kbd> prop to display a progress bar while fetching data.
     </div>
     <!-- Template/Script -->
@@ -1125,29 +1126,28 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx19Headers"
-          :items="exx19Desserts"
-          :items-per-page="5"
-          :options.sync="exx19Options"
-          :server-items-length="exx19TotalDesserts"
-          :loading="exx19Loading"
-        ></v-data-table>
-      </template>
-    </flex-box-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx19Headers"
+        :items="exx19Desserts"
+        :items-per-page="5"
+        :options.sync="exx19Options"
+        :server-items-length="exx19TotalDesserts"
+        :loading="exx19Loading"
+      ></v-data-table>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== Content Editing ===-->
     <div class="title">Content Editing (Exx.20)</div>
     <div class="subtitle-1">
-      The <kbd>v-edit-dialog</kbd> component can be used for editing data directly within a <kbd>v-data-table</kbd>. You can block the
+      The <kbd>v-edit-dialog</kbd> component can be used for editing data directly within a <kbd>v-data-table</kbd>. You
+      can block the
       closing of the <kbd>v-edit-dialog</kbd> when clicked outside by adding the <kbd>persistent</kbd> prop.
     </div>
     <!-- Template/Script -->
@@ -1181,71 +1181,69 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx20Headers"
-          :items="exx20Desserts"
-          :items-per-page="5"
-        >
-          <template v-slot:item.name="props">
-            <v-edit-dialog
-              :return-value.sync="props.item.name"
-              @save="exx20Save"
-              @cancel="exx20Cancel"
-              @open="exx20Open"
-              @close="exx20Close"
-            > {{ props.item.name }}
-              <template v-slot:input>
-                <v-text-field
-                  v-model="props.item.name"
-                  :rules="[exx20Max25chars]"
-                  label="Edit"
-                  single-line
-                  counter
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-          <template v-slot:item.iron="props">
-            <v-edit-dialog
-              :return-value.sync="props.item.iron"
-              large
-              persistent
-              @save="exx20Save"
-              @cancel="exx20Cancel"
-              @open="exx20Open"
-              @close="exx20Close"
-            >
-              <div>{{ props.item.iron }}</div>
-              <template v-slot:input>
-                <div class="mt-4 title">Update Iron</div>
-              </template>
-              <template v-slot:input>
-                <v-text-field
-                  v-model="props.item.iron"
-                  :rules="[exx20Max25chars]"
-                  label="Edit"
-                  single-line
-                  counter
-                  autofocus
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-        </v-data-table>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx20Headers"
+        :items="exx20Desserts"
+        :items-per-page="5"
+      >
+        <template v-slot:item.name="props">
+          <v-edit-dialog
+            :return-value.sync="props.item.name"
+            @save="exx20Save"
+            @cancel="exx20Cancel"
+            @open="exx20Open"
+            @close="exx20Close"
+          > {{ props.item.name }}
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.name"
+                :rules="[exx20Max25chars]"
+                label="Edit"
+                single-line
+                counter
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <template v-slot:item.iron="props">
+          <v-edit-dialog
+            :return-value.sync="props.item.iron"
+            large
+            persistent
+            @save="exx20Save"
+            @cancel="exx20Cancel"
+            @open="exx20Open"
+            @close="exx20Close"
+          >
+            <div>{{ props.item.iron }}</div>
+            <template v-slot:input>
+              <div class="mt-4 title">Update Iron</div>
+            </template>
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.iron"
+                :rules="[exx20Max25chars]"
+                label="Edit"
+                single-line
+                counter
+                autofocus
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+      </v-data-table>
 
-        <v-snackbar v-model="exx20Snack" :timeout="3000" :color="exx20SnackColor">
-          {{ exx20SnackText }}
-          <v-btn text @click="exx20Snack = false">Close</v-btn>
-        </v-snackbar>
-      </template>
-    </flex-box-table>
+      <v-snackbar v-model="exx20Snack" :timeout="3000" :color="exx20SnackColor">
+        {{ exx20SnackText }}
+        <v-btn text @click="exx20Snack = false">Close</v-btn>
+      </v-snackbar>
+    </flex-box-card>
     <v-divider class="my-5"></v-divider>
 
     <!--=== CRUD Actions ===-->
@@ -1284,90 +1282,87 @@
     </flex-box-panel>
     <br/>
     <!-- DataTable -->
-    <flex-box-table
+    <flex-box-card
+      :md="10"
       :outlined="true"
-      :isSlotDataTable="true"
     >
-      <template v-slot:data-table>
-        <v-data-table
-          :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
-          :dark="theme.dark"
-          :headers="exx21Headers"
-          :items="exx21Desserts"
-          :items-per-page="5"
-          sort-by="calories"
-        >
-          <template v-slot:top>
-            <v-toolbar flat color="secondary">
-              <v-toolbar-title>My CRUD</v-toolbar-title>
-              <v-divider
-                class="mx-4"
-                inset
-                vertical
-              ></v-divider>
-              <v-spacer></v-spacer>
-              <v-dialog v-model="exx21Dialog" max-width="500px">
-                <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ exx21FormTitle }}</span>
-                  </v-card-title>
+      <v-data-table
+        :class="theme.dark? 'grey darken-3' : 'grey lighten-5' "
+        :dark="theme.dark"
+        :headers="exx21Headers"
+        :items="exx21Desserts"
+        :items-per-page="5"
+        sort-by="calories"
+      >
+        <template v-slot:top>
+          <v-toolbar flat color="secondary">
+            <v-toolbar-title>My CRUD</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            ></v-divider>
+            <v-spacer></v-spacer>
+            <v-dialog v-model="exx21Dialog" max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">{{ exx21FormTitle }}</span>
+                </v-card-title>
 
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="exx21EditedItem.name" label="Dessert name"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="exx21EditedItem.calories" label="Calories"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="exx21EditedItem.fat" label="Fat (g)"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="exx21EditedItem.carbs" label="Carbs (g)"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="exx21EditedItem.protein" label="Protein (g)"></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="exx21EditedItem.name" label="Dessert name"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="exx21EditedItem.calories" label="Calories"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="exx21EditedItem.fat" label="Fat (g)"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="exx21EditedItem.carbs" label="Carbs (g)"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="exx21EditedItem.protein" label="Protein (g)"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="exx21Close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="exx21Save">Save</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-toolbar>
-          </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="exx21EditItem(item)"
-            >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              small
-              @click="exx21DeleteItem(item)"
-            >
-              mdi-delete
-            </v-icon>
-          </template>
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="exx21Initialize">Reset</v-btn>
-          </template>
-        </v-data-table>
-      </template>
-    </flex-box-table>
-    <v-divider class="my-5"></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="exx21Close">Cancel</v-btn>
+                  <v-btn color="blue darken-1" text @click="exx21Save">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="exx21EditItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="exx21DeleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="exx21Initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </flex-box-card>
   </div>
 </template>
 
@@ -1540,12 +1535,12 @@
             sortable: false,
             value: 'name',
           },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
-          { text: '', value: 'data-table-expand' },
+          {text: 'Calories', value: 'calories'},
+          {text: 'Fat (g)', value: 'fat'},
+          {text: 'Carbs (g)', value: 'carbs'},
+          {text: 'Protein (g)', value: 'protein'},
+          {text: 'Iron (%)', value: 'iron'},
+          {text: '', value: 'data-table-expand'},
         ],
         exx14Search: '',
         exx14Calories: '',
@@ -1583,11 +1578,11 @@
             sortable: false,
             value: 'name',
           },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Actions', value: 'actions', sortable: false },
+          {text: 'Calories', value: 'calories'},
+          {text: 'Fat (g)', value: 'fat'},
+          {text: 'Carbs (g)', value: 'carbs'},
+          {text: 'Protein (g)', value: 'protein'},
+          {text: 'Actions', value: 'actions', sortable: false},
         ],
         exx21Desserts: [],
         exx21EditedIndex: -1,
@@ -1605,7 +1600,7 @@
           carbs: 0,
           protein: 0,
         },
-     }
+      }
     },
     head() {
       return {
@@ -1615,7 +1610,7 @@
         ],
       }
     },
-    mounted () {
+    mounted() {
       this.exx19GetDataFromApi()
         .then(data => {
           this.exx19Desserts = data.items
@@ -1624,7 +1619,7 @@
       this.exx21Initialize();
     },
     watch: {
-      exx11Enabled (slot) {
+      exx11Enabled(slot) {
         if (slot === 'no-data') {
           this.exx11Items = []
         } else if (slot === 'no-results') {
@@ -1635,7 +1630,7 @@
         }
       },
       exx19Options: {
-        handler () {
+        handler() {
           this.exx19GetDataFromApi()
             .then(data => {
               this.exx19Desserts = data.items;
@@ -1644,7 +1639,7 @@
         },
         deep: true,
       },
-      exx21Dialog (val) {
+      exx21Dialog(val) {
         val || this.exx21Close()
       },
     },
@@ -1654,16 +1649,16 @@
         config: 'getConfig',
         loading: 'getLoading'
       }),
-      exx11ShowSelect () {
+      exx11ShowSelect() {
         return this.exx11IsEnabled('header.data-table-select') || this.exx11IsEnabled('item.data-table-select')
       },
-      exx11HideHeaders () {
+      exx11HideHeaders() {
         return !this.exx11ShowSelect
       },
-      exx11IsLoading () {
+      exx11IsLoading() {
         return this.exx11IsEnabled('progress')
       },
-      exx14Headers () {
+      exx14Headers() {
         return [
           {
             text: 'Dessert (100g serving)',
@@ -1679,13 +1674,13 @@
               return value < parseInt(this.exx14Calories)
             },
           },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
+          {text: 'Fat (g)', value: 'fat'},
+          {text: 'Carbs (g)', value: 'carbs'},
+          {text: 'Protein (g)', value: 'protein'},
+          {text: 'Iron (%)', value: 'iron'},
         ]
       },
-      exx21FormTitle () {
+      exx21FormTitle() {
         return this.exx21EditedIndex === -1 ? 'New Item' : 'Edit Item'
       },
     },
@@ -1703,32 +1698,32 @@
           this.initPanelDelay(2000);
         }
       },
-      exx11IsEnabled (slot) {
+      exx11IsEnabled(slot) {
         return this.exx11Enabled === slot
       },
-      exx14FilterOnlyCapsText (value, search, item) {
+      exx14FilterOnlyCapsText(value, search, item) {
         return value != null &&
           search != null &&
           typeof value === 'string' &&
           value.toString().toLocaleUpperCase().indexOf(search) !== -1
       },
-      exx16GetColor (calories) {
+      exx16GetColor(calories) {
         if (calories > 400) return 'red';
         else if (calories > 200) return 'orange';
         else return 'green'
       },
-      exx18ToggleOrder () {
+      exx18ToggleOrder() {
         this.exx18SortDesc = !this.exx18SortDesc
       },
-      exx18NextSort () {
+      exx18NextSort() {
         let index = this.exx18Headers.findIndex(h => h.value === this.exx18SortBy);
         index = (index + 1) % this.exx18Headers.length;
         this.exx18SortBy = this.exx18Headers[index].value
       },
-      exx19GetDataFromApi () {
+      exx19GetDataFromApi() {
         this.exx19Loading = true;
         return new Promise((resolve, reject) => {
-          const { sortBy, sortDesc, page, itemsPerPage } = this.exx19Options;
+          const {sortBy, sortDesc, page, itemsPerPage} = this.exx19Options;
 
           let items = this.exx19GetDesserts();
           const total = items.length;
@@ -1763,43 +1758,43 @@
           }, 1000)
         })
       },
-      exx19GetDesserts () {
+      exx19GetDesserts() {
         return desserts
       },
-      exx20Save () {
+      exx20Save() {
         this.exx20Snack = true;
         this.exx20SnackColor = 'success';
         this.exx20SnackText = 'Data saved'
       },
-      exx20Cancel () {
+      exx20Cancel() {
         this.exx20Snack = true;
         this.exx20SnackColor = 'error';
         this.exx20SnackText = 'Canceled'
       },
-      exx20Open () {
+      exx20Open() {
         this.exx20Snack = true;
         this.exx20SnackColor = 'info';
         this.exx20SnackText = 'Dialog opened'
       },
-      exx20Close () {
+      exx20Close() {
         console.log('Dialog closed')
       },
-      exx21Initialize () {
+      exx21Initialize() {
         this.exx21Desserts = desserts
       },
 
-      exx21EditItem (item) {
+      exx21EditItem(item) {
         this.exx21EditedIndex = this.exx21Desserts.indexOf(item);
         this.exx21EditedItem = Object.assign({}, item);
         this.exx21Dialog = true
       },
 
-      exx21DeleteItem (item) {
+      exx21DeleteItem(item) {
         const index = this.exx21Desserts.indexOf(item);
         confirm('Are you sure you want to delete this item?') && this.exx21Desserts.splice(index, 1)
       },
 
-      exx21Close () {
+      exx21Close() {
         this.exx21Dialog = false;
         this.$nextTick(() => {
           this.exx21EditedItem = Object.assign({}, this.exx21DefaultItem);
@@ -1807,7 +1802,7 @@
         })
       },
 
-      exx21Save () {
+      exx21Save() {
         if (this.exx21EditedIndex > -1) {
           Object.assign(this.exx21Desserts[this.exx21EditedIndex], this.exx21EditedItem)
         } else {
