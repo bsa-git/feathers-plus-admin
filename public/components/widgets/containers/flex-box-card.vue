@@ -32,6 +32,8 @@
           <!-- Slot card-text -->
           <slot></slot>
         </v-card-text>
+        <!-- Slot card-actions -->
+        <slot name="card-actions"></slot>
       </v-card>
     </v-col>
   </v-row>

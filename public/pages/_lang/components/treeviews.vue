@@ -708,8 +708,10 @@
     <!--=== Async items ===-->
     <div class="title">Async items (Exx.15)</div>
     <div class="subtitle-1">
-      You can dynamically load child data by supplying a Promise callback to the <kbd>load-children</kbd> prop. This callback
-      will be executed the first time a user tries to expand an item that has a children property that is an empty array.
+      You can dynamically load child data by supplying a Promise callback to the <kbd>load-children</kbd> prop. This
+      callback
+      will be executed the first time a user tries to expand an item that has a children property that is an empty
+      array.
     </div>
     <!-- Template/Script -->
     <flex-box-panel
@@ -828,6 +830,136 @@
       </v-row>
     </flex-box-card>
     <v-divider class="my-5"></v-divider>
+
+    <!--=== Custom selectable icons ===-->
+    <div class="title">Custom selectable icons (Exx.16)</div>
+    <div class="subtitle-1">
+      Customize the <kbd>on</kbd>, <kbd>off</kbd> and <kbd>indeterminate</kbd> icons for your selectable tree.
+      Combine with other advanced functionality like API loaded items.
+    </div>
+    <!-- Template/Script -->
+    <flex-box-panel
+      :md="10"
+      title="Template/Script"
+      icon="mdi-contain"
+      :model="panel"
+      v-on:onTogglePanel="modelPanel"
+    >
+      <v-row
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Template" :init="true">
+            <code22></code22>
+          </highlight-code>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <highlight-code :md="12" title="Script">
+            <code23></code23>
+          </highlight-code>
+        </v-col>
+      </v-row>
+    </flex-box-panel>
+    <br/>
+    <!-- TreeView -->
+    <flex-box-card
+      :md="8"
+      :outlined="true"
+    >
+      <template v-slot:tool-bar>
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
+          <v-icon>mdi-silverware</v-icon>
+          <v-toolbar-title>Local hotspots</v-toolbar-title>
+        </v-toolbar>
+      </template>
+      <v-row>
+        <v-col>
+          <v-card-text>
+            <v-treeview
+              v-model="exx16Tree"
+              :load-children="exx16Fetch"
+              :items="exx16Items"
+              selected-color="indigo"
+              open-on-click
+              selectable
+              return-object
+              expand-icon="mdi-chevron-down"
+              on-icon="mdi-bookmark"
+              off-icon="mdi-bookmark-outline"
+              indeterminate-icon="mdi-bookmark-minus"
+            >
+            </v-treeview>
+          </v-card-text>
+        </v-col>
+
+        <v-divider vertical></v-divider>
+
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-card-text>
+            <div
+              v-if="exx16Tree.length === 0"
+              key="title"
+              class="title font-weight-light grey--text pa-4 text-center"
+            >
+              Select your favorite breweries
+            </div>
+
+            <v-scroll-x-transition
+              group
+              hide-on-leave
+            >
+              <v-chip
+                v-for="(selection, i) in exx16Tree"
+                :key="i"
+                color="grey"
+                dark
+                small
+                class="ma-1"
+              >
+                <v-icon left small>mdi-beer</v-icon>
+                {{ selection.name }}
+              </v-chip>
+            </v-scroll-x-transition>
+          </v-card-text>
+        </v-col>
+      </v-row>
+      <template v-slot:card-actions>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn
+            text
+            @click="exx16Tree = []"
+          >
+            Reset
+          </v-btn>
+
+          <v-spacer></v-spacer>
+
+          <v-btn
+            class="white--text"
+            color="green darken-1"
+            depressed
+          >
+            Save
+            <v-icon right>mdi-content-save</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </template>
+    </flex-box-card>
+    <v-divider class="my-5"></v-divider>
   </div>
 </template>
 
@@ -864,6 +996,8 @@
   import Code19 from '~/components/codes/components/treeviews/code-js-19';
   import Code20 from '~/components/codes/components/treeviews/code-html-20';
   import Code21 from '~/components/codes/components/treeviews/code-js-21';
+  import Code22 from '~/components/codes/components/treeviews/code-html-22';
+  import Code23 from '~/components/codes/components/treeviews/code-js-23';
 
   const debug = require('debug')('app:page.basicForms');
 
@@ -906,6 +1040,8 @@
       Code19,
       Code20,
       Code21,
+      Code22,
+      Code23,
     },
     data() {
       const exx7Items = treeItems.map((item, index) => {
@@ -943,6 +1079,10 @@
         exx15Avatar: null,
         exx15Open: [],
         exx15Users: [],
+        exx16Breweries: [],
+        exx16IsLoading: false,
+        exx16Tree: [],
+        exx16Types: [],
       }
     },
     head() {
@@ -955,6 +1095,15 @@
     },
     watch: {
       exx15Selected: 'exx15RandomAvatar',
+      exx16Breweries (val) {
+        this.exx16Types = val.reduce((acc, cur) => {
+          const type = cur.brewery_type
+
+          if (!acc.includes(type)) acc.push(type)
+
+          return acc
+        }, []).sort()
+      },
     },
     computed: {
       ...mapGetters({
@@ -967,7 +1116,7 @@
           ? (item, search, textKey) => item[textKey].indexOf(search) > -1
           : undefined
       },
-      exx15Items () {
+      exx15Items() {
         return [
           {
             name: 'Users',
@@ -975,12 +1124,28 @@
           },
         ]
       },
-      exx15Selected () {
+      exx15Selected() {
         if (!this.exx15Active.length) return undefined
 
         const id = this.exx15Active[0]
 
         return this.exx15Users.find(user => user.id === id)
+      },
+      exx16Items() {
+        const children = this.exx16Types.map(type => ({
+          id: type,
+          name: this.exx16GetName(type),
+          children: this.exx16GetChildren(type),
+        }))
+
+        return [{
+          id: 1,
+          name: 'All Breweries',
+          children,
+        }]
+      },
+      exx16ShouldShowTree() {
+        return this.exx16Breweries.length > 0 && !this.exx16IsLoading
       },
     },
     methods: {
@@ -997,7 +1162,7 @@
           this.initPanelDelay(2000);
         }
       },
-      async exx15FetchUsers (item) {
+      async exx15FetchUsers(item) {
         // Remove in 6 months and say
         // you've made optimizations! :)
         await pause(1500)
@@ -1007,8 +1172,35 @@
           .then(json => (item.children.push(...json)))
           .catch(err => console.warn(err))
       },
-      exx15RandomAvatar () {
+      exx15RandomAvatar() {
         this.exx15Avatar = avatars[Math.floor(Math.random() * avatars.length)]
+      },
+      exx16Fetch () {
+        if (this.exx16Breweries.length) return
+
+        return fetch('https://api.openbrewerydb.org/breweries')
+          .then(res => res.json())
+          .then(data => (this.exx16Breweries = data))
+          .catch(err => console.log(err))
+      },
+      exx16GetChildren (type) {
+        const breweries = []
+
+        for (const brewery of this.exx16Breweries) {
+          if (brewery.brewery_type !== type) continue
+
+          breweries.push({
+            ...brewery,
+            name: this.exx16GetName(brewery.name),
+          })
+        }
+
+        return breweries.sort((a, b) => {
+          return a.name > b.name ? 1 : -1
+        })
+      },
+      exx16GetName (name) {
+        return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
       },
     },
   }
