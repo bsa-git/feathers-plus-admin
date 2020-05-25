@@ -1,7 +1,11 @@
 <template>
   <v-content>
     <!-- Page Content  -->
-    <v-container id="page-content" fluid>
+    <v-container
+      id="page-content"
+      class="mb-10"
+      fluid
+    >
       <nuxt></nuxt>
     </v-container>
     <!-- Page Footer -->

@@ -797,7 +797,6 @@
         </v-timeline-item>
       </v-timeline>
     </flex-box-card>
-    <v-divider class="my-5"></v-divider>
   </div>
 </template>
 

@@ -75,7 +75,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Auto sizing columns ===-->
-    <div class="title">Auto sizing columns</div>
+    <div class="title">Auto sizing columns (Exx.1)</div>
     <div class="subtitle-1">Columns will automatically take up an equal amount of space within their parent container.
       This can be modified using the <kbd>cols</kbd> prop. You can also utilize the <span class="font-weight-bold">sm, md, lg</span>
       and <span class="font-weight-bold">xl</span> props to further define how the column will be sized in different
@@ -110,7 +110,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== One column width ===-->
-    <div class="title">One column width</div>
+    <div class="title">One column width (Exx.2)</div>
     <div class="subtitle-1">When using the auto-layout, you can define the width of only one column and still have its
       siblings to automatically resize around it.
     </div>
@@ -153,7 +153,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Variable content width ===-->
-    <div class="title">Variable content width</div>
+    <div class="title">Variable content width (Exx.3)</div>
     <div class="subtitle-1">Assigning breakpoint width for columns can be configured to resize based upon the nature
       width of their content.
     </div>
@@ -225,7 +225,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Grow and Shrink ===-->
-    <div class="title">Grow and Shrink</div>
+    <div class="title">Grow and Shrink (Exx.4)</div>
     <div class="subtitle-1">By default, flex components will automatically fill the available space in a row or column.
       They will also shrink relative to the rest of the flex items in the flex container when a specific size is
       not designated. You can define the column width of the <kbd>v-col</kbd> by using the cols prop and providing
@@ -270,7 +270,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Row and column breakpoints ===-->
-    <div class="title">Row and column breakpoints</div>
+    <div class="title">Row and column breakpoints (Exx.5)</div>
     <div class="subtitle-1">Dynamically change your layout based upon resolution. (resize your screen and watch
       the <kbd>top row</kbd> layout change on <span class="font-weight-bold">sm, md, and lg</span> breakpoints)
     </div>
@@ -315,7 +315,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Unique layouts ===-->
-    <div class="title">Unique layouts</div>
+    <div class="title">Unique layouts (Exx.6)</div>
     <div class="subtitle-1">The power and flexibility of the Vuetify grid system allows you to create amazing user
       interfaces.
     </div>
@@ -386,7 +386,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Vertical alignment ===-->
-    <div class="title">Vertical alignment</div>
+    <div class="title">Vertical alignment (Exx.7)</div>
     <div class="subtitle-1">Change the vertical alignment of flex items and their parents using the
       <kbd>align</kbd> and <kbd>align-self</kbd> properties.
     </div>
@@ -441,7 +441,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Horizontal alignment ===-->
-    <div class="title">Horizontal alignment</div>
+    <div class="title">Horizontal alignment (Exx.8)</div>
     <div class="subtitle-1">Change the horizontal alignment of flex items and their parents using the
       <kbd>justify</kbd> and <kbd>justify-self</kbd> properties.
     </div>
@@ -470,7 +470,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== No gutters ===-->
-    <div class="title">No gutters</div>
+    <div class="title">No gutters (Exx.9)</div>
     <div class="subtitle-1">You can remove the negative margins from <kbd>v-row</kbd> and the padding from its direct
       <kbd>v-col</kbd> children using the <kbd>no-gutters</kbd> property.
     </div>
@@ -507,7 +507,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Column wrapping ===-->
-    <div class="title">Column wrapping</div>
+    <div class="title">Column wrapping (Exx.10)</div>
     <div class="subtitle-1">When more than 12 columns are placed within a given row (that is not using the
       <kbd>.flex-nowrap</kbd> utility class), each group of extra columns will wrap onto a new line.
     </div>
@@ -547,7 +547,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Order classes ===-->
-    <div class="title">Order classes</div>
+    <div class="title">Order classes (Exx.11)</div>
     <div class="subtitle-1">You can control the ordering of grid items. As with offsets, you can set different orders
       for different sizes. Design specialized screen layouts that accommodate to any application.
     </div>
@@ -586,7 +586,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Order last / first ===-->
-    <div class="title">Order last / first</div>
+    <div class="title">Order last / first (Exx.12)</div>
     <div class="subtitle-1">You can also designate explicitly <kbd>first</kbd> or <kbd>last</kbd> which will assign -1
       or 13 values
       respectively to the order CSS property.
@@ -626,7 +626,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Offset ===-->
-    <div class="title">Offset</div>
+    <div class="title">Offset (Exx.13)</div>
     <div class="subtitle-1">Offsets are useful for compensating for elements that may not be visible yet, or to
       control the position of content. Just as with breakpoints, you can set an offset for any available sizes.
       This allows you to fine tune your application layout precisely to your needs.
@@ -706,7 +706,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Offset breakpoint ===-->
-    <div class="title">Offset breakpoint</div>
+    <div class="title">Offset breakpoint (Exx.14)</div>
     <div class="subtitle-1">Offset can also be applied on a per breakpoint basis.
     </div>
     <br/>
@@ -776,7 +776,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Margin utilities ===-->
-    <div class="title">Margin utilities</div>
+    <div class="title">Margin utilities (Exx.15)</div>
     <div class="subtitle-1">Using the <a href="https://vuetifyjs.com/en/styles/flex/#auto-margins" target="_blank">auto
       margin helper utilities</a>
       you can force sibling columns away from each other.
@@ -859,7 +859,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Nested grid ===-->
-    <div class="title">Nested grid</div>
+    <div class="title">Nested grid (Exx.16)</div>
     <div class="subtitle-1">Grids can be nested, similar to other frameworks, in order to achieve very custom layouts.
     </div>
     <br/>
@@ -909,7 +909,7 @@
     <v-divider class="my-5"></v-divider>
 
     <!--=== Spacers ===-->
-    <div class="title">Spacers</div>
+    <div class="title">Spacers (Exx.17)</div>
     <div class="subtitle-1">The <kbd>v-spacer</kbd> component is useful when you want to fill available space or make
       space
       between two components.

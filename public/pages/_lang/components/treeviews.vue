@@ -749,7 +749,7 @@
       :outlined="true"
     >
       <template v-slot:card-title>
-        <v-card-title class="indigo white--text headline">
+        <v-card-title class="primary white--text headline">
           User Directory
         </v-card-title>
       </template>
@@ -782,15 +782,17 @@
           <v-scroll-y-transition mode="out-in">
             <div
               v-if="!exx15Selected"
-              class="title grey--text text--lighten-1 font-weight-light"
-              style="align-self: center;"
+              key="title"
+              class="title font-weight-light grey--text pa-4 text-center"
             >
               Select a User
             </div>
+
             <v-card
               v-else
               :key="exx15Selected.id"
               class="pt-6 mx-auto"
+              color="secondary"
               flat
               max-width="400"
             >
@@ -889,7 +891,7 @@
               v-model="exx16Tree"
               :load-children="exx16Fetch"
               :items="exx16Items"
-              selected-color="indigo"
+              selected-color="indigo lighten-2"
               open-on-click
               selectable
               return-object
@@ -950,7 +952,7 @@
 
           <v-btn
             class="white--text"
-            color="green darken-1"
+            color="primary"
             depressed
           >
             Save
@@ -959,7 +961,6 @@
         </v-card-actions>
       </template>
     </flex-box-card>
-    <v-divider class="my-5"></v-divider>
   </div>
 </template>
 
@@ -1007,9 +1008,9 @@
     '?accessoriesType=Prescription02&avatarStyle=Circle&clotheColor=Black&clotheType=ShirtVNeck&eyeType=Surprised&eyebrowType=Angry&facialHairColor=Blonde&facialHairType=Blank&hairColor=Blonde&hatColor=PastelOrange&mouthType=Smile&skinColor=Black&topType=LongHairNotTooLong',
     '?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelOrange&clotheType=Overall&eyeType=Close&eyebrowType=AngryNatural&facialHairColor=Blonde&facialHairType=Blank&graphicType=Pizza&hairColor=Black&hatColor=PastelBlue&mouthType=Serious&skinColor=Light&topType=LongHairBigHair',
     '?accessoriesType=Kurt&avatarStyle=Circle&clotheColor=Gray01&clotheType=BlazerShirt&eyeType=Surprised&eyebrowType=Default&facialHairColor=Red&facialHairType=Blank&graphicType=Selena&hairColor=Red&hatColor=Blue02&mouthType=Twinkle&skinColor=Pale&topType=LongHairCurly',
-  ]
+  ];
 
-  const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   export default {
     components: {
@@ -1097,9 +1098,9 @@
       exx15Selected: 'exx15RandomAvatar',
       exx16Breweries (val) {
         this.exx16Types = val.reduce((acc, cur) => {
-          const type = cur.brewery_type
+          const type = cur.brewery_type;
 
-          if (!acc.includes(type)) acc.push(type)
+          if (!acc.includes(type)) acc.push(type);
 
           return acc
         }, []).sort()
@@ -1125,9 +1126,9 @@
         ]
       },
       exx15Selected() {
-        if (!this.exx15Active.length) return undefined
+        if (!this.exx15Active.length) return undefined;
 
-        const id = this.exx15Active[0]
+        const id = this.exx15Active[0];
 
         return this.exx15Users.find(user => user.id === id)
       },
@@ -1136,7 +1137,7 @@
           id: type,
           name: this.exx16GetName(type),
           children: this.exx16GetChildren(type),
-        }))
+        }));
 
         return [{
           id: 1,
@@ -1165,7 +1166,7 @@
       async exx15FetchUsers(item) {
         // Remove in 6 months and say
         // you've made optimizations! :)
-        await pause(1500)
+        await pause(1500);
 
         return fetch('https://jsonplaceholder.typicode.com/users')
           .then(res => res.json())
@@ -1176,7 +1177,7 @@
         this.exx15Avatar = avatars[Math.floor(Math.random() * avatars.length)]
       },
       exx16Fetch () {
-        if (this.exx16Breweries.length) return
+        if (this.exx16Breweries.length) return;
 
         return fetch('https://api.openbrewerydb.org/breweries')
           .then(res => res.json())
@@ -1184,10 +1185,10 @@
           .catch(err => console.log(err))
       },
       exx16GetChildren (type) {
-        const breweries = []
+        const breweries = [];
 
         for (const brewery of this.exx16Breweries) {
-          if (brewery.brewery_type !== type) continue
+          if (brewery.brewery_type !== type) continue;
 
           breweries.push({
             ...brewery,

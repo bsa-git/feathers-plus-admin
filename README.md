@@ -2,7 +2,7 @@
 
 > Project feathers-plus-admin
 
-### [Live Demo...](https://feathers-plus-admin.herokuapp.com/dashboard)
+### [Live Demo...](https://feathers-plus-admin.herokuapp.com)
 
 ## About
 
