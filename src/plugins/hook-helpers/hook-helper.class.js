@@ -91,7 +91,6 @@ class HookHelper {
         inspector('showDebugInfo:', this.hookContext);
       }
     }
-
   }
 
   /**

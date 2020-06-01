@@ -46,7 +46,7 @@ class Service {
    */
   static getServicePaths() {
     const paths = Object.keys(fakeData).map(key => loKebabCase(key).toLowerCase());
-    if (isDebug) debug('clearAll::paths:', paths);
+    if (isDebug) debug('getServicePaths:', paths);
     return paths;
   }
 

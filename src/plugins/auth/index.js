@@ -4,6 +4,7 @@ const loginLocal = require('./login-local');
 const makeClient = require('./make-client');
 const verifiers = require('./verifiers');
 const AuthServer = require('./auth-server.class');
+const Channel = require('./channel.class');
 const checkUserUniqueness = require('./checkUserUniqueness');
 module.exports = {
   localStorage,
@@ -12,5 +13,6 @@ module.exports = {
   makeClient,
   verifiers,
   AuthServer,
+  Channel,
   checkUserUniqueness
 };

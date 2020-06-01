@@ -1,7 +1,9 @@
 const {authenticate} = require('@feathersjs/authentication').hooks;
 const {checkContext, getItems} = require('feathers-hooks-common');
+const errors = require('@feathersjs/errors');
 const crypto = require('crypto');
 const {inspector, readJsonFileSync, stripSpecific, isTrue, appRoot} = require('../lib');
+const typeOf = require('../lib/type-of');
 const debug = require('debug')('app:plugins.auth-server.class');
 
 const isLog = false;
@@ -43,6 +45,9 @@ const randomDigits = (len) => {
 const getEnvItems = (value) => {
   return stripSpecific(value, ';').split(';').map(item => item.trim());
 };
+
+// Get fake data
+const fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`);
 
 
 class AuthServer {
@@ -104,6 +109,7 @@ class AuthServer {
   /**
    * Is mask
    * @param mask // 'authentication.create.after'
+   * @return Boolean
    */
   isMask(mask = '') {
     const maskItems = mask.split('.');
@@ -330,7 +336,7 @@ class AuthServer {
     const payloadIsValid = function payloadIsValid(payload) {
       return payload && (!payload.exp || payload.exp * 1000 > new Date().getTime());
     };
-    if (typeof token !== 'string') {
+    if (!typeOf.isString(token)) {
       return Promise.reject(new Error('Token provided to verifyJWT is missing or not a string'));
     }
     try {
@@ -425,6 +431,19 @@ class AuthServer {
   }
 
   /**
+   * Get IsRole for roleName
+   * e.g. for Administrator => isAdmin; NotEnvRole => isGuest
+   * @param roleName
+   * @return {String}
+   */
+  static getIsEnvRole(roleName = '') {
+    const envRoles = AuthServer.getRoles();
+    const keys = Object.keys(envRoles);
+    const result = keys.find(key => envRoles[key] === roleName);
+    return result? result : 'isGuest';
+  }
+
+  /**
    * Is base role
    * @param roleName
    * @return {boolean}
@@ -504,6 +523,59 @@ class AuthServer {
       }
       return str;
     });
+  }
+
+  /**
+   * Get fake data
+   * e.g. {users: [{id: 1234, email: 'my@test.com', ...}, {id: 1235, email: 'my2@test.com', ...}], ...}
+   * @return {Object}
+   */
+  static getFakeData(){
+    return  fakeData;
+  }
+
+  /**
+   * Get service fields
+   * @param serviceName
+   * @param isId
+   * @return {Array.<*>}
+   */
+  static serviceFields(serviceName = '', isId = false) {
+    const serviceFakeData = fakeData[serviceName][0];
+    const idField = 'id' in serviceFakeData ? 'id' : '_id';
+    const fields = Object.keys(serviceFakeData).filter(key => isId ? true : key !== idField);
+    if (isLog) debug('serviceFields.fields:', fields);
+    return fields;
+  }
+
+  /**
+   * Get service paths
+   * @return {Array}
+   */
+  static getServicePaths() {
+    const loKebabCase = require('lodash/kebabCase');
+    const paths = Object.keys(fakeData).map(key => loKebabCase(key).toLowerCase());
+    if (isDebug) debug('getServicePaths:', paths);
+    return paths;
+  }
+
+  /**
+   * Get id field
+   * @param items {Array || Object}
+   * @return {string}
+   */
+  static getIdField(items) {
+    let idField = '';
+    if (Array.isArray(items) && items.length) {
+      idField = 'id' in items[0] ? 'id' : '_id';
+    }
+    if (typeOf.isObject(items) && Object.keys(items).length) {
+      idField = 'id' in items ? 'id' : '_id';
+    }
+    if(!idField){
+      throw new errors.GeneralError('Items argument is not an array or object');
+    }
+    return idField ;
   }
 }
 
