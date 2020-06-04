@@ -117,6 +117,17 @@
       "isAuthEntity": false,
       "requiresAuth": true,
       "graphql": true
+    },
+    "chatMessages": {
+      "name": "chatMessages",
+      "nameSingular": "chatMessage",
+      "subFolder": "",
+      "fileName": "chat-messages",
+      "adapter": "mongoose",
+      "path": "/chat-messages",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
     }
   },
   "hooks": {

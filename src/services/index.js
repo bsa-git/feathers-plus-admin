@@ -1,6 +1,7 @@
 
 // Configure the Feathers services. (Can be re-generated.)
 let authManagement = require('./auth-management/auth-management.service');
+let chatMessages = require('./chat-messages/chat-messages.service');
 let dataManagement = require('./data-management/data-management.service');
 let logMessages = require('./log-messages/log-messages.service');
 let mailer = require('./mailer/mailer.service');
@@ -17,6 +18,7 @@ let graphql = require('./graphql/graphql.service');
 // eslint-disable-next-line no-unused-vars
 let moduleExports = function (app) {
   app.configure(authManagement);
+  app.configure(chatMessages);
   app.configure(dataManagement);
   app.configure(logMessages);
   app.configure(mailer);

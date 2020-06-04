@@ -21,6 +21,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // !end
 
   // !<DEFAULT> code: services
+  let chatMessages = app.service('/chat-messages');
   let logMessages = app.service('/log-messages');
   let roles = app.service('/roles');
   let teams = app.service('/teams');
@@ -70,6 +71,51 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     // !end
 
     /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+
+    // ChatMessage.team(query: JSON, params: JSON, key: JSON): Team
+    // !<DEFAULT> code: bl-ChatMessage-team
+    case 'ChatMessage.team':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return teams.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
+    // ChatMessage.owner(query: JSON, params: JSON, key: JSON): User!
+    // !<DEFAULT> code: bl-ChatMessage-owner
+    case 'ChatMessage.owner':
+      return feathersBatchLoader(dataLoaderName, '!', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
+    // ChatMessage.user(query: JSON, params: JSON, key: JSON): User
+    // !<DEFAULT> code: bl-ChatMessage-user
+    case 'ChatMessage.user':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
 
     // LogMessage.owner(query: JSON, params: JSON, key: JSON): User
     // !<DEFAULT> code: bl-LogMessage-owner
@@ -201,6 +247,24 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
   let returns = {
 
+    ChatMessage: {
+
+      // team(query: JSON, params: JSON, key: JSON): Team
+      // !<DEFAULT> code: resolver-ChatMessage-team
+      team: getResult('ChatMessage.team', 'teamId'),
+      // !end
+
+      // owner(query: JSON, params: JSON, key: JSON): User!
+      // !<DEFAULT> code: resolver-ChatMessage-owner
+      owner: getResult('ChatMessage.owner', 'ownerId'),
+      // !end
+
+      // user(query: JSON, params: JSON, key: JSON): User
+      // !<DEFAULT> code: resolver-ChatMessage-user
+      user: getResult('ChatMessage.user', 'userId'),
+      // !end
+    },
+
     LogMessage: {
 
       // owner(query: JSON, params: JSON, key: JSON): User
@@ -271,6 +335,20 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
     // !code: resolver_field_more // !end
     Query: {
+
+      // !<DEFAULT> code: query-ChatMessage
+      // getChatMessage(query: JSON, params: JSON, key: JSON): ChatMessage
+      getChatMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return chatMessages.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findChatMessage(query: JSON, params: JSON): [ChatMessage!]
+      findChatMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return chatMessages.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
 
       // !<DEFAULT> code: query-LogMessage
       // getLogMessage(query: JSON, params: JSON, key: JSON): LogMessage

@@ -77,6 +77,14 @@
           "update": "auth",
           "patch": "auth",
           "remove": "auth"
+        },
+        "chatMessages": {
+          "create": "auth",
+          "get": "auth",
+          "find": "auth",
+          "update": "auth",
+          "patch": "auth",
+          "remove": "auth"
         }
       }
     }

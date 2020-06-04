@@ -17,6 +17,7 @@ let moduleExports = function serviceResolvers(app, options) {
   // !end
 
   // !<DEFAULT> code: services
+  let chatMessages = app.service('/chat-messages');
   let logMessages = app.service('/log-messages');
   let roles = app.service('/roles');
   let teams = app.service('/teams');
@@ -26,6 +27,42 @@ let moduleExports = function serviceResolvers(app, options) {
   // !end
 
   let returns = {
+
+    ChatMessage: {
+
+      // team(query: JSON, params: JSON, key: JSON): Team
+      team:
+        // !code: resolver-ChatMessage-team
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.teamId }, paginate: false
+          });
+          return (parent.teamId === '000000000000000000000000')? null : teams.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
+      // owner(query: JSON, params: JSON, key: JSON): User!
+      owner:
+        // !<DEFAULT> code: resolver-ChatMessage-owner
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.ownerId }, paginate: false
+          });
+          return users.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
+      // user(query: JSON, params: JSON, key: JSON): User
+      user:
+        // !code: resolver-ChatMessage-user
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.userId }, paginate: false
+          });
+          return (parent.userId === '000000000000000000000000')? null : users.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+    },
 
     LogMessage: {
 
@@ -209,6 +246,20 @@ let moduleExports = function serviceResolvers(app, options) {
     // !code: resolver_field_more // !end
 
     Query: {
+
+      // !<DEFAULT> code: query-ChatMessage
+      // getChatMessage(query: JSON, params: JSON, key: JSON): ChatMessage
+      getChatMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return chatMessages.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findChatMessage(query: JSON, params: JSON): [ChatMessage!]
+      findChatMessage(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        return chatMessages.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
 
       // !<DEFAULT> code: query-LogMessage
       // getLogMessage(query: JSON, params: JSON, key: JSON): LogMessage

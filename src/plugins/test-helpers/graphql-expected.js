@@ -6,6 +6,7 @@ let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 //--- Users --//
 const usersFakeData = fakeData['users'];
 const userFakeData = usersFakeData[0];
+const userFakeData2 = usersFakeData[1];
 const idFieldUser = 'id' in userFakeData ? 'id' : '_id';
 const userId = userFakeData[idFieldUser];
 //--- userProfiles --//
@@ -21,9 +22,18 @@ const teamsFakeData = fakeData['teams'];
 const teamFakeData = teamsFakeData[0];
 const idFieldTeam = 'id' in teamFakeData ? 'id' : '_id';
 const teamId = teamFakeData[idFieldTeam];
-//--- userTeams --//
-// const userTeamsFakeData = fakeData['userTeams'];
-// const idFieldUserTeam = 'id' in userTeamsFakeData[0] ? 'id' : '_id';
+//--- logMessages --//
+const logMessagesFakeData = fakeData['logMessages'];
+const logMessageFakeData = logMessagesFakeData[0];
+const idFieldLogMessage = 'id' in logMessageFakeData ? 'id' : '_id';
+const logMessageId = logMessageFakeData[idFieldLogMessage];
+//--- chatMessages --//
+const chatMessagesFakeData = fakeData['chatMessages'];
+const chatMessageFakeData = chatMessagesFakeData[0];
+const idFieldChatMessage = 'id' in chatMessageFakeData ? 'id' : '_id';
+const chatMessageId = chatMessageFakeData[idFieldChatMessage];
+
+
 
 const _usersForTeam = (teamId) => {
   let teams = {};
@@ -83,20 +93,6 @@ const usersForTeam = () => {
   });
 };
 
-
-// getUser = Object.create(null).getUser = {
-//   [idFieldUser]: userId,
-//   email: userFakeData.email,
-//   fullName: `${userFakeData.firstName} ${userFakeData.lastName}`,
-//   profile: {
-//     personalPhone: userProfileFakeData.personalPhone,
-//     personalWebSite: userProfileFakeData.personalWebSite,
-//     jobCompanyName: userProfileFakeData.jobCompanyName,
-//   },
-//   role: rolesForUser[0],
-//   teams: teamsForUser()
-// };
-
 let getUser = () => {
   const item = Object.create(null);
   item.getUser = {
@@ -133,14 +129,6 @@ let findUser = () => {
   return items;
 };
 
-// let getRole = {
-//   getRole: {
-//     [idFieldRole]: roleId,
-//     name: roleFakeData.name,
-//     users: usersForRole
-//   }
-// };
-
 let getRole = () => {
   const item = Object.create(null);
   item.getRole = {
@@ -150,16 +138,6 @@ let getRole = () => {
   };
   return item;
 };
-
-/*
-let findRole = [{
-  findRole: [{
-    [idFieldRole]: roleId,
-    name: roleFakeData.name,
-    users: usersForRole
-  }]
-}];
-*/
 
 let findRole = () => {
   const items = [];
@@ -172,15 +150,6 @@ let findRole = () => {
   items.push(item);
   return items;
 };
-/*
-  let getTeam = {
-  getTeam: {
-    [idFieldTeam]: teamId,
-    name: teamFakeData.name,
-    members: usersForTeam()
-  }
-};
-*/
 
 let getTeam = () => {
   const item = Object.create(null);
@@ -192,15 +161,6 @@ let getTeam = () => {
   return item;
 };
 
-/*
-  let findTeam = [{
-  findTeam: [{
-    [idFieldTeam]: teamId,
-    name: teamFakeData.name,
-    members: usersForTeam()
-  }]
-}];
-*/
 let findTeam = () => {
   const items = [];
   const item = Object.create(null);
@@ -213,11 +173,103 @@ let findTeam = () => {
   return items;
 };
 
+let getLogMessage = () => {
+  const item = Object.create(null);
+  item.getLogMessage = {
+    [idFieldLogMessage]: logMessageId,
+    gr: logMessageFakeData.gr,
+    pr: logMessageFakeData.pr,
+    name: logMessageFakeData.name,
+    msg:  logMessageFakeData.msg,
+    owner: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    },
+    user: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    }
+  };
+  return item;
+};
+
+let findLogMessage = () => {
+  const items = [];
+  const item = Object.create(null);
+  item.findLogMessage = [{
+    [idFieldLogMessage]: logMessageId,
+    gr: logMessageFakeData.gr,
+    pr: logMessageFakeData.pr,
+    name: logMessageFakeData.name,
+    msg:  logMessageFakeData.msg,
+    owner: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    },
+    user: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    }
+  }];
+  items.push(item);
+  return items;
+};
+
+let getChatMessage = () => {
+  const item = Object.create(null);
+  item.getChatMessage = {
+    [idFieldChatMessage]: chatMessageId,
+    msg:  chatMessageFakeData.msg,
+    team: null,
+    owner: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    },
+    user: {
+      [idFieldUser]: userFakeData2[idFieldUser],
+      email: userFakeData2.email,
+      fullName: `${userFakeData2.firstName} ${userFakeData2.lastName}`
+    }
+  };
+  return item;
+};
+
+let findChatMessage = () => {
+  const items = [];
+  const item = Object.create(null);
+  item.findChatMessage = [{
+    [idFieldChatMessage]: chatMessageId,
+    msg:  chatMessageFakeData.msg,
+    team: null,
+    owner: {
+      [idFieldUser]: userId,
+      email: userFakeData.email,
+      fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
+    },
+    user: {
+      [idFieldUser]: userFakeData2[idFieldUser],
+      email: userFakeData2.email,
+      fullName: `${userFakeData2.firstName} ${userFakeData2.lastName}`
+    }
+  }];
+  items.push(item);
+  return items;
+};
+
 module.exports = {
   getUser: getUser(),
   findUser: findUser(),
   getRole: getRole(),
   findRole: findRole(),
   getTeam: getTeam(),
-  findTeam: findTeam()
+  findTeam: findTeam(),
+  getLogMessage: getLogMessage(),
+  findLogMessage: findLogMessage(),
+  getChatMessage: getChatMessage(),
+  findChatMessage: findChatMessage()
 };

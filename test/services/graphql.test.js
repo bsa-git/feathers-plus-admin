@@ -133,6 +133,22 @@ describe('<<< Test services/graphql.test.js >>>', () => {
           assert.ok(false);
         }
       });
+
+      it('registered the \'chatMessages\' service', () => {
+        const service = app.service('chat-messages');
+        assert.ok(service, 'Registered the service');
+      });
+
+      it('Save fake data to \'chatMessages\' service', async () => {
+        // Seed service data
+        const results = await seedService(app, 'chatMessages');
+        if (Array.isArray(results)) {
+          assert.ok(results.length === fakes['chatMessages'].length);
+        } else {
+          if(isLog) debug('seedService.results:', results);
+          assert.ok(false);
+        }
+      });
     }
   });
 
@@ -185,6 +201,34 @@ describe('<<< Test services/graphql.test.js >>>', () => {
       if (isLog) inspector('Response for \'findTeam\' query:', response);
       if (isLog) inspector('Expected for \'findTeam\' query:', graphqlExpected['findTeam']);
       assert.deepStrictEqual(response.data, graphqlExpected['findTeam']);
+    });
+
+    it('Run \'getLogMessage\' request for GraphQl', async () => {
+      const response = await graphql.find({query: {query: graphqlQuery['getLogMessage']}});
+      if (isLog) inspector('Response for \'getLogMessage\' query:', response);
+      if (isLog) inspector('Expected for \'getLogMessage\' query:', graphqlExpected['getLogMessage']);
+      assert.deepStrictEqual(response, graphqlExpected['getLogMessage']);
+    });
+
+    it('Run \'findLogMessage\' request for GraphQl', async () => {
+      const response = await graphql.find({query: {query: graphqlQuery['findLogMessage']}});
+      if (isLog) inspector('Response for \'findLogMessage\' query:', response);
+      if (isLog) inspector('Expected for \'findLogMessage\' query:', graphqlExpected['findLogMessage']);
+      assert.deepStrictEqual(response.data, graphqlExpected['findLogMessage']);
+    });
+
+    it('Run \'getChatMessage\' request for GraphQl', async () => {
+      const response = await graphql.find({query: {query: graphqlQuery['getChatMessage']}});
+      if (isLog) inspector('Response for \'getChatMessage\' query:', response);
+      if (isLog) inspector('Expected for \'getChatMessage\' query:', graphqlExpected['getChatMessage']);
+      assert.deepStrictEqual(response, graphqlExpected['getChatMessage']);
+    });
+
+    it('Run \'findChatMessage\' request for GraphQl', async () => {
+      const response = await graphql.find({query: {query: graphqlQuery['findChatMessage']}});
+      if (isLog) inspector('Response for \'findChatMessage\' query:', response);
+      if (isLog) inspector('Expected for \'findChatMessage\' query:', graphqlExpected['findChatMessage']);
+      assert.deepStrictEqual(response.data, graphqlExpected['findChatMessage']);
     });
   });
 });

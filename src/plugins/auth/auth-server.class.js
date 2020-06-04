@@ -371,7 +371,7 @@ class AuthServer {
   }
 
   /**
-   * Get roles
+   * Get env roles
    * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
@@ -389,7 +389,7 @@ class AuthServer {
   }
 
   /**
-   * Get base roles
+   * Get base env roles
    * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
    * @param isBaseRole
    * @return {Object||String}

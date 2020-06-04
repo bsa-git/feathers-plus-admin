@@ -4,6 +4,18 @@
 // !code: init // !end
 
 let moduleExports = `
+type ChatMessage {
+  id: ID
+  _id: ID
+  teamId: ID
+  ownerId: ID
+  userId: ID
+  msg: String
+  team(query: JSON, params: JSON, key: JSON): Team
+  owner(query: JSON, params: JSON, key: JSON): User!
+  user(query: JSON, params: JSON, key: JSON): User
+}
+ 
 type LogMessage {
   id: ID
   _id: ID
@@ -98,6 +110,8 @@ type User {
  
 
 type Query {
+  getChatMessage(key: JSON, query: JSON, params: JSON): ChatMessage
+  findChatMessage(query: JSON, params: JSON): [ChatMessage]!
   getLogMessage(key: JSON, query: JSON, params: JSON): LogMessage
   findLogMessage(query: JSON, params: JSON): [LogMessage]!
   getRole(key: JSON, query: JSON, params: JSON): Role
