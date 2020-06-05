@@ -108,7 +108,6 @@
     "eslint-utils": ">=1.4.1",
     "lodash.template": ">=4.5.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.7",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }
