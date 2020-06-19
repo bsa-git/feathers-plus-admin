@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser" : true,
     "es6": true,
@@ -6,9 +7,9 @@
     "mocha": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
     "sourceType": "module"
   },
+  "parser": "./node_modules/babel-eslint/lib",
   "extends": "eslint:recommended",
   "rules": {
     "no-console": "off",

@@ -18,9 +18,9 @@
     "test": "test/"
   },
   "engines": {
-    "node": "12.x",
-    "npm": "6.x",
-    "yarn": "1.x"
+    "node": ">= 12.x",
+    "npm": ">= 6.x",
+    "yarn": ">= 1.x"
   },
   "scripts": {
     "eslint": "eslint src/. test/. --config .eslintrc.json",
@@ -104,6 +104,7 @@
     "xml-loader": "^1.2.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^5.11.1",
     "eslint-utils": ">=1.4.1",
     "lodash.template": ">=4.5.0",

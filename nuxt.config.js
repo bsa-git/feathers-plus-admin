@@ -1,6 +1,6 @@
 // require('@babel/polyfill');
 const pkg = require('./package');
-const Dotenv = require('dotenv-webpack');
+const DotEnvWebpack = require('dotenv-webpack');
 const loConcat = require('lodash/concat');
 
 const appMenu = require('./public/api/app/app-menu');
@@ -162,7 +162,7 @@ module.exports = {
       });
     },
     plugins: [// new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|fr|hu/)
-      new Dotenv({
+      new DotEnvWebpack({
         path: './.env', // Path to .env file (this is the default)
         systemvars: true // It makes it possible to work in production mode on Heroku hosting
       }),
