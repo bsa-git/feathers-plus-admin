@@ -64,6 +64,21 @@ const stripSpecific = function (value, symbol = '') {
   return trimValue;
 };
 
+/**
+ * Get capitalize string
+ * @param value
+ * @param prefix
+ */
+const getCapitalizeStr = function (value, prefix = '') {
+  const loCapitalize = require('lodash/capitalize');
+  let _value = loCapitalize(value);
+  if(prefix){
+    const regex = / /gi;
+    _value = _value.replaceAll(regex, '');
+    _value = prefix + _value;
+  }
+  return _value;
+};
 
 /**
  * Is true
@@ -400,6 +415,7 @@ export default {
   waitTimeout,
   stripSlashes,
   stripSpecific,
+  getCapitalizeStr,
   isTrue,
   getNumber,
   getRegex,

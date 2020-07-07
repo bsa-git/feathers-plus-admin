@@ -87,6 +87,21 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       );
       // !end
 
+    // ChatMessage.role(query: JSON, params: JSON, key: JSON): Role
+    // !<DEFAULT> code: bl-ChatMessage-role
+    case 'ChatMessage.role':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        keys => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return roles.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+      // !end
+
     // ChatMessage.owner(query: JSON, params: JSON, key: JSON): User!
     // !<DEFAULT> code: bl-ChatMessage-owner
     case 'ChatMessage.owner':
@@ -252,6 +267,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // team(query: JSON, params: JSON, key: JSON): Team
       // !<DEFAULT> code: resolver-ChatMessage-team
       team: getResult('ChatMessage.team', 'teamId'),
+      // !end
+
+      // role(query: JSON, params: JSON, key: JSON): Role
+      // !<DEFAULT> code: resolver-ChatMessage-role
+      role: getResult('ChatMessage.role', 'roleId'),
       // !end
 
       // owner(query: JSON, params: JSON, key: JSON): User!

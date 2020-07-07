@@ -311,7 +311,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
     it('Error when removing a base record from \'roles\' service', async () => {
 
       const recAdmin = fakes['roles'].find(function (role) {
-        return (role.name === AuthServer.getRoles('isAdmin'));
+        return (role.name === AuthServer.getRoles('isAdministrator'));
       });
 
       const recGuest = fakes['roles'].find(function (role) {
@@ -423,8 +423,7 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
       const idFieldTeam = 'id' in rec ? 'id' : '_id';
       const userTeams = app.service('user-teams');
 
-      // Find a team that is present in userTeams service
-      fakes['teams'].forEach(async team => {
+      const _teamHandle = async team => {
         const _teamId = team[idFieldTeam];
         const _findResultsBefore = await userTeams.find({query: {teamId: _teamId}});
         if (!teamId && _findResultsBefore.data.length) {
@@ -444,13 +443,19 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
           if (isLog) inspector('Data integrity when removing a record from \'teams\' service.findResultsAfter:', findResultsAfter.data);
           assert.ok(findResultsBefore.data.length > findResultsAfter.data.length, 'Protection did not work to removing the data from service');
         }
-      });
+      };
+
+      // Find a team that is present in userTeams service
+      for (let i = 0; i < fakes['teams'].length; i++) {
+        const team = fakes['teams'][i];
+        await _teamHandle(team);
+      }
     });
 
     it('Data integrity when removing a record from \'roles\' service', async () => {
 
       const rec = fakes['roles'].find(function (role) {
-        return (role.name !== AuthServer.getRoles('isAdmin')) && (role.name !== AuthServer.getRoles('isGuest'));
+        return (role.name !== AuthServer.getRoles('isAdministrator')) && (role.name !== AuthServer.getRoles('isGuest'));
       });
 
       // const rec = fakes['roles'][0];

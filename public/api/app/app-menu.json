@@ -23,11 +23,9 @@
     "title": "Chat",
     "group": "apps",
     "icon": "mdi-chat",
-    "target": "_blank",
     "name": "chat",
     "alias": "chat",
-    "to": "/chat",
-    "inactive": true
+    "to": "/chat/messages"
   },
   {
     "title": "Inbox",

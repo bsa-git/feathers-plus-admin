@@ -437,6 +437,14 @@
     "confirmDeleteItemsTitle": "Удалить выделенные элементы",
     "confirmDeleteItemsText": "Эти элементы будут удалены из базы данных сервера, а также из клиентского хранилища"
   },
+  "chatMessages": {
+    "title": "Сообщения Чата",
+    "description": "Сообщения Чата"
+  },
+  "chatContacts": {
+    "title": "Контакты Чата",
+    "description": "Контакты Чата"
+  },
   "graphql": {
     "title": "GraphQL",
     "description": "GraphQL - язык запросов для APIs",

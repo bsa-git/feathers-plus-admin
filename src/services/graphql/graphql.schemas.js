@@ -7,11 +7,13 @@ let moduleExports = `
 type ChatMessage {
   id: ID
   _id: ID
-  teamId: ID
   ownerId: ID
   userId: ID
+  teamId: ID
+  roleId: ID
   msg: String
   team(query: JSON, params: JSON, key: JSON): Team
+  role(query: JSON, params: JSON, key: JSON): Role
   owner(query: JSON, params: JSON, key: JSON): User!
   user(query: JSON, params: JSON, key: JSON): User
 }

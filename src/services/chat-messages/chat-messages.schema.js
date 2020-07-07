@@ -11,7 +11,7 @@ let schema = {
   // !end
   // !code: schema_definitions
   //--------------------------
-  fakeRecords: 2,
+  fakeRecords: 3,
   //--------------------------
   // !end
 
@@ -30,9 +30,10 @@ let schema = {
     //-------------------------
     id: {type: 'ID'},
     _id: {type: 'ID'},
-    teamId: {type: 'ID', faker: {fk: 'teams:random'}},
     ownerId: {type: 'ID', faker: {fk: 'users:random'}},
     userId: {type: 'ID', faker: {fk: 'users:random'}},
+    teamId: {type: 'ID', faker: {fk: 'teams:random'}},
+    roleId: {type: 'ID', faker: {fk: 'roles:random'}},
     msg: {faker: 'lorem.sentence'}
     //-------------------------
     // !end
@@ -64,6 +65,7 @@ let extensions = {
       // !code: graphql_add
       //-------------------
       team: {type: 'Team', args: true, relation: {ourTable: 'teamId', otherTable: '_id'}},
+      role: {type: 'Role', args: true, relation: {ourTable: 'roleId', otherTable: '_id'}},
       owner: {type: 'User!', args: true, relation: {ourTable: 'ownerId', otherTable: '_id'}},
       user: {type: 'User', args: true, relation: {ourTable: 'userId', otherTable: '_id'}},
       //-------------------

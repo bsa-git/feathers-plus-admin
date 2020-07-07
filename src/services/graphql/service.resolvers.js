@@ -41,6 +41,17 @@ let moduleExports = function serviceResolvers(app, options) {
         },
         // !end
 
+      // role(query: JSON, params: JSON, key: JSON): Role
+      role:
+        // !code: resolver-ChatMessage-role
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.roleId }, paginate: false
+          });
+          return (parent.teamId === '000000000000000000000000')? null : roles.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
       // owner(query: JSON, params: JSON, key: JSON): User!
       owner:
         // !<DEFAULT> code: resolver-ChatMessage-owner

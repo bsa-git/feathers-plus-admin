@@ -16,13 +16,16 @@ let moduleExports = merge({},
       autoIncrement: true,
       primaryKey: true
     },
-    teamId: {
-      type: DataTypes.INTEGER
-    },
     ownerId: {
       type: DataTypes.INTEGER
     },
     userId: {
+      type: DataTypes.INTEGER
+    },
+    teamId: {
+      type: DataTypes.INTEGER
+    },
+    roleId: {
       type: DataTypes.INTEGER
     },
     msg: {

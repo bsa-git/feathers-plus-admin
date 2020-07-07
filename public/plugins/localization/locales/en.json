@@ -438,6 +438,14 @@
     "confirmDeleteItemsTitle": "Remove selected items",
     "confirmDeleteItemsText": "This items will be removed from the server database as well as from the client store"
   },
+  "chatMessages": {
+    "title": "Chat Messages",
+    "description": "Chat Messages"
+  },
+  "chatContacts": {
+    "title": "Chat Contacts",
+    "description": "Chat Contacts"
+  },
   "graphql": {
     "title": "GraphQL",
     "description": "GraphQL is a query language for APIs",

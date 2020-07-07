@@ -606,15 +606,8 @@
 
       async updateMemberIds(userId, teamIds = []) {
         try {
-          if (isDebug) debug(`updateMemberIds: userId=${userId}; teamIds=${teamIds}`);
-          let userTeam = null;
-          const updateMemberIds = {created: [], removed: []};
-          const idFieldTeam = this.$store.state.teams.idField;
-          const idFieldUserTeams = this.$store.state['user-teams'].idField;
-          const {Team, UserTeam} = this.$FeathersVuex;
-          const teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
-          if (isLog) debug('updateMemberIds.teams:', teams);
-          teams.forEach(async team => {
+
+          const _teamHandle = async team => {
             const teamId = team[idFieldTeam];
             const data = {
               teamId: '',
@@ -641,7 +634,20 @@
                 updateMemberIds.removed.push(removeResponse);
               }
             }
-          });
+          }
+
+          if (isDebug) debug(`updateMemberIds: userId=${userId}; teamIds=${teamIds}`);
+          let userTeam = null;
+          const updateMemberIds = {created: [], removed: []};
+          const idFieldTeam = this.$store.state.teams.idField;
+          const idFieldUserTeams = this.$store.state['user-teams'].idField;
+          const {Team, UserTeam} = this.$FeathersVuex;
+          const teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
+          if (isLog) debug('updateMemberIds.teams:', teams);
+          for (let i = 0; i < teams.length; i++) {
+            const team = teams[i];
+            await _teamHandle(team);
+          }
           return updateMemberIds;
         } catch (error) {
           if (isLog) debug('team.save.error:', error);

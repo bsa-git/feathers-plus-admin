@@ -1,6 +1,7 @@
 // const loConcat = require('lodash/concat');
 import fakeData from '~~/seeds/fake-data.json';
 import typeOf from '~/plugins/lib/type-of';
+// import {use} from "vee-validate/dist/vee-validate.minimal.esm";
 const loKebabCase = require('lodash/kebabCase');
 const loMerge = require('lodash/merge');
 const errors = require('@feathersjs/errors');
@@ -113,6 +114,38 @@ class Service {
   }
 
   /**
+   * Get auth user id
+   */
+  getAuthUserId() {
+    const user = this.getAuthUser();
+    const idField = user? Service.getIdField(user) : '';
+    return idField? user[idField] : '';
+  }
+
+  /**
+   * Check service constraints
+   * @return {Promise<void>}
+   */
+  async checkServiceConstraints() {
+    const userId = this.getAuthUserId();
+    if(userId){
+      // Check role
+      const roleId = this.getAuthUser()['roleId'];
+      let role = this.getFromStore('roles', roleId);
+      if(!role){
+        role = await this.get('roles', roleId);
+      }
+      // Check teams
+      const idFieldTeam = this.getServiceIdField('teams');
+      const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
+      const teamCount = this.findCountInStore('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}}});
+      if(teamIdsForUser.length !== teamCount){
+        await this.findAll('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
+      }
+    }
+  }
+
+  /**
    * Clear all services from store
    */
   clearAll() {
@@ -126,9 +159,14 @@ class Service {
    * @return {Promise.<void>}
    */
   async findAllForAdmin() {
-    const paths = Service.getServicePaths();
+    if (isDebug) debug('findAllForAdmin: START');
+    const paths = Service.getServicePaths().filter(path => path !== 'chat-messages');
     paths.forEach(path => this.findAll(path, {query: {}}));
-    if (isDebug) debug('findAllForAdmin: OK');
+    // Find chat messages for user
+    const user = this.getAuthUser();
+    if (user) {
+      await this.findChatMessagesForUser(user);
+    }
   }
 
   /**
@@ -136,6 +174,7 @@ class Service {
    * @return {Promise.<void>}
    */
   async findAllForUser() {
+    if (isDebug) debug('findAllForUser: START');
     const user = this.getAuthUser();
     if (user) {
       // getRole
@@ -154,12 +193,30 @@ class Service {
       logMessages = logMessages.filter(msg => msg.ownerId !== msg.userId);
       if(logMessages.length){
         let ownerIds = logMessages.map(msg => msg.ownerId);
-        // ownerIds.forEach(async (ownerId) => await this.get('users', ownerId));
         ownerIds.forEach((ownerId) => this.get('users', ownerId));
-        debug('findAllForUser.ownerIds:', ownerIds);
+        // debug('findAllForUser.ownerIds:', ownerIds);
       }
+      // Find chat messages for user
+      await this.findChatMessagesForUser(user);
     }
-    if (isDebug) debug('findAllForUser: OK');
+  }
+
+  /**
+   * Find all services for admin user
+   * @param user {Object}
+   * @return {Promise.<void>}
+   */
+  async findChatMessagesForUser(user) {
+    const idUserField = this.getServiceIdField('users');
+    const userId = user[idUserField];
+    // Find chat messages
+    const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
+    await this.findAll('chat-messages', {query: {$or: [
+      {userId: userId},
+      {ownerId: userId},
+      {roleId: user.roleId},
+      { teamId: { $in: teamIdsForUser}}
+    ]}});
   }
 
   /**
@@ -198,9 +255,8 @@ class Service {
   async findAll(path, params = {}) {
     const newParams = loMerge(params, {query: {$limit: null}});
     let results = await this.dispatch(`${path}/find`, newParams);
-    results = results.data || results;
     if (isLog) debug(`findAll.path: ${path}`, `findAll.params: ${JSON.stringify(newParams)}`, 'findAll.results:', results);
-
+    results = results.data || results;
     return results;
   }
 

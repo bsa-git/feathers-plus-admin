@@ -17,7 +17,7 @@ let base = merge({},
   {
     title: "ChatMessages",
     description: "ChatMessages database.",
-    fakeRecords: 2,
+    fakeRecords: 3,
     required: [],
     uniqueItemProperties: [],
     properties: {
@@ -26,12 +26,6 @@ let base = merge({},
       },
       _id: {
         type: ID
-      },
-      teamId: {
-        type: ID,
-        faker: {
-          fk: "teams:random"
-        }
       },
       ownerId: {
         type: ID,
@@ -43,6 +37,18 @@ let base = merge({},
         type: ID,
         faker: {
           fk: "users:random"
+        }
+      },
+      teamId: {
+        type: ID,
+        faker: {
+          fk: "teams:random"
+        }
+      },
+      roleId: {
+        type: ID,
+        faker: {
+          fk: "roles:random"
         }
       },
       msg: {

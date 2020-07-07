@@ -17,6 +17,7 @@ const queries = {
   oneLevel: {
     query: {
       team: {},
+      role: {},
       owner: {},
       user: {},
     }
@@ -26,6 +27,9 @@ const queries = {
     query: {
       team: {
         members: {},
+      },
+      role: {
+        users: {},
       },
       owner: {
         fullName: {},
@@ -103,9 +107,10 @@ const twoLevelsFields = {
   query: {
     id: 1,
     _id: 1,
-    teamId: 1,
     ownerId: 1,
     userId: 1,
+    teamId: 1,
+    roleId: 1,
     msg: 1,
     team: {
       _args: {},
@@ -114,6 +119,14 @@ const twoLevelsFields = {
       name: 1,
       description: 1,
       members: {},
+    },
+    role: {
+      _args: {},
+      id: 1,
+      _id: 1,
+      name: 1,
+      description: 1,
+      users: {},
     },
     owner: {
       _args: {},

@@ -24,7 +24,7 @@ const authPaths = (envPaths) => {
 
 /**
  * Get auth roles
- * e.g. [{isAdmin: 'Administrator'}, {isGuest: 'Guest'}, {isSuperRole: 'superRole'}]
+ * e.g. [{isAdministrator: 'Administrator'}, {isGuest: 'Guest'}, {isSuperRole: 'superRole'}]
  * @param envRoles
  * @return {Array}
  */
@@ -37,7 +37,7 @@ const authRoles = (envRoles) => {
 
 /**
  * Get base roles
- * e.g. [{isAdmin: 'Administrator'}, {isGuest: 'Guest'}]
+ * e.g. [{isAdministrator: 'Administrator'}, {isGuest: 'Guest'}]
  * @param envBaseRoles
  * @return {Array}
  */

@@ -318,9 +318,13 @@
 
       async removeItems() {
         try {
+          const _itemHandle = async item => await this.service.remove('log-messages', item.id);
           this.confirmDialog = false;
           // Remove log-messages
-          this.selected.forEach(async item => await this.service.remove('log-messages', item.id));
+          for (let i = 0; i < this.selected.length; i++) {
+            const item = this.selected[i];
+            await _itemHandle(item);
+          }
           this.showSuccess(`${this.$t('management.success')}!`);
           // Save log-message
           this.saveLogMessage('LOG-MESSAGE-REMOVE', {selected: this.selected});

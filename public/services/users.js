@@ -44,8 +44,8 @@ const servicePlugin = service(servicePath, {
           return null;
         }
       },
-      roleId: null,
-      get role() {
+      // roleId: null,
+      get role () {
         if (this.roleId) {
           const idFieldRole = store.state.roles.idField;
           let role = Models.Role.getFromStore(this.roleId);

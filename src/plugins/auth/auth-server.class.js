@@ -170,7 +170,7 @@ class AuthServer {
       findResults = findResults.data;
       if(findResults.length){
         let idField = 'id' in findResults[0] ? 'id' : '_id';
-        roleId = findResults[0][idField];
+        roleId = findResults[0][idField].toString();
       }
       return roleId;
     } else {
@@ -184,7 +184,7 @@ class AuthServer {
    */
   async isAdmin() {
     const roleName = await this.getRoleName();
-    return roleName === AuthServer.getRoles('isAdmin');
+    return roleName === AuthServer.getRoles('isAdministrator');
   }
 
   /**
@@ -372,7 +372,7 @@ class AuthServer {
 
   /**
    * Get env roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
+   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
    */
@@ -390,7 +390,7 @@ class AuthServer {
 
   /**
    * Get base env roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest' }
    * @param isBaseRole
    * @return {Object||String}
    */
@@ -432,11 +432,11 @@ class AuthServer {
 
   /**
    * Get IsRole for roleName
-   * e.g. for Administrator => isAdmin; NotEnvRole => isGuest
+   * e.g. for Administrator => isAdministrator; NotEnvRole => isGuest
    * @param roleName
    * @return {String}
    */
-  static getIsEnvRole(roleName = '') {
+  static getEnvAliaseForRoleName(roleName = '') {
     const envRoles = AuthServer.getRoles();
     const keys = Object.keys(envRoles);
     const result = keys.find(key => envRoles[key] === roleName);

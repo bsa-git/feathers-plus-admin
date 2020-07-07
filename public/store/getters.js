@@ -56,7 +56,7 @@ const getters = {
   },
 
   isAdmin(state, getters) {
-    return getters.isMyRole('isAdmin');
+    return getters.isMyRole('isAdministrator');
   },
 
   isMyRole: (state, getters) => (isRole = '') => {
@@ -70,7 +70,7 @@ const getters = {
 
   /**
    * Get roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
+   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param state
    * @param isRole
    * @return {Object}
@@ -85,7 +85,7 @@ const getters = {
 
   /**
    * Get base roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest' }
+   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest' }
    * @param state
    * @param isBaseRole
    * @return {Object}

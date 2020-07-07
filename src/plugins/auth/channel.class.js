@@ -25,9 +25,11 @@ class Channel {
     // Get connection.provider
     this.provider = this.connection && this.connection.provider ? this.connection.provider : '';
     // Get payload.userId
-    this.userId = this.payload? this.payload.userId : '';
+    this.userId = this.payload && this.payload.userId? this.payload.userId.toString() : '';
     // Get role name
     this.roleName = this.payload? this.payload.role : '';
+    // Get roleId
+    this.roleId = this.user && this.user.roleId? this.user.roleId.toString() : '';
     if(isDebug) debug('Channel.constructor OK; connection:', this.connection);
   }
 
@@ -122,7 +124,7 @@ class Channel {
 
   /**
    * Get roles
-   * e.g. { isAdmin: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
+   * e.g. { isAdministrator: 'Administrator', isGuest: 'Guest', isSuperRole: 'superRole' }
    * @param isRole
    * @return {Object||String}
    */
@@ -132,12 +134,12 @@ class Channel {
 
   /**
    * Get IsRole for roleName
-   * e.g. for Administrator => isAdmin
+   * e.g. for Administrator => isAdministrator
    * @param roleName
    * @return {String}
    */
-  static getIsEnvRole(roleName = '') {
-    return AuthServer.getIsEnvRole(roleName);
+  static getEnvAliaseForRoleName(roleName = '') {
+    return AuthServer.getEnvAliaseForRoleName(roleName);
   }
 
   /**
@@ -146,7 +148,7 @@ class Channel {
    */
   async isAdmin() {
     const roleName = await this.getRoleName();
-    return roleName === AuthServer.getRoles('isAdmin');
+    return roleName === AuthServer.getRoles('isAdministrator');
   }
 
   /**
@@ -192,18 +194,17 @@ class Channel {
     const loPick = require('lodash/pick');
     let teamIdsForUser, teamsForUser;
     const idField = AuthServer.getIdField(this.user);
-    const userId = this.user[idField];
     const userTeams = this.app.service('user-teams');
     const teams = this.app.service('teams');
-    if (userTeams && teams) {
-      teamIdsForUser = await userTeams.find({query: {userId: userId, $sort: {teamId: 1}}});
+    if (userTeams && teams && this.userId) {
+      teamIdsForUser = await userTeams.find({query: {userId: this.userId, $sort: {teamId: 1}}});
       teamIdsForUser = teamIdsForUser.data;
       teamIdsForUser = teamIdsForUser.map(row => row.teamId.toString());
       if(teamIdsForUser.length){
         teamsForUser = await teams.find({query: {[idField]: {$in: teamIdsForUser}, $sort: {name: 1}}});
         teamsForUser = teamsForUser.data;
         teamsForUser = teamsForUser.map(team => {
-          const id = team[idField];
+          const id = team[idField].toString();
           team = loPick(team, AuthServer.serviceFields('teams'));
           team.id = id;
           return team;

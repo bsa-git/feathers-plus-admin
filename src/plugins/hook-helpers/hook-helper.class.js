@@ -257,8 +257,12 @@ class HookHelper {
    * @return {Promise.<void>}
    */
   async forEachRecords(fn) {
+    const _recordHandle = async record => await fn(record);
     if(Array.isArray(this.contextRecords)){
-      this.contextRecords.forEach(async record => await fn(record));
+      for (let i = 0; i < this.contextRecords.length; i++) {
+        const record = this.contextRecords[i];
+        await _recordHandle(record);
+      }
     }else {
       await fn(this.contextRecords);
     }

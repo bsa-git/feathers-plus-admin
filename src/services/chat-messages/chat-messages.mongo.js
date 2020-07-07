@@ -14,12 +14,6 @@ let moduleExports = merge({},
       _id: {
         bsonType: "objectId"
       },
-      teamId: {
-        faker: {
-          fk: "teams:random"
-        },
-        bsonType: "objectId"
-      },
       ownerId: {
         faker: {
           fk: "users:random"
@@ -29,6 +23,18 @@ let moduleExports = merge({},
       userId: {
         faker: {
           fk: "users:random"
+        },
+        bsonType: "objectId"
+      },
+      teamId: {
+        faker: {
+          fk: "teams:random"
+        },
+        bsonType: "objectId"
+      },
+      roleId: {
+        faker: {
+          fk: "roles:random"
         },
         bsonType: "objectId"
       },

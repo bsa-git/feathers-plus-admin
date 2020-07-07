@@ -445,6 +445,32 @@
       },
       async updateUserIds(roleId, userIds = []) {
         try {
+
+          const _userHandle = async user => {
+            const userId = user[idFieldUser];
+            const isUserId = userIds.indexOf(userId) >= 0;
+            if (isUserId) {
+              omitUserIds.push(userId);
+            } else {
+              // Warning: not possible remove role from oneself
+              // Warning: It is not possible to remove a guest role
+              if (roleId !== guestId && !this.isYouAuth(userId)) {
+                newUser = new User({[idFieldUser]: userId, roleId: guestId});
+                saveResponse = await newUser.save();
+                updatedUserIds.removed.push(saveResponse);
+              }
+            }
+          }
+
+          const _userHandle2 = async user => {
+            const userId = user[idFieldUser];
+            if (!this.isYouAuth(userId)) {
+              newUser = new User({[idFieldUser]: userId, roleId: roleId});
+              saveResponse = await newUser.save();
+              updatedUserIds.added.push(saveResponse);
+            }
+          }
+
           if (isDebug) debug('updateUserIds.roleId:', roleId, 'userIds:', userIds);
           let omitUserIds = [];
           let newUser, saveResponse = null;
@@ -459,34 +485,18 @@
           const role = Role.getFromStore(roleId);
           // Users excluded from the role
           let users = User.findInStore({query: {roleId: roleId}}).data;
-          users.forEach(async user => {
-            const userId = user[idFieldUser];
-            const isUserId = userIds.indexOf(userId) >= 0;
-            if (isUserId) {
-              omitUserIds.push(userId);
-            } else {
-              // Warning: not possible remove role from oneself
-              // Warning: It is not possible to remove a guest role
-              if (roleId !== guestId && !this.isYouAuth(userId)) {
-                newUser = new User({[idFieldUser]: userId, roleId: guestId});
-                saveResponse = await newUser.save();
-                updatedUserIds.removed.push(saveResponse);
-              }
-            }
-          });
+          for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            await _userHandle(user);
+          }
           if (isLog) debug('updateUserIds.removed', updatedUserIds.removed);
           // Users added to the role
           const filterUserIds = userIds.filter(userId => omitUserIds.indexOf(userId) < 0);
           users = User.findInStore({query: {[idFieldUser]: {$in: filterUserIds}}}).data;
-          users.forEach(async user => {
-            const userId = user[idFieldUser];
-//            if (!this.isYouAuth(userId) && this.isEnvRole(role.name)) {
-            if (!this.isYouAuth(userId)) {
-              newUser = new User({[idFieldUser]: userId, roleId: roleId});
-              saveResponse = await newUser.save();
-              updatedUserIds.added.push(saveResponse);
-            }
-          });
+          for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            await _userHandle2(user);
+          }
           if (isLog) debug('updateUserIds.added', updatedUserIds.added);
           return updatedUserIds;
         } catch (error) {

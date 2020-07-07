@@ -1,9 +1,9 @@
 const {readJsonFileSync, writeJsonFileSync, inspector, appRoot} = require('../lib');
 const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
-const dotenv = require('dotenv');// Loads environment variables from .env file.
+const dotEnv = require('dotenv');// Loads environment variables from .env file.
 const chalk = require('chalk');
 
-dotenv.load(); // Load environment variables
+dotEnv.load(); // Load environment variables
 
 const isDebug = true;
 const isLog = false;
@@ -62,7 +62,7 @@ const usersUpdate = () => {
   });
   // Set  roleId for last user
   const foundRole = fakeDataRoles.find(function (role) {
-    return (role.name !== Auth.getRoles('isAdmin')) && (role.name !== Auth.getRoles('isGuest'));
+    return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
   });
   fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundRole[idFieldRole];
 
@@ -106,12 +106,18 @@ const logMessagesUpdate = () => {
 };
 
 const chatMessagesUpdate = () => {
-  fakeDataChatMessages[0]['teamId'] = '000000000000000000000000';// ownerId userId
+  fakeDataChatMessages[0]['teamId'] = '000000000000000000000000';
+  fakeDataChatMessages[0]['roleId'] = '000000000000000000000000';
   fakeDataChatMessages[0]['ownerId'] = fakeDataUser[idFieldUser];
   fakeDataChatMessages[0]['userId'] = fakeDataUser2[idFieldUser];
   fakeDataChatMessages[1]['teamId'] = fakeDataTeam[idFieldTeam];
+  fakeDataChatMessages[1]['roleId'] = '000000000000000000000000';
   fakeDataChatMessages[1]['ownerId'] = fakeDataUser[idFieldUser];
   fakeDataChatMessages[1]['userId'] = '000000000000000000000000';
+  fakeDataChatMessages[2]['teamId'] = '000000000000000000000000';
+  fakeDataChatMessages[2]['roleId'] = fakeDataRole[idFieldRole];
+  fakeDataChatMessages[2]['ownerId'] = fakeDataUser[idFieldUser];
+  fakeDataChatMessages[2]['userId'] = '000000000000000000000000';
   if(isLog) inspector('fake-service.chatMessagesUpdate.fakeDataChatMessages:', fakeDataChatMessages);
   if(isDebug) console.log(chalk.yellow('ChatMessages Update: Ok'));
 };

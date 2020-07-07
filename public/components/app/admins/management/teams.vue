@@ -427,14 +427,7 @@
       },
       async updateUserIds(teamId, userIds = []) {
         try {
-          if (isDebug) debug('updateUserIds.teamId:', teamId, 'userIds:', userIds);
-          let omitUserIds = [];
-          const updatedUserIds = {added: [], removed: []};
-          const idFieldUserTeams = this.$store.state['user-teams'].idField;
-          const {UserTeam} = this.$FeathersVuex;
-          // Users excluded from the team
-          const userTeams = UserTeam.findInStore({query: {teamId: teamId}}).data;
-          userTeams.forEach(async userTeam => {
+          const _userTeamHandle = async userTeam => {
             const userId = userTeam['userId'];
             const isUserId = userIds.indexOf(userId) >= 0;
             if (isUserId) {
@@ -445,15 +438,32 @@
               const removeResponse = await userTeam.remove();
               updatedUserIds.removed.push(removeResponse);
             }
-          });
-          if (isLog) debug('updateUserIds.removed', updatedUserIds.removed);
-          // Users added to the team
-          const filterUserIds = userIds.filter(userId => omitUserIds.indexOf(userId) < 0);
-          filterUserIds.forEach(async userId => {
+          }
+
+          const _userIdHandle = async userId => {
             const userTeam = new UserTeam({teamId: teamId, userId: userId});
             const saveResponse = await userTeam.save();
             updatedUserIds.added.push(saveResponse);
-          });
+          }
+
+          if (isDebug) debug('updateUserIds.teamId:', teamId, 'userIds:', userIds);
+          let omitUserIds = [];
+          const updatedUserIds = {added: [], removed: []};
+          const idFieldUserTeams = this.$store.state['user-teams'].idField;
+          const {UserTeam} = this.$FeathersVuex;
+          // Users excluded from the team
+          const userTeams = UserTeam.findInStore({query: {teamId: teamId}}).data;
+          for (let i = 0; i < userTeams.length; i++) {
+            const userTeam = userTeams[i];
+            await _userTeamHandle(userTeam);
+          }
+          if (isLog) debug('updateUserIds.removed', updatedUserIds.removed);
+          // Users added to the team
+          const filterUserIds = userIds.filter(userId => omitUserIds.indexOf(userId) < 0);
+          for (let i = 0; i < filterUserIds.length; i++) {
+            const userId = filterUserIds[i];
+            await _userIdHandle(userId);
+          }
           if (isLog) debug('updateUserIds.added', updatedUserIds.added);
           return updatedUserIds;
         } catch (error) {
