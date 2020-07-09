@@ -73,7 +73,7 @@ let moduleExports = function (app) {
         // !code: before_create
         authentication.hooks.authenticate(config.strategies),
         // Add data to payload
-        auth.payloadExtension(),
+        // auth.payloadExtension(),
         // Add isVerified for verify user`s email
         verifyHooks.isVerified()
         // !end

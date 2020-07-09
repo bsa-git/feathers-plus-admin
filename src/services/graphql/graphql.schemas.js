@@ -35,6 +35,7 @@ type Role {
   id: ID
   _id: ID
   name: String
+  alias: String
   description: String
   users: [User!]
 }
@@ -43,6 +44,7 @@ type Team {
   id: ID
   _id: ID
   name: String
+  alias: String
   description: String
   members: [User!]
 }

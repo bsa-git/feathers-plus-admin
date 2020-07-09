@@ -16,12 +16,7 @@ module.exports = function (options = {}) {
     // Show debug info
     hh.showDebugInfo('', isLog);
 
-    // hh.showDebugInfo('graphql.find.after', true);
-
-    const hh2 = await contextNormalize(context);
-    records = hh2.contextRecords;
-    // hh2.showDebugInfo('graphql.find.after', true);
-
+    records = await contextNormalize(context);
     if(isLog) inspector('hooks.normalize::records:', records);
 
     // Place the modified records back in the context.

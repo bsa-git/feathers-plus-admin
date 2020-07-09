@@ -39,6 +39,7 @@
 
 <script>
   import {mapGetters} from 'vuex';
+  import AuthClient from '~/plugins/auth/auth-client.class';
   import appMenu from '~/api/app/app-menu.json';
   import syncStore from '~/plugins/lib/sync-store';
   import AppToolbar from '~/components/app/layout/AppToolbar';
@@ -49,7 +50,8 @@
   import AppRightDrawer from '~/components/app/layout/AppRightDrawer';
   import AppSnackBar from '~/components/layout/Snackbar';
 
-  import themeColorOptions from '~/api/app/theme-color-options.json';
+  const debug = require('debug')('app:layouts.default');
+  const isDebug = false;
 
   export default {
     components: {
@@ -77,6 +79,15 @@
         syncStore.initVuetify(this, true);
       })
     },
+    watch: {
+      'user.roleAlias': function (val, oldVal) {
+        if(isDebug) debug('watch.user - Changed!')
+        if(val){
+          if(isDebug) debug('watch.user.roleAlias:', val);
+          this.checkAccessToRoutePath();
+        }
+      },
+    },
     methods: {
       modelNavLeft: function (newValue) {
         this.navLeft = newValue
@@ -87,6 +98,17 @@
       devAvatar() {
         const avatar = new this.$Avatar(this.config.email);
         return avatar.imageUrl();
+      },
+      checkAccessToRoutePath() {
+        // Create auth client
+        const authClient = new AuthClient(this.$store);
+        // Check auth access for route.path
+        if (!authClient.isAccess(this.$route.path)) {
+          if(isDebug) debug(`This path '${this.$route.path}' is not available. Not enough rights.`);
+          this.$store.commit('SHOW_ERROR', `${this.$t('error.not_enough_rights')}.`);
+          const fullPath = (this.$store.state.config.locale === this.$store.state.config.fallbackLocale) ? '/user/login' : `/${this.$store.state.config.locale}/user/login`;
+          this.$redirect(fullPath);
+        }
       },
     },
     computed: {

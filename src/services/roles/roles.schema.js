@@ -39,6 +39,7 @@ let schema = {
     id: {type: 'ID'},
     _id: {type: 'ID'},
     name: {faker: 'name.title'},
+    alias: {type: 'string', faker: {exp: '"is" + rec.name.replace(/ /gi, "")'}},
     description: {faker: 'lorem.sentence'}
     //-------------------------
     // !end

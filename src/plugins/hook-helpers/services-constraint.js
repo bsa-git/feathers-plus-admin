@@ -1,5 +1,5 @@
 const errors = require('@feathersjs/errors');
-// const {isObject} = require('../lib');
+const {getCapitalizeStr} = require('../lib');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.servicesConstraint');
@@ -22,7 +22,7 @@ module.exports = async function servicesConstraint(context) {
   let maxRows = process.env.LOGMSG_MAXROWS;
   maxRows = Number.isInteger(maxRows)? maxRows : Number.parseInt(maxRows);
 
-  let idField, validate;
+  let idField, validate, normalize;
 
   //----- SERVICES CONSTRAINT ---//
   switch (`${hookHelper.contextPath}.${hookHelper.contextMethod}.${hookHelper.contextType}`) {
@@ -74,6 +74,33 @@ module.exports = async function servicesConstraint(context) {
     };
     await validate();
     break;
+  case 'roles.create.before':
+  case 'roles.patch.before':
+  case 'teams.create.before':
+  case 'teams.patch.before':
+    normalize = async (record) => {
+      let alias = '', _record = {};
+      alias = record.name? getCapitalizeStr(record.name, 'is') : '';
+      // if(isDebug) debug('beforeNormalizeAlias.alias:', alias);
+      if(alias && record.alias !== alias){
+        _record.alias = alias;
+      }
+      Object.assign(record, _record);
+    };
+    await hookHelper.forEachRecords(normalize);
+    break;
+  case 'users.create.after':
+  case 'users.patch.after':
+  case 'users.get.after':
+  case 'users.find.after':
+    normalize = async (record) => {
+      if(!record.roleAlias){
+        const role = await hookHelper.getItem('roles', record.roleId);
+        record.roleAlias = role.alias;
+      }
+    };
+    await hookHelper.forEachRecords(normalize);
+    break;
   case 'users.remove.after':
     validate = async (record) => {
       const idFieldUser = HookHelper.getIdField(record);
@@ -88,7 +115,14 @@ module.exports = async function servicesConstraint(context) {
       removed = await hookHelper.removeItem(servicePath, {[idFieldUser]: profileId});
       if (isDebug) debug(`after.users.remove: record have been removed for id = '${removed[idFieldUser]}' from the "${servicePath}" service`);
     };
+    normalize = async (record) => {
+      if(!record.roleAlias){
+        const role = await hookHelper.getItem('roles', record.roleId);
+        record.roleAlias = role.alias;
+      }
+    };
     await hookHelper.forEachRecords(validate);
+    await hookHelper.forEachRecords(normalize);
     break;
   case 'teams.remove.after':
     validate = async (record) => {

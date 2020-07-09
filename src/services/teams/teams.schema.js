@@ -40,6 +40,7 @@ let schema = {
     id: {type: 'ID'},
     _id: {type: 'ID'},
     name: {minLength: 2, maxLength: 30, faker: 'commerce.productName'},
+    alias: {type: 'string', faker: {exp: '"is" + rec.name.replace(/ /gi, "")'}},
     description: {faker: 'lorem.sentence'},
     // memberIds: {
     //   type: 'array',

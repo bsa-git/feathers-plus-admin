@@ -11,6 +11,7 @@ const isSeed = true;
 
 // Get generated fake data
 const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
+const roleGuest = fakes['roles'].find(role => role.alias === 'isGuest');
 
 
 describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
@@ -318,7 +319,6 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
         return (role.name !== AuthServer.getRoles('isGuest'));
       });
 
-      // const rec = fakes['roles'][0];
       const idFieldRole = 'id' in recAdmin ? 'id' : '_id';
       const roleAdminId = recAdmin[idFieldRole];
       const roleGuestId = recGuest[idFieldRole];
@@ -356,6 +356,34 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
       }
     });
 
+    it('Set contextBefore.alias while creating record for \'roles\' service', async () => {
+      const service = app.service('roles');
+      contextBefore.path = 'roles';
+      contextBefore.method = 'create';
+      contextBefore.service = service;
+      contextBefore.data = {
+        name: 'My super role',
+        description: 'Description for my super role',
+      };
+      await constraints(true)(contextBefore);
+      if (isDebug) debug('Set contextBefore.alias while creating record for \'roles\' service.contextBefore:', contextBefore.data);
+      assert.ok(contextBefore.data.alias, 'Protection did not work to write the data to service');
+    });
+
+    it('Set contextBefore.alias while creating record for \'teams\' service', async () => {
+      const service = app.service('roles');
+      contextBefore.path = 'teams';
+      contextBefore.method = 'create';
+      contextBefore.service = service;
+      contextBefore.data = {
+        name: 'My super team',
+        description: 'Description for my super team',
+      };
+      await constraints(true)(contextBefore);
+      if (isDebug) debug('Set contextBefore.alias while creating record for \'teams\' service.contextBefore:', contextBefore.data);
+      assert.ok(contextBefore.data.alias, 'Protection did not work to write the data to service');
+    });
+
     it('Set contextBefore.roleId while creating record for \'users\' service', async () => {
       const service = app.service('users');
       contextBefore.path = 'users';
@@ -388,6 +416,26 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
       assert.ok(contextBefore.data.profileId, 'Protection did not work to write the data to service');
     });
 
+    it('Set contextAfter.roleAlias while creating record for \'users\' service', async () => {
+      const idField = 'id' in roleGuest ? 'id' : '_id';
+      const service = app.service('users');
+      contextAfter.path = 'users';
+      contextAfter.method = 'create';
+      contextAfter.service = service;
+      contextAfter.result = {
+        email: 'my_email@test.com',
+        password: 'my_email',
+        firstName: 'myFirstName',
+        lastName: 'myLastName',
+        roleId: roleGuest[idField]
+      };
+      await constraints(true)(contextAfter);
+      if (isDebug) debug('Set contextAfter.roleAlias while creating record for \'users\' service.contextAfter:', contextAfter.result);
+      assert.ok(contextAfter.result.roleAlias, 'Protection did not work to write the data to service');
+    });
+
+
+
     it('Data integrity for \'user-teams\',\'user-profiles\' services, when removing a record from \'users\' service', async () => {
       const rec = fakes['users'][0];
       const idFieldUser = 'id' in rec ? 'id' : '_id';
@@ -405,7 +453,8 @@ describe('<<< Test /hooks/constraints.unit.test.js >>>', () => {
       contextAfter.service = app.service('users');
       contextAfter.result = {
         [idFieldUser]: userId,
-        profileId: profileId
+        profileId: profileId,
+        roleAlias: roleGuest.alias
       };
       await constraints(true)(contextAfter);
       const findUserTeamsAfter = await userTeams.find({query: {userId: userId}});

@@ -44,10 +44,12 @@ let fakeDataLogMessages = fakeData['logMessages'];
 let fakeDataChatMessages = fakeData['chatMessages'];
 
 const rolesUpdate = () => {
-  const roles = Object.values(Auth.getBaseRoles());
+  const roles = Auth.getBaseRoles();
+  const roleKeys = Object.keys(Auth.getBaseRoles());
   if(isLog) inspector('fake-service.rolesUpdate.roles:', roles);
-  roles.forEach((role, index) => {
-    fakeDataRoles[index]['name'] = role;
+  roleKeys.forEach((key, index) => {
+    fakeDataRoles[index]['alias'] = key;
+    fakeDataRoles[index]['name'] = roles[key];
   });
   if(isLog) inspector('fake-service.rolesUpdate.fakeDataRoles:', fakeDataRoles);
   if(isDebug) console.log(chalk.yellow('Roles Update: Ok'));

@@ -1,9 +1,7 @@
 // const errors = require('@feathersjs/errors');
-const {inspector, isString, isObject, isNumber, isNull} = require('../lib');
+const {inspector, isString, isObject, isNumber, isNull, /*getCapitalizeStr*/} = require('../lib');
 const HookHelper = require('./hook-helper.class');
-// const debug = require('debug')('app:plugins.contextNormalize');
 
-// const isDebug = false;
 const isLog = false;
 
 
@@ -117,9 +115,10 @@ const afterNormalizeUserAuth = async (record) => {
 /**
  * Context normalize
  * @param context
- * @return {Promise.<void>}
+ * @return {Promise<HookHelper>}
  */
 module.exports = async function contextNormalize(context) {
+  // let normalize = null;
   // Create HookHelper object
   const hh = new HookHelper(context);
   // Run base normalize
@@ -137,5 +136,6 @@ module.exports = async function contextNormalize(context) {
   default:
     break;
   }
-  return Promise.resolve(hh);
+  // return Promise.resolve(hh);
+  return hh.contextRecords;
 };

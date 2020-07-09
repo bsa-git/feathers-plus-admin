@@ -35,6 +35,12 @@ let base = merge({},
         faker: "commerce.productName",
         type: "string"
       },
+      alias: {
+        type: "string",
+        faker: {
+          exp: "\"is\" + rec.name.replace(/ /gi, \"\")"
+        }
+      },
       description: {
         faker: "lorem.sentence",
         type: "string"

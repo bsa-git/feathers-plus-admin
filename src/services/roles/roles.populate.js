@@ -93,6 +93,7 @@ const twoLevelsFields = {
     id: 1,
     _id: 1,
     name: 1,
+    alias: 1,
     description: 1,
     users: {
       _args: {},

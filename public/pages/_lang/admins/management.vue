@@ -90,7 +90,7 @@
         ],
       }
     },
-    created: async function () {
+    created: function () {
     },
     computed: {
       ...mapGetters({

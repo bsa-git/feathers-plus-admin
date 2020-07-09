@@ -20,6 +20,9 @@ let moduleExports = merge({},
       type: DataTypes.TEXT,
       unique: true
     },
+    alias: {
+      type: DataTypes.TEXT
+    },
     description: {
       type: DataTypes.TEXT
     }

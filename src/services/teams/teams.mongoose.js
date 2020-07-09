@@ -16,6 +16,7 @@ let moduleExports = merge({},
       maxLength: 30,
       unique: true
     },
+    alias: String,
     description: String
   },
   // !end

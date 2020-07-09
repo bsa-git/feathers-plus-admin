@@ -71,10 +71,11 @@ const stripSpecific = function (value, symbol = '') {
  */
 const getCapitalizeStr = function (value, prefix = '') {
   const loCapitalize = require('lodash/capitalize');
+  const loWords = require('lodash/words');
   let _value = loCapitalize(value);
   if(prefix){
-    const regex = / /gi;
-    _value = _value.replaceAll(regex, '');
+    let words = loWords(_value).map(word => loCapitalize(word));
+    _value = words.join('');
     _value = prefix + _value;
   }
   return _value;

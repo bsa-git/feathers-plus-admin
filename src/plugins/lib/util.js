@@ -65,6 +65,23 @@ const stripSpecific = function (value, symbol = '') {
 };
 
 /**
+ * Get capitalize string
+ * @param value
+ * @param prefix
+ */
+const getCapitalizeStr = function (value, prefix = '') {
+  const loCapitalize = require('lodash/capitalize');
+  const loWords = require('lodash/words');
+  let _value = loCapitalize(value);
+  if(prefix){
+    let words = loWords(_value).map(word => loCapitalize(word));
+    _value = words.join('');
+    _value = prefix + _value;
+  }
+  return _value;
+};
+
+/**
  * Is true
  * @param value String|Any
  * @return boolean
@@ -296,6 +313,7 @@ module.exports = {
   waitTimeout,
   stripSlashes,
   stripSpecific,
+  getCapitalizeStr,
   isTrue,
   getNumber,
   getRegex,

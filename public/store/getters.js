@@ -1,5 +1,6 @@
 import colors from 'vuetify/lib/util/colors';
 import themeColorOptions from '~/api/app/theme-color-options.json';
+// const debug = require('debug')('app:store.getters');
 
 const getters = {
 
@@ -63,9 +64,14 @@ const getters = {
     return getters.getMyRole === getters.getRoles(isRole);
   },
 
-  getMyRole: (state) => {
-    const role = state.auth.payload ? state.auth.payload.role : '';
-    return role ? role : '';
+  getMyRole: (state, getters) => {
+    let roleAlias = '';
+    let roleName = '';
+    if(getters.isAuth){
+      roleAlias = getters.getUser.roleAlias;
+      roleName = getters.getRoles(roleAlias);
+    }
+    return roleName;
   },
 
   /**

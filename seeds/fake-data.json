@@ -1,14 +1,14 @@
 {
   "users": [
     {
-      "_id": "5ef2ebcf535cb910141b6918",
-      "email": "Bianka_Toy40@gmail.com",
-      "password": "Bianka_Toy40",
-      "firstName": "Webster",
-      "lastName": "Daniel",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/joshaustin/128.jpg",
-      "roleId": "5ef2ebcf535cb910141b691b",
-      "profileId": "5ef2ebcf535cb910141b6924",
+      "_id": "5f0407bd3ba89a17b81af186",
+      "email": "Gabriella.Denesik@yahoo.com",
+      "password": "Gabriella.Denesik",
+      "firstName": "Katelyn",
+      "lastName": "Kutch",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/flashmurphy/128.jpg",
+      "roleId": "5f0407bd3ba89a17b81af189",
+      "profileId": "5f0407bd3ba89a17b81af192",
       "active": true,
       "isVerified": true,
       "verifyToken": "",
@@ -27,14 +27,14 @@
       "loginAt": "1970-01-01T00:00:00.000Z"
     },
     {
-      "_id": "5ef2ebcf535cb910141b6919",
-      "email": "Blake.Boyer91@gmail.com",
-      "password": "Blake.Boyer91",
-      "firstName": "Precious",
-      "lastName": "Daniel",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/_scottburgess/128.jpg",
-      "roleId": "5ef2ebcf535cb910141b691d",
-      "profileId": "5ef2ebcf535cb910141b6925",
+      "_id": "5f0407bd3ba89a17b81af187",
+      "email": "Marlee75@gmail.com",
+      "password": "Marlee75",
+      "firstName": "Daron",
+      "lastName": "Muller",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/itolmach/128.jpg",
+      "roleId": "5f0407bd3ba89a17b81af189",
+      "profileId": "5f0407bd3ba89a17b81af193",
       "active": true,
       "isVerified": true,
       "verifyToken": "",
@@ -53,14 +53,14 @@
       "loginAt": "1970-01-01T00:00:00.000Z"
     },
     {
-      "_id": "5ef2ebcf535cb910141b691a",
-      "email": "Sigurd.OConner@gmail.com",
-      "password": "Sigurd.OConner",
-      "firstName": "Jade",
-      "lastName": "Lynch",
-      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/lawlbwoy/128.jpg",
-      "roleId": "5ef2ebcf535cb910141b691d",
-      "profileId": "5ef2ebcf535cb910141b6926",
+      "_id": "5f0407bd3ba89a17b81af188",
+      "email": "Jacinto33@yahoo.com",
+      "password": "Jacinto33",
+      "firstName": "Natalia",
+      "lastName": "Watsica",
+      "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/hafeeskhan/128.jpg",
+      "roleId": "5f0407bd3ba89a17b81af18b",
+      "profileId": "5f0407bd3ba89a17b81af194",
       "active": true,
       "isVerified": true,
       "verifyToken": "",
@@ -81,155 +81,161 @@
   ],
   "roles": [
     {
-      "_id": "5ef2ebcf535cb910141b691b",
+      "_id": "5f0407bd3ba89a17b81af189",
       "name": "Administrator",
-      "description": "Sint voluptatum occaecati quod esse eum consectetur eius."
+      "alias": "isAdministrator",
+      "description": "Placeat et dolores praesentium consectetur sunt temporibus dolore magni voluptatem."
     },
     {
-      "_id": "5ef2ebcf535cb910141b691c",
+      "_id": "5f0407bd3ba89a17b81af18a",
       "name": "Guest",
-      "description": "Qui non quo reprehenderit."
+      "alias": "isGuest",
+      "description": "Est ut ut voluptates qui aut voluptas."
     },
     {
-      "_id": "5ef2ebcf535cb910141b691d",
-      "name": "Dynamic Creative Executive",
-      "description": "Ea laboriosam quisquam eveniet provident id et doloribus."
+      "_id": "5f0407bd3ba89a17b81af18b",
+      "name": "Corporate Group Assistant",
+      "alias": "isCorporateGroupAssistant",
+      "description": "Nemo voluptatem cumque voluptas adipisci."
     }
   ],
   "teams": [
     {
-      "_id": "5ef2ebcf535cb910141b691e",
-      "name": "Refined Granite Car",
-      "description": "Officiis minus libero exercitationem sint vero quis delectus."
+      "_id": "5f0407bd3ba89a17b81af18c",
+      "name": "Unbranded Rubber Bacon",
+      "alias": "isUnbrandedRubberBacon",
+      "description": "In earum nihil non quod porro."
     },
     {
-      "_id": "5ef2ebcf535cb910141b691f",
-      "name": "Generic Wooden Chips",
-      "description": "Et est placeat repellendus et sunt ea quo."
+      "_id": "5f0407bd3ba89a17b81af18d",
+      "name": "Ergonomic Fresh Pants",
+      "alias": "isErgonomicFreshPants",
+      "description": "Sunt soluta rerum ea minima molestias nisi occaecati quod."
     },
     {
-      "_id": "5ef2ebcf535cb910141b6920",
-      "name": "Licensed Plastic Table",
-      "description": "Ut accusamus ipsum pariatur excepturi at expedita suscipit ab magnam."
+      "_id": "5f0407bd3ba89a17b81af18e",
+      "name": "Licensed Concrete Ball",
+      "alias": "isLicensedConcreteBall",
+      "description": "Unde molestiae nesciunt explicabo aut molestiae et saepe consequatur."
     }
   ],
   "userTeams": [
     {
-      "_id": "5ef2ebcf535cb910141b6921",
-      "teamId": "5ef2ebcf535cb910141b691e",
-      "userId": "5ef2ebcf535cb910141b6919"
+      "_id": "5f0407bd3ba89a17b81af18f",
+      "teamId": "5f0407bd3ba89a17b81af18c",
+      "userId": "5f0407bd3ba89a17b81af187"
     },
     {
-      "_id": "5ef2ebcf535cb910141b6922",
-      "teamId": "5ef2ebcf535cb910141b691f",
-      "userId": "5ef2ebcf535cb910141b6918"
+      "_id": "5f0407bd3ba89a17b81af190",
+      "teamId": "5f0407bd3ba89a17b81af18d",
+      "userId": "5f0407bd3ba89a17b81af187"
     },
     {
-      "_id": "5ef2ebcf535cb910141b6923",
-      "teamId": "5ef2ebcf535cb910141b6920",
-      "userId": "5ef2ebcf535cb910141b6918"
+      "_id": "5f0407bd3ba89a17b81af191",
+      "teamId": "5f0407bd3ba89a17b81af18e",
+      "userId": "5f0407bd3ba89a17b81af186"
     }
   ],
   "userProfiles": [
     {
-      "_id": "5ef2ebcf535cb910141b6924",
-      "personalPhone": "517-683-1715",
-      "personalWebSite": "http://billie.org",
-      "addressSuite": "Suite 972",
-      "addressStreet": "45190 Ortiz Wells",
-      "addressCity": "Moisesside",
+      "_id": "5f0407bd3ba89a17b81af192",
+      "personalPhone": "947-147-5016",
+      "personalWebSite": "https://madilyn.net",
+      "addressSuite": "Apt. 806",
+      "addressStreet": "91637 Gerhold Plains",
+      "addressCity": "Lake Vita",
       "addressState": "North Dakota",
-      "addressStateAbbr": "IN",
-      "addressCountry": "Bolivia",
-      "addressCountryCode": "KP",
-      "addressZipCode": "05871",
-      "addressLatitude": "-60.4294",
-      "addressLongitude": "137.9627",
-      "jobCompanyName": "Kovacek LLC",
-      "jobTitle": "Customer Security Officer",
-      "jobType": "Agent",
-      "jobPhone": "296-556-2375",
-      "jobWebSite": "https://ursula.info",
-      "jobEmail": "Abdul_Mraz@example.net"
+      "addressStateAbbr": "MO",
+      "addressCountry": "Saint Vincent and the Grenadines",
+      "addressCountryCode": "SY",
+      "addressZipCode": "54254",
+      "addressLatitude": "-18.5313",
+      "addressLongitude": "40.6118",
+      "jobCompanyName": "Hauck, Watsica and Fay",
+      "jobTitle": "Investor Marketing Agent",
+      "jobType": "Liaison",
+      "jobPhone": "042-412-3962",
+      "jobWebSite": "https://simeon.org",
+      "jobEmail": "Abigale_Auer@example.org"
     },
     {
-      "_id": "5ef2ebcf535cb910141b6925",
-      "personalPhone": "036-903-7529",
-      "personalWebSite": "https://diego.net",
-      "addressSuite": "Suite 219",
-      "addressStreet": "0776 Braden Pines",
-      "addressCity": "Jaredstad",
-      "addressState": "Kansas",
-      "addressStateAbbr": "CA",
-      "addressCountry": "Philippines",
-      "addressCountryCode": "MX",
-      "addressZipCode": "01440-6747",
-      "addressLatitude": "-23.2685",
-      "addressLongitude": "103.1096",
-      "jobCompanyName": "Lang, Hudson and Ledner",
-      "jobTitle": "Forward Interactions Designer",
-      "jobType": "Technician",
-      "jobPhone": "633-233-5988",
-      "jobWebSite": "http://zakary.net",
-      "jobEmail": "Norma_Renner@example.com"
+      "_id": "5f0407bd3ba89a17b81af193",
+      "personalPhone": "740-414-0375",
+      "personalWebSite": "http://tiana.biz",
+      "addressSuite": "Apt. 458",
+      "addressStreet": "017 Jolie Fort",
+      "addressCity": "Lake Jordi",
+      "addressState": "Delaware",
+      "addressStateAbbr": "VA",
+      "addressCountry": "Equatorial Guinea",
+      "addressCountryCode": "PN",
+      "addressZipCode": "08319",
+      "addressLatitude": "-60.7740",
+      "addressLongitude": "31.5455",
+      "jobCompanyName": "Harber Inc",
+      "jobTitle": "Investor Security Assistant",
+      "jobType": "Engineer",
+      "jobPhone": "673-088-7418",
+      "jobWebSite": "http://finn.name",
+      "jobEmail": "Wilmer_Klein36@example.org"
     },
     {
-      "_id": "5ef2ebcf535cb910141b6926",
-      "personalPhone": "914-227-8833",
-      "personalWebSite": "https://madelynn.org",
-      "addressSuite": "Suite 281",
-      "addressStreet": "9517 Nicolette Corners",
-      "addressCity": "Abernathystad",
-      "addressState": "Nevada",
-      "addressStateAbbr": "FL",
-      "addressCountry": "Tajikistan",
-      "addressCountryCode": "IR",
-      "addressZipCode": "57998-2334",
-      "addressLatitude": "64.9330",
-      "addressLongitude": "-11.7782",
-      "jobCompanyName": "Glover LLC",
-      "jobTitle": "Future Accounts Coordinator",
-      "jobType": "Analyst",
-      "jobPhone": "541-609-7134",
-      "jobWebSite": "https://austen.com",
-      "jobEmail": "Ethyl.Armstrong68@example.com"
+      "_id": "5f0407bd3ba89a17b81af194",
+      "personalPhone": "848-149-6142",
+      "personalWebSite": "http://keely.net",
+      "addressSuite": "Suite 841",
+      "addressStreet": "5264 Terrance Loaf",
+      "addressCity": "West Ciaraville",
+      "addressState": "Mississippi",
+      "addressStateAbbr": "UT",
+      "addressCountry": "Slovakia (Slovak Republic)",
+      "addressCountryCode": "NL",
+      "addressZipCode": "24956-6017",
+      "addressLatitude": "-54.0576",
+      "addressLongitude": "130.0319",
+      "jobCompanyName": "Fisher - Hahn",
+      "jobTitle": "Legacy Integration Supervisor",
+      "jobType": "Strategist",
+      "jobPhone": "377-713-4400",
+      "jobWebSite": "https://ramon.com",
+      "jobEmail": "Eladio_Leannon49@example.net"
     }
   ],
   "logMessages": [
     {
-      "_id": "5ef2ebcf535cb910141b6927",
+      "_id": "5f0407bd3ba89a17b81af195",
       "gr": "TEST",
       "pr": 10,
       "name": "TEST",
-      "ownerId": "5ef2ebcf535cb910141b6918",
-      "userId": "5ef2ebcf535cb910141b6918",
+      "ownerId": "5f0407bd3ba89a17b81af186",
+      "userId": "5f0407bd3ba89a17b81af186",
       "msg": "{\"message\":\"Ullam eum enim incidunt unde omnis laborum voluptatum explicabo.\"}"
     }
   ],
   "chatMessages": [
     {
-      "_id": "5ef2ebcf535cb910141b6928",
-      "ownerId": "5ef2ebcf535cb910141b6918",
-      "userId": "5ef2ebcf535cb910141b6919",
+      "_id": "5f0407bd3ba89a17b81af196",
+      "ownerId": "5f0407bd3ba89a17b81af186",
+      "userId": "5f0407bd3ba89a17b81af187",
       "teamId": "000000000000000000000000",
       "roleId": "000000000000000000000000",
-      "msg": "Omnis quasi tenetur expedita libero at."
+      "msg": "Perspiciatis labore est et omnis sapiente et sed omnis."
     },
     {
-      "_id": "5ef2ebcf535cb910141b6929",
-      "ownerId": "5ef2ebcf535cb910141b6918",
+      "_id": "5f0407bd3ba89a17b81af197",
+      "ownerId": "5f0407bd3ba89a17b81af186",
       "userId": "000000000000000000000000",
-      "teamId": "5ef2ebcf535cb910141b691e",
+      "teamId": "5f0407bd3ba89a17b81af18c",
       "roleId": "000000000000000000000000",
-      "msg": "Voluptate sapiente tenetur exercitationem aspernatur."
+      "msg": "Repudiandae exercitationem cumque doloribus labore quo."
     },
     {
-      "_id": "5ef2ebcf535cb910141b692a",
-      "ownerId": "5ef2ebcf535cb910141b6918",
+      "_id": "5f0407bd3ba89a17b81af198",
+      "ownerId": "5f0407bd3ba89a17b81af186",
       "userId": "000000000000000000000000",
       "teamId": "000000000000000000000000",
-      "roleId": "5ef2ebcf535cb910141b691b",
-      "msg": "Minus animi et dolores."
+      "roleId": "5f0407bd3ba89a17b81af189",
+      "msg": "Aut voluptas soluta rem."
     }
   ]
 }

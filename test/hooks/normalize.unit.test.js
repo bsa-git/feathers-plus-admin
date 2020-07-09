@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {appRoot} = require('../../src/plugins/lib');
+const {appRoot} = require('../../src/plugins');
 const normalize = require(`${appRoot}/src/hooks/normalize`);
 const app = require(`${appRoot}/src/app`);
 const debug = require('debug')('app:normalize.unit.test');

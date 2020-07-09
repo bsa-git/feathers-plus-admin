@@ -20,6 +20,12 @@ let moduleExports = merge({},
         faker: "commerce.productName",
         bsonType: "string"
       },
+      alias: {
+        faker: {
+          exp: "\"is\" + rec.name.replace(/ /gi, \"\")"
+        },
+        bsonType: "string"
+      },
       description: {
         faker: "lorem.sentence",
         bsonType: "string"
