@@ -65,6 +65,40 @@ const mutations = {
     }
   },
 
+  //--- CHAT ---//
+  /**
+   * Set checkAt for chat
+   * @param state {Object}
+   * @param checkAt {Object|String}
+   */
+  SET_CHAT_CHECKAT(state, checkAt) {
+    state.chat.checkAt = typeOf.isObject(checkAt)? JSON.stringify(checkAt) : checkAt ;
+    if(process.client && cookies.get('chat_checkAt') !== state.chat.checkAt){
+      cookies.set('chat_checkAt', state.chat.checkAt);
+    }
+  },
+
+  /**
+   * Set chat selected item
+   * @param state {Object}
+   * @param selectedItem {Object}
+   */
+  SET_CHAT_SELECTED_ITEM(state, selectedItem) {
+    state.chat =  Object.assign(state.chat, selectedItem);
+    if(process.client && cookies.get('chat_selectedItem') !== JSON.stringify(selectedItem)){
+      cookies.set('chat_selectedItem', JSON.stringify(selectedItem));
+    }
+  },
+
+  /**
+   * Set chat selected contact
+   * @param state {Object}
+   * @param selectedContact {Number}
+   */
+  SET_CHAT_SELECTED_CONTACT(state, selectedContact) {
+    state.chat.contactSelected = selectedContact;
+  },
+
   //--- SNACKBAR ---//
   /**
    * Set snack bar

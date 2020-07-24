@@ -13,6 +13,7 @@
         :tile="tile"
         :height="height"
         :class="classValue"
+        :elevation="elevation"
       >
         <!-- Slot sheet -->
         <slot></slot>
@@ -59,6 +60,10 @@
       },
       classValue: {
         type: String,
+        default: undefined
+      },
+      elevation: {
+        type: Number,
         default: undefined
       },
     },

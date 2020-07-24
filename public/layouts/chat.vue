@@ -17,6 +17,7 @@
     <template v-if="!$vuetify.breakpoint.smAndDown">
       <!-- Chat Menu -->
       <v-navigation-drawer
+        :dark="$vuetify.theme.dark"
         fixed
         permanent
         app
@@ -27,11 +28,11 @@
         ></chat-menu>
       </v-navigation-drawer>
       <!-- Main Content -->
-      <v-content>
+      <v-main>
         <v-container fluid fill-height>
           <nuxt></nuxt>
         </v-container>
-      </v-content>
+      </v-main>
     </template>
     <template v-else>
 
@@ -107,7 +108,7 @@
     computed: {
       getChatMenu: function () {
         const _chatMenu = chatMenuList.map(item => {
-          if(item.text === 'user'){
+          if(item.text === 'chat_user'){
             item.avatar = this.user.avatar;
             item.name = `${this.user.firstName} ${this.user.lastName}`;
           }

@@ -14,6 +14,7 @@
         :dark="(dark === undefined)? theme.dark : dark"
         :outlined="outlined"
         :tile="tile"
+        :elevation="elevation"
       >
         <!-- Slot card system-bar -->
         <slot name="system-bar"></slot>
@@ -104,6 +105,10 @@
       tile: {
         type: Boolean,
         default: false
+      },
+      elevation: {
+        type: Number,
+        default: undefined
       },
       //--- V-DATA-TABLE ---//
       model: {

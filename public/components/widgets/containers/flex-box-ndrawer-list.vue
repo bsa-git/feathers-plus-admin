@@ -14,6 +14,7 @@
         :outlined="outlined"
         :loading="loading"
         :tile="tile"
+        :elevation="elevation"
       >
         <v-navigation-drawer permanent width="100%">
           <!-- Slot card system bar -->
@@ -95,6 +96,10 @@
       loading: {
         type: Boolean,
         default: false
+      },
+      elevation: {
+        type: Number,
+        default: undefined
       },
       //--- V-LIST ---//
       disabled: {

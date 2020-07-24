@@ -89,6 +89,23 @@ module.exports = async function servicesConstraint(context) {
     };
     await hookHelper.forEachRecords(normalize);
     break;
+  case 'chat-messages.create.before':
+  case 'chat-messages.patch.before':
+    normalize = async (record) => {
+      let _record = {};
+      if(!record.userId){
+        _record.userId = '000000000000000000000000';
+      }
+      if(!record.roleId){
+        _record.roleId = '000000000000000000000000';
+      }
+      if(!record.teamId){
+        _record.teamId = '000000000000000000000000';
+      }
+      Object.assign(record, _record);
+    };
+    await hookHelper.forEachRecords(normalize);
+    break;
   case 'users.create.after':
   case 'users.patch.after':
   case 'users.get.after':

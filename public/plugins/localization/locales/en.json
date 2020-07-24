@@ -61,6 +61,10 @@
     "about": "About",
     "dashboard": "Dashboard",
     "chat": "Chat",
+    "chat_user": "User",
+    "chat_messages": "Messages",
+    "chat_contacts": "Contacts",
+    "chat_settings": "Settings",
     "inbox": "Inbox",
     "media": "Media",
     "services": "Services",
@@ -438,13 +442,32 @@
     "confirmDeleteItemsTitle": "Remove selected items",
     "confirmDeleteItemsText": "This items will be removed from the server database as well as from the client store"
   },
-  "chatMessages": {
+  "chat_messages": {
     "title": "Chat Messages",
-    "description": "Chat Messages"
+    "description": "Chat Messages",
+    "userList": "Users",
+    "userMessages": "Messages",
+    "users": "Users",
+    "roles": "Roles",
+    "teams": "Teams",
+    "noPosts": "No Posts",
+    "typeMessage": "Type message here",
+    "sendMsg": "Send message",
+    "moreDetails": "More details...",
+    "goToContacts": "Contacts..."
   },
-  "chatContacts": {
+  "chat_contacts": {
     "title": "Chat Contacts",
-    "description": "Chat Contacts"
+    "description": "Chat Contacts",
+    "selectUser": "Select a User",
+    "userInfo": "Profile",
+    "userList": "Users",
+    "goToMsgList": "Messages..."
+  },
+  "chat_settings": {
+    "title": "Chat Settings",
+    "description": "Chat Settings",
+    "goToSettings": "Settings..."
   },
   "graphql": {
     "title": "GraphQL",

@@ -1,11 +1,11 @@
 <template>
   <v-app id="user-pages" :style="`background-color: ${primaryColor}`">
     <!-- Main Content -->
-    <v-content>
+    <v-main>
       <v-container fluid fill-height>
         <nuxt></nuxt>
       </v-container>
-    </v-content>
+    </v-main>
     <!-- Snackbar -->
     <app-snack-bar
       :show="snackBar.show"

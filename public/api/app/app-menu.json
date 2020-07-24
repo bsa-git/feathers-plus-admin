@@ -21,11 +21,34 @@
   },
   {
     "title": "Chat",
-    "group": "apps",
+    "group": "chat",
     "icon": "mdi-chat",
     "name": "chat",
     "alias": "chat",
-    "to": "/chat/messages"
+    "to": "/chat",
+    "items": [
+      {
+        "name": "chat-messages",
+        "alias": "chat_messages",
+        "title": "Messages",
+        "icon": "mdi-comment-text-multiple",
+        "to": "/chat/messages"
+      },
+      {
+        "name": "chat-contacts",
+        "alias": "chat_contacts",
+        "title": "Contacts",
+        "icon": "mdi-account-multiple",
+        "to": "/chat/contacts"
+      },
+      {
+        "name": "chat-settings",
+        "alias": "chat_settings",
+        "title": "Settings",
+        "icon": "mdi-message-settings",
+        "to": "/chat/settings"
+      }
+    ]
   },
   {
     "title": "Inbox",

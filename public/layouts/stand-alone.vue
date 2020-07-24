@@ -1,10 +1,10 @@
 <template>
   <v-app id="stand-alone">
-    <v-content>
+    <v-main>
       <v-container fluid fill-height>
         <nuxt></nuxt>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

@@ -32,4 +32,6 @@ export default async (context, inject) => {
   syncStore.setThemePrimary(context);
   syncStore.setLocale(context);
   syncStore.setNoticesCheckAt(context);
+  syncStore.setChatCheckAt(context);
+  syncStore.setChatSelectedItem(context);
 };

@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-main>
     <!-- Page Content  -->
     <v-container
       id="page-content"
@@ -15,7 +15,7 @@
       :developer="config.logoTitle"
       :site="config.website"
     ></app-footer>
-  </v-content>
+  </v-main>
 </template>
 
 <script>

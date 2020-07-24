@@ -1,6 +1,7 @@
 import colors from 'vuetify/lib/util/colors';
 import themeColorOptions from '~/api/app/theme-color-options.json';
-// const debug = require('debug')('app:store.getters');
+import util from '~/plugins/lib/util';
+const debug = require('debug')('app:store.getters');
 
 const getters = {
 
@@ -18,6 +19,10 @@ const getters = {
 
   getNotices: (state) => {
     return state.notices;
+  },
+
+  getChat: (state) => {
+    return state.chat;
   },
 
   getSystem: (state) => {
@@ -43,6 +48,12 @@ const getters = {
     // Get primary base color
     const primaryColor = colors[theme.primary].base;
     return primaryColor;
+  },
+
+  getFullPath: (state) => (path) => {
+    const _path = util.stripSlashes(path);
+    const fullPath = (state.config.locale === state.config.fallbackLocale) ? `/${_path}` : `/${state.config.locale}/${_path}`;
+    return fullPath;
   },
 
   isAuth: (state) => {
@@ -115,6 +126,21 @@ const getters = {
     const result = (names.indexOf(roleName) >= 0);
     return result;
   },
+
+  getTeamIdsForUser: (state, getters) => (userId) => {
+    return getters['user-teams/teamIdsForUser'](userId);
+  },
+
+  isMyTeam: (state, getters) => (params = {}) => {
+    const userId = params.userId;
+    const teamId = params.teamId;
+    const teamIds = getters.getTeamIdsForUser(userId);
+    const findIndex = teamIds.findIndex(id => id === teamId);
+    // debug('getters.isMyTeam.teamIds:', teamIds, teamId, findIndex);
+    return findIndex > -1;
+  },
+
+  // const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
 
   getUser: (state) => {
     return state.auth.user;

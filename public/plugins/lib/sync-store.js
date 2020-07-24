@@ -1,8 +1,8 @@
 import cookies from 'browser-cookies';
 import util from '~/plugins/lib/util';
-// import themeColorOptions from '~/api/data/theme-color-options.json';
-
+const loPick = require('lodash/pick');
 const debug = require('debug')('app:plugins.sync-store');
+
 const isDebug = false;
 const isLog = false;
 
@@ -67,6 +67,37 @@ const setNoticesCheckAt = (ct) => {
 };
 
 /**
+ * Set chat checkAt
+ * @param ct {Object}
+ */
+const setChatCheckAt = (ct) => {
+  const storeChatCheckAt = ct.store.state.chat.checkAt;
+  const serverCookieChatCheckAt = (process.server && !process.static) ? util.readCookie(ct.req.headers.cookie, 'chat_checkAt') : storeChatCheckAt;
+  const cookiesChatCheckAt = process.server ? serverCookieChatCheckAt : cookies.get('chat_checkAt');
+  if (process.client && !cookiesChatCheckAt) {
+    cookies.set('chat_checkAt', storeChatCheckAt);
+  } else if (cookiesChatCheckAt !== storeChatCheckAt) {
+    ct.store.commit('SET_CHAT_CHECKAT', cookiesChatCheckAt);
+  }
+};
+
+/**
+ * Set chat selected item
+ * @param ct {Object}
+ */
+const setChatSelectedItem = (ct) => {
+  let storeChatSelectedItem = loPick(ct.store.state.chat, ['userSelected', 'roleSelected', 'teamSelected']);
+  storeChatSelectedItem = JSON.stringify(storeChatSelectedItem);
+  const serverCookieChatSelectedItem = (process.server && !process.static) ? util.readCookie(ct.req.headers.cookie, 'chat_selectedItem') : storeChatSelectedItem;
+  const cookiesChatSelectedItem = process.server ? serverCookieChatSelectedItem : cookies.get('chat_selectedItem');
+  if (process.client && !cookiesChatSelectedItem) {
+    cookies.set('chat_selectedItem', storeChatSelectedItem);
+  } else if (cookiesChatSelectedItem !== storeChatSelectedItem) {
+    ct.store.commit('SET_CHAT_SELECTED_ITEM', JSON.parse(cookiesChatSelectedItem));
+  }
+};
+
+/**
  * Init vuetify
  * @param ctVue {Object}
  * @param isUpdateColor {Boolean}
@@ -99,5 +130,7 @@ export default {
   setThemeDark,
   setLocale,
   setNoticesCheckAt,
+  setChatCheckAt,
+  setChatSelectedItem,
   initVuetify
 };

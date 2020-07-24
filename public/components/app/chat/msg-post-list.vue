@@ -1,0 +1,105 @@
+<template>
+  <v-scroll-y-transition mode="out-in">
+    <v-card
+      color="secondary"
+      :dark="theme.dark"
+      elevation="0"
+    >
+      <!-- No Posts -->
+      <div
+        v-if="!(items && items.length)"
+        key="title"
+        class="title font-weight-light grey--text pa-4 text-center"
+      >
+        {{ $t('chat_messages.noPosts') }}
+      </div>
+      <template v-else v-for="item in items">
+        <!-- dtDate -->
+        <div>
+          <div v-if="item.dtDate">
+            <div  class="d-flex justify-center">
+              <v-chip
+                class="ma-2"
+                color="orange"
+                text-color="white"
+                small
+              >
+                {{ item.dtDate }}
+              </v-chip>
+            </div>
+            <v-divider></v-divider>
+          </div>
+          <!-- Messages List -->
+          <flex-box
+            :md="6"
+            :justify="item.isOwnerAuth? 'end' : 'start'"
+          >
+            <msg-post
+              :item="item"
+              v-on:onClickShowContact="onShowContact"
+            ></msg-post>
+          </flex-box>
+        </div>
+      </template>
+      <v-card-actions>
+        <msg-post-input
+          v-if="isSelectedItem"
+          :label="$t('chat_messages.typeMessage')"
+          :btn-title="$t('chat_messages.sendMsg')"
+          :msgInput="msgInput"
+          v-on:onMsgInput="modelMsgInput"
+          v-on:onClickSend="clickSendMsg"
+        ></msg-post-input>
+      </v-card-actions>
+    </v-card>
+  </v-scroll-y-transition>
+</template>
+
+<script>
+  import {mapGetters} from 'vuex'
+  import FlexBox from '~/components/widgets/containers/flex-box';
+  import MsgPost from '~/components/app/chat/msg-post';
+  import MsgPostInput from '~/components/app/chat/msg-post-input';
+
+  const debug = require('debug')('app:comp.msg-post-list');
+  const isLog = false;
+
+  export default {
+    components: {
+      FlexBox,
+      MsgPost,
+      MsgPostInput
+    },
+    props: {
+      items: Array,
+      isSelectedItem: Boolean
+    },
+    data() {
+      return {
+        msgInput: ''
+      }
+    },
+    created: function () {
+
+    },
+    computed: {
+      ...mapGetters({
+        theme: 'getTheme',
+      }),
+
+    },
+    methods: {
+      modelMsgInput: function (newValue) {
+        this.msgInput = newValue
+      },
+      clickSendMsg: function () {
+        // debug('methods.clickSendMsg.msgInput:', this.msgInput)
+        this.$emit('onSendPost', this.msgInput);
+        this.msgInput = '';
+      },
+      onShowContact: function (ownerId) {
+        this.$emit('onShowContact', ownerId);
+      },
+    }
+  }
+</script>

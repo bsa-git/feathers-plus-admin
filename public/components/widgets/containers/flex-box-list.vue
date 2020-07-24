@@ -14,6 +14,7 @@
         :outlined="outlined"
         :loading="loading"
         :tile="tile"
+        :elevation="elevation"
       >
         <!-- Slot card system bar -->
         <slot name="system-bar"></slot>
@@ -93,6 +94,10 @@
       loading: {
         type: Boolean,
         default: false
+      },
+      elevation: {
+        type: Number,
+        default: undefined
       },
       //--- V-LIST ---//
       disabled: {

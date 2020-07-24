@@ -19,7 +19,7 @@
           '  </v-app-bar>\n' +
           '\n' +
           '  <!-- Sizes your content based upon application components -->\n' +
-          '  <v-content>\n' +
+          '  <v-main>\n' +
           '\n' +
           '    <!-- Provides the application the proper gutter -->\n' +
           '    <v-container fluid>\n' +
@@ -27,7 +27,7 @@
           '      <!-- If using vue-router -->\n' +
           '      <router-view></router-view>\n' +
           '    </v-container>\n' +
-          '  </v-content>\n' +
+          '  </v-main>\n' +
           '\n' +
           '  <v-footer app>\n' +
           '    <!-- -->\n' +

@@ -61,6 +61,10 @@
     "about": "О Программе",
     "dashboard": "Рабочий стол",
     "chat": "Чат",
+    "chat_user": "Пользователь",
+    "chat_messages": "Сообщения",
+    "chat_contacts": "Контакты",
+    "chat_settings": "Настройки",
     "inbox": "Входящие",
     "media": "Медиа",
     "services": "Сервисы",
@@ -437,13 +441,32 @@
     "confirmDeleteItemsTitle": "Удалить выделенные элементы",
     "confirmDeleteItemsText": "Эти элементы будут удалены из базы данных сервера, а также из клиентского хранилища"
   },
-  "chatMessages": {
+  "chat_messages": {
     "title": "Сообщения Чата",
-    "description": "Сообщения Чата"
+    "description": "Сообщения Чата",
+    "userList": "Пользователи",
+    "userMessages": "Сообщения",
+    "users": "Пользователи",
+    "roles": "Роли",
+    "teams": "Команды",
+    "noPosts": "Сообщения отсутствуют",
+    "typeMessage": "Введите сообщение",
+    "sendMsg": "Передать сообщение",
+    "moreDetails": "Подробнее...",
+    "goToContacts": "Перейти к контактам"
   },
-  "chatContacts": {
+  "chat_contacts": {
     "title": "Контакты Чата",
-    "description": "Контакты Чата"
+    "description": "Контакты Чата",
+    "selectUser": "Выберите пользователя",
+    "userInfo": "Профиль",
+    "userList": "Пользователи",
+    "goToMsgList": "Перейти к сообщениям"
+  },
+  "chat_settings": {
+    "title": "Настройки Чата",
+    "description": "Настройки Чата",
+    "goToSettings": "Перейти к конфигурации"
   },
   "graphql": {
     "title": "GraphQL",

@@ -160,13 +160,34 @@ class Service {
    */
   async findAllForAdmin() {
     if (isDebug) debug('findAllForAdmin: START');
-    const paths = Service.getServicePaths().filter(path => path !== 'chat-messages');
-    paths.forEach(path => this.findAll(path, {query: {}}));
     // Find chat messages for user
     const user = this.getAuthUser();
     if (user) {
-      await this.findChatMessagesForUser(user);
+      const paths = Service.getServicePaths().filter(path => path !== 'chat-messages' && path !== 'user-teams');
+      paths.forEach(path => this.findAll(path, {query: {}}));
+      // Find all chat messages for admin
+      await this.findChatMessagesForAdmin(user);
     }
+  }
+
+  /**
+   * Find all chat messages for admin
+   * @param user {Object}
+   * @return {Promise.<void>}
+   */
+  async findChatMessagesForAdmin(user) {
+    const idField = this.getServiceIdField('users');
+    const userId = user[idField];
+    // Find chat messages
+    await this.findAll('user-teams', {query: {}});
+    const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
+    const chatMessages = await this.findAll('chat-messages', {query: {$or: [
+      {ownerId: userId},
+      {userId: userId},
+      {roleId: user.roleId},
+      { teamId: { $in: teamIdsForUser}}
+    ]}});
+    debug('findChatMessagesForAdmin.chatMessages:', chatMessages);
   }
 
   /**
@@ -179,6 +200,7 @@ class Service {
     if (user) {
       // getRole
       await this.get('roles', user.roleId);
+      await this.find('roles', {query: {alias: 'isAdministrator'}});
       // getUserProfiles
       await this.get('user-profiles', user.profileId);
       // getTeams
@@ -193,8 +215,14 @@ class Service {
       logMessages = logMessages.filter(msg => msg.ownerId !== msg.userId);
       if(logMessages.length){
         let ownerIds = logMessages.map(msg => msg.ownerId);
-        ownerIds.forEach((ownerId) => this.get('users', ownerId));
-        // debug('findAllForUser.ownerIds:', ownerIds);
+        const getUserForOwnerId = async ownerId => {
+          await this.get('users', ownerId);
+        };
+        // Remove log-messages
+        for (let i = 0; i < ownerIds.length; i++) {
+          const ownerId = ownerIds[i];
+          await getUserForOwnerId(ownerId);
+        }
       }
       // Find chat messages for user
       await this.findChatMessagesForUser(user);
@@ -202,21 +230,35 @@ class Service {
   }
 
   /**
-   * Find all services for admin user
+   * Find all chat messages for user
    * @param user {Object}
    * @return {Promise.<void>}
    */
   async findChatMessagesForUser(user) {
-    const idUserField = this.getServiceIdField('users');
-    const userId = user[idUserField];
+    const idField = this.getServiceIdField('users');
+    const userId = user[idField];
     // Find chat messages
     const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
-    await this.findAll('chat-messages', {query: {$or: [
-      {userId: userId},
+    const chatMessages = await this.findAll('chat-messages', {query: {$or: [
       {ownerId: userId},
+      {userId: userId},
       {roleId: user.roleId},
       { teamId: { $in: teamIdsForUser}}
     ]}});
+    const getUserForOwnerId = async ownerId => {
+      const owner = await this.get('users', ownerId);
+      await this.get('user-profiles', owner.profileId);
+      if(!this.getFromStore('roles', owner.roleId)){
+        await this.get('roles', owner.roleId);
+      }
+    };
+    // getUserForOwnerId
+    for (let i = 0; i < chatMessages.length; i++) {
+      const ownerId = chatMessages[i]['ownerId'];
+      if(ownerId !== userId && !this.getFromStore('users', ownerId)){
+        await getUserForOwnerId(ownerId);
+      }
+    }
   }
 
   /**

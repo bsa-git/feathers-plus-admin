@@ -1,18 +1,23 @@
 [
   {
-    "text": "user",
+    "text": "chat_user",
     "avatar": "",
     "name": "",
     "to": "/chat/contacts"
   },
   {
-    "text": "messages",
+    "text": "chat_messages",
     "icon": "mdi-comment-text-multiple",
     "to": "/chat/messages"
   },
   {
-    "text": "contacts",
+    "text": "chat_contacts",
     "icon": "mdi-account-multiple",
     "to": "/chat/contacts"
+  },
+  {
+    "text": "chat_settings",
+    "icon": "mdi-message-settings",
+    "to": "/chat/settings"
   }
 ]

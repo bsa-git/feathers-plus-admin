@@ -146,6 +146,14 @@ export default () => ({
   notices: {
     checkAt: '',
   },
+  //--- CHAT ---//
+  chat: {
+    checkAt: '',
+    userSelected: -1,
+    roleSelected: -1,
+    teamSelected: -1,
+    contactSelected: -1,
+  },
   //--- NOTIFICATIONS ---//
   system: {
     loading: false,

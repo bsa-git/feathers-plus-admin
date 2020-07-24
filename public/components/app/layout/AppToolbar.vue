@@ -500,7 +500,6 @@
           }
         });
         this.setStateNoticesCheckAt(JSON.stringify(items));
-//        debug('initAppNotifications.notifications:', this.notifications);
       },
       toggleFullScreen() {
         let doc = window.document;

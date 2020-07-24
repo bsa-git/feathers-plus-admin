@@ -16,13 +16,14 @@ const isLog = false;
  * @return {Object|null}
  */
 const getUser = function (userId, store, Models) {
-  let user = null;
-  user = Models.User.getFromStore(userId);
+  let _user = null;
+  const user = Models.User.getFromStore(userId);
   if (user){
-    user = loPick(user, ['fullName', 'email', 'avatar']);
-    user.id = userId;
+    _user = loPick(user, ['fullName', 'email', 'avatar', 'roleAlias']);
+    _user.id = userId;
+    _user.role = user.role;
   }
-  return user;
+  return _user;
 };
 
 /**
@@ -63,6 +64,7 @@ const {service} = feathersVuex(feathersClient, {idField: '_id'});
 const servicePath = 'chat-messages';
 const servicePlugin = service(servicePath, {
   instanceDefaults(data, {store, Model, Models}) {
+    const moment = require('moment');
     const idField = store.state[servicePath].idField;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
@@ -82,6 +84,14 @@ const servicePlugin = service(servicePath, {
       },
       get role() {
         return (this && this.roleId && this.roleId !== '000000000000000000000000')? getRole(this.roleId, store, Models) : null;
+      },
+      get dtUTC() {
+        let dt = moment.utc(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        return dt;
+      },
+      get dtLocal() {
+        let dt = moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        return dt;
       },
     };
   },
