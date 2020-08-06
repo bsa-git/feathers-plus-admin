@@ -1,7 +1,7 @@
 import colors from 'vuetify/lib/util/colors';
 import themeColorOptions from '~/api/app/theme-color-options.json';
 import util from '~/plugins/lib/util';
-const debug = require('debug')('app:store.getters');
+// const debug = require('debug')('app:store.getters');
 
 const getters = {
 
@@ -31,6 +31,12 @@ const getters = {
 
   getLoading: (state) => {
     return state.system.loading;
+  },
+
+  getDbNullIdValue: (state) => {
+    let result = null;
+    if(state.config.typeDB === 'mongodb') result = state.config.mongodbNullIdValue;
+    return result;
   },
 
   getPrimaryColor: (state) => {
@@ -131,16 +137,15 @@ const getters = {
     return getters['user-teams/teamIdsForUser'](userId);
   },
 
-  isMyTeam: (state, getters) => (params = {}) => {
-    const userId = params.userId;
-    const teamId = params.teamId;
+  isMyTeam: (state, getters) => (userId, teamId) => {
     const teamIds = getters.getTeamIdsForUser(userId);
     const findIndex = teamIds.findIndex(id => id === teamId);
-    // debug('getters.isMyTeam.teamIds:', teamIds, teamId, findIndex);
     return findIndex > -1;
   },
 
-  // const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
+  detUserIdsForTeam: (state, getters) => (teamId) => {
+    return getters['user-teams/userIdsForTeam'](teamId);
+  },
 
   getUser: (state) => {
     return state.auth.user;

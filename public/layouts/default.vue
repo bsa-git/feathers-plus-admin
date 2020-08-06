@@ -38,8 +38,9 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+  import {mapGetters, mapActions, mapMutations} from 'vuex';
   import AuthClient from '~/plugins/auth/auth-client.class';
+  import ServiceClient from '~/plugins/service-helpers/service-client.class';
   import appMenu from '~/api/app/app-menu.json';
   import syncStore from '~/plugins/lib/sync-store';
   import AppToolbar from '~/components/app/layout/AppToolbar';
@@ -49,6 +50,7 @@
   import AppFab from '~/components/layout/Fab';
   import AppRightDrawer from '~/components/app/layout/AppRightDrawer';
   import AppSnackBar from '~/components/layout/Snackbar';
+  import feathersClient from '~/plugins/auth/feathers-client';
 
   const debug = require('debug')('app:layouts.default');
   const isDebug = false;
@@ -70,44 +72,36 @@
         refAppToolbar: null,
       }
     },
-    created: function () {},
+    created: function () {
+    },
     mounted: function () {
       this.$nextTick(function () {
         // Get refAppToolbar
         this.refAppToolbar = Object.assign({}, this.$refs['refAppToolbar']);
         // Init vuetify
         syncStore.initVuetify(this, true);
+        // Update services
+        this.updateServices('created');
       })
     },
+    destroyed: function () {
+      this.updateServices('destroyed');
+    },
     watch: {
-      'user.roleAlias': function (val, oldVal) {
-        if(isDebug) debug('watch.user - Changed!')
-        if(val){
-          if(isDebug) debug('watch.user.roleAlias:', val);
+      'user.roleAlias': function (val) {
+        if (isDebug) debug('watch.user.roleAlias - Changed!');
+        if (val) {
+          if (isDebug) debug('watch.user.roleAlias:', val);
           this.checkAccessToRoutePath();
         }
       },
-    },
-    methods: {
-      modelNavLeft: function (newValue) {
-        this.navLeft = newValue
-      },
-      modelSnackBar: function (newValue) {
-        this.$store.commit('SET_SNACK_BAR', {show: newValue});
-      },
-      devAvatar() {
-        const avatar = new this.$Avatar(this.config.email);
-        return avatar.imageUrl();
-      },
-      checkAccessToRoutePath() {
-        // Create auth client
-        const authClient = new AuthClient(this.$store);
-        // Check auth access for route.path
-        if (!authClient.isAccess(this.$route.path)) {
-          if(isDebug) debug(`This path '${this.$route.path}' is not available. Not enough rights.`);
-          this.$store.commit('SHOW_ERROR', `${this.$t('error.not_enough_rights')}.`);
-          const fullPath = (this.$store.state.config.locale === this.$store.state.config.fallbackLocale) ? '/user/login' : `/${this.$store.state.config.locale}/user/login`;
-          this.$redirect(fullPath);
+      'user.active': function (val) {
+        if (isDebug) debug('watch.user.active - Changed!');
+        if (val === false) {
+          if (isDebug) debug('watch.user.active:', val);
+          this.showWarning({text: this.$t('management.userToInactiveMode'), timeout: 10000});
+          this.logout();
+          this.$router.push(this.$i18n.path(this.config.homePath));
         }
       },
     },
@@ -118,8 +112,70 @@
         theme: 'getTheme',
         primaryColor: 'getPrimaryColor',
         user: 'getUser',
+        fullPath: 'getFullPath'
       }),
-    }
+    },
+    methods: {
+      ...mapActions(['logout']),
+      ...mapMutations({
+        showWarning: 'SHOW_WARNING',
+      }),
+      modelNavLeft: function (newValue) {
+        this.navLeft = newValue
+      },
+      modelSnackBar: function (newValue) {
+        this.$store.commit('SET_SNACK_BAR', {show: newValue});
+      },
+      devAvatar() {
+        const avatar = new this.$Avatar(this.config.email);
+        return avatar.imageUrl();
+      },
+      refresh() {
+        location.reload();
+      },
+      checkAccessToRoutePath() {
+        const authClient = new AuthClient(this.$store);
+        const serviceClient = new ServiceClient(this.$store);
+        // Check auth access for route.path
+        if (!authClient.isAccess(this.$route.path)) {
+          if (isDebug) debug(`This path '${this.$route.path}' is not available. Not enough rights.`);
+          this.$store.commit('SHOW_ERROR', `${this.$t('error.not_enough_rights')}.`);
+          this.$redirect(this.fullPath('/user/login'));
+
+        } else {
+          this.refresh();
+        }
+      },
+      updateServices(lifecycle) {
+        const userTeams = feathersClient.service('user-teams');
+        const chatMessages = feathersClient.service('chat-messages');
+        const users = feathersClient.service('users');
+
+        const onCreatedUserTeams = async (userTeam) => {
+          const serviceClient = new ServiceClient(this.$store);
+          await serviceClient.findChatMessagesForTeam(userTeam.teamId);
+        };
+
+        const onCreatedChatMessage = async (msg) => {
+          const serviceClient = new ServiceClient(this.$store);
+          const idUserField = serviceClient.getServiceIdField('users');
+          const authUserId = this.user[idUserField];
+          const msgOwnerId = msg['ownerId'];
+          if(msgOwnerId !== authUserId && !serviceClient.getFromStore('users', msgOwnerId)){
+            await serviceClient.getUserForUserId(msgOwnerId);
+          }
+        };
+
+        if(lifecycle === 'created'){
+          userTeams.on('created', onCreatedUserTeams);
+          chatMessages.on('created', onCreatedChatMessage);
+        }
+        if(lifecycle === 'destroyed'){
+          userTeams.removeListener('created', onCreatedUserTeams);
+          chatMessages.removeListener('created', onCreatedChatMessage);
+        }
+      }
+    },
   }
 </script>
 

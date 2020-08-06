@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {appRoot, inspector, readJsonFileSync, AuthServer, HookHelper, seedService} = require('../../src/plugins');
+const {appRoot, inspector, readJsonFileSync, AuthServer, HookHelper, serviceHelper} = require('../../src/plugins');
 const authHook = require(`${appRoot}/src/hooks/auth`);
 const chalk = require('chalk');
 const app = require(`${appRoot}/src/app`);
@@ -14,7 +14,7 @@ const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
 
-  if(!isTest) {
+  if (!isTest) {
     debug('<<< Test /hooks/auth.unit.test.js - NOT >>>');
     return;
   }
@@ -73,14 +73,8 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
   });
 
   it('Save fake data to \'users\' service', async () => {
-    // Seed service data
-    const results = await seedService(app, 'users');
-    if (Array.isArray(results)) {
-      assert.ok(results.length === fakes['users'].length);
-    } else {
-      if(isLog) debug('seedService.results:', results);
-      assert.ok(false);
-    }
+    const errPath = await serviceHelper.saveFakesToServices(app, 'users');
+    assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
   });
 
   it('Customizing the Payload with Hook', () => {
@@ -194,7 +188,7 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
     try {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
-      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+      const payload = {userId: fakeUser[idField], role: 'Administrator'};
 
       contextAfter.app = app;
       contextAfter.path = 'authentication';
@@ -216,7 +210,7 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
     try {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
-      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+      const payload = {userId: fakeUser[idField], role: 'Administrator'};
 
       // Set user.active = false
       const users = app.service('users');
@@ -245,7 +239,7 @@ describe('<<< Test /hooks/auth.unit.test.js >>>', () => {
     try {
       const fakeUser = fakes['users'][0];
       const idField = HookHelper.getIdField(fakeUser);
-      const payload = { userId: fakeUser[idField], role: 'Administrator' };
+      const payload = {userId: fakeUser[idField], role: 'Administrator'};
 
       // Get user loginAt field
       const users = app.service('users');

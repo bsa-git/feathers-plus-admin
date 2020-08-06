@@ -1,11 +1,9 @@
 const assert = require('assert');
-const {readJsonFileSync, appRoot} = require('../../src/plugins/lib/index');
+const {readJsonFileSync, appRoot, serviceHelper} = require('../../src/plugins');
 const app = require(`${appRoot}/src/app`);
-const {seedService} = require(`${appRoot}/src/plugins/test-helpers`);
 const debug = require('debug')('app:users.test');
 
 const isDebug = false;
-const isLog = false;
 const isTest = true;
 
 // Get generated fake data
@@ -19,19 +17,13 @@ describe('<<< Test services/users.test.js >>>', () => {
   }
 
   it('registered the service', () => {
-    const service = app.service('users');
-    assert.ok(service, 'Registered the service');
+    const errPath = serviceHelper.checkServicesRegistered(app, 'users');
+    assert.ok(errPath === '', `Service '${errPath}' not registered`);
   });
 
   it('Save fake data to \'users\' service', async () => {
-    // Seed service data
-    const results = await seedService(app, 'users');
-    if (Array.isArray(results)) {
-      assert.ok(results.length === fakes['users'].length);
-    } else {
-      if(isLog) debug('seedService.results:', results);
-      assert.ok(false);
-    }
+    const errPath = await serviceHelper.saveFakesToServices(app, 'users');
+    assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
   });
 
   it('Error on incorrect email', async function () {

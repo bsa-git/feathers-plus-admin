@@ -1,16 +1,13 @@
 const assert = require('assert');
-const {readJsonFileSync, inspector, appRoot} = require('../../src/plugins/lib');
+const {inspector, appRoot} = require('../../src/plugins/lib');
+const {serviceHelper, graphqlQuery, graphqlExpected} = require('../../src/plugins/test-helpers');
 const app = require(`${appRoot}/src/app`);
-const {seedService, graphqlQuery, graphqlExpected} = require(`${appRoot}/src/plugins/test-helpers`);
 const debug = require('debug')('app:graphql.test');
 
 const isLog = false;
 
 const isTest = true;
 const isSeed = true;
-
-// Get generated fake data
-const fakes = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 
 let graphql;
 const port = app.get('port') || 3030;
@@ -38,116 +35,14 @@ describe('<<< Test services/graphql.test.js >>>', () => {
 
   describe('--- Save fake data to services ---', function () {
     if (isSeed) {
-      it('registered the \'users\' service', () => {
-        const service = app.service('users');
-        assert.ok(service, 'Registered the service');
+      it('registered the all services', () => {
+        const errPath = serviceHelper.checkServicesRegistered(app);
+        assert.ok(errPath === '', `Service '${errPath}' not registered`);
       });
 
-      it('Save fake data to \'users\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'users');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['users'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'roles\' service', () => {
-        const service = app.service('roles');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'roles\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'roles');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['roles'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'teams\' service', () => {
-        const service = app.service('teams');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'teams\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'teams');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['teams'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'userTeams\' service', () => {
-        const service = app.service('user-teams');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'userTeams\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'userTeams');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['userTeams'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'userProfiles\' service', () => {
-        const service = app.service('user-profiles');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'userProfiles\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'userProfiles');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['userProfiles'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'logMessages\' service', () => {
-        const service = app.service('log-messages');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'logMessages\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'logMessages');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['logMessages'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
-      });
-
-      it('registered the \'chatMessages\' service', () => {
-        const service = app.service('chat-messages');
-        assert.ok(service, 'Registered the service');
-      });
-
-      it('Save fake data to \'chatMessages\' service', async () => {
-        // Seed service data
-        const results = await seedService(app, 'chatMessages');
-        if (Array.isArray(results)) {
-          assert.ok(results.length === fakes['chatMessages'].length);
-        } else {
-          if(isLog) debug('seedService.results:', results);
-          assert.ok(false);
-        }
+      it('Save fakes to services', async () => {
+        const errPath = await serviceHelper.saveFakesToServices(app);
+        assert.ok(errPath === '', `Not save fakes to services - '${errPath}'`);
       });
     }
   });

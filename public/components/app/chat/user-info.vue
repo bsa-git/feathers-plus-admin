@@ -39,9 +39,8 @@
         <v-col class="text-right mr-4 mb-2" tag="strong" cols="5" v-if="item.profile.jobCompanyName">Company:</v-col>
         <v-col v-if="item.profile.jobCompanyName">{{ item.profile.jobCompanyName }}</v-col>
         <v-col class="text-right mr-4 mb-2" tag="strong" cols="5" v-if="item.profile.jobWebSite">Website:</v-col>
-        <v-col v-if="item.profile.jobWebSite">
-          <a :href="item.profile.jobWebSite" target="_blank">{{ item.profile.jobWebSite }}</a>
-        </v-col>
+        <v-col v-if="item.profile.jobWebSite"><a :href="item.profile.jobWebSite" target="_blank">{{
+          item.profile.jobWebSite }}</a></v-col>
         <v-col class="text-right mr-4 mb-2" tag="strong" cols="5" v-if="item.profile.personalPhone">Phone:</v-col>
         <v-col v-if="item.profile.personalPhone">{{ item.profile.personalPhone }}</v-col>
       </v-row>
@@ -51,6 +50,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+
   export default {
     components: {},
     props: {

@@ -33,8 +33,8 @@ export default function createLogMessage(store) {
       ownerId = service.user[idField];
       userId = service.user[idField];
     }else {
-      ownerId = '000000000000000000000000';
-      userId = '000000000000000000000000';
+      ownerId = service.getters.getDbNullIdValue;
+      userId = service.getters.getDbNullIdValue;
     }
 
     // Not create log msg

@@ -407,6 +407,7 @@
     "userTeams": "User Teams",
     "confirm_delete_title": "Remove this item",
     "confirm_delete_description": "This item will be removed from the server database as well as from the client store",
+    "userToInactiveMode": "You have been moved to an inactive mode, please contact your system administrator",
     "matchEnvValue": "Must match the value in the .env file",
     "success": "Operation successful",
     "noData": "No data available",

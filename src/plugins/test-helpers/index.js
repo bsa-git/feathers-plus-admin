@@ -5,6 +5,7 @@ const seedService = require('./seed-service');
 const graphqlQuery = require('./graphql-query');
 const graphqlExpected = require('./graphql-expected');
 const isTestEnv = require('./is-test-env');
+const serviceHelper = require('./service-helper');
 
 module.exports = Object.assign({},
   {
@@ -12,7 +13,8 @@ module.exports = Object.assign({},
     seedService,
     graphqlQuery,
     graphqlExpected,
-    isTestEnv
+    isTestEnv,
+    serviceHelper
   },
   cli
 );

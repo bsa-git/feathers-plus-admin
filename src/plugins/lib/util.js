@@ -252,6 +252,17 @@ const cloneObject = function (obj) {
 };
 
 /**
+ * Get dbNullIdValue
+ * e.g. for mongodb -> '000000000000000000000000'
+ * @return {*}
+ */
+const dbNullIdValue = function () {
+  let result = null;
+  if(process.env.TYPE_DB === 'mongodb') result = process.env.MONGODB_NULL_ID_VALUE;
+  return result;
+};
+
+/**
  * sort array by string field
  * @param items {Array}
  * @param name {String}
@@ -321,6 +332,7 @@ module.exports = {
   qlParams,
   stringify,
   cloneObject,
+  dbNullIdValue,
   sortByStringField,
   sortByNumberField,
   sortByString,

@@ -1,7 +1,6 @@
 import useragent from 'express-useragent';
 import i18n from '~/middleware/i18n';
 import AuthClient from '~/plugins/auth/auth-client.class';
-import Service from '~/plugins/service-helpers/service-client.class';
 import createLogMessage from '~/plugins/service-helpers/create-log-message';
 
 const debug = require('debug')('app:middleware.init-app');
@@ -15,11 +14,6 @@ export default async function (context) {
 
     // Get context content
     const {$t, store, redirect, route} = context;
-
-    // Create service client
-    const serviceClient = new Service(store);
-    // Check service constraints
-    await serviceClient.checkServiceConstraints();
 
     // Create auth client
     const authClient = new AuthClient(store);

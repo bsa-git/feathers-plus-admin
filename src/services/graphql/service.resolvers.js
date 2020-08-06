@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
 // !code: imports
-const {inspector} = require('../../plugins/lib');
+const {inspector, dbNullIdValue} = require('../../plugins/lib');
 const debug = require('debug')('app:service.graphql.resolvers');
 
 const isDebug = false;
@@ -37,7 +37,7 @@ let moduleExports = function serviceResolvers(app, options) {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.teamId }, paginate: false
           });
-          return (parent.teamId === '000000000000000000000000')? null : teams.find(feathersParams).then(extractFirstItem);
+          return (parent.teamId === dbNullIdValue())? null : teams.find(feathersParams).then(extractFirstItem);
         },
         // !end
 
@@ -48,7 +48,7 @@ let moduleExports = function serviceResolvers(app, options) {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.roleId }, paginate: false
           });
-          return (parent.teamId === '000000000000000000000000')? null : roles.find(feathersParams).then(extractFirstItem);
+          return (parent.teamId === dbNullIdValue())? null : roles.find(feathersParams).then(extractFirstItem);
         },
         // !end
 
@@ -70,7 +70,7 @@ let moduleExports = function serviceResolvers(app, options) {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.userId }, paginate: false
           });
-          return (parent.userId === '000000000000000000000000')? null : users.find(feathersParams).then(extractFirstItem);
+          return (parent.userId === dbNullIdValue())? null : users.find(feathersParams).then(extractFirstItem);
         },
         // !end
     },

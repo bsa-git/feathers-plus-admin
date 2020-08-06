@@ -99,6 +99,7 @@
   import {mapGetters, mapMutations} from 'vuex';
   import moment from 'moment';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
+  import ServiceHelper from '~/plugins/service-helpers/service-client.class';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
   import FlexBoxList from '~/components/widgets/containers/flex-box-list';
   import MsgUserList from '~/components/app/chat/msg-user-list';
@@ -126,7 +127,8 @@
         userSelected: -1,
         roleSelected: -1,
         teamSelected: -1,
-        showUserList: true
+        showUserList: true,
+        sh: null
       }
     },
     head() {
@@ -138,6 +140,7 @@
       }
     },
     created: function () {
+      this.sh = new ServiceHelper(this.$store);
       this.initChat();
     },
     watch: {
@@ -202,33 +205,33 @@
       },
       users() {
         const data = [];
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        let users = this.getStoreUsers;
-        users = users.filter(user => {
-          return  user[idField] !== authUserId
-        });
-        users.forEach(user => {
-          const userId = user[idField];
-          const messages = this.messages.filter(msg => this.isUserMsg(msg, userId));
-          const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-          const countMsg = messages.length ? messages.length : 0;
-          const lastMsg = messages.length ? messages[0].msg : '';
-          // Get user
-          let item = {
-            id: userId,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: user.fullName,
-            email: user.email,
-            avatar: user.avatar,
-            roleName: user.role ? user.role.name : '',
-            timeLabel,
-            countMsg,
-            lastMsg
-          };
-          data.push(item);
-        });
+        if(this.user){
+          const idField = this.$store.state.users.idField;
+          const authUserId = this.user[idField];
+          let users = this.getStoreUsers;
+          users = users.filter(this.isFilterUser);
+          users.forEach(user => {
+            const userId = user[idField];
+            const messages = this.messages.filter(msg => this.isUserMsg(userId, msg));
+            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
+            const countMsg = messages.length ? messages.length : 0;
+            const lastMsg = messages.length ? messages[0].msg : '';
+            // Get user
+            let item = {
+              id: userId,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              fullName: user.fullName,
+              email: user.email,
+              avatar: user.avatar,
+              roleName: user.role ? user.role.name : '',
+              timeLabel,
+              countMsg,
+              lastMsg
+            };
+            data.push(item);
+          });
+        }
         return data
       },
       getSelectedUser() {
@@ -236,29 +239,32 @@
       },
       roles() {
         const data = [];
-        const idField = this.$store.state.roles.idField;
-        const {Role} = this.$FeathersVuex;
-        let roles = Role.findInStore({query: {$sort: {name: 1}}}).data;
-        roles.forEach(role => {
-          const roleId = role[idField];
-          const messages = this.messages.filter(msg => roleId === (msg.role ? msg.roleId : null));
-          const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-          const countMsg = messages.length ? messages.length : 0;
-          const lastMsg = messages.length ? messages[0].msg : '';
-          // Get role
-          let item = {
-            id: roleId,
-            name: role.name,
-            description: role.description,
-            alias: role.alias,
-            timeLabel,
-            countMsg,
-            lastMsg,
-            icon: 'mdi-security',
-            iconClass: 'grey lighten-1 white--text'
-          };
-          data.push(item);
-        });
+        if(this.user){
+          const idField = this.$store.state.roles.idField;
+          const {Role} = this.$FeathersVuex;
+          let roles = Role.findInStore({query: {$sort: {name: 1}}}).data;
+          roles = roles.filter(this.isFilterRole);
+          roles.forEach(role => {
+            const roleId = role[idField];
+            const messages = this.messages.filter(msg => this.isRoleMsg(roleId, msg));
+            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
+            const countMsg = messages.length ? messages.length : 0;
+            const lastMsg = messages.length ? messages[0].msg : '';
+            // Get role
+            let item = {
+              id: roleId,
+              name: role.name,
+              description: role.description,
+              alias: role.alias,
+              timeLabel,
+              countMsg,
+              lastMsg,
+              icon: 'mdi-security',
+              iconClass: 'grey lighten-1 white--text'
+            };
+            data.push(item);
+          });
+        }
         return data
       },
       getSelectedRole() {
@@ -266,30 +272,33 @@
       },
       teams() {
         const data = [];
-        const idField = this.$store.state.teams.idField;
-        const {Team} = this.$FeathersVuex;
-        let teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
-        teams.forEach(team => {
-          const teamId = team[idField];
-          const messages = this.messages.filter(msg => this.isTeamMsg(teamId, msg));
-          // const messages = this.messages;
-          const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-          const countMsg = messages.length ? messages.length : 0;
-          const lastMsg = messages.length ? messages[0].msg : '';
-          // Get team
-          let item = {
-            id: teamId,
-            name: team.name,
-            description: team.description,
-            alias: team.alias,
-            timeLabel,
-            countMsg,
-            lastMsg,
-            icon: 'mdi-account-group',
-            iconClass: 'blue white--text'
-          };
-          data.push(item);
-        });
+        if(this.user){
+          const idField = this.$store.state.teams.idField;
+          const {Team} = this.$FeathersVuex;
+          let teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
+          teams = teams.filter(this.isFilterTeam);
+          teams.forEach(team => {
+            const teamId = team[idField];
+            const messages = this.messages.filter(msg => this.isTeamMsg(teamId, msg));
+            // const messages = this.messages;
+            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
+            const countMsg = messages.length ? messages.length : 0;
+            const lastMsg = messages.length ? messages[0].msg : '';
+            // Get team
+            let item = {
+              id: teamId,
+              name: team.name,
+              description: team.description,
+              alias: team.alias,
+              timeLabel,
+              countMsg,
+              lastMsg,
+              icon: 'mdi-account-group',
+              iconClass: 'blue white--text'
+            };
+            data.push(item);
+          });
+        }
         return data
       },
       getSelectedTeam() {
@@ -297,40 +306,43 @@
       },
       messages() {
         const data = [];
-        const idField = this.$store.state['chat-messages'].idField;
-        const {ChatMessage} = this.$FeathersVuex;
-        let messages = ChatMessage.findInStore({query: {$sort: {createdAt: 1}}}).data;
-        messages.forEach(msg => {
-          const msgId = msg[idField];
-          // const _dtDate = msg.dtLocal.split(' ')[0];
-          // Get msg
-          let item = {
-            id: msgId,
-            msg: msg.msg,
-            dt: msg.dtLocal,
-            // dtDate: (_dtDate === this.dtDate) ? '' : _dtDate,
-            isOwnerAuth: this.isYouAuth(msg.ownerId),
-            ownerId: msg.ownerId,
-            userId: msg.userId,
-            roleId: msg.roleId,
-            teamId: msg.teamId,
-            owner: msg.owner,
-            user: msg.user,
-            role: msg.role,
-            team: msg.team
-          };
-          // if(item.dtDate !== '' && item.dtDate !== this.dtDate){
-          //   this.dtDate = item.dtDate;
-          // }
-          data.push(item);
-        });
+        if(this.user){
+          const idField = this.$store.state['chat-messages'].idField;
+          const {ChatMessage} = this.$FeathersVuex;
+          let messages = ChatMessage.findInStore({query: {$sort: {createdAt: 1}}}).data;
+          messages = messages.filter(this.isFilterMsg)
+          messages.forEach(msg => {
+            const msgId = msg[idField];
+            // const _dtDate = msg.dtLocal.split(' ')[0];
+            // Get msg
+            let item = {
+              id: msgId,
+              msg: msg.msg,
+              dt: msg.dtLocal,
+              // dtDate: (_dtDate === this.dtDate) ? '' : _dtDate,
+              isOwnerAuth: this.isYouAuth(msg.ownerId),
+              ownerId: msg.ownerId,
+              userId: msg.userId,
+              roleId: msg.roleId,
+              teamId: msg.teamId,
+              owner: msg.owner,
+              user: msg.user,
+              role: msg.role,
+              team: msg.team
+            };
+            // if(item.dtDate !== '' && item.dtDate !== this.dtDate){
+            //   this.dtDate = item.dtDate;
+            // }
+            data.push(item);
+          });
+        }
         return data
       },
       getSelectedMessages() {
         let messages = [], user, role, team;
         if (this.getSelectedUser) {
           user = this.getSelectedUser;
-          messages = this.messages.filter(msg => this.isUserMsg(msg, user.id));
+          messages = this.messages.filter(msg => this.isUserMsg(user.id, msg));
         }
         if (this.getSelectedRole) {
           role = this.getSelectedRole;
@@ -373,7 +385,7 @@
         this.roleSelected = this.chat.roleSelected;
         this.teamSelected = this.chat.teamSelected;
       },
-      isUserMsg: function (msg, userId) {
+      isUserMsg: function (userId, msg) {
         let result = false;
         const idField = this.$store.state.users.idField;
         const authUserId = this.user[idField];
@@ -392,7 +404,7 @@
         const msgTeamId = msg.team? msg.teamId : null;
         // I wrote to the selected team || I am a member of the selected team
         if(teamId === msgTeamId){
-          result = this.isMyTeam({userId: authUserId, teamId}) || (authUserId === msg.ownerId)
+          result = this.isMyTeam(authUserId, teamId) || (authUserId === msg.ownerId)
         }
         return result
       },
@@ -406,6 +418,41 @@
           result = (this.user.roleId === roleId) || (authUserId === msg.ownerId)
         }
         return result
+      },
+      isFilterRole: function (role) {
+        const idField = this.$store.state.roles.idField;
+        const isRole = (this.user.roleAlias === 'isAdministrator')? true : ( role[idField] === this.user.roleId);
+        return (role.alias === 'isAdministrator') || isRole;
+      },
+      isFilterTeam: function (team) {
+        const idTeamField = this.$store.state.teams.idField;
+        const idUserField = this.$store.state.users.idField;
+        const isTeam = (this.user.roleAlias === 'isAdministrator')? true : this.isMyTeam(this.user[idUserField], team[idTeamField]);
+        return isTeam;
+      },
+      isFilterUser: function (user) {
+        const idField = this.$store.state.users.idField;
+        const authUserId = this.user[idField];
+        const userId = user[idField];
+        const msgOwnerIds = this.messages.map(msg => msg.ownerId);
+        const msgUserIds = this.messages.filter(msg => !!msg.user).map(msg => msg.userId);
+        const isMsgOwner = (msgOwnerIds.findIndex(id => id === userId) > -1);
+        const isMsgUser = (msgUserIds.findIndex(id => id === userId) > -1);
+        return (userId !== authUserId) && (isMsgOwner || isMsgUser);
+        /*
+        result = ((userId === msgUserId) && (authUserId === msg.ownerId)) ||
+            ((userId === msg.ownerId) && (authUserId === msgUserId));
+         */
+      },
+      isFilterMsg: function (msg) {
+        const idField = this.$store.state.users.idField;
+        const authUserId = this.user[idField];
+        const isMsgOwner = (msg.ownerId === authUserId);
+        const isMsgUser = (msg.userId === authUserId);
+        const isMsgRole = (msg.roleId === this.user.roleId);
+        const isMsgTeam = this.isMyTeam(authUserId, msg.teamId);
+        // return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
+        return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
       },
       modelUserSelected: function (newValue) {
         this.userSelected = newValue

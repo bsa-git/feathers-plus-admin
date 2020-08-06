@@ -12,6 +12,8 @@ const isLog = false;
 const {service} = feathersVuex(feathersClient, {idField: '_id'});
 
 const servicePath = 'user-teams';
+// const userTeams = feathersClient(servicePath);
+// userTeams.on('patched', userTeam => console.log('User team patched', userTeam));
 const servicePlugin = service(servicePath, {
   instanceDefaults(data, {store, Model}) {
     const idField = store.state['user-teams'].idField;

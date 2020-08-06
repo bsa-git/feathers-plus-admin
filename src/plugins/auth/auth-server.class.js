@@ -560,6 +560,16 @@ class AuthServer {
   }
 
   /**
+   * Get fake paths
+   * @return {Array}
+   */
+  static getFakePaths() {
+    const paths = Object.keys(fakeData);
+    if (isDebug) debug('getFakePaths:', paths);
+    return paths;
+  }
+
+  /**
    * Get id field
    * @param items {Array || Object}
    * @return {string}
@@ -577,6 +587,7 @@ class AuthServer {
     }
     return idField ;
   }
+
 }
 
 module.exports = AuthServer;

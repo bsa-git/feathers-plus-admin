@@ -13,7 +13,7 @@
           <v-list-item-content>
             <v-list-item-subtitle :class="theme.dark? 'white--text' : 'black--text'">{{ item.owner.fullName }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle>{{ item.owner.role.name }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="item.owner.role" >{{ item.owner.role.name }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon color="" @click="showContact" :title="$t('chat_messages.moreDetails')">

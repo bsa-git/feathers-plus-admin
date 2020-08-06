@@ -478,6 +478,10 @@
       }
     },
     methods: {
+      ...mapMutations({
+        showSuccess: 'SHOW_SUCCESS',
+        showError: 'SHOW_ERROR',
+      }),
       clickEditItem(item) {
         this.editedIndex = this.users.indexOf(item);
         this.editedItem = Object.assign({}, item);
@@ -661,20 +665,25 @@
           this.confirmDialog = false;
           const {User} = this.$FeathersVuex;
           const idField = this.$store.state.users.idField;
-          const user = new User({[idField]: this.idItem});
-          await user.remove();
-          this.showSuccess(`${this.$t('management.success')}!`);
-          this.idItem = null;
+          // First step: set user.active => false
+          let user = new User({
+            [idField]: this.idItem,
+            active: false,
+          });
+          await user.save();
+          // Second step: remove user
+          setTimeout( async () => {
+            user = new User({[idField]: this.idItem});
+            await user.remove();
+            this.idItem = null;
+            this.showSuccess(`${this.$t('management.success')}!`);
+          }, 1000);
         } catch (error) {
           if (isLog) debug('user.remove.error:', error);
           this.showError(error.message);
           this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
-      ...mapMutations({
-        showSuccess: 'SHOW_SUCCESS',
-        showError: 'SHOW_ERROR',
-      }),
     }
   }
 </script>

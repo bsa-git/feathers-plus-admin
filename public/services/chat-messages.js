@@ -66,6 +66,7 @@ const servicePlugin = service(servicePath, {
   instanceDefaults(data, {store, Model, Models}) {
     const moment = require('moment');
     const idField = store.state[servicePath].idField;
+    const dbNullIdValue = store.getters.getDbNullIdValue;
     if (isLog) debug('ServiceInfo:', {
       servicePath: Model.servicePath,
       namespace: Model.namespace,
@@ -77,13 +78,13 @@ const servicePlugin = service(servicePath, {
         return (this && this.ownerId)? getUser(this.ownerId, store, Models) : null;
       },
       get user() {
-        return (this && this.userId && this.userId !== '000000000000000000000000')? getUser(this.userId, store, Models) : null;
+        return (this && this.userId && this.userId !== dbNullIdValue)? getUser(this.userId, store, Models) : null;
       },
       get team() {
-        return (this && this.teamId && this.teamId !== '000000000000000000000000')? getTeam(this.teamId, store, Models) : null;
+        return (this && this.teamId && this.teamId !== dbNullIdValue)? getTeam(this.teamId, store, Models) : null;
       },
       get role() {
-        return (this && this.roleId && this.roleId !== '000000000000000000000000')? getRole(this.roleId, store, Models) : null;
+        return (this && this.roleId && this.roleId !== dbNullIdValue)? getRole(this.roleId, store, Models) : null;
       },
       get dtUTC() {
         let dt = moment.utc(this.createdAt).format('YYYY-MM-DD HH:mm:ss');

@@ -1,4 +1,4 @@
-const {readJsonFileSync, writeJsonFileSync, inspector, appRoot} = require('../lib');
+const {readJsonFileSync, writeJsonFileSync, inspector, appRoot, dbNullIdValue} = require('../lib');
 const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
 const dotEnv = require('dotenv');// Loads environment variables from .env file.
 const chalk = require('chalk');
@@ -21,6 +21,7 @@ let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 let fakeDataUsers = fakeData['users'];
 let fakeDataUser = fakeDataUsers[0];
 let fakeDataUser2 = fakeDataUsers[1];
+let fakeDataUser3 = fakeDataUsers[2];
 let idFieldUser = 'id' in fakeDataUser ? 'id' : '_id';
 
 let fakeDataRoles = fakeData['roles'];
@@ -43,6 +44,10 @@ let fakeDataLogMessages = fakeData['logMessages'];
 
 let fakeDataChatMessages = fakeData['chatMessages'];
 
+const foundNotAdminAndNotGuestRole = fakeDataRoles.find(function (role) {
+  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
+});
+
 const rolesUpdate = () => {
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
@@ -63,10 +68,10 @@ const usersUpdate = () => {
     fakeDataUsers[index]['profileId'] = profile[idFieldUserProfile];
   });
   // Set  roleId for last user
-  const foundRole = fakeDataRoles.find(function (role) {
-    return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
-  });
-  fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundRole[idFieldRole];
+  // const foundRole = fakeDataRoles.find(function (role) {
+  //   return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
+  // });
+  fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
 
   Object.assign(fakeDataUsers, fakeDataUsers.map(user => {
     const nowDate = new Date(0);// Date.now()
@@ -108,18 +113,23 @@ const logMessagesUpdate = () => {
 };
 
 const chatMessagesUpdate = () => {
-  fakeDataChatMessages[0]['teamId'] = '000000000000000000000000';
-  fakeDataChatMessages[0]['roleId'] = '000000000000000000000000';
   fakeDataChatMessages[0]['ownerId'] = fakeDataUser[idFieldUser];
-  fakeDataChatMessages[0]['userId'] = fakeDataUser2[idFieldUser];
-  fakeDataChatMessages[1]['teamId'] = fakeDataTeam[idFieldTeam];
-  fakeDataChatMessages[1]['roleId'] = '000000000000000000000000';
+  fakeDataChatMessages[0]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
+  fakeDataChatMessages[0]['userId'] = dbNullIdValue();
+  fakeDataChatMessages[0]['teamId'] = dbNullIdValue();
   fakeDataChatMessages[1]['ownerId'] = fakeDataUser[idFieldUser];
-  fakeDataChatMessages[1]['userId'] = '000000000000000000000000';
-  fakeDataChatMessages[2]['teamId'] = '000000000000000000000000';
-  fakeDataChatMessages[2]['roleId'] = fakeDataRole[idFieldRole];
+  fakeDataChatMessages[1]['teamId'] = fakeDataTeam[idFieldTeam];
+  fakeDataChatMessages[1]['userId'] = dbNullIdValue();
+  fakeDataChatMessages[1]['roleId'] = dbNullIdValue();
   fakeDataChatMessages[2]['ownerId'] = fakeDataUser[idFieldUser];
-  fakeDataChatMessages[2]['userId'] = '000000000000000000000000';
+  fakeDataChatMessages[2]['userId'] = fakeDataUser2[idFieldUser];
+  fakeDataChatMessages[2]['teamId'] = dbNullIdValue();
+  fakeDataChatMessages[2]['roleId'] = dbNullIdValue();
+  fakeDataChatMessages[3]['ownerId'] = fakeDataUser[idFieldUser];
+  fakeDataChatMessages[3]['userId'] = fakeDataUser3[idFieldUser];
+  fakeDataChatMessages[3]['teamId'] = dbNullIdValue();
+  fakeDataChatMessages[3]['roleId'] = dbNullIdValue();
+
   if(isLog) inspector('fake-service.chatMessagesUpdate.fakeDataChatMessages:', fakeDataChatMessages);
   if(isDebug) console.log(chalk.yellow('ChatMessages Update: Ok'));
 };

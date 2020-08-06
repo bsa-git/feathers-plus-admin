@@ -1,12 +1,14 @@
 const loMerge = require('lodash/merge');
 const {checkContext, getItems, replaceItems} = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
+// const {inspector, isObject} = require('../lib');
 const {inspector, isObject} = require('../lib');
 const chalk = require('chalk');
 const debug = require('debug')('app:hook-helper.class');
 
 const isLog = false;
 const isDebug = false;
+
 
 class HookHelper {
   /**
@@ -155,6 +157,7 @@ class HookHelper {
     }
     return idField ? idField : new errors.GeneralError('Items argument is not an array or object');
   }
+
 
   /**
    * Get context id

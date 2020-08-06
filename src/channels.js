@@ -1,5 +1,6 @@
 const Channel = require('./plugins/auth/channel.class');
 const Auth = require('./plugins/auth/auth-server.class');
+const {dbNullIdValue} = require('./plugins/lib');
 const debug = require('debug')('app:channels');
 
 const isLog = false;
@@ -200,6 +201,7 @@ module.exports = function (app) {
     case 'teams':
       idField = Auth.getIdField(data);
       teamId = data[idField].toString();
+      // debug('app.publish.teams.teamId:', teamId);
       userTeams = await app.service('user-teams').find({query: {teamId: teamId, $sort: {userId: 1}}});
       userIds = userTeams.data.map(userTeam => userTeam.userId.toString());
       userIds.forEach(userId => publishResult.push(app.channel(`userIds/${userId}`)));
@@ -209,15 +211,15 @@ module.exports = function (app) {
       publishResult.push(app.channel(`userIds/${userId}`));
       break;
     case 'chat-messages':
-      if (data.userId !== '000000000000000000000000') {
+      if (data.userId !== dbNullIdValue()) {
         userId = data.userId.toString();
         publishResult.push(app.channel(`userIds/${userId}`));
       }
-      if (data.teamId !== '000000000000000000000000') {
+      if (data.teamId !== dbNullIdValue()) {
         teamId = data.teamId.toString();
         publishResult.push(app.channel(`teams/${teamId}`));
       }
-      if (data.roleId !== '000000000000000000000000') {
+      if (data.roleId !== dbNullIdValue()) {
         roleId = data.roleId.toString();
         publishResult.push(app.channel(`roles/${roleId}`));
       }

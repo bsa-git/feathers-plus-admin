@@ -114,13 +114,15 @@
         theme: 'getTheme',
         user: 'getUser',
         chat: 'getChat',
-        fullPath: 'getFullPath'
+        fullPath: 'getFullPath',
+        isMyTeam: 'isMyTeam'
       }),
       users() {
         const data = [];
         const idFieldUser = this.$store.state.users.idField;
         const {User} = this.$FeathersVuex;
         let users = User.findInStore({query: {$sort: {fullName: 1}}}).data;
+        users = users.filter(this.isFilterUser);
         users.forEach(user => {
           const userId = user[idFieldUser];
           // Get user
@@ -140,10 +142,13 @@
         return data
       },
       getSelectedUser(){
-        if(this.userSelected !== -1){
-          debug('computed.getSelectedUser.user', this.users[this.userSelected])
-        }
         return this.userSelected === -1? null :  this.users[this.userSelected];
+      },
+      messages() {
+        const {ChatMessage} = this.$FeathersVuex;
+        let messages = ChatMessage.findInStore({query: {$sort: {createdAt: 1}}}).data;
+        messages = messages.filter(this.isFilterMsg);
+        return messages
       },
       isMobile(){
         return this.$vuetify.breakpoint.smAndDown
@@ -166,7 +171,25 @@
       },
       goToChatSettings: function () {
         this.$redirect(this.fullPath('/chat/settings'));
-      }
+      },
+      isFilterUser: function (user) {
+        const idField = this.$store.state.users.idField;
+        const userId = user[idField];
+        const msgOwnerIds = this.messages.map(msg => msg.ownerId);
+        const msgUserIds = this.messages.filter(msg => !!msg.user).map(msg => msg.userId);
+        const isMsgOwner = (msgOwnerIds.findIndex(id => id === userId) > -1);
+        const isMsgUser = (msgUserIds.findIndex(id => id === userId) > -1);
+        return (isMsgOwner || isMsgUser);
+      },
+      isFilterMsg: function (msg) {
+        const idField = this.$store.state.users.idField;
+        const authUserId = this.user[idField];
+        const isMsgOwner = (msg.ownerId === authUserId);
+        const isMsgUser = (msg.userId === authUserId);
+        const isMsgRole = (msg.roleId === this.user.roleId);
+        const isMsgTeam = this.isMyTeam(authUserId, msg.teamId);
+        return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
+      },
     },
   }
 </script>

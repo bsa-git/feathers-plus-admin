@@ -11,7 +11,7 @@ let schema = {
   // !end
   // !code: schema_definitions
   //--------------------------
-  fakeRecords: 3,
+  fakeRecords: 4,
   //--------------------------
   // !end
 

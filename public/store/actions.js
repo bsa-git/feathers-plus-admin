@@ -73,6 +73,7 @@ const actions = {
   async authenticate(store, credentials = null) {
     if(isDebug) debug('<<authenticate>> Start authenticate');
     const service = new this.$Service(store);
+
     // authenticate
     let response = await service.authenticate(credentials);
     if(isLog) debug('service.authenticate.response:', response);

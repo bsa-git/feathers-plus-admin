@@ -1,5 +1,5 @@
 const errors = require('@feathersjs/errors');
-const {getCapitalizeStr} = require('../lib');
+const {getCapitalizeStr, dbNullIdValue} = require('../lib');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.servicesConstraint');
@@ -81,7 +81,6 @@ module.exports = async function servicesConstraint(context) {
     normalize = async (record) => {
       let alias = '', _record = {};
       alias = record.name? getCapitalizeStr(record.name, 'is') : '';
-      // if(isDebug) debug('beforeNormalizeAlias.alias:', alias);
       if(alias && record.alias !== alias){
         _record.alias = alias;
       }
@@ -89,22 +88,36 @@ module.exports = async function servicesConstraint(context) {
     };
     await hookHelper.forEachRecords(normalize);
     break;
+  case 'log-messages.create.before':
+    validate = async (record) => {
+      if(record.ownerId && record.ownerId !== dbNullIdValue()) await hookHelper.validateRelationship('users', record.ownerId);
+      if(record.userId && record.userId !== dbNullIdValue()) await hookHelper.validateRelationship('users', record.userId);
+    };
+    await hookHelper.forEachRecords(validate);
+    break;
   case 'chat-messages.create.before':
   case 'chat-messages.patch.before':
     normalize = async (record) => {
       let _record = {};
       if(!record.userId){
-        _record.userId = '000000000000000000000000';
+        _record.userId = dbNullIdValue();
       }
       if(!record.roleId){
-        _record.roleId = '000000000000000000000000';
+        _record.roleId = dbNullIdValue();
       }
       if(!record.teamId){
-        _record.teamId = '000000000000000000000000';
+        _record.teamId = dbNullIdValue();
       }
       Object.assign(record, _record);
     };
+    validate = async (record) => {
+      await hookHelper.validateRelationship('users', record.ownerId);
+      if(record.userId && record.userId !== dbNullIdValue()) await hookHelper.validateRelationship('users', record.userId);
+      if(record.roleId && record.roleId !== dbNullIdValue()) await hookHelper.validateRelationship('roles', record.roleId);
+      if(record.teamId && record.teamId !== dbNullIdValue()) await hookHelper.validateRelationship('teams', record.teamId);
+    };
     await hookHelper.forEachRecords(normalize);
+    await hookHelper.forEachRecords(validate);
     break;
   case 'users.create.after':
   case 'users.patch.after':
@@ -123,10 +136,28 @@ module.exports = async function servicesConstraint(context) {
       const idFieldUser = HookHelper.getIdField(record);
       const userId = record[idFieldUser].toString();
       const profileId = record.profileId.toString();
-      // Remove items for 'user-teams' service
-      let servicePath = 'user-teams';
-      let removed = await hookHelper.removeItems(servicePath, {userId: userId});
+
+      // Remove items for 'chat-messages' service
+      let servicePath = 'chat-messages';
+      let removed = await hookHelper.removeItems(servicePath, {$or: [
+        {ownerId: userId},
+        {userId: userId}
+      ]});
       if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
+
+      // Remove items for 'log-messages' service
+      servicePath = 'log-messages';
+      removed = await hookHelper.removeItems(servicePath, {$or: [
+        {ownerId: userId},
+        {userId: userId}
+      ]});
+      if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
+
+      // Remove items for 'user-teams' service
+      servicePath = 'user-teams';
+      removed = await hookHelper.removeItems(servicePath, {userId: userId});
+      if (isDebug) debug(`after.users.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
+
       // Remove item for 'user-profiles' service
       servicePath = 'user-profiles';
       removed = await hookHelper.removeItem(servicePath, {[idFieldUser]: profileId});
@@ -145,8 +176,15 @@ module.exports = async function servicesConstraint(context) {
     validate = async (record) => {
       const idFieldTeam = HookHelper.getIdField(record);
       const teamId = record[idFieldTeam].toString();
-      let servicePath = 'user-teams';
-      const removed = await hookHelper.removeItems(servicePath, {teamId: teamId});
+
+      // Remove items for 'chat-messages' service
+      let servicePath = 'chat-messages';
+      let removed = await hookHelper.removeItems(servicePath, {teamId: teamId});
+      if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
+
+      // Remove items for 'user-teams' service
+      servicePath = 'user-teams';
+      removed = await hookHelper.removeItems(servicePath, {teamId: teamId});
       if (isDebug) debug(`after.teams.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
     };
     await hookHelper.forEachRecords(validate);
@@ -155,7 +193,14 @@ module.exports = async function servicesConstraint(context) {
     validate = async (record) => {
       const idFieldRole = HookHelper.getIdField(record);
       const roleId = record[idFieldRole].toString();
-      let servicePath = 'users';
+
+      // Remove items for 'chat-messages' service
+      let servicePath = 'chat-messages';
+      let removed = await hookHelper.removeItems(servicePath, {roleId: roleId});
+      if (isDebug) debug(`after.roles.remove: (${removed.length}) records have been removed from the "${servicePath}" service`);
+
+      // Update roleId to 'isGuest' for 'users' service
+      servicePath = 'users';
       const guestId = await authServer.getRoleId('isGuest');
       if(guestId) {
         const data = {roleId: guestId.toString()};

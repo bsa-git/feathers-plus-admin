@@ -1,4 +1,4 @@
-const {inspector, appRoot, readJsonFileSync} = require('../lib');
+const {inspector, appRoot, readJsonFileSync, dbNullIdValue} = require('../lib');
 const AuthServer = require('../auth/auth-server.class');
 const HookHelper = require('./hook-helper.class');
 const debug = require('debug')('app:plugins.getLogMessage');
@@ -368,8 +368,8 @@ module.exports = async function getLogMessage(context) {
           }
         };
       }
-      ownerId = mailerData.senderId? mailerData.senderId : '000000000000000000000000';
-      userId = mailerData.senderId? mailerData.senderId : '000000000000000000000000';
+      ownerId = mailerData.senderId? mailerData.senderId : dbNullIdValue();
+      userId = mailerData.senderId? mailerData.senderId : dbNullIdValue();
       result = {
         gr: logData.gr,
         pr: logData.pr,
@@ -397,8 +397,8 @@ module.exports = async function getLogMessage(context) {
         ownerId = hookHelper.contextUser[idField];
         userId = hookHelper.contextUser[idField];
       }else {
-        ownerId = '000000000000000000000000';
-        userId = '000000000000000000000000';
+        ownerId = dbNullIdValue();
+        userId = dbNullIdValue();
       }
       msg = Object.assign({}, context.contextBeforeData);
       result = {
@@ -421,8 +421,8 @@ module.exports = async function getLogMessage(context) {
         user = hookHelper.contextError.hook.params.user;
         idField = HookHelper.getIdField(user);
       }
-      ownerId = user ? user[idField] : '000000000000000000000000';
-      userId = user ? user[idField] : '000000000000000000000000';
+      ownerId = user ? user[idField] : dbNullIdValue();
+      userId = user ? user[idField] : dbNullIdValue();
       msg = {message: hookHelper.contextError.message, info: hookHelper.getDebugError()};
 
       result = {

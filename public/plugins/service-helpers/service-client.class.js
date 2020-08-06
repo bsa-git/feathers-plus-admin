@@ -123,35 +123,27 @@ class Service {
   }
 
   /**
-   * Check service constraints
-   * @return {Promise<void>}
-   */
-  async checkServiceConstraints() {
-    const userId = this.getAuthUserId();
-    if(userId){
-      // Check role
-      const roleId = this.getAuthUser()['roleId'];
-      let role = this.getFromStore('roles', roleId);
-      if(!role){
-        role = await this.get('roles', roleId);
-      }
-      // Check teams
-      const idFieldTeam = this.getServiceIdField('teams');
-      const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
-      const teamCount = this.findCountInStore('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}}});
-      if(teamIdsForUser.length !== teamCount){
-        await this.findAll('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
-      }
-    }
-  }
-
-  /**
    * Clear all services from store
    */
   clearAll() {
     const paths = Service.getServicePaths();
     paths.forEach(path => this.commit(`${path}/clearAll`));
     if (isDebug) debug('clearAll: OK');
+  }
+
+  /**
+   * Get user for userId
+   * @param userId
+   * @return {Promise.<void>}
+   */
+  async getUserForUserId(userId) {
+    if(!this.getFromStore('users', userId)){
+      const user = await this.get('users', userId);
+      await this.get('user-profiles', user.profileId);
+      if(!this.getFromStore('roles', user.roleId)){
+        await this.get('roles', user.roleId);
+      }
+    }
   }
 
   /**
@@ -180,14 +172,14 @@ class Service {
     const userId = user[idField];
     // Find chat messages
     await this.findAll('user-teams', {query: {}});
-    const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
-    const chatMessages = await this.findAll('chat-messages', {query: {$or: [
+    const teamIdsForUser = this.getters.getTeamIdsForUser(userId);
+    // getTeamIdsForUser
+    await this.findAll('chat-messages', {query: {$or: [
       {ownerId: userId},
       {userId: userId},
       {roleId: user.roleId},
       { teamId: { $in: teamIdsForUser}}
     ]}});
-    debug('findChatMessagesForAdmin.chatMessages:', chatMessages);
   }
 
   /**
@@ -207,21 +199,22 @@ class Service {
       const idFieldTeam = this.state.teams.idField;
       const idFieldUser = this.state.users.idField;
       const userId = user[idFieldUser];
+
+      // Find teams for user
       let teamIdsForUser = await this.findAll('user-teams', {query: {userId: userId, $sort: {teamId: 1}}});
       teamIdsForUser = teamIdsForUser.map(row => row.teamId.toString());
-      await this.findAll('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
+      if(teamIdsForUser.length){
+        await this.findAll('teams', {query: {[idFieldTeam]: {$in: teamIdsForUser}, $sort: {name: 1}}});
+      }
       // Find log messages
       let logMessages = await this.findAll('log-messages', {query: {userId: userId}});
       logMessages = logMessages.filter(msg => msg.ownerId !== msg.userId);
       if(logMessages.length){
         let ownerIds = logMessages.map(msg => msg.ownerId);
-        const getUserForOwnerId = async ownerId => {
-          await this.get('users', ownerId);
-        };
-        // Remove log-messages
+        // Get users for log-messages ownerIds
         for (let i = 0; i < ownerIds.length; i++) {
           const ownerId = ownerIds[i];
-          await getUserForOwnerId(ownerId);
+          await this.getUserForUserId(ownerId);
         }
       }
       // Find chat messages for user
@@ -236,30 +229,92 @@ class Service {
    */
   async findChatMessagesForUser(user) {
     const idField = this.getServiceIdField('users');
-    const userId = user[idField];
+    const authUserId = user[idField];
     // Find chat messages
-    const teamIdsForUser = this.getters['user-teams/teamIdsForUser'](userId);
+    const teamIdsForUser = this.getters.getTeamIdsForUser(authUserId);
     const chatMessages = await this.findAll('chat-messages', {query: {$or: [
-      {ownerId: userId},
-      {userId: userId},
+      {ownerId: authUserId},
+      {userId: authUserId},
       {roleId: user.roleId},
       { teamId: { $in: teamIdsForUser}}
     ]}});
-    const getUserForOwnerId = async ownerId => {
-      const owner = await this.get('users', ownerId);
-      await this.get('user-profiles', owner.profileId);
-      if(!this.getFromStore('roles', owner.roleId)){
-        await this.get('roles', owner.roleId);
-      }
-    };
-    // getUserForOwnerId
+    // Get users for chatMessages
     for (let i = 0; i < chatMessages.length; i++) {
-      const ownerId = chatMessages[i]['ownerId'];
-      if(ownerId !== userId && !this.getFromStore('users', ownerId)){
-        await getUserForOwnerId(ownerId);
+      const msg = chatMessages[i];
+      const msgOwnerId = msg['ownerId'];
+      const msgUserId = msg['user']?  msg['userId'] : null;
+      if(msgOwnerId !== authUserId && !this.getFromStore('users', msgOwnerId)){
+        await this.getUserForUserId(msgOwnerId);
+      }
+      if(msgUserId && msgUserId !== authUserId && !this.getFromStore('users', msgUserId)){
+        await this.getUserForUserId(msgUserId);
       }
     }
   }
+
+  /**
+   * Find chat messages for role
+   * @param roleId
+   * @return {Promise.<void>}
+   */
+  async findChatMessagesForRole(roleId) {
+    const idUserField = this.getServiceIdField('users');
+    const authUserId = this.user[idUserField];
+    // Find chat messages
+    if(!this.getFromStore('roles', roleId)){
+      await this.get('roles', roleId);
+
+      let chatMessages = this.findInStore('chat-messages', {query: {roleId: roleId}});
+      if(!chatMessages.length){
+        chatMessages = await this.find('chat-messages', {query: {roleId: roleId}});
+        // Get users for chatMessages
+        for (let i = 0; i < chatMessages.length; i++) {
+          const msg = chatMessages[i];
+          const msgOwnerId = msg['ownerId'];
+          const msgUserId = msg['user']?  msg['userId'] : null;
+          if(msgOwnerId !== authUserId && !this.getFromStore('users', msgOwnerId)){
+            await this.getUserForUserId(msgOwnerId);
+          }
+          if(msgUserId && msgUserId !== authUserId && !this.getFromStore('users', msgUserId)){
+            await this.getUserForUserId(msgUserId);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Find chat messages for team
+   * @param teamId
+   * @return {Promise.<void>}
+   */
+  async findChatMessagesForTeam(teamId) {
+    const idUserField = this.getServiceIdField('users');
+    const authUserId = this.user[idUserField];
+    // Find chat messages
+    if(!this.getFromStore('teams', teamId)){
+      await this.get('teams', teamId);
+
+      let chatMessages = this.findInStore('chat-messages', {query: {teamId: teamId}});
+      if(!chatMessages.length){
+        chatMessages = await this.find('chat-messages', {query: {teamId: teamId}});
+        // Get users for chatMessages
+        for (let i = 0; i < chatMessages.length; i++) {
+          const msg = chatMessages[i];
+          const msgOwnerId = msg['ownerId'];
+          const msgUserId = msg['user']?  msg['userId'] : null;
+          if(msgOwnerId !== authUserId && !this.getFromStore('users', msgOwnerId)){
+            await this.getUserForUserId(msgOwnerId);
+          }
+          if(msgUserId && msgUserId !== authUserId && !this.getFromStore('users', msgUserId)){
+            await this.getUserForUserId(msgUserId);
+          }
+        }
+      }
+    }
+  }
+
+  //==============================================================================================//
 
   /**
    * Find method, which is a proxy to the find action

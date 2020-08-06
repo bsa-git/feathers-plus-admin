@@ -107,7 +107,8 @@ export default () => ({
     baseUrl: (process.env.BASE_URL || 'http://localhost:3030').trim(),
     homePath: (process.env.HOME_PATH || '/dashboard').trim(),
     //--- DATABASE ---//
-    // mongodb: getMongoDB(process.env.NODE_ENV),
+    typeDB: (process.env.TYPE_DB || 'mongodb').trim(),
+    mongodbNullIdValue: (process.env.MONGODB_NULL_ID_VALUE || '000000000000000000000000').trim(),
     //--- LOG-MESSAGES ---//
     logMsgEnable: util.isTrue(process.env.LOGMSG_ENABLE),
     logMsgMaxRows: util.getNumber(process.env.LOGMSG_MAXROWS),
