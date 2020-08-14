@@ -356,7 +356,6 @@
       },
       getSelLogMessages: function () {
         const logMessages = this.logMessages.filter(msg => this.selLogNames.includes(msg.name));
-//        debug('computed.getSelLogMessages.logMessages:', logMessages);
         return logMessages
       },
       getQueryNotifications: function () {

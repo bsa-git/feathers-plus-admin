@@ -4,6 +4,42 @@
     <app-page-header
       :page-title="description"
     ></app-page-header>
+
+    <!--=== Confirm Dialog ===-->
+    <confirm-dialog
+      :dialog="confirmDialog"
+      :title-dialog="$t('management.confirm_delete_title')"
+      :text-dialog="$t('management.confirm_delete_description')"
+      :run-action="removeChatMsg"
+      v-on:onCloseDialog="confirmDialog = false"
+    ></confirm-dialog>
+
+    <!--=== Msg Edit Dialog ===-->
+    <save-dialog
+      :dialog="saveDialog"
+      :on-submit="onSaveChatMsg"
+      :close-dialog="closeSaveDialog"
+      :loading-submit="loadingSubmit"
+      :is-new-item="false"
+      :dialog-title="titleSaveDialog()"
+      :content-title="titleSaveDialog()"
+      :action-save-text="$t('management.save')"
+      :action-cancel-text="$t('management.cancel')"
+    >
+      <!-- Slot save-content -->
+      <div slot="save-content">
+        <v-row>
+          <v-col cols="12">
+            <v-textarea
+              v-model="editedItem.msg"
+              :value="editedItem.msg"
+              :label="$t('chat_messages.editMessage')"
+            ></v-textarea>
+          </v-col>
+        </v-row>
+      </div>
+    </save-dialog>
+
     <!-- MessagesView -->
     <flex-box-card
       :md="10"
@@ -88,6 +124,8 @@
             :is-selected-item="isSelectedItem"
             v-on:onSendPost="onSendPost"
             v-on:onShowContact="onShowContact"
+            v-on:onRemoveMsg="onRemoveMsg"
+            v-on:onEditMsg="onEditMsg"
           ></msg-post-list>
         </v-col>
       </v-row>
@@ -98,6 +136,9 @@
 <script>
   import {mapGetters, mapMutations} from 'vuex';
   import moment from 'moment';
+  import createLogMessage from '~/plugins/service-helpers/create-log-message';
+  import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
+  import SaveDialog from '~/components/dialogs/SaveDialog';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
   import ServiceHelper from '~/plugins/service-helpers/service-client.class';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
@@ -112,6 +153,8 @@
   export default {
     // layout: 'chat',
     components: {
+      ConfirmDialog,
+      SaveDialog,
       AppPageHeader,
       FlexBoxCard,
       FlexBoxList,
@@ -123,12 +166,21 @@
       return {
         title: this.$t('chat_messages.title'),
         description: this.$t('chat_messages.description'),
+        confirmDialog: false,
+        saveDialog: false,
+        saveLogMessage: null,
+        error: undefined,
+        loadingSubmit: false,
         dtDate: '',
         userSelected: -1,
         roleSelected: -1,
         teamSelected: -1,
         showUserList: true,
-        sh: null
+        sh: null,
+        msgId: null,
+        editedItem: {
+          msg: '',
+        },
       }
     },
     head() {
@@ -141,10 +193,11 @@
     },
     created: function () {
       this.sh = new ServiceHelper(this.$store);
+      this.saveLogMessage = createLogMessage(this.$store);
       this.initChat();
     },
     watch: {
-      userSelected(val) {
+      userSelected(val, oldVal) {
         if (val > -1) {
           this.dtDate = '';
           this.showUserList = false;
@@ -158,8 +211,13 @@
             })
           }
         }
+        if(oldVal > -1){
+          const user = this.users[oldVal];
+          const msgInfo = this.getMsgInfo('user', user.id, true);
+          user.msgInfo = Object.assign({}, msgInfo);
+        }
       },
-      roleSelected(val) {
+      roleSelected(val, oldVal) {
         if (val > -1) {
           this.dtDate = '';
           this.showUserList = false;
@@ -173,8 +231,13 @@
             })
           }
         }
+        if(oldVal > -1){
+          const role = this.roles[oldVal];
+          const msgInfo = this.getMsgInfo('role', role.id, true);
+          role.msgInfo = msgInfo;
+        }
       },
-      teamSelected(val) {
+      teamSelected(val, oldVal) {
         if (val > -1) {
           this.dtDate = '';
           this.showUserList = false;
@@ -187,6 +250,17 @@
               teamSelected: val
             })
           }
+        }
+        if(oldVal > -1){
+          const team = this.teams[oldVal];
+          const msgInfo = this.getMsgInfo('team', team.id, true);
+          team.msgInfo = msgInfo;
+        }
+      },
+      saveDialog(val) {
+        if (val) {
+          this.$validator.reset();
+          this.dismissError();
         }
       }
     },
@@ -205,17 +279,19 @@
       },
       users() {
         const data = [];
+        let msgInfo = {};
         if(this.user){
           const idField = this.$store.state.users.idField;
           const authUserId = this.user[idField];
           let users = this.getStoreUsers;
           users = users.filter(this.isFilterUser);
           users.forEach(user => {
+            msgInfo = {};
             const userId = user[idField];
             const messages = this.messages.filter(msg => this.isUserMsg(userId, msg));
-            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-            const countMsg = messages.length ? messages.length : 0;
-            const lastMsg = messages.length ? messages[0].msg : '';
+            if(messages.length){
+              msgInfo = this.getMsgInfo('user', userId);
+            }
             // Get user
             let item = {
               id: userId,
@@ -225,9 +301,7 @@
               email: user.email,
               avatar: user.avatar,
               roleName: user.role ? user.role.name : '',
-              timeLabel,
-              countMsg,
-              lastMsg
+              msgInfo,
             };
             data.push(item);
           });
@@ -239,26 +313,26 @@
       },
       roles() {
         const data = [];
+        let msgInfo = {};
         if(this.user){
           const idField = this.$store.state.roles.idField;
           const {Role} = this.$FeathersVuex;
           let roles = Role.findInStore({query: {$sort: {name: 1}}}).data;
           roles = roles.filter(this.isFilterRole);
           roles.forEach(role => {
+            msgInfo = {};
             const roleId = role[idField];
             const messages = this.messages.filter(msg => this.isRoleMsg(roleId, msg));
-            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-            const countMsg = messages.length ? messages.length : 0;
-            const lastMsg = messages.length ? messages[0].msg : '';
+            if(messages.length){
+              msgInfo = this.getMsgInfo('role', roleId);
+            }
             // Get role
             let item = {
               id: roleId,
               name: role.name,
               description: role.description,
               alias: role.alias,
-              timeLabel,
-              countMsg,
-              lastMsg,
+              msgInfo,
               icon: 'mdi-security',
               iconClass: 'grey lighten-1 white--text'
             };
@@ -272,27 +346,26 @@
       },
       teams() {
         const data = [];
+        let msgInfo = {};
         if(this.user){
           const idField = this.$store.state.teams.idField;
           const {Team} = this.$FeathersVuex;
           let teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
           teams = teams.filter(this.isFilterTeam);
           teams.forEach(team => {
+            msgInfo = {};
             const teamId = team[idField];
             const messages = this.messages.filter(msg => this.isTeamMsg(teamId, msg));
-            // const messages = this.messages;
-            const timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-            const countMsg = messages.length ? messages.length : 0;
-            const lastMsg = messages.length ? messages[0].msg : '';
+            if(messages.length){
+              msgInfo = this.getMsgInfo('team', teamId);
+            }
             // Get team
             let item = {
               id: teamId,
               name: team.name,
               description: team.description,
               alias: team.alias,
-              timeLabel,
-              countMsg,
-              lastMsg,
+              msgInfo,
               icon: 'mdi-account-group',
               iconClass: 'blue white--text'
             };
@@ -310,16 +383,16 @@
           const idField = this.$store.state['chat-messages'].idField;
           const {ChatMessage} = this.$FeathersVuex;
           let messages = ChatMessage.findInStore({query: {$sort: {createdAt: 1}}}).data;
-          messages = messages.filter(this.isFilterMsg)
+          messages = messages.filter(this.isFilterMsg);
           messages.forEach(msg => {
             const msgId = msg[idField];
-            // const _dtDate = msg.dtLocal.split(' ')[0];
             // Get msg
             let item = {
               id: msgId,
               msg: msg.msg,
               dt: msg.dtLocal,
-              // dtDate: (_dtDate === this.dtDate) ? '' : _dtDate,
+              dtUTC: msg.dtUTC,
+              dtUpdatedAt: msg.dtUpdatedAtLocal,
               isOwnerAuth: this.isYouAuth(msg.ownerId),
               ownerId: msg.ownerId,
               userId: msg.userId,
@@ -330,28 +403,45 @@
               role: msg.role,
               team: msg.team
             };
-            // if(item.dtDate !== '' && item.dtDate !== this.dtDate){
-            //   this.dtDate = item.dtDate;
-            // }
             data.push(item);
           });
         }
         return data
       },
       getSelectedMessages() {
-        let messages = [], user, role, team;
+        let messages = [], user, role, team, msgInfo;
         if (this.getSelectedUser) {
           user = this.getSelectedUser;
           messages = this.messages.filter(msg => this.isUserMsg(user.id, msg));
+          if(messages.length){
+            msgInfo = this.getMsgInfo('user', user.id);
+            messages = messages.map((msg, index) => {
+              msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              return msg;
+            })
+          }
         }
         if (this.getSelectedRole) {
           role = this.getSelectedRole;
           messages = this.messages.filter(msg => this.isRoleMsg(role.id, msg));
+          if(messages.length){
+            msgInfo = this.getMsgInfo('role', role.id);
+            messages = messages.map((msg, index) => {
+              msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              return msg;
+            })
+          }
         }
         if (this.getSelectedTeam) {
           team = this.getSelectedTeam;
           messages = this.messages.filter(msg => this.isTeamMsg(team.id, msg));
-          // debug('getSelectedMessages.messages:', messages);
+          if(messages.length){
+            msgInfo = this.getMsgInfo('team', team.id);
+            messages = messages.map((msg, index) => {
+              msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              return msg;
+            })
+          }
         }
         // Set dtDate field for msg
         if(messages.length){
@@ -378,7 +468,8 @@
         showSuccess: 'SHOW_SUCCESS',
         showError: 'SHOW_ERROR',
         setSelectedItem: 'SET_CHAT_SELECTED_ITEM',
-        setSelectedContact: 'SET_CHAT_SELECTED_CONTACT'
+        setSelectedContact: 'SET_CHAT_SELECTED_CONTACT',
+        setChatCheckat: 'SET_CHAT_CHECKAT'
       }),
       initChat: function () {
         this.userSelected = this.chat.userSelected;
@@ -439,10 +530,6 @@
         const isMsgOwner = (msgOwnerIds.findIndex(id => id === userId) > -1);
         const isMsgUser = (msgUserIds.findIndex(id => id === userId) > -1);
         return (userId !== authUserId) && (isMsgOwner || isMsgUser);
-        /*
-        result = ((userId === msgUserId) && (authUserId === msg.ownerId)) ||
-            ((userId === msg.ownerId) && (authUserId === msgUserId));
-         */
       },
       isFilterMsg: function (msg) {
         const idField = this.$store.state.users.idField;
@@ -451,8 +538,60 @@
         const isMsgUser = (msg.userId === authUserId);
         const isMsgRole = (msg.roleId === this.user.roleId);
         const isMsgTeam = this.isMyTeam(authUserId, msg.teamId);
-        // return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
         return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
+      },
+      getMsgInfo(name, id, changeSel = false) {
+        let msgInfo = {};
+        let messages = [];
+        let _item, dtCheckAt, items = [], isStateChatCheckAt = false;
+
+        // Get items from stateChatCheckAt
+        dtCheckAt = moment.utc(0).format();
+        let stateChatCheckAt = this.chat.checkAt;
+        if (stateChatCheckAt) {
+          items = JSON.parse(stateChatCheckAt);
+        }
+
+        // Get dtCheckAt from stateChatCheckAt
+        if(items.length){
+          isStateChatCheckAt = items.filter(item => (item.name === name) && (item.id === id)).length > 0;
+        }
+        if(isStateChatCheckAt){
+          _item = items.filter(item => (item.name === name) && (item.id === id))[0];
+          if(changeSel){
+            _item.checkAt = moment.utc().format();
+            // Set state chat checkat
+            this.setChatCheckat(items);
+          }
+          dtCheckAt = _item.checkAt;
+        } else {
+          _item = {name, id, checkAt: dtCheckAt};
+          items.push(_item);
+          // Set state chat checkat
+          this.setChatCheckat(items);
+        }
+
+
+        if(name === 'user'){
+          messages = this.messages.filter(msg => this.isUserMsg(id, msg));
+        }
+        if(name === 'role'){
+          messages = this.messages.filter(msg => this.isRoleMsg(id, msg));
+        }
+        if(name === 'team'){
+          messages = this.messages.filter(msg => this.isTeamMsg(id, msg));
+        }
+
+        msgInfo.countAll = messages.length;
+
+        messages = messages.filter(msg => msg.dtUTC >= dtCheckAt);
+
+        // Get msgInfo
+        msgInfo.timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
+        msgInfo.countMsg = messages.length ? messages.length : 0;
+        msgInfo.lastMsg = messages.length ? messages[0].msg : '';
+
+        return  msgInfo;
       },
       modelUserSelected: function (newValue) {
         this.userSelected = newValue
@@ -464,8 +603,8 @@
         this.teamSelected = newValue
       },
       onSendPost: function (newValue) {
-        if (isLog) debug('methods.sendPost.newValue:', newValue)
-        this.saveChatMsg(newValue);
+        if (isLog) debug('methods.sendPost.newValue:', newValue);
+        this.createChatMsg(newValue);
       },
       onShowContact: function (ownerId) {
         const idField = this.$store.state.users.idField;
@@ -473,9 +612,20 @@
         const userIndex = users.findIndex(user => {
           return  user[idField] === ownerId
         });
-        if (isLog) debug('methods.onShowContact.userIndex:', userIndex)
+        if (isLog) debug('methods.onShowContact.userIndex:', userIndex);
         this.setSelectedContact(userIndex);
         this.$redirect(this.fullPath('/chat/contacts'));
+      },
+      onRemoveMsg: function (msgId) {
+        this.msgId = msgId;
+        this.confirmDialog = true;
+      },
+      onEditMsg(msgId) {
+        this.msgId = msgId;
+        const idField = this.$store.state['chat-messages'].idField;
+        const {ChatMessage} = this.$FeathersVuex;
+        this.editedItem.msg = ChatMessage.getFromStore(msgId).msg;
+        this.saveDialog = true;
       },
       goToChatSettings: function () {
         this.$redirect(this.fullPath('/chat/settings'));
@@ -483,7 +633,19 @@
       goToChatContacts: function () {
         this.$redirect(this.fullPath('/chat/contacts'));
       },
-      saveChatMsg: function (msg) {
+      closeSaveDialog() {
+        this.saveDialog = false;
+        this.editedItem.msg = '';
+        this.$validator.reset();
+        this.dismissError();
+      },
+      titleSaveDialog() {
+        return this.msgId? this.$t('management.edit_item') : this.$t('management.new_item')
+      },
+      dismissError() {
+        this.error = undefined;
+      },
+      createChatMsg: function (msg) {
         let chatMessage;
         let data = {};
         const idFieldUser = this.$store.state.users.idField;
@@ -505,8 +667,48 @@
           chatMessage.save();
           this.showSuccess(`${this.$t('management.success')}!`);
         } catch (error) {
-          if (isLog) debug('methods.saveChatMsg.error:', error);
+          if (isLog) debug('createChatMsg.error:', error);
           this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
+        }
+      },
+      async removeChatMsg() {
+        try {
+          this.confirmDialog = false;
+          const {ChatMessage} = this.$FeathersVuex;
+          const idField = this.$store.state['chat-messages'].idField;
+          const msg = new ChatMessage({[idField]: this.msgId, msg: ''});
+          await msg.save();
+          this.msgId = null;
+          this.showSuccess(`${this.$t('management.success')}!`);
+        } catch (error) {
+          if (isLog) debug('removeChatMsg.error:', error);
+          this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
+        }
+      },
+      async onSaveChatMsg() {
+        try {
+          this.dismissError();
+          await this.$validator.validateAll();
+          if (this.$validator.errors.any()) {
+            this.showError('Validation Error!');
+          } else {
+            this.loadingSubmit = true;
+            if (isLog) debug('formData:', this.editedItem);
+            const {ChatMessage} = this.$FeathersVuex;
+            const idField = this.$store.state['chat-messages'].idField;
+            const msg = new ChatMessage({[idField]: this.msgId, msg: this.editedItem.msg});
+            await msg.save();
+            this.msgId = null;
+            this.loadingSubmit = false;
+            this.closeSaveDialog();
+          }
+        } catch (error) {
+          if (isLog) debug('onSaveChatMsg.error:', error);
+          this.loadingSubmit = false;
+          this.showError(error.message);
+          this.saveLogMessage('ERROR-CLIENT', {error});
         }
       },
     },

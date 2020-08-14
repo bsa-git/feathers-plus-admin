@@ -41,6 +41,7 @@
       :loading-submit="loadingSubmit"
       :is-new-item="isNewItem"
       :dialog-title="formTitle"
+      :content-title="formTitle"
       :action-save-text="$t('management.save')"
       :action-cancel-text="$t('management.cancel')"
     >
@@ -386,7 +387,6 @@
               if (isLog) debug('save().response:', saveResponse);
               const idFieldRole = this.$store.state.roles.idField;
               const roleId = saveResponse[idFieldRole];
-//              if (isLog) debug('onSubmit.editedItem.userIds:', this.editedItem.userIds);
               const updatedUserIds = await this.updateUserIds(roleId, this.editedItem.userIds);
               if (isLog) debug('updatedUserIds:', updatedUserIds);
               this.showSuccess(`${this.$t('management.success')}!`);

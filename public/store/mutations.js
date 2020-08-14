@@ -72,7 +72,7 @@ const mutations = {
    * @param checkAt {Object|String}
    */
   SET_CHAT_CHECKAT(state, checkAt) {
-    state.chat.checkAt = typeOf.isObject(checkAt)? JSON.stringify(checkAt) : checkAt ;
+    state.chat.checkAt = Array.isArray(checkAt)? JSON.stringify(checkAt) : checkAt ;
     if(process.client && cookies.get('chat_checkAt') !== state.chat.checkAt){
       cookies.set('chat_checkAt', state.chat.checkAt);
     }

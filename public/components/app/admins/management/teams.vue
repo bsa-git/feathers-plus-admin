@@ -42,6 +42,7 @@
       :loading-submit="loadingSubmit"
       :is-new-item="isNewItem"
       :dialog-title="formTitle"
+      :content-title="formTitle"
       :action-save-text="$t('management.save')"
       :action-cancel-text="$t('management.cancel')"
     >

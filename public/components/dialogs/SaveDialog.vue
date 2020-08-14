@@ -9,7 +9,7 @@
         <v-toolbar color="primary" elevation="0" dark>
           <v-icon v-if="isNewItem" class="mr-3">fas fa-plus-square</v-icon>
           <v-icon v-else class="mr-3">fas fa-edit</v-icon>
-          <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
+          <v-toolbar-title v-if="dialogTitle">{{ dialogTitle }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click="showDialog = false">
             <v-icon>mdi-close</v-icon>
@@ -20,7 +20,7 @@
           <v-card-text>
             <div class="text-center">
               <slot name="save-header"></slot>
-              <h1 class="my-4 primary--text font-weight-light">{{ dialogTitle }}</h1>
+              <h1 v-if="contentTitle" class="my-4 primary--text font-weight-light">{{ contentTitle }}</h1>
             </div>
             <slot name="save-content"></slot>
           </v-card-text>
@@ -45,12 +45,28 @@
 
   export default {
     props: {
-      dialog: Boolean,
       onSubmit: Function,
       closeDialog: Function,
-      loadingSubmit: Boolean,
-      dialogTitle: String,
-      isNewItem: Boolean,
+      dialog: {
+        type: Boolean,
+        default: false
+      },
+      loadingSubmit: {
+        type: Boolean,
+        default: false
+      },
+      dialogTitle: {
+        type: String,
+        default: ''
+      },
+      contentTitle: {
+        type: String,
+        default: ''
+      },
+      isNewItem: {
+        type: Boolean,
+        default: false
+      },
       actionSaveText: {
         type: String,
         default: 'Save'

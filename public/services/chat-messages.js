@@ -64,6 +64,7 @@ const {service} = feathersVuex(feathersClient, {idField: '_id'});
 const servicePath = 'chat-messages';
 const servicePlugin = service(servicePath, {
   instanceDefaults(data, {store, Model, Models}) {
+    let dt = '';
     const moment = require('moment');
     const idField = store.state[servicePath].idField;
     const dbNullIdValue = store.getters.getDbNullIdValue;
@@ -87,11 +88,15 @@ const servicePlugin = service(servicePath, {
         return (this && this.roleId && this.roleId !== dbNullIdValue)? getRole(this.roleId, store, Models) : null;
       },
       get dtUTC() {
-        let dt = moment.utc(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        dt = moment.utc(this.createdAt).format();
         return dt;
       },
       get dtLocal() {
-        let dt = moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        dt = moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        return dt;
+      },
+      get dtUpdatedAtLocal() {
+        dt = moment(this.updatedAt).format('YYYY-MM-DD HH:mm:ss');
         return dt;
       },
     };

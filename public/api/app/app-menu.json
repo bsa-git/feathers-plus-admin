@@ -23,6 +23,7 @@
     "title": "Chat",
     "group": "chat",
     "icon": "mdi-chat",
+    "badge": true,
     "name": "chat",
     "alias": "chat",
     "to": "/chat",

@@ -14,6 +14,7 @@
       :app-menu="appMenu"
       :user="user"
       :drawer="navLeft"
+      :badge-chat="10"
       v-on:onNavLeft="modelNavLeft"
     ></app-left-drawer>
     <!-- Page content -->

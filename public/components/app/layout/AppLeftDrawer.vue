@@ -35,7 +35,18 @@
                       no-action="no-action"
         >
           <v-list-item slot="activator" ripple="ripple">
-            <v-list-item-content>
+            <v-badge v-if="item.badge"
+                     :currentItemName="currentItemName = item.name"
+                     :content="getBadgeValue"
+                     :value="!!getBadgeValue"
+                     color="red"
+                     inline
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-badge>
+            <v-list-item-content v-else>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -98,7 +109,18 @@
           <v-list-item-action v-if="item.icon">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
-          <v-list-item-content>
+          <v-badge v-if="item.badge"
+                   :currentItemName="currentItemName = item.name"
+                   :content="getBadgeValue"
+                   :value="!!getBadgeValue"
+                   color="red"
+                   inline
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-badge>
+          <v-list-item-content v-else>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action v-if="item.subAction">
@@ -121,10 +143,15 @@
       locale: String,
       appMenu: Array,
       user: Object,
-      drawer: Boolean
+      drawer: Boolean,
+      badgeChat: {
+        type: Number,
+        default: 0
+      },
     },
     data: function () {
       return {
+        currentItemName: '',
         mini: false,
         scrollSettings: {
           maxScrollbarLength: 160
@@ -167,6 +194,13 @@
         });
         return this.sortAppMenu(menu);
       },
+      getBadgeValue() {
+        let result = false;
+        if(this.currentItemName === 'chat'){
+          result = this.badgeChat;
+        }
+        return result;
+      }
     },
     methods: {
       sortAppMenu: function (menu) {

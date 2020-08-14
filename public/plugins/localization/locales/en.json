@@ -453,9 +453,15 @@
     "teams": "Teams",
     "noPosts": "No Posts",
     "typeMessage": "Type message here",
+    "editMessage": "Edit message",
     "sendMsg": "Send message",
     "moreDetails": "More details...",
-    "goToContacts": "Contacts..."
+    "goToContacts": "Contacts...",
+    "remove": "Remove",
+    "edit": "Edit",
+    "created": "Created",
+    "deleted": "Deleted",
+    "changed": "Changed"
   },
   "chat_contacts": {
     "title": "Chat Contacts",

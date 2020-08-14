@@ -20,8 +20,6 @@
             <div  class="d-flex justify-center">
               <v-chip
                 class="ma-2"
-                color="orange"
-                text-color="white"
                 small
               >
                 {{ item.dtDate }}
@@ -37,6 +35,8 @@
             <msg-post
               :item="item"
               v-on:onClickShowContact="onShowContact"
+              v-on:onClickRemoveMsg="onRemoveMsg"
+              v-on:onClickEditMsg="onEditMsg"
             ></msg-post>
           </flex-box>
         </div>
@@ -99,6 +99,12 @@
       },
       onShowContact: function (ownerId) {
         this.$emit('onShowContact', ownerId);
+      },
+      onRemoveMsg: function (msgId) {
+        this.$emit('onRemoveMsg', msgId);
+      },
+      onEditMsg: function (msgId) {
+        this.$emit('onEditMsg', msgId);
       },
     }
   }
