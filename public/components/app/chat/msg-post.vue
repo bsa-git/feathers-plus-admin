@@ -4,7 +4,6 @@
     :color=" theme.dark? 'grey darken-1' : 'grey lighten-4'"
     :outlined="true"
   >
-    <!-- secondary darken-2 dark -->
     <template v-slot:system-bar>
       <v-system-bar
         :color="theme.dark? 'grey darken-3' : 'grey lighten-1'"

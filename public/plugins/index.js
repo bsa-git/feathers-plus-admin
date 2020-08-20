@@ -25,8 +25,7 @@ export default async (context, inject) => {
   // Set Vue plugins
   vueI18n(context);
   veeValidate(context);
-  // Check auth
-  await context.store.dispatch('checkAuth');
+
   // Set store
   syncStore.setThemeDark(context);
   syncStore.setThemePrimary(context);
@@ -34,4 +33,7 @@ export default async (context, inject) => {
   syncStore.setNoticesCheckAt(context);
   syncStore.setChatCheckAt(context);
   syncStore.setChatSelectedItem(context);
+
+  // Check auth
+  await context.store.dispatch('checkAuth');
 };

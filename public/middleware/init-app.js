@@ -17,7 +17,7 @@ export default async function (context) {
 
     // Create auth client
     const authClient = new AuthClient(store);
-    if(isDebug) debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${authClient.isAuth}; <<myRole>>: ${authClient.getMyRole? authClient.getMyRole : 'No'}`);
+    if(isDebug) debug(`Start on ${process.server ? 'server' : 'client'}; <<Path>>: ${route.path} <<isAuth>>: ${authClient.isAuth}; <<myRole>>: ${authClient.getMyRole? authClient.getMyRole : 'It\'s not env. role'}`);
     if(isLog) debug('<<user>>:', authClient.user);
 
     // Check auth access for route.path

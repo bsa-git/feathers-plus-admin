@@ -140,7 +140,7 @@
   import ConfirmDialog from '~/components/dialogs/ConfirmDialog';
   import SaveDialog from '~/components/dialogs/SaveDialog';
   import AppPageHeader from '~/components/app/layout/AppPageHeader';
-  import ServiceHelper from '~/plugins/service-helpers/service-client.class';
+//  import ServiceClient from '~/plugins/service-helpers/service-client.class';
   import FlexBoxCard from '~/components/widgets/containers/flex-box-card';
   import FlexBoxList from '~/components/widgets/containers/flex-box-list';
   import MsgUserList from '~/components/app/chat/msg-user-list';
@@ -176,11 +176,11 @@
         roleSelected: -1,
         teamSelected: -1,
         showUserList: true,
-        sh: null,
         msgId: null,
         editedItem: {
           msg: '',
         },
+        srv: null,
       }
     },
     head() {
@@ -192,7 +192,7 @@
       }
     },
     created: function () {
-      this.sh = new ServiceHelper(this.$store);
+      this.srv = new this.$Service(this.$store);
       this.saveLogMessage = createLogMessage(this.$store);
       this.initChat();
     },
@@ -212,9 +212,13 @@
           }
         }
         if(oldVal > -1){
-          const user = this.users[oldVal];
-          const msgInfo = this.getMsgInfo('user', user.id, true);
-          user.msgInfo = Object.assign({}, msgInfo);
+          if(this.user){
+            const user = this.users[oldVal];
+            const messages = this.messages.filter(msg => this.srv.isUserChatMsg(user.id, msg));
+            const dtCheckAt = this.srv.getChatDTCheckAt('user', user.id, true);
+            const msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            user.msgInfo = Object.assign({}, msgInfo);
+          }
         }
       },
       roleSelected(val, oldVal) {
@@ -232,9 +236,13 @@
           }
         }
         if(oldVal > -1){
-          const role = this.roles[oldVal];
-          const msgInfo = this.getMsgInfo('role', role.id, true);
-          role.msgInfo = msgInfo;
+          if(this.user){
+            const role = this.roles[oldVal];
+            const messages = this.messages.filter(msg => this.srv.isRoleChatMsg(role.id, msg));
+            const dtCheckAt = this.srv.getChatDTCheckAt('role', role.id, true);
+            const msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            role.msgInfo = msgInfo;
+          }
         }
       },
       teamSelected(val, oldVal) {
@@ -252,9 +260,13 @@
           }
         }
         if(oldVal > -1){
-          const team = this.teams[oldVal];
-          const msgInfo = this.getMsgInfo('team', team.id, true);
-          team.msgInfo = msgInfo;
+          if(this.user){
+            const team = this.teams[oldVal];
+            const messages = this.messages.filter(msg => this.srv.isTeamChatMsg(team.id, msg));
+            const dtCheckAt = this.srv.getChatDTCheckAt('team', team.id, true);
+            const msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            team.msgInfo = msgInfo;
+          }
         }
       },
       saveDialog(val) {
@@ -274,23 +286,21 @@
         isMyTeam: 'isMyTeam'
       }),
       getStoreUsers() {
-        const {User} = this.$FeathersVuex;
-        return User.findInStore({query: {$sort: {fullName: 1}}}).data;
+        return this.srv.findInStore('users', {query: {$sort: {fullName: 1}}});
       },
       users() {
         const data = [];
         let msgInfo = {};
         if(this.user){
-          const idField = this.$store.state.users.idField;
-          const authUserId = this.user[idField];
-          let users = this.getStoreUsers;
-          users = users.filter(this.isFilterUser);
+          const users = this.srv.getChatUsers();
+          const idField = this.srv.getServiceIdField('users');
           users.forEach(user => {
             msgInfo = {};
             const userId = user[idField];
-            const messages = this.messages.filter(msg => this.isUserMsg(userId, msg));
+            const messages = this.srv.getChatMessages().filter(msg => this.srv.isUserChatMsg(userId, msg));
             if(messages.length){
-              msgInfo = this.getMsgInfo('user', userId);
+              const dtCheckAt = this.srv.getChatDTCheckAt('user', userId);
+              msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
             }
             // Get user
             let item = {
@@ -315,16 +325,15 @@
         const data = [];
         let msgInfo = {};
         if(this.user){
-          const idField = this.$store.state.roles.idField;
-          const {Role} = this.$FeathersVuex;
-          let roles = Role.findInStore({query: {$sort: {name: 1}}}).data;
-          roles = roles.filter(this.isFilterRole);
+          const roles = this.srv.getChatRoles();
+          const idField = this.srv.getServiceIdField('roles');
           roles.forEach(role => {
             msgInfo = {};
             const roleId = role[idField];
-            const messages = this.messages.filter(msg => this.isRoleMsg(roleId, msg));
+            const messages = this.srv.getChatMessages().filter(msg => this.srv.isRoleChatMsg(roleId, msg));
             if(messages.length){
-              msgInfo = this.getMsgInfo('role', roleId);
+              const dtCheckAt = this.srv.getChatDTCheckAt('role', roleId);
+              msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
             }
             // Get role
             let item = {
@@ -348,16 +357,15 @@
         const data = [];
         let msgInfo = {};
         if(this.user){
-          const idField = this.$store.state.teams.idField;
-          const {Team} = this.$FeathersVuex;
-          let teams = Team.findInStore({query: {$sort: {name: 1}}}).data;
-          teams = teams.filter(this.isFilterTeam);
+          const teams = this.srv.getChatTeams();
+          const idField = this.srv.getServiceIdField('teams');
           teams.forEach(team => {
             msgInfo = {};
             const teamId = team[idField];
-            const messages = this.messages.filter(msg => this.isTeamMsg(teamId, msg));
+            const messages = this.srv.getChatMessages().filter(msg => this.srv.isTeamChatMsg(teamId, msg));
             if(messages.length){
-              msgInfo = this.getMsgInfo('team', teamId);
+              const dtCheckAt = this.srv.getChatDTCheckAt('team', teamId);
+              msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
             }
             // Get team
             let item = {
@@ -380,10 +388,8 @@
       messages() {
         const data = [];
         if(this.user){
-          const idField = this.$store.state['chat-messages'].idField;
-          const {ChatMessage} = this.$FeathersVuex;
-          let messages = ChatMessage.findInStore({query: {$sort: {createdAt: 1}}}).data;
-          messages = messages.filter(this.isFilterMsg);
+          const idField = this.srv.getServiceIdField('chat-messages');
+          const messages = this.srv.getChatMessages();
           messages.forEach(msg => {
             const msgId = msg[idField];
             // Get msg
@@ -409,38 +415,81 @@
         return data
       },
       getSelectedMessages() {
-        let messages = [], user, role, team, msgInfo;
+        let messages = [], user, role, team, msgInfo, dtCheckAt;
+        let goToPost = false, lastPost = null;
         if (this.getSelectedUser) {
           user = this.getSelectedUser;
-          messages = this.messages.filter(msg => this.isUserMsg(user.id, msg));
+          messages = this.messages.filter(msg => this.srv.isUserChatMsg(user.id, msg));
           if(messages.length){
-            msgInfo = this.getMsgInfo('user', user.id);
+            // Get msgInfo
+            dtCheckAt = this.srv.getChatDTCheckAt('user', user.id);
+            msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            // Clear goToPost prop from msg
+            this.clearGoToPostMsg(messages);
+            // Set goToPost prop for last msg
             messages = messages.map((msg, index) => {
               msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              if(!goToPost && msg.isNew){
+                goToPost = true;
+                msg.goToPost = true
+              }
               return msg;
-            })
+            });
+            if(messages.findIndex(msg => msg.goToPost) === -1){
+              lastPost = messages[messages.length - 1];
+              lastPost.goToPost = true;
+            }
+            goToPost = false;
           }
         }
         if (this.getSelectedRole) {
           role = this.getSelectedRole;
-          messages = this.messages.filter(msg => this.isRoleMsg(role.id, msg));
+          messages = this.messages.filter(msg => this.srv.isRoleChatMsg(role.id, msg));
           if(messages.length){
-            msgInfo = this.getMsgInfo('role', role.id);
+            // Get msgInfo
+            dtCheckAt = this.srv.getChatDTCheckAt('role', role.id);
+            msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            // Clear goToPost prop from msg
+            this.clearGoToPostMsg(messages);
+            // Set goToPost prop for last msg
             messages = messages.map((msg, index) => {
               msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              if(msg.isNew && !goToPost){
+                goToPost = true;
+                msg.goToPost = true
+              }
               return msg;
-            })
+            });
+            if(messages.findIndex(msg => msg.goToPost) === -1){
+              lastPost = messages[messages.length - 1];
+              lastPost.goToPost = true;
+            }
+            goToPost = false;
           }
         }
         if (this.getSelectedTeam) {
           team = this.getSelectedTeam;
-          messages = this.messages.filter(msg => this.isTeamMsg(team.id, msg));
+          messages = this.messages.filter(msg => this.srv.isTeamChatMsg(team.id, msg));
           if(messages.length){
-            msgInfo = this.getMsgInfo('team', team.id);
+            // Get msgInfo
+            dtCheckAt = this.srv.getChatDTCheckAt('team', team.id);
+            msgInfo = this.srv.getChatMsgInfo(messages, dtCheckAt);
+            // Clear goToPost prop from msg
+            this.clearGoToPostMsg(messages);
+            // Set goToPost prop for last msg
             messages = messages.map((msg, index) => {
               msg.isNew =  msgInfo.countMsg? ((messages.length - index) <= msgInfo.countMsg) : false;
+              if(msg.isNew && !goToPost){
+                goToPost = true;
+                msg.goToPost = true
+              }
               return msg;
-            })
+            });
+            if(messages.findIndex(msg => msg.goToPost) === -1){
+              lastPost = messages[messages.length - 1];
+              lastPost.goToPost = true;
+            }
+            goToPost = false;
           }
         }
         // Set dtDate field for msg
@@ -476,122 +525,13 @@
         this.roleSelected = this.chat.roleSelected;
         this.teamSelected = this.chat.teamSelected;
       },
-      isUserMsg: function (userId, msg) {
-        let result = false;
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        const msgUserId = msg.user? msg.userId : null;
-        // I wrote to the selected user || The selected user wrote to me
-        if(msgUserId){
-          result = ((userId === msgUserId) && (authUserId === msg.ownerId)) ||
-            ((userId === msg.ownerId) && (authUserId === msgUserId));
-        }
-        return result
-      },
-      isTeamMsg: function (teamId, msg) {
-        let result = false;
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        const msgTeamId = msg.team? msg.teamId : null;
-        // I wrote to the selected team || I am a member of the selected team
-        if(teamId === msgTeamId){
-          result = this.isMyTeam(authUserId, teamId) || (authUserId === msg.ownerId)
-        }
-        return result
-      },
-      isRoleMsg: function (roleId, msg) {
-        let result = false;
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        const msgRoleId = msg.role? msg.roleId : null;
-        // I wrote to the selected role || This is my role
-        if(roleId === msgRoleId){
-          result = (this.user.roleId === roleId) || (authUserId === msg.ownerId)
-        }
-        return result
-      },
-      isFilterRole: function (role) {
-        const idField = this.$store.state.roles.idField;
-        const isRole = (this.user.roleAlias === 'isAdministrator')? true : ( role[idField] === this.user.roleId);
-        return (role.alias === 'isAdministrator') || isRole;
-      },
-      isFilterTeam: function (team) {
-        const idTeamField = this.$store.state.teams.idField;
-        const idUserField = this.$store.state.users.idField;
-        const isTeam = (this.user.roleAlias === 'isAdministrator')? true : this.isMyTeam(this.user[idUserField], team[idTeamField]);
-        return isTeam;
-      },
-      isFilterUser: function (user) {
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        const userId = user[idField];
-        const msgOwnerIds = this.messages.map(msg => msg.ownerId);
-        const msgUserIds = this.messages.filter(msg => !!msg.user).map(msg => msg.userId);
-        const isMsgOwner = (msgOwnerIds.findIndex(id => id === userId) > -1);
-        const isMsgUser = (msgUserIds.findIndex(id => id === userId) > -1);
-        return (userId !== authUserId) && (isMsgOwner || isMsgUser);
-      },
-      isFilterMsg: function (msg) {
-        const idField = this.$store.state.users.idField;
-        const authUserId = this.user[idField];
-        const isMsgOwner = (msg.ownerId === authUserId);
-        const isMsgUser = (msg.userId === authUserId);
-        const isMsgRole = (msg.roleId === this.user.roleId);
-        const isMsgTeam = this.isMyTeam(authUserId, msg.teamId);
-        return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
-      },
-      getMsgInfo(name, id, changeSel = false) {
-        let msgInfo = {};
-        let messages = [];
-        let _item, dtCheckAt, items = [], isStateChatCheckAt = false;
-
-        // Get items from stateChatCheckAt
-        dtCheckAt = moment.utc(0).format();
-        let stateChatCheckAt = this.chat.checkAt;
-        if (stateChatCheckAt) {
-          items = JSON.parse(stateChatCheckAt);
-        }
-
-        // Get dtCheckAt from stateChatCheckAt
-        if(items.length){
-          isStateChatCheckAt = items.filter(item => (item.name === name) && (item.id === id)).length > 0;
-        }
-        if(isStateChatCheckAt){
-          _item = items.filter(item => (item.name === name) && (item.id === id))[0];
-          if(changeSel){
-            _item.checkAt = moment.utc().format();
-            // Set state chat checkat
-            this.setChatCheckat(items);
+      clearGoToPostMsg: function (messages) {
+        messages.map(msg => {
+          if(msg.goToPost){
+            delete msg.goToPost;
           }
-          dtCheckAt = _item.checkAt;
-        } else {
-          _item = {name, id, checkAt: dtCheckAt};
-          items.push(_item);
-          // Set state chat checkat
-          this.setChatCheckat(items);
-        }
-
-
-        if(name === 'user'){
-          messages = this.messages.filter(msg => this.isUserMsg(id, msg));
-        }
-        if(name === 'role'){
-          messages = this.messages.filter(msg => this.isRoleMsg(id, msg));
-        }
-        if(name === 'team'){
-          messages = this.messages.filter(msg => this.isTeamMsg(id, msg));
-        }
-
-        msgInfo.countAll = messages.length;
-
-        messages = messages.filter(msg => msg.dtUTC >= dtCheckAt);
-
-        // Get msgInfo
-        msgInfo.timeLabel = messages.length ? moment(messages[0].dt).fromNow() : '';
-        msgInfo.countMsg = messages.length ? messages.length : 0;
-        msgInfo.lastMsg = messages.length ? messages[0].msg : '';
-
-        return  msgInfo;
+          return msg
+        })
       },
       modelUserSelected: function (newValue) {
         this.userSelected = newValue
@@ -677,8 +617,10 @@
           this.confirmDialog = false;
           const {ChatMessage} = this.$FeathersVuex;
           const idField = this.$store.state['chat-messages'].idField;
-          const msg = new ChatMessage({[idField]: this.msgId, msg: ''});
-          await msg.save();
+//          const msg = new ChatMessage({[idField]: this.msgId, msg: ''});
+//          await msg.save();
+          const msg = new ChatMessage({[idField]: this.msgId});
+          await msg.remove();
           this.msgId = null;
           this.showSuccess(`${this.$t('management.success')}!`);
         } catch (error) {

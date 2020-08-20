@@ -1,10 +1,10 @@
 // const loConcat = require('lodash/concat');
 import fakeData from '~~/seeds/fake-data.json';
-import typeOf from '~/plugins/lib/type-of';
-// import {use} from "vee-validate/dist/vee-validate.minimal.esm";
+// import typeOf from '~/plugins/lib/type-of';
+import moment from 'moment';
 const loKebabCase = require('lodash/kebabCase');
 const loMerge = require('lodash/merge');
-const errors = require('@feathersjs/errors');
+// const errors = require('@feathersjs/errors');
 const debug = require('debug')('app:plugins.service-client.class');
 
 const isLog = false;
@@ -49,25 +49,6 @@ class Service {
     const paths = Object.keys(fakeData).map(key => loKebabCase(key).toLowerCase());
     if (isDebug) debug('getServicePaths:', paths);
     return paths;
-  }
-
-  /**
-   * Get id field
-   * @param items {Array || Object}
-   * @return {string}
-   */
-  static getIdField(items) {
-    let idField = '';
-    if (Array.isArray(items) && items.length) {
-      idField = 'id' in items[0] ? 'id' : '_id';
-    }
-    if (typeOf.isObject(items) && Object.keys(items).length) {
-      idField = 'id' in items ? 'id' : '_id';
-    }
-    if(!idField){
-      throw new errors.GeneralError('Items argument is not an array or object');
-    }
-    return idField ;
   }
 
   /**
@@ -118,7 +99,7 @@ class Service {
    */
   getAuthUserId() {
     const user = this.getAuthUser();
-    const idField = user? Service.getIdField(user) : '';
+    const idField = user? this.getServiceIdField('users') : '';
     return idField? user[idField] : '';
   }
 
@@ -159,6 +140,7 @@ class Service {
       paths.forEach(path => this.findAll(path, {query: {}}));
       // Find all chat messages for admin
       await this.findChatMessagesForAdmin(user);
+      this.initStateChatCheckAt();
     }
   }
 
@@ -219,6 +201,7 @@ class Service {
       }
       // Find chat messages for user
       await this.findChatMessagesForUser(user);
+      this.initStateChatCheckAt();
     }
   }
 
@@ -259,7 +242,8 @@ class Service {
    */
   async findChatMessagesForRole(roleId) {
     const idUserField = this.getServiceIdField('users');
-    const authUserId = this.user[idUserField];
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idUserField];
     // Find chat messages
     if(!this.getFromStore('roles', roleId)){
       await this.get('roles', roleId);
@@ -290,7 +274,8 @@ class Service {
    */
   async findChatMessagesForTeam(teamId) {
     const idUserField = this.getServiceIdField('users');
-    const authUserId = this.user[idUserField];
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idUserField];
     // Find chat messages
     if(!this.getFromStore('teams', teamId)){
       await this.get('teams', teamId);
@@ -312,6 +297,309 @@ class Service {
         }
       }
     }
+  }
+
+  /**
+   * Init state chat checkAt
+   */
+  initStateChatCheckAt(){
+    let idField = '_id';
+
+    const authUser = this.getAuthUser();
+    if(!authUser) return;
+
+    // Get chat users
+    const users = this.getChatUsers();
+    idField = this.getServiceIdField('users');
+    users.forEach(user => {
+      const userId = user[idField];
+      this.getChatDTCheckAt('user', userId);
+    });
+    // Get chat roles
+    const roles = this.getChatRoles();
+    idField = this.getServiceIdField('roles');
+    roles.forEach(role => {
+      const roleId = role[idField];
+      this.getChatDTCheckAt('role', roleId);
+    });
+    // Get chat teams
+    const teams = this.getChatTeams();
+    idField = this.getServiceIdField('teams');
+    teams.forEach(team => {
+      const teamId = team[idField];
+      this.getChatDTCheckAt('team', teamId);
+    });
+  }
+
+  /**
+   * Get new chat messages
+   */
+  getNewChatMessages(){
+    let idField = '_id', count = 0, dtCheckAt = '', messages = [];
+    let msgInfo = {};
+
+    const authUser = this.getAuthUser();
+    if(!authUser) return count;
+
+    // Get chat users
+    const users = this.getChatUsers();
+    users.forEach(user => {
+      idField = this.state.users.idField;
+      const userId = user[idField];
+      messages = this.getChatMessages().filter(msg => this.isUserChatMsg(userId, msg));
+      if(messages.length){
+        dtCheckAt = this.getChatDTCheckAt('user', userId);
+        msgInfo = this.getChatMsgInfo(messages, dtCheckAt);
+        if(msgInfo.countMsg){
+          count += msgInfo.countMsg;
+        }
+      }
+    });
+    // Get chat roles
+    const roles = this.getChatRoles();
+    roles.forEach(role => {
+      idField = this.state.roles.idField;
+      const roleId = role[idField];
+      messages = this.getChatMessages().filter(msg => this.isRoleChatMsg(roleId, msg));
+      if(messages.length){
+        dtCheckAt = this.getChatDTCheckAt('role', roleId);
+        msgInfo = this.getChatMsgInfo(messages, dtCheckAt);
+        if(msgInfo.countMsg){
+          count += msgInfo.countMsg;
+        }
+      }
+    });
+    // Get chat teams
+    const teams = this.getChatTeams();
+    teams.forEach(team => {
+      const idField = this.state.teams.idField;
+      const teamId = team[idField];
+      messages = this.getChatMessages().filter(msg => this.isTeamChatMsg(teamId, msg));
+      if(messages.length){
+        dtCheckAt = this.getChatDTCheckAt('team', teamId);
+        msgInfo = this.getChatMsgInfo(messages, dtCheckAt);
+        if(msgInfo.countMsg){
+          count += msgInfo.countMsg;
+        }
+      }
+    });
+    return count;
+  }
+
+  /**
+   * Get chat users
+   * @return {Array}
+   */
+  getChatUsers(){
+    let users = this.findInStore('users', {query: {$sort: {fullName: 1}}});
+    users = users.filter(user => this.isChatFilterUser(user));
+    return users;
+  }
+
+  /**
+   * Get chat roles
+   * @return {Array}
+   */
+  getChatRoles(){
+    let roles = this.findInStore('roles', {query: {$sort: {name: 1}}});
+    roles = roles.filter(role => this.isChatFilterRole(role));
+    return roles;
+  }
+
+  /**
+   * Get chat teams
+   * @return {Array}
+   */
+  getChatTeams(){
+    let teams = this.findInStore('teams', {query: {$sort: {name: 1}}});
+    teams = teams.filter(team => this.isChatFilterTeam(team));
+    return teams;
+  }
+
+  /**
+   * Get chat messages
+   * @return {Array}
+   */
+  getChatMessages(){
+    let messages = this.findInStore('chat-messages', {query: {$sort: {createdAt: 1}}});
+    messages = messages.filter(msg => this.isChatFilterMsg(msg));
+    return messages;
+  }
+
+  /**
+   * Is user chat msg filter
+   * @param userId
+   * @param msg {Object}
+   * @return {boolean}
+   */
+  isUserChatMsg(userId, msg) {
+    let result = false;
+    const idField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idField];
+    const msgUserId = msg.user? msg.userId : null;
+    // I wrote to the selected user || The selected user wrote to me
+    if(msgUserId){
+      result = ((userId === msgUserId) && (authUserId === msg.ownerId)) ||
+        ((userId === msg.ownerId) && (authUserId === msgUserId));
+    }
+    return result;
+  }
+
+  /**
+   * Is team chat msg filter
+   * @param teamId
+   * @param msg {Object}
+   * @return {boolean}
+   */
+  isTeamChatMsg(teamId, msg) {
+    let result = false;
+    const idField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idField];
+    const msgTeamId = msg.team? msg.teamId : null;
+    // I wrote to the selected team || I am a member of the selected team
+    if(teamId === msgTeamId){
+      result = this.getters.isMyTeam(authUserId, teamId) || (authUserId === msg.ownerId);
+    }
+    return result;
+  }
+
+  /**
+   * Is role chat msg filter
+   * @param roleId
+   * @param msg {Object}
+   * @return {boolean}
+   */
+  isRoleChatMsg(roleId, msg) {
+    let result = false;
+    const idField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idField];
+    const msgRoleId = msg.role? msg.roleId : null;
+    // I wrote to the selected role || This is my role
+    if(roleId === msgRoleId){
+      result = (authUser.roleId === roleId) || (authUserId === msg.ownerId);
+    }
+    return result;
+  }
+
+  /**
+   * Is chat filter role
+   * @param role {Object}
+   * @return {boolean}
+   */
+  isChatFilterRole(role) {
+    const idField = this.state.roles.idField;
+    const authUser = this.getAuthUser();
+    const isRole = (authUser.roleAlias === 'isAdministrator')? true : ( role[idField] === authUser.roleId);
+    return (role.alias === 'isAdministrator') || isRole;
+  }
+
+  /**
+   * Is chat filter team
+   * @param team {Object}
+   * @return {boolean}
+   */
+  isChatFilterTeam(team) {
+    const idTeamField = this.state.teams.idField;
+    const idUserField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const isTeam = (authUser.roleAlias === 'isAdministrator')? true : this.getters.isMyTeam(authUser[idUserField], team[idTeamField]);
+    return isTeam;
+  }
+
+  /**
+   * Is chat filter user
+   * @param user {Object}
+   * @return {boolean}
+   */
+  isChatFilterUser(user) {
+    const idField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idField];
+    const userId = user[idField];
+    const messages = this.getChatMessages();
+    const msgOwnerIds = messages.map(msg => msg.ownerId);
+    const msgUserIds = messages.filter(msg => !!msg.user).map(msg => msg.userId);
+    const isMsgOwner = (msgOwnerIds.findIndex(id => id === userId) > -1);
+    const isMsgUser = (msgUserIds.findIndex(id => id === userId) > -1);
+    return (userId !== authUserId) && (isMsgOwner || isMsgUser);
+  }
+
+  /**
+   * Is chat filter msg
+   * @param msg {Object}
+   * @return {boolean|*}
+   */
+  isChatFilterMsg(msg) {
+    const idField = this.state.users.idField;
+    const authUser = this.getAuthUser();
+    const authUserId = authUser[idField];
+    const isMsgOwner = (msg.ownerId === authUserId);
+    const isMsgUser = (msg.userId === authUserId);
+    const isMsgRole = (msg.roleId === authUser.roleId);
+    const isMsgTeam = this.getters.isMyTeam(authUserId, msg.teamId);
+    return (isMsgOwner || isMsgUser || isMsgRole || isMsgTeam);
+  }
+
+  /**
+   * Get chat dateTime checkAt
+   * @param name {String}
+   * @param id
+   * @param commitCheckAt {Boolean}
+   * @return {String}
+   */
+  getChatDTCheckAt(name, id, commitCheckAt = false){
+    let _item, items = [], isStateChatCheckAt = false;
+    let dtCheckAt = moment.utc(0).format();
+
+    // Get items from stateChatCheckAt
+    let stateChatCheckAt = this.getters.getChat.checkAt;
+    if (stateChatCheckAt) {
+      items = JSON.parse(stateChatCheckAt);
+    }
+
+    // Get dtCheckAt from stateChatCheckAt
+    if(items.length){
+      isStateChatCheckAt = items.filter(item => (item.name === name) && (item.id === id)).length > 0;
+    }
+    if(isStateChatCheckAt){
+      _item = items.filter(item => (item.name === name) && (item.id === id))[0];
+      if(commitCheckAt){
+        _item.checkAt = moment.utc().format();
+        // Set state chat checkat
+        this.commit('SET_CHAT_CHECKAT', items);
+      }
+      dtCheckAt = _item.checkAt;
+    } else {
+      _item = {name, id, checkAt: dtCheckAt};
+      items.push(_item);
+      // Set state chat checkat
+      this.commit('SET_CHAT_CHECKAT', items);
+    }
+    return dtCheckAt;
+  }
+
+  /**
+   * Get chat msg info
+   * @param messages {Array}
+   * @param dtCheckAt {String}
+   * @return {Object}
+   */
+  getChatMsgInfo(messages, dtCheckAt) {
+    let msgInfo = {};
+    let _messages = [];
+    msgInfo.countAll = messages.length;
+    // Filter messages
+    _messages = messages.filter(msg => msg.dtUTC >= dtCheckAt);
+
+    // Get msgInfo
+    msgInfo.timeLabel = _messages.length ? moment(_messages[0].dt).fromNow() : '';
+    msgInfo.countMsg = _messages.length ? _messages.length : 0;
+    msgInfo.lastMsg = _messages.length ? _messages[0].msg : '';
+
+    return  msgInfo;
   }
 
   //==============================================================================================//

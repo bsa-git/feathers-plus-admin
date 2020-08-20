@@ -13,7 +13,7 @@ const isDebug = false;
  */
 export default function createLogMessage(store) {
   return async (name = '', params = {}) => {
-    let msg, data, selIds, ownerId, userId, result;
+    let msg, data, selIds, ownerId, userId, result = null;
     if(isDebug) debug('name:', name, 'params:', params);
 
     const service = new Service(store);
@@ -27,11 +27,12 @@ export default function createLogMessage(store) {
     if(isLog) debug('logData:', logData);
 
     // Get idField for user
-    const idField = Service.getIdField(service.user);
+    const idField = service.getServiceIdField('users');
     // Get ownerId/userId
-    if(service.user){
-      ownerId = service.user[idField];
-      userId = service.user[idField];
+    const authUser = service.getAuthUser();
+    if(authUser){
+      ownerId = authUser[idField];
+      userId = authUser[idField];
     }else {
       ownerId = service.getters.getDbNullIdValue;
       userId = service.getters.getDbNullIdValue;
@@ -52,8 +53,8 @@ export default function createLogMessage(store) {
       }
       msg = {
         selected: selIds,
-        email: service.user['email'],
-        fullName: `${service.user['firstName']} ${service.user['lastName']}`
+        email: authUser['email'],
+        fullName: `${authUser['firstName']} ${authUser['lastName']}`
       };
       data = {
         gr: logData.gr,

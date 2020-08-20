@@ -14,7 +14,7 @@
       :app-menu="appMenu"
       :user="user"
       :drawer="navLeft"
-      :badge-chat="10"
+      :badge-chat="getNewChatMessages"
       v-on:onNavLeft="modelNavLeft"
     ></app-left-drawer>
     <!-- Page content -->
@@ -41,7 +41,6 @@
 <script>
   import {mapGetters, mapActions, mapMutations} from 'vuex';
   import AuthClient from '~/plugins/auth/auth-client.class';
-  import ServiceClient from '~/plugins/service-helpers/service-client.class';
   import appMenu from '~/api/app/app-menu.json';
   import syncStore from '~/plugins/lib/sync-store';
   import AppToolbar from '~/components/app/layout/AppToolbar';
@@ -115,6 +114,14 @@
         user: 'getUser',
         fullPath: 'getFullPath'
       }),
+      getNewChatMessages: function() {
+        let count = 0;
+        if(this.user){
+          const srv = new this.$Service(this.$store);
+          count = srv.getNewChatMessages();
+        }
+        return count;
+      }
     },
     methods: {
       ...mapActions(['logout']),
@@ -136,7 +143,6 @@
       },
       checkAccessToRoutePath() {
         const authClient = new AuthClient(this.$store);
-        const serviceClient = new ServiceClient(this.$store);
         // Check auth access for route.path
         if (!authClient.isAccess(this.$route.path)) {
           if (isDebug) debug(`This path '${this.$route.path}' is not available. Not enough rights.`);
@@ -153,17 +159,21 @@
         const users = feathersClient.service('users');
 
         const onCreatedUserTeams = async (userTeam) => {
-          const serviceClient = new ServiceClient(this.$store);
-          await serviceClient.findChatMessagesForTeam(userTeam.teamId);
+          if(this.user){
+            const srv = new this.$Service(this.$store);
+            await srv.findChatMessagesForTeam(userTeam.teamId);
+          }
         };
 
         const onCreatedChatMessage = async (msg) => {
-          const serviceClient = new ServiceClient(this.$store);
-          const idUserField = serviceClient.getServiceIdField('users');
-          const authUserId = this.user[idUserField];
-          const msgOwnerId = msg['ownerId'];
-          if(msgOwnerId !== authUserId && !serviceClient.getFromStore('users', msgOwnerId)){
-            await serviceClient.getUserForUserId(msgOwnerId);
+          if(this.user){
+            const srv = new this.$Service(this.$store);
+            const idUserField = srv.getServiceIdField('users');
+            const authUserId = this.user[idUserField];
+            const msgOwnerId = msg['ownerId'];
+            if(msgOwnerId !== authUserId && !srv.getFromStore('users', msgOwnerId)){
+              await srv.getUserForUserId(msgOwnerId);
+            }
           }
         };
 

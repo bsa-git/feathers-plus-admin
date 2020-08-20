@@ -1,4 +1,5 @@
 import cookies from 'browser-cookies';
+import goTo from 'vuetify/es5/services/goto';
 
 const debug = require('debug')('app:plugins.util');
 const isDebug = true;
@@ -41,6 +42,21 @@ const waitTimeout = function (fn, cb = null, delay = 0) {
       clearInterval(timerId);
     }
   }, _delay);
+};
+
+/**
+ * Go To Scroll
+ * Programmatic Scrolling
+ * @param to {string | number | HTMLElement | VueComponent}
+ * @param params {Object}
+ */
+const goToScroll = function (to, params = {}) {
+  let _params = {
+    duration: 500,
+    offset: 0,
+    easing: 'easeInOutCubic',
+  };
+  goTo(to, Object.assign(_params, params));
 };
 
 /**
@@ -414,6 +430,7 @@ export default {
   delayTime,
   pause,
   waitTimeout,
+  goToScroll,
   stripSlashes,
   stripSpecific,
   getCapitalizeStr,

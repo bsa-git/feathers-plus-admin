@@ -13,7 +13,7 @@
       >
         {{ $t('chat_messages.noPosts') }}
       </div>
-      <template v-else v-for="item in items">
+      <template v-else v-for="item in getItems">
         <!-- dtDate -->
         <div>
           <div v-if="item.dtDate">
@@ -33,6 +33,7 @@
             :justify="item.isOwnerAuth? 'end' : 'start'"
           >
             <msg-post
+              :ref="item.goToPost? 'goToPost' : ''"
               :item="item"
               v-on:onClickShowContact="onShowContact"
               v-on:onClickRemoveMsg="onRemoveMsg"
@@ -80,13 +81,31 @@
       }
     },
     created: function () {
+    },
+    mounted: function () {
+      this.$nextTick(function () {
 
+      })
     },
     computed: {
       ...mapGetters({
         theme: 'getTheme',
       }),
-
+      getItems() {
+        const self = this;
+        this.items.forEach(item => {
+          if(item.goToPost){
+            debug('computed.getItems:', 'Is item.goToPost!');
+            setTimeout(function() {
+              if(Array.isArray(self.$refs.goToPost) && self.$refs.goToPost.length){
+                const goToPost = self.$refs.goToPost[0];
+                self.$util.goToScroll(goToPost);// , {duration: 1000}
+              }
+            }, 500);
+          }
+        });
+        return this.items
+      }
     },
     methods: {
       modelMsgInput: function (newValue) {
