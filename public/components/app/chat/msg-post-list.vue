@@ -95,7 +95,6 @@
         const self = this;
         this.items.forEach(item => {
           if(item.goToPost){
-            debug('computed.getItems:', 'Is item.goToPost!');
             setTimeout(function() {
               if(Array.isArray(self.$refs.goToPost) && self.$refs.goToPost.length){
                 const goToPost = self.$refs.goToPost[0];

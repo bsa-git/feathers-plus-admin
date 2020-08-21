@@ -548,11 +548,11 @@
       },
       onShowContact: function (ownerId) {
         const idField = this.$store.state.users.idField;
-        const users = this.getStoreUsers;
-        const userIndex = users.findIndex(user => {
-          return  user[idField] === ownerId
+        const userIndex = this.users.findIndex(user => {
+          return  user.id === ownerId
         });
         if (isLog) debug('methods.onShowContact.userIndex:', userIndex);
+        debug('methods.onShowContact.userIndex:', userIndex);
         this.setSelectedContact(userIndex);
         this.$redirect(this.fullPath('/chat/contacts'));
       },
