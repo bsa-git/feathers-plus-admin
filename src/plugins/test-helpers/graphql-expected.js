@@ -1,12 +1,15 @@
 const {readJsonFileSync, appRoot} = require('../lib');
+const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
+const dotEnv = require('dotenv');// Loads environment variables from .env file.
 const loPick = require('lodash/pick');
+
+dotEnv.load(); // Load environment variables
 
 // Get generated fake data
 let fakeData = readJsonFileSync(`${appRoot}/seeds/fake-data.json`) || {};
 //--- Users --//
 const usersFakeData = fakeData['users'];
 const userFakeData = usersFakeData[0];
-const userFakeData2 = usersFakeData[1];
 const idFieldUser = 'id' in userFakeData ? 'id' : '_id';
 const userId = userFakeData[idFieldUser];
 //--- userProfiles --//
@@ -33,7 +36,9 @@ const chatMessageFakeData = chatMessagesFakeData[0];
 const idFieldChatMessage = 'id' in chatMessageFakeData ? 'id' : '_id';
 const chatMessageId = chatMessageFakeData[idFieldChatMessage];
 
-
+const foundNotAdminAndNotGuestRole = rolesFakeData.find(function (role) {
+  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
+});
 
 const _usersForTeam = (teamId) => {
   let teams = {};
@@ -224,17 +229,18 @@ let getChatMessage = () => {
   item.getChatMessage = {
     [idFieldChatMessage]: chatMessageId,
     msg:  chatMessageFakeData.msg,
+    role: {
+      [idFieldRole]: foundNotAdminAndNotGuestRole[idFieldRole],
+      name: foundNotAdminAndNotGuestRole.name,
+      description: foundNotAdminAndNotGuestRole.description
+    },
     team: null,
     owner: {
       [idFieldUser]: userId,
       email: userFakeData.email,
       fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
     },
-    user: {
-      [idFieldUser]: userFakeData2[idFieldUser],
-      email: userFakeData2.email,
-      fullName: `${userFakeData2.firstName} ${userFakeData2.lastName}`
-    }
+    user: null
   };
   return item;
 };
@@ -245,17 +251,18 @@ let findChatMessage = () => {
   item.findChatMessage = [{
     [idFieldChatMessage]: chatMessageId,
     msg:  chatMessageFakeData.msg,
+    role: {
+      [idFieldRole]: foundNotAdminAndNotGuestRole[idFieldRole],
+      name: foundNotAdminAndNotGuestRole.name,
+      description: foundNotAdminAndNotGuestRole.description
+    },
     team: null,
     owner: {
       [idFieldUser]: userId,
       email: userFakeData.email,
       fullName: `${userFakeData.firstName} ${userFakeData.lastName}`
     },
-    user: {
-      [idFieldUser]: userFakeData2[idFieldUser],
-      email: userFakeData2.email,
-      fullName: `${userFakeData2.firstName} ${userFakeData2.lastName}`
-    }
+    user: null
   }];
   items.push(item);
   return items;

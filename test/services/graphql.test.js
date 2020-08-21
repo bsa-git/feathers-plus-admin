@@ -115,7 +115,9 @@ describe('<<< Test services/graphql.test.js >>>', () => {
     it('Run \'getChatMessage\' request for GraphQl', async () => {
       const response = await graphql.find({query: {query: graphqlQuery['getChatMessage']}});
       if (isLog) inspector('Response for \'getChatMessage\' query:', response);
+      inspector('Response for \'getChatMessage\' query:', response);
       if (isLog) inspector('Expected for \'getChatMessage\' query:', graphqlExpected['getChatMessage']);
+      inspector('Expected for \'getChatMessage\' query:', graphqlExpected['getChatMessage']);
       assert.deepStrictEqual(response, graphqlExpected['getChatMessage']);
     });
 

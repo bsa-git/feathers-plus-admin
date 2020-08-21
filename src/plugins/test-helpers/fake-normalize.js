@@ -48,6 +48,10 @@ const foundNotAdminAndNotGuestRole = fakeDataRoles.find(function (role) {
   return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
 });
 
+const foundGuestRole = fakeDataRoles.find(function (role) {
+  return (role.name === Auth.getRoles('isGuest'));
+});
+
 const rolesUpdate = () => {
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
@@ -63,14 +67,12 @@ const rolesUpdate = () => {
 const usersUpdate = () => {
   // Set  roleId for first user
   fakeDataUsers[0]['roleId'] = fakeDataRole[idFieldRole];
+  fakeDataUsers[1]['roleId'] = foundGuestRole[idFieldRole];
   // Set profileId for users
   fakeDataUserProfiles.forEach((profile, index) => {
     fakeDataUsers[index]['profileId'] = profile[idFieldUserProfile];
   });
   // Set  roleId for last user
-  // const foundRole = fakeDataRoles.find(function (role) {
-  //   return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
-  // });
   fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
 
   Object.assign(fakeDataUsers, fakeDataUsers.map(user => {

@@ -150,6 +150,11 @@ const getChatMessage = `{
   getChatMessage(key: "${chatMessageId}") {
     ${idFieldChatMessage}
     msg
+    role{
+      ${idFieldRole}
+      name
+      description
+    }
     team{
       ${idFieldTeam}
       name
@@ -172,6 +177,11 @@ const findChatMessage = `{
   findChatMessage(query: {${idFieldChatMessage}: "${chatMessageId}"}) {
     ${idFieldChatMessage}
     msg
+    role{
+      ${idFieldRole}
+      name
+      description
+    }
     team{
       ${idFieldTeam}
       name

@@ -48,7 +48,7 @@ let moduleExports = function serviceResolvers(app, options) {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.roleId }, paginate: false
           });
-          return (parent.teamId === dbNullIdValue())? null : roles.find(feathersParams).then(extractFirstItem);
+          return (parent.roleId === dbNullIdValue())? null : roles.find(feathersParams).then(extractFirstItem);
         },
         // !end
 
