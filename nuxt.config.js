@@ -48,6 +48,7 @@ module.exports = {
   mode: 'spa',// universal|spa
   srcDir: 'public',
   buildDir: 'nuxt-dist',
+  telemetry: false,
   generate: {
     dir: generateDir,
     // routes: [
