@@ -1,6 +1,6 @@
 # feathers-plus-admin
 
-> Project feathers-plus-admin
+> Project  feathers-plus-admin
 
 ### [Live Demo...](https://feathers-plus-admin.herokuapp.com)
 
