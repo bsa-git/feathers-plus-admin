@@ -182,10 +182,12 @@ class HookHelper {
     if (method) target.method = method;
     if (type) target.type = type;
     if (params) {
-      if (params.connection) {
-        delete params.connection;
-      }
-      target.params = params;
+      target.params = {};
+      let {user, authenticated, payload, provider} = params;
+      target.params.user = user? user : null;
+      target.params.authenticated = authenticated? authenticated : null;
+      target.params.payload = payload? payload : null;
+      target.params.provider = provider? provider : '';
     }
     if (id) target.id = id;
     if (data && type === 'before') target.data = data;
