@@ -183,11 +183,20 @@ class HookHelper {
     if (type) target.type = type;
     if (params) {
       target.params = {};
-      let {user, authenticated, payload, provider} = params;
-      target.params.user = user? user : null;
-      target.params.authenticated = authenticated? authenticated : null;
-      target.params.payload = payload? payload : null;
+      let {user, authenticated, provider, query, connection} = params;
+      if(user){
+        target.params.user = user;
+      }
+      if(authenticated){
+        target.params.authenticated = authenticated;
+      }
       target.params.provider = provider? provider : '';
+      if (query && Object.keys(query).length > 0) {
+        target.params.query = query;
+      }
+      if (connection && Object.keys(connection).length > 0) {
+        target.params.connection = connection;
+      }
     }
     if (id) target.id = id;
     if (data && type === 'before') target.data = data;
