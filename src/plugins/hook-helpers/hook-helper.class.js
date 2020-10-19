@@ -61,9 +61,6 @@ class HookHelper {
     this.contextError = this.context.error ? this.context.error : null;
     // Get provider
     this.contextProvider = this.contextParams && this.contextParams.provider ? this.contextParams.provider : '';
-    // Get normalize hook context
-    // this.hookContext = getHookContext(this.context);
-    this.hookContext = HookHelper.getHookContext(this.context);
   }
 
 
@@ -78,19 +75,32 @@ class HookHelper {
 
   /**
    * Show debug info
-   * @param mask // 'authentication.create.after'
-   * @param show
+   * @param {String} mask // 'authentication.create.after'
+   * @param {Boolean} show
+   * @param {Boolean} isConn
    */
-  showDebugInfo(mask = '', show = true) {
+  showDebugInfo(mask = '', show = true, isConn = false) {
     if (this.contextError) return;
     if (mask) {
       const maskItems = mask.split('.');
-      if (show && (maskItems[0] === this.contextPath) && (maskItems[1] === this.contextMethod) && (maskItems[2] === this.contextType)) {
-        inspector(`showDebugInfo::${mask}:`, this.hookContext);
+      if (maskItems.length === 1) {
+        if (show && (maskItems[0] === this.contextPath)) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
+      }
+      if (maskItems.length === 2) {
+        if (show && (maskItems[0] === this.contextPath) && (maskItems[1] === this.contextMethod)) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
+      }
+      if (maskItems.length === 3) {
+        if (show && (maskItems[0] === this.contextPath) && (maskItems[1] === this.contextMethod) && (maskItems[2] === this.contextType)) {
+          inspector(`showDebugInfo::${mask}:`, HookHelper.getHookContext(this.context, isConn));
+        }
       }
     } else {
       if (show) {
-        inspector('showDebugInfo:', this.hookContext);
+        inspector('showDebugInfo:', HookHelper.getHookContext(this.context, isConn));
       }
     }
   }
@@ -174,7 +184,13 @@ class HookHelper {
     return contextId;
   }
 
-  static getHookContext(context) {
+  /**
+   * Get hook context
+   * @param {Object} context 
+   * @param {Boolean} isConn 
+   * @returns {Object}
+   */
+  static getHookContext(context, isConn = false) {
     let target = {};
     let {path, method, type, params, id, data, result, /*dispatch,*/ statusCode, grapql} = context;
 
@@ -194,7 +210,7 @@ class HookHelper {
       if (query && Object.keys(query).length > 0) {
         target.params.query = query;
       }
-      if (connection && Object.keys(connection).length > 0) {
+      if (isConn && connection && Object.keys(connection).length > 0) {
         target.params.connection = connection;
       }
     }
