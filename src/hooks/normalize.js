@@ -1,7 +1,7 @@
 const {getItems, replaceItems} = require('feathers-hooks-common');
 const {inspector, HookHelper, contextNormalize} = require('../plugins');
 
-const isLog = false;
+const isLog = true;
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (options = {}) {
