@@ -84,7 +84,7 @@
     "feathers-vuex": "^1.7.0",
     "graphql-resolvers-ast": "^1.4.0",
     "helmet": "^3.15.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.2",
     "lodash.merge": "^4.6.2",
     "merge-graphql-schemas": "1.5.8",
     "moment": "^2.24.0",
