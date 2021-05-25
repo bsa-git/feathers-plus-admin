@@ -18,9 +18,9 @@
     "test": "test/"
   },
   "engines": {
-    "node": ">= 12.x",
-    "npm": ">= 6.x",
-    "yarn": ">= 1.x"
+    "node": "= 12.x",
+    "npm": "= 6.x",
+    "yarn": "= 1.x"
   },
   "scripts": {
     "eslint": "eslint src/. test/. --config .eslintrc.json",
