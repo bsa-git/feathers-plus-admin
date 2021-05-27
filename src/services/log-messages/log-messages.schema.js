@@ -24,7 +24,7 @@ let schema = {
     // !code: schema_unique // !end
   ],
 
-  // Fields in the model.
+    // Fields in the model.
   properties: {
     // !code: schema_properties
     //-------------------------
