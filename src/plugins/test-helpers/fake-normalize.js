@@ -1,9 +1,11 @@
 const {readJsonFileSync, writeJsonFileSync, inspector, appRoot, dbNullIdValue} = require('../lib');
 const Auth = require(`${appRoot}/src/plugins/auth/auth-server.class`);
-const dotEnv = require('dotenv');// Loads environment variables from .env file.
 const chalk = require('chalk');
 
-dotEnv.load(); // Load environment variables
+const result = require('dotenv').config();
+if (result.error) {
+  throw result.error;
+}
 
 const isDebug = true;
 const isLog = false;
@@ -44,14 +46,6 @@ let fakeDataLogMessages = fakeData['logMessages'];
 
 let fakeDataChatMessages = fakeData['chatMessages'];
 
-const foundNotAdminAndNotGuestRole = fakeDataRoles.find(function (role) {
-  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
-});
-
-const foundGuestRole = fakeDataRoles.find(function (role) {
-  return (role.name === Auth.getRoles('isGuest'));
-});
-
 const rolesUpdate = () => {
   const roles = Auth.getBaseRoles();
   const roleKeys = Object.keys(Auth.getBaseRoles());
@@ -75,9 +69,10 @@ const usersUpdate = () => {
   // Set  roleId for last user
   fakeDataUsers[fakeDataUsers.length - 1]['roleId'] = foundNotAdminAndNotGuestRole[idFieldRole];
 
-  Object.assign(fakeDataUsers, fakeDataUsers.map(user => {
-    const nowDate = new Date(0);// Date.now()
+  Object.assign(fakeDataUsers, fakeDataUsers.map((user, index) => {
+    const nowDate = new Date(0);// Date.now() /img/avatar/user_2.png people_1
     user.loginAt = nowDate.toJSON();
+    user.avatar = `/img/avatar/people_${index + 1}.png`;
     user.active = true;
     user.isVerified = true;
     user.verifyToken = '';
@@ -152,6 +147,17 @@ const fakeDataUpdate = () => {
 if(isDebug) console.log(chalk.yellow('Start: Fake-Service!'));
 // Services fake data update
 rolesUpdate();
+
+// Found guest role
+const foundGuestRole = fakeDataRoles.find(function (role) {
+  return (role.name === Auth.getRoles('isGuest'));
+});
+
+// Found not admin and not guest role
+const foundNotAdminAndNotGuestRole = fakeDataRoles.find(function (role) {
+  return (role.name !== Auth.getRoles('isAdministrator')) && (role.name !== Auth.getRoles('isGuest'));
+});
+
 usersUpdate();
 userTeamsUpdate();
 logMessagesUpdate();

@@ -1,4 +1,3 @@
-
 // Define the Feathers schema for service `logMessages`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
@@ -24,7 +23,7 @@ let schema = {
     // !code: schema_unique // !end
   ],
 
-    // Fields in the model.
+  // Fields in the model.
   properties: {
     // !code: schema_properties
     //-------------------------

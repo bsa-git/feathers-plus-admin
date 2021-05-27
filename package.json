@@ -23,11 +23,11 @@
     "yarn": "= 1.x"
   },
   "scripts": {
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "eslint": "eslint --fix src/. test/. --config .eslintrc.json",
     "mocha": "mocha test/ --recursive --exit --timeout 10000",
     "mocha:debug": "mocha test/debug/ --recursive --exit --timeout 10000",
-    "test:all": "yarn run eslint && cross-env NODE_ENV=test yarn run mocha",
-    "test:debug": "cross-env NODE_ENV=test DEBUG=app:* yarn run mocha:debug",
+    "test:all": "yarn run eslint && cross-env NODE_ENV=test DEBUG=app:* yarn run mocha",
+    "test:debug": "yarn run eslint && cross-env NODE_ENV=test DEBUG=app:* yarn run mocha:debug",
     "dev": "cross-env NODE_ENV=development DEBUG=app:* node src/",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node src/",
