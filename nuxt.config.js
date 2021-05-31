@@ -10,8 +10,12 @@ const generateDir = process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'docs-dist'
 let getRoutePaths = null;
 
 if (process.env.DEPLOY_ENV) {
-  const dotEnv = require('dotenv');// Loads environment variables from .env file.
-  dotEnv.load(); // Load environment variables
+  // const dotEnv = require('dotenv');// Loads environment variables from .env file.
+  // dotEnv.load(); // Load environment variables
+  const result = require('dotenv').config();
+  if (result.error) {
+    throw result.error;
+  }
 
   /**
    * Get route paths for generate mode
@@ -79,17 +83,17 @@ module.exports = {
   head: {
     title: pkg.name,
     meta: [
-      {charset: 'utf-8'},
-      {'http-equiv': 'X-UA-Compatible', content: 'IE=edge'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: pkg.description}
+      { charset: 'utf-8' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico'},
+      { rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' },
       // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'},
-      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto: 100,300,400,500,700,900'},
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto: 100,300,400,500,700,900' },
       // https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet
-      {rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'},
+      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css' },
       // {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Playball'}
     ],
     script: [
@@ -105,7 +109,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: {color: '#fff'},
+  loading: { color: '#fff' },
 
   /*
   ** Global CSS
@@ -148,7 +152,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, {isClient}) {
+    extend(config, { isClient }) {
       // Extend only webpack config for client-bundle
       if (isClient) {
         config.devtool = '#source-map';
