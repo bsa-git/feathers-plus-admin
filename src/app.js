@@ -2,10 +2,12 @@
 // Configure Feathers app. (Can be re-generated.)
 // !code: preface
 //---------------
-const result = require('dotenv').config();
-if (result.error) {
-  throw result.error;
-}
+const dotEnv = require('dotenv');// Loads environment variables from .env file.
+dotEnv.load(); // Load environment variables
+// const result = require('dotenv').config();
+// if (result.error) {
+//   throw result.error;
+// }
 //---------------
 // !end
 const path = require('path');

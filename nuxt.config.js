@@ -10,12 +10,12 @@ const generateDir = process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'docs-dist'
 let getRoutePaths = null;
 
 if (process.env.DEPLOY_ENV) {
-  // const dotEnv = require('dotenv');// Loads environment variables from .env file.
-  // dotEnv.load(); // Load environment variables
-  const result = require('dotenv').config();
-  if (result.error) {
-    throw result.error;
-  }
+  const dotEnv = require('dotenv');// Loads environment variables from .env file.
+  dotEnv.load(); // Load environment variables
+  // const result = require('dotenv').config();
+  // if (result.error) {
+  //   throw result.error;
+  // }
 
   /**
    * Get route paths for generate mode
