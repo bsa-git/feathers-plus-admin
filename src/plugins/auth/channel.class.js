@@ -118,7 +118,7 @@ class Channel {
       }
       return roleId;
     } else {
-      throw new errors.BadRequest(`There is no service for the path - '${path}'`);
+      throw new errors.BadRequest('There is no service for the path - "roles"');
     }
   }
 
