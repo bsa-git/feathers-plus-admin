@@ -102,6 +102,7 @@
     "vue-echarts": "^4.0.4",
     "vue-i18n": "^8.7.0",
     "winston": "^3.1.0",
+    "ws": "6.2.2",
     "xml-loader": "^1.2.1"
   },
   "devDependencies": {
