@@ -65,6 +65,7 @@
     "ajv": "^5.5.2",
     "axios": "^0.21.1",
     "browser-cookies": "^1.2.0",
+    "browserslist": "4.16.6",
     "chalk": "^2.4.2",
     "compression": "^1.7.3",
     "cookie-storage": "^3.2.0",
