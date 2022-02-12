@@ -62,7 +62,7 @@
     "@feathersjs/socketio-client": "^1.2.1",
     "@nuxtjs/svg": "0.1.12",
     "@nuxtjs/vuetify": "^1.11.2",
-    "ajv": "^5.5.2",
+    "ajv": "^6.12.3",
     "axios": "^0.21.1",
     "browser-cookies": "^1.2.0",
     "chalk": "^2.4.2",
