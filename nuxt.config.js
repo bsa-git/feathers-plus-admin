@@ -7,6 +7,8 @@ const appMenu = require('./public/api/app/app-menu');
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? '/feathers-plus-admin/' : '/';
 const generateDir = process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'docs-dist';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 let getRoutePaths = null;
 
 if (process.env.DEPLOY_ENV) {
@@ -155,7 +157,7 @@ module.exports = {
     extend(config, { isClient }) {
       // Extend only webpack config for client-bundle
       if (isClient) {
-        config.devtool = '#source-map';
+        config.devtool = 'eval-source-map'; // eval-source-map source-map
         // console.log('config.module.rules', config.module.rules.find(aRule => aRule.test === /\\.jsx?$/));
       }
       config.module.rules.push({
