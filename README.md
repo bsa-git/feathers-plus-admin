@@ -26,7 +26,7 @@ See the sample file ".env.dev.example" for development mode or ".env.prod.exampl
 for production mode. In environment variables, user's secret data such as user_id, 
 user_secret, etc. are usually specified.
 
-4. Start your app for development mode
+4. Start your app for development mode.
 
 to work with the MongoDB database
 
